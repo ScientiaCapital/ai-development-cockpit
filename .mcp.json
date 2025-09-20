@@ -53,6 +53,20 @@
 			"env": {
 				"PROJECT_ROOT": "/Users/tmkipper/repos"
 			}
+		},
+		"desktop-commander": {
+			"type": "stdio",
+			"command": "npx",
+			"args": [
+				"-y",
+				"@desktop-commander/mcp-server"
+			],
+			"env": {
+				"DC_ALLOWED_DIRECTORIES": "/Users/tmkipper/repos",
+				"DC_DEFAULT_SHELL": "zsh",
+				"DC_FILE_READ_LINE_LIMIT": "2000",
+				"DC_FILE_WRITE_LINE_LIMIT": "50"
+			}
 		}
 	}
 }

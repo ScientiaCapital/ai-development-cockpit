@@ -1,192 +1,206 @@
 {
   "tasks": [
     {
-      "id": "e90d9141-8859-411c-9c1a-8d7e094dcc34",
-      "name": "Build Terminal-Based Model Marketplace Interface",
-      "description": "Create the core marketplace interface with terminal aesthetics that can dynamically switch between SwaggyStacks (gaming) and ScientiaCapital (corporate) themes. Include advanced search, filtering, and model discovery capabilities.",
-      "status": "completed",
+      "id": "fda9094a-7449-47ec-a1ca-959b7748e952",
+      "name": "Create Marketplace Page Object Model",
+      "description": "Implement comprehensive MarketplacePage object following the established DeploymentPage pattern (400+ lines) for testing marketplace functionality including model discovery, organization switching, and dual-theme support.",
+      "notes": "Must mirror the comprehensive testing approach from DeploymentPage.ts (400+ lines) but focused on marketplace functionality. Should support both SwaggyStacks terminal theme and ScientiaCapital corporate theme testing.",
+      "status": "pending",
       "dependencies": [],
-      "createdAt": "2025-09-20T19:10:58.389Z",
-      "updatedAt": "2025-09-20T19:16:15.062Z",
+      "createdAt": "2025-09-20T22:17:03.761Z",
+      "updatedAt": "2025-09-20T22:17:03.761Z",
       "relatedFiles": [
         {
-          "path": "src/components/terminal/ModelMarketplace.tsx",
+          "path": "tests/e2e/page-objects/MarketplacePage.ts",
           "type": "CREATE",
-          "description": "Main marketplace component"
+          "description": "New page object model for marketplace testing"
         },
         {
-          "path": "src/components/terminal/ModelCard.tsx",
-          "type": "CREATE",
-          "description": "Individual model display card"
+          "path": "tests/e2e/page-objects/DeploymentPage.ts",
+          "type": "REFERENCE",
+          "description": "Reference implementation pattern to follow"
         },
         {
-          "path": "src/hooks/useModelSearch.ts",
-          "type": "CREATE",
-          "description": "Model search and filtering logic"
-        },
-        {
-          "path": "src/styles/terminal.module.css",
-          "type": "TO_MODIFY",
-          "description": "Add marketplace-specific styles"
+          "path": "tests/e2e/page-objects/BasePage.ts",
+          "type": "DEPENDENCY",
+          "description": "Base class to extend from"
         }
       ],
-      "implementationGuide": "1. Extend existing terminal components to support model browsing\n2. Create model card components with organization-specific styling\n3. Implement advanced search with filters (organization, model type, popularity)\n4. Add pagination and infinite scroll for large model collections\n5. Integrate real-time model statistics and deployment status",
-      "verificationCriteria": "Marketplace loads successfully, displays models from both organizations, search and filtering work correctly, theme switching operates smoothly",
-      "analysisResult": "Phase 2 Development Goals: Complete the dual-domain LLM platform infrastructure by building a terminal-themed model marketplace that integrates both SwaggyStacks and ScientiaCapital HuggingFace organizations. Focus on creating seamless authentication, model discovery, deployment capabilities, and end-to-end testing systems that support both developer-focused (retro gaming aesthetic) and enterprise-focused (professional corporate aesthetic) user experiences.",
-      "summary": "Successfully implemented comprehensive model marketplace with terminal aesthetic. Created useModelSearch.ts hook for search and filtering logic, ModelCard.tsx component for individual model display with deployment capabilities, and ModelMarketplace.tsx main interface with theme switching between SwaggyStacks (gaming) and ScientiaCapital (enterprise) themes. Implemented marketplace page at /marketplace that demonstrates organization switching, ASCII art headers, and complete marketplace functionality. All verification criteria met: marketplace loads successfully, displays models from both organizations, search and filtering work correctly, and theme switching operates smoothly.",
-      "completedAt": "2025-09-20T19:16:15.061Z"
+      "implementationGuide": "Follow the existing pattern from tests/e2e/page-objects/DeploymentPage.ts:\\n\\nclass MarketplacePage extends BasePage {\\n  // Core marketplace selectors\\n  private readonly modelGrid = '[data-testid=\"model-grid\"]';\\n  private readonly organizationSwitcher = '[data-testid=\"org-switcher\"]';\\n  private readonly searchInput = '[data-testid=\"model-search\"]';\\n  private readonly modelCard = '[data-testid^=\"model-card-\"]';\\n  \\n  // Marketplace-specific methods\\n  async expectModelGrid(): Promise<void>\\n  async searchModels(query: string): Promise<void>\\n  async selectOrganization(org: 'swaggystacks' | 'scientia'): Promise<void>\\n  async expectDualThemeSupport(): Promise<void>\\n  async getModelCount(): Promise<number>\\n  async selectModel(modelId: string): Promise<void>\\n}\\n\\nImplement 20+ comprehensive test methods following DeploymentPage's extensive coverage pattern.",
+      "verificationCriteria": "Page object should provide comprehensive marketplace testing methods similar in scope to DeploymentPage (400+ lines), support dual-theme testing, include error handling patterns, and follow established TypeScript interfaces and selector strategies.",
+      "analysisResult": "End-to-End Model Deployment Testing System Implementation - Building comprehensive testing validation that covers model discovery through marketplace → authentication with dual organizations → deployment to RunPod infrastructure → real-time monitoring → rollback capabilities. Must integrate with existing Playwright framework while adding real API validation capabilities alongside current mock testing strategy."
     },
     {
-      "id": "e27f85e2-8788-4913-ae1b-f6aa4aba35ee",
-      "name": "Implement HuggingFace Multi-Organization Authentication",
-      "description": "Build secure authentication system that can handle both SwaggyStacks and ScientiaCapital tokens, with dynamic organization switching and API access management.",
-      "status": "completed",
-      "dependencies": [],
-      "createdAt": "2025-09-20T19:10:58.389Z",
-      "updatedAt": "2025-09-20T19:20:54.535Z",
-      "relatedFiles": [
-        {
-          "path": "src/contexts/HuggingFaceAuth.tsx",
-          "type": "CREATE",
-          "description": "Authentication context provider"
-        },
-        {
-          "path": "src/lib/huggingface-api.ts",
-          "type": "CREATE",
-          "description": "HuggingFace API client with multi-org support"
-        },
-        {
-          "path": "src/components/auth/OrganizationSwitcher.tsx",
-          "type": "CREATE",
-          "description": "Organization switching component"
-        },
-        {
-          "path": ".env.local",
-          "type": "TO_MODIFY",
-          "description": "Environment configuration for tokens"
-        }
-      ],
-      "implementationGuide": "1. Create authentication context with multi-token support\n2. Implement organization switching logic\n3. Build secure token storage and retrieval\n4. Add authentication error handling and retry mechanisms\n5. Create authentication status indicators in the UI",
-      "verificationCriteria": "Authentication works for both organizations, organization switching is seamless, API calls use correct tokens, error handling works properly",
-      "analysisResult": "Phase 2 Development Goals: Complete the dual-domain LLM platform infrastructure by building a terminal-themed model marketplace that integrates both SwaggyStacks and ScientiaCapital HuggingFace organizations. Focus on creating seamless authentication, model discovery, deployment capabilities, and end-to-end testing systems that support both developer-focused (retro gaming aesthetic) and enterprise-focused (professional corporate aesthetic) user experiences.",
-      "summary": "Successfully implemented comprehensive HuggingFace multi-organization authentication system. Created HuggingFaceAuthProvider context with secure token management, dynamic organization switching, and error handling. Built OrganizationSwitcher component with seamless UI switching between SwaggyStacks (gaming) and ScientiaCapital (enterprise) themes. Implemented HuggingFace API client with multi-org support, retry mechanisms, and robust error handling. Created comprehensive test page demonstrating authentication flow, organization switching, model discovery, and API integration. System now enables C-suite executives and developers to add their own HuggingFace tokens for instant access to private model collections, with MCP server integration for fine-tuning and LLM services.",
-      "completedAt": "2025-09-20T19:20:54.533Z"
-    },
-    {
-      "id": "39e963ca-58e5-46aa-96d7-604dc8c0935d",
-      "name": "Develop Model Discovery and API Integration",
-      "description": "Create comprehensive model discovery system that fetches models from both HuggingFace organizations, with metadata enrichment, caching, and real-time updates.",
-      "status": "completed",
-      "dependencies": [
-        {
-          "taskId": "e27f85e2-8788-4913-ae1b-f6aa4aba35ee"
-        }
-      ],
-      "createdAt": "2025-09-20T19:10:58.389Z",
-      "updatedAt": "2025-09-20T19:32:18.422Z",
-      "relatedFiles": [
-        {
-          "path": "src/services/modelDiscovery.ts",
-          "type": "CREATE",
-          "description": "Model discovery service"
-        },
-        {
-          "path": "src/hooks/useModels.ts",
-          "type": "CREATE",
-          "description": "React hook for model data"
-        },
-        {
-          "path": "src/types/models.ts",
-          "type": "CREATE",
-          "description": "TypeScript types for model data"
-        },
-        {
-          "path": "src/lib/modelCache.ts",
-          "type": "CREATE",
-          "description": "Model data caching system"
-        }
-      ],
-      "implementationGuide": "1. Build HuggingFace API integration for model listing\n2. Implement model metadata fetching and caching\n3. Create organization-specific model filtering\n4. Add model popularity and usage statistics\n5. Implement real-time model availability checking",
-      "verificationCriteria": "Models load from both organizations, metadata is complete and accurate, caching improves performance, real-time updates work",
-      "analysisResult": "Phase 2 Development Goals: Complete the dual-domain LLM platform infrastructure by building a terminal-themed model marketplace that integrates both SwaggyStacks and ScientiaCapital HuggingFace organizations. Focus on creating seamless authentication, model discovery, deployment capabilities, and end-to-end testing systems that support both developer-focused (retro gaming aesthetic) and enterprise-focused (professional corporate aesthetic) user experiences.",
-      "summary": "Successfully completed comprehensive model discovery and API integration system. Implemented useModels.ts hook with advanced caching, pagination, and authentication integration. Created useModelSearch.ts with real-time search, filtering, and sorting capabilities. Integrated modelDiscovery.ts service with HuggingFace API, sophisticated caching system using modelCache.ts, and complete TypeScript type definitions in types/models.ts. Updated ModelMarketplace.tsx to use new hooks with seamless organization switching and theme integration. All components now work together to provide a unified model discovery experience across both SwaggyStacks and ScientiaCapital organizations.",
-      "completedAt": "2025-09-20T19:32:18.419Z"
-    },
-    {
-      "id": "a67b180a-0606-4b41-be3f-c4f242a3438b",
-      "name": "Build RunPod Deployment Integration",
-      "description": "Implement seamless model deployment to RunPod infrastructure with monitoring, scaling, and cost optimization features.",
-      "status": "in_progress",
-      "dependencies": [
-        {
-          "taskId": "39e963ca-58e5-46aa-96d7-604dc8c0935d"
-        }
-      ],
-      "createdAt": "2025-09-20T19:10:58.389Z",
-      "updatedAt": "2025-09-20T19:32:54.638Z",
-      "relatedFiles": [
-        {
-          "path": "src/services/runpodDeployment.ts",
-          "type": "CREATE",
-          "description": "RunPod deployment service"
-        },
-        {
-          "path": "src/components/deployment/DeploymentMonitor.tsx",
-          "type": "CREATE",
-          "description": "Deployment monitoring interface"
-        },
-        {
-          "path": "src/hooks/useDeployment.ts",
-          "type": "CREATE",
-          "description": "Deployment management hook"
-        },
-        {
-          "path": "src/types/deployment.ts",
-          "type": "CREATE",
-          "description": "Deployment-related types"
-        }
-      ],
-      "implementationGuide": "1. Create RunPod API client and authentication\n2. Implement model deployment workflow\n3. Build deployment monitoring and status tracking\n4. Add cost estimation and optimization features\n5. Create deployment rollback and scaling capabilities",
-      "verificationCriteria": "Models deploy successfully to RunPod, monitoring shows accurate status, cost estimation is accurate, rollback functionality works",
-      "analysisResult": "Phase 2 Development Goals: Complete the dual-domain LLM platform infrastructure by building a terminal-themed model marketplace that integrates both SwaggyStacks and ScientiaCapital HuggingFace organizations. Focus on creating seamless authentication, model discovery, deployment capabilities, and end-to-end testing systems that support both developer-focused (retro gaming aesthetic) and enterprise-focused (professional corporate aesthetic) user experiences."
-    },
-    {
-      "id": "47b36024-8ff8-40a1-a2dc-f534ddfe1b31",
-      "name": "Create End-to-End Testing Framework",
-      "description": "Develop comprehensive testing system that validates the entire deployment pipeline from model selection to production endpoints, including automated testing for both organizations.",
+      "id": "7924c6b3-b614-44ae-b8ab-f044e93d6fc6",
+      "name": "Implement Marketplace Discovery Tests",
+      "description": "Create comprehensive test suite for marketplace model discovery functionality covering search, filtering, organization switching, and dual-theme validation using the new MarketplacePage object.",
+      "notes": "Must test both SwaggyStacks and ScientiaCapital model discovery with appropriate theme validation. Should include error handling, empty states, and performance expectations.",
       "status": "pending",
       "dependencies": [
         {
-          "taskId": "a67b180a-0606-4b41-be3f-c4f242a3438b"
+          "taskId": "fda9094a-7449-47ec-a1ca-959b7748e952"
         }
       ],
-      "createdAt": "2025-09-20T19:10:58.389Z",
-      "updatedAt": "2025-09-20T19:10:58.389Z",
+      "createdAt": "2025-09-20T22:17:03.761Z",
+      "updatedAt": "2025-09-20T22:17:03.761Z",
       "relatedFiles": [
         {
-          "path": "tests/e2e/deployment.spec.ts",
+          "path": "tests/e2e/marketplace/marketplace-discovery.spec.ts",
           "type": "CREATE",
-          "description": "End-to-end deployment tests"
+          "description": "Main marketplace discovery test suite"
         },
         {
-          "path": "tests/e2e/marketplace.spec.ts",
-          "type": "CREATE",
-          "description": "Marketplace functionality tests"
+          "path": "tests/e2e/deployment/deployment-validation.spec.ts",
+          "type": "REFERENCE",
+          "description": "Reference test structure and patterns"
         },
         {
-          "path": "tests/utils/testHelpers.ts",
+          "path": "src/app/marketplace/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "May need data-testid attributes for testing"
+        }
+      ],
+      "implementationGuide": "Create tests/e2e/marketplace/marketplace-discovery.spec.ts following the pattern from deployment-validation.spec.ts:\\n\\ntest.describe('Marketplace Model Discovery', () => {\\n  let marketplacePage: MarketplacePage;\\n  \\n  test.beforeEach(async ({ page }) => {\\n    marketplacePage = new MarketplacePage(page);\\n    await marketplacePage.goto();\\n  });\\n  \\n  test.describe('Model Search and Discovery', () => {\\n    test('should display model grid correctly')\\n    test('should search models by keyword')\\n    test('should filter by organization')\\n    test('should show model details on selection')\\n  });\\n  \\n  test.describe('Organization Switching', () => {\\n    test('should switch between SwaggyStacks and ScientiaCapital')\\n    test('should maintain search state during org switch')\\n    test('should apply correct theme for each organization')\\n  });\\n});\\n\\nInclude comprehensive mock API routing for HuggingFace model discovery endpoints.",
+      "verificationCriteria": "Test suite should provide comprehensive coverage of marketplace functionality including search, filtering, organization switching, theme validation, error handling, and performance expectations. Should follow established mock API routing patterns.",
+      "analysisResult": "End-to-End Model Deployment Testing System Implementation - Building comprehensive testing validation that covers model discovery through marketplace → authentication with dual organizations → deployment to RunPod infrastructure → real-time monitoring → rollback capabilities. Must integrate with existing Playwright framework while adding real API validation capabilities alongside current mock testing strategy."
+    },
+    {
+      "id": "b8e4aeb7-b8f9-4726-9707-15e087e76579",
+      "name": "Create Real API Integration Test Framework",
+      "description": "Implement hybrid testing strategy that supports both mock API testing (existing) and real API integration testing with environment-based configuration switching for HuggingFace and RunPod APIs.",
+      "notes": "Must maintain backward compatibility with existing mock tests while adding real API testing capabilities. Should include environment validation and graceful fallbacks.",
+      "status": "pending",
+      "dependencies": [],
+      "createdAt": "2025-09-20T22:17:03.761Z",
+      "updatedAt": "2025-09-20T22:17:03.761Z",
+      "relatedFiles": [
+        {
+          "path": "tests/e2e/utils/TestApiClient.ts",
           "type": "CREATE",
-          "description": "Test utility functions"
+          "description": "Hybrid API client for test mode switching"
         },
         {
           "path": "playwright.config.ts",
-          "type": "CREATE",
-          "description": "Playwright configuration"
+          "type": "TO_MODIFY",
+          "description": "Add real API testing project configuration"
+        },
+        {
+          "path": "src/services/runpod/client.ts",
+          "type": "REFERENCE",
+          "description": "Existing RunPod client to extend"
         }
       ],
-      "implementationGuide": "1. Set up automated testing framework with Playwright\n2. Create test scenarios for both SwaggyStacks and ScientiaCapital paths\n3. Implement deployment validation tests\n4. Build performance and load testing capabilities\n5. Add continuous integration test automation",
-      "verificationCriteria": "All tests pass consistently, deployment pipeline validation works, performance tests meet benchmarks, CI integration functions properly",
-      "analysisResult": "Phase 2 Development Goals: Complete the dual-domain LLM platform infrastructure by building a terminal-themed model marketplace that integrates both SwaggyStacks and ScientiaCapital HuggingFace organizations. Focus on creating seamless authentication, model discovery, deployment capabilities, and end-to-end testing systems that support both developer-focused (retro gaming aesthetic) and enterprise-focused (professional corporate aesthetic) user experiences."
+      "implementationGuide": "Extend the existing service pattern to support test mode switching:\\n\\n// Create tests/e2e/utils/TestApiClient.ts\\nclass E2ETestClient {\\n  constructor(testMode: 'mock' | 'real' = process.env.E2E_TEST_MODE) {\\n    this.mode = testMode;\\n    this.huggingfaceClient = testMode === 'real' ? \\n      new HuggingFaceClient(process.env.HUGGINGFACE_TOKEN) :\\n      new MockHuggingFaceClient();\\n    this.runpodClient = testMode === 'real' ?\\n      new RunPodClient(process.env.RUNPOD_API_KEY) :\\n      new MockRunPodClient();\\n  }\\n}\\n\\n// Update playwright.config.ts\\nprojects: [\\n  {\\n    name: 'mock-api',\\n    use: { baseURL: 'http://localhost:3001' }\\n  },\\n  {\\n    name: 'real-api',\\n    use: { \\n      baseURL: 'http://localhost:3001',\\n      extraHTTPHeaders: { 'E2E-TEST-MODE': 'real' }\\n    }\\n  }\\n]",
+      "verificationCriteria": "Framework should support seamless switching between mock and real API modes, maintain all existing test functionality, provide environment validation, and include proper error handling for missing API keys.",
+      "analysisResult": "End-to-End Model Deployment Testing System Implementation - Building comprehensive testing validation that covers model discovery through marketplace → authentication with dual organizations → deployment to RunPod infrastructure → real-time monitoring → rollback capabilities. Must integrate with existing Playwright framework while adding real API validation capabilities alongside current mock testing strategy."
+    },
+    {
+      "id": "ba74bcc9-64a0-4f39-a86a-a660bab14410",
+      "name": "Implement Real HuggingFace API Integration Tests",
+      "description": "Create comprehensive test suite that validates real HuggingFace API integration with both SwaggyStacks and ScientiaCapital organizations, including authentication, model discovery, and error handling.",
+      "notes": "Tests should be skippable when real API tokens are not available. Must validate both organization authentications and handle real-world API constraints like rate limiting.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "b8e4aeb7-b8f9-4726-9707-15e087e76579"
+        },
+        {
+          "taskId": "fda9094a-7449-47ec-a1ca-959b7748e952"
+        }
+      ],
+      "createdAt": "2025-09-20T22:17:03.761Z",
+      "updatedAt": "2025-09-20T22:17:03.761Z",
+      "relatedFiles": [
+        {
+          "path": "tests/e2e/marketplace/marketplace-real-api.spec.ts",
+          "type": "CREATE",
+          "description": "Real HuggingFace API integration tests"
+        },
+        {
+          "path": "src/services/huggingface/discovery.service.ts",
+          "type": "DEPENDENCY",
+          "description": "HuggingFace service to test against"
+        },
+        {
+          "path": ".env.example",
+          "type": "TO_MODIFY",
+          "description": "Add E2E test environment variables"
+        }
+      ],
+      "implementationGuide": "Create tests/e2e/marketplace/marketplace-real-api.spec.ts:\\n\\ntest.describe('Marketplace Real API Integration', () => {\\n  test.skip(() => !process.env.HUGGINGFACE_TOKEN, 'Requires real HuggingFace API token');\\n  \\n  test.beforeEach(async ({ page }) => {\\n    // Configure for real API mode\\n    await page.setExtraHTTPHeaders({ 'E2E-TEST-MODE': 'real' });\\n  });\\n  \\n  test.describe('SwaggyStacks Organization', () => {\\n    test('should authenticate with SwaggyStacks HuggingFace org')\\n    test('should discover SwaggyStacks models via real API')\\n    test('should handle API rate limiting gracefully')\\n    test('should validate model metadata accuracy')\\n  });\\n  \\n  test.describe('ScientiaCapital Organization', () => {\\n    test('should authenticate with ScientiaCapital HuggingFace org')\\n    test('should discover ScientiaCapital models via real API')\\n    test('should handle organization switching with real auth')\\n  });\\n});\\n\\nInclude comprehensive error handling for API failures, rate limiting, and authentication issues.",
+      "verificationCriteria": "Tests should successfully authenticate with both HuggingFace organizations, discover real models, handle API constraints gracefully, validate data accuracy, and provide clear feedback for missing credentials.",
+      "analysisResult": "End-to-End Model Deployment Testing System Implementation - Building comprehensive testing validation that covers model discovery through marketplace → authentication with dual organizations → deployment to RunPod infrastructure → real-time monitoring → rollback capabilities. Must integrate with existing Playwright framework while adding real API validation capabilities alongside current mock testing strategy."
+    },
+    {
+      "id": "dd0e057d-66ac-4afc-bbcc-d81d5b04c000",
+      "name": "Create End-to-End Pipeline Integration Tests",
+      "description": "Implement comprehensive tests that validate the complete pipeline from marketplace model selection through RunPod deployment to monitoring and rollback, integrating all existing test components into cohesive end-to-end workflows.",
+      "notes": "Must integrate marketplace discovery with deployment pipeline testing. Should test both SwaggyStacks and ScientiaCapital workflows and include comprehensive error handling at each pipeline stage.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "7924c6b3-b614-44ae-b8ab-f044e93d6fc6"
+        },
+        {
+          "taskId": "b8e4aeb7-b8f9-4726-9707-15e087e76579"
+        }
+      ],
+      "createdAt": "2025-09-20T22:17:03.761Z",
+      "updatedAt": "2025-09-20T22:17:03.761Z",
+      "relatedFiles": [
+        {
+          "path": "tests/e2e/integration/full-pipeline.spec.ts",
+          "type": "CREATE",
+          "description": "End-to-end pipeline integration tests"
+        },
+        {
+          "path": "tests/e2e/deployment/deployment-validation.spec.ts",
+          "type": "DEPENDENCY",
+          "description": "Existing deployment tests to integrate"
+        },
+        {
+          "path": "tests/e2e/deployment/rollback-validation.spec.ts",
+          "type": "DEPENDENCY",
+          "description": "Existing rollback tests to integrate"
+        }
+      ],
+      "implementationGuide": "Create tests/e2e/integration/full-pipeline.spec.ts that combines marketplace and deployment testing:\\n\\ntest.describe('Full Deployment Pipeline Integration', () => {\\n  let marketplacePage: MarketplacePage;\\n  let deploymentPage: DeploymentPage;\\n  \\n  test.describe('SwaggyStacks Pipeline', () => {\\n    test('should complete full model deployment pipeline for SwaggyStacks', async ({ page }) => {\\n      // Phase 1: Model Discovery\\n      marketplacePage = new MarketplacePage(page);\\n      await marketplacePage.goto();\\n      await marketplacePage.selectOrganization('swaggystacks');\\n      await marketplacePage.searchModels('DialoGPT');\\n      const modelId = await marketplacePage.selectFirstModel();\\n      \\n      // Phase 2: Deployment Configuration\\n      await marketplacePage.clickDeploy();\\n      deploymentPage = new DeploymentPage(page);\\n      await deploymentPage.expectDeploymentForm();\\n      await deploymentPage.selectGpuType('NVIDIA_A6000');\\n      \\n      // Phase 3: Deployment Execution\\n      const deploymentId = await deploymentPage.deployModel();\\n      await deploymentPage.waitForDeploymentStatus(deploymentId, 'running');\\n      \\n      // Phase 4: Monitoring Validation\\n      await deploymentPage.expectHealthyMetrics(deploymentId);\\n      \\n      // Phase 5: Cleanup\\n      await deploymentPage.terminateDeployment(deploymentId);\\n    });\\n  });\\n});",
+      "verificationCriteria": "Tests should successfully execute complete workflows from model discovery to deployment monitoring, validate integration between all system components, handle errors gracefully at each stage, and provide comprehensive pipeline validation for both organizations.",
+      "analysisResult": "End-to-End Model Deployment Testing System Implementation - Building comprehensive testing validation that covers model discovery through marketplace → authentication with dual organizations → deployment to RunPod infrastructure → real-time monitoring → rollback capabilities. Must integrate with existing Playwright framework while adding real API validation capabilities alongside current mock testing strategy."
+    },
+    {
+      "id": "6e2d932c-5d0a-4151-bd57-de4e09235a93",
+      "name": "Implement Performance and Load Testing Validation",
+      "description": "Create comprehensive performance testing suite that validates deployment performance, cost estimation accuracy, real-time monitoring, and load testing capabilities under realistic conditions.",
+      "notes": "Must validate performance expectations, cost accuracy, and system behavior under load. Should include realistic load scenarios and performance benchmarking.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "dd0e057d-66ac-4afc-bbcc-d81d5b04c000"
+        }
+      ],
+      "createdAt": "2025-09-20T22:17:03.761Z",
+      "updatedAt": "2025-09-20T22:17:03.761Z",
+      "relatedFiles": [
+        {
+          "path": "tests/e2e/performance/performance-validation.spec.ts",
+          "type": "CREATE",
+          "description": "Performance and load testing suite"
+        },
+        {
+          "path": "src/services/runpod/cost.service.ts",
+          "type": "DEPENDENCY",
+          "description": "Cost estimation service to validate"
+        },
+        {
+          "path": "src/services/runpod/monitoring.service.ts",
+          "type": "DEPENDENCY",
+          "description": "Monitoring service to test under load"
+        }
+      ],
+      "implementationGuide": "Create tests/e2e/performance/performance-validation.spec.ts:\\n\\ntest.describe('Performance and Load Testing', () => {\\n  test.describe('Deployment Performance', () => {\\n    test('should deploy models within acceptable time limits', async () => {\\n      const startTime = Date.now();\\n      const deploymentId = await deploymentPage.deployModel();\\n      await deploymentPage.waitForDeploymentStatus(deploymentId, 'running', 300000); // 5 min max\\n      const deployTime = Date.now() - startTime;\\n      expect(deployTime).toBeLessThan(300000); // 5 minutes\\n    });\\n    \\n    test('should provide accurate cost estimations', async () => {\\n      await deploymentPage.selectModel('microsoft/DialoGPT-medium');\\n      await deploymentPage.selectGpuType('NVIDIA_A6000');\\n      const estimatedCost = await deploymentPage.getCostEstimate();\\n      \\n      const deploymentId = await deploymentPage.deployModel();\\n      await deploymentPage.waitForDeploymentStatus(deploymentId, 'running');\\n      const actualCost = await deploymentPage.getCostPerHour(deploymentId);\\n      \\n      // Cost should be within 10% of estimate\\n      expect(Math.abs(actualCost - estimatedCost) / estimatedCost).toBeLessThan(0.1);\\n    });\\n  });\\n  \\n  test.describe('Load Testing', () => {\\n    test('should handle concurrent deployment requests')\\n    test('should maintain performance under load')\\n    test('should validate monitoring accuracy during load')\\n  });\\n});",
+      "verificationCriteria": "Tests should validate deployment time limits, cost estimation accuracy within 10%, monitoring reliability under load, and system performance benchmarks. Should provide clear performance metrics and identify bottlenecks.",
+      "analysisResult": "End-to-End Model Deployment Testing System Implementation - Building comprehensive testing validation that covers model discovery through marketplace → authentication with dual organizations → deployment to RunPod infrastructure → real-time monitoring → rollback capabilities. Must integrate with existing Playwright framework while adding real API validation capabilities alongside current mock testing strategy."
     }
   ]
 }

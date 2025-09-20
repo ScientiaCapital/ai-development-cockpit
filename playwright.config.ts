@@ -23,7 +23,8 @@ export default defineConfig({
   reporter: [
     ['html', { outputFolder: 'playwright-report' }],
     ['json', { outputFile: 'test-results/results.json' }],
-    ['junit', { outputFile: 'test-results/junit.xml' }]
+    ['junit', { outputFile: 'test-results/junit.xml' }],
+    ['./tests/reporters/AnalyticsReporter.ts', { outputDir: 'test-results/analytics' }]
   ],
 
   /* Shared settings for all the projects below */

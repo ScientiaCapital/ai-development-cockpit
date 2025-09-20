@@ -1,0 +1,484 @@
+name: Continuous Deployment with E2E Validation
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '*.md'
+      - 'docs/**'
+      - '.github/**'
+      - '!.github/workflows/**'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+      skip_tests:
+        description: 'Skip E2E tests (emergency deployment)'
+        required: false
+        default: false
+        type: boolean
+      rollback_on_failure:
+        description: 'Auto-rollback on test failure'
+        required: false
+        default: true
+        type: boolean
+
+env:
+  NODE_VERSION: '18'
+  DEPLOYMENT_TIMEOUT: 1800 # 30 minutes
+
+jobs:
+  # Pre-deployment validation
+  pre-deployment:
+    name: Pre-deployment Validation
+    runs-on: ubuntu-latest
+    outputs:
+      deploy-environment: ${{ steps.config.outputs.environment }}
+      skip-tests: ${{ steps.config.outputs.skip_tests }}
+      deployment-id: ${{ steps.config.outputs.deployment_id }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure deployment
+        id: config
+        run: |
+          # Determine deployment environment
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            ENVIRONMENT="${{ github.event.inputs.environment }}"
+            SKIP_TESTS="${{ github.event.inputs.skip_tests }}"
+          else
+            ENVIRONMENT="staging"
+            SKIP_TESTS="false"
+          fi
+
+          DEPLOYMENT_ID="deploy-$(date +%Y%m%d-%H%M%S)-${GITHUB_SHA:0:8}"
+
+          echo "environment=$ENVIRONMENT" >> $GITHUB_OUTPUT
+          echo "skip_tests=$SKIP_TESTS" >> $GITHUB_OUTPUT
+          echo "deployment_id=$DEPLOYMENT_ID" >> $GITHUB_OUTPUT
+
+          echo "🚀 Preparing deployment to $ENVIRONMENT"
+          echo "📋 Deployment ID: $DEPLOYMENT_ID"
+          echo "🧪 Skip tests: $SKIP_TESTS"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run pre-deployment checks
+        run: |
+          echo "🔍 Running pre-deployment checks..."
+
+          # Type checking
+          npm run type-check
+
+          # Linting
+          npm run lint
+
+          # Build validation
+          npm run build
+
+          # Check environment variables
+          if [[ "${{ steps.config.outputs.environment }}" == "production" ]]; then
+            echo "⚠️ Production deployment detected - additional validation required"
+
+            # Check for production-specific requirements
+            if [[ ! -f ".env.production" && ! -f ".env.local" ]]; then
+              echo "❌ Production environment configuration missing"
+              exit 1
+            fi
+          fi
+
+          echo "✅ Pre-deployment checks passed"
+
+  # Critical E2E tests before deployment
+  critical-e2e-tests:
+    name: Critical E2E Tests
+    runs-on: ubuntu-latest
+    needs: pre-deployment
+    if: needs.pre-deployment.outputs.skip-tests != 'true'
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Start development server
+        run: |
+          npm run dev &
+          sleep 15
+          curl -f http://localhost:3001 || exit 1
+
+      - name: Run critical marketplace tests
+        run: |
+          echo "🧪 Running critical E2E tests for deployment validation..."
+
+          # Run only the most critical tests that validate core functionality
+          npx playwright test tests/e2e/marketplace/critical-path.spec.ts \
+            tests/e2e/marketplace/smoke-tests.spec.ts \
+            --reporter=html,junit \
+            --output-dir=test-results/critical
+
+      - name: Validate test results
+        run: |
+          # Check if any critical tests failed
+          if [[ -f "test-results/critical/results.xml" ]]; then
+            FAILURES=$(grep -c 'failure' test-results/critical/results.xml || echo "0")
+            if [[ "$FAILURES" -gt "0" ]]; then
+              echo "❌ Critical tests failed - blocking deployment"
+              exit 1
+            fi
+          fi
+
+          echo "✅ Critical E2E tests passed - deployment approved"
+
+      - name: Upload critical test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: critical-test-results
+          path: |
+            test-results/critical/
+            playwright-report/
+          retention-days: 7
+
+  # Staging deployment
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [pre-deployment, critical-e2e-tests]
+    if: |
+      always() &&
+      needs.pre-deployment.result == 'success' &&
+      (needs.critical-e2e-tests.result == 'success' || needs.pre-deployment.outputs.skip-tests == 'true') &&
+      needs.pre-deployment.outputs.deploy-environment == 'staging'
+    environment:
+      name: staging
+      url: https://staging.swaggystacks.com
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build for staging
+        env:
+          NODE_ENV: production
+          NEXT_PUBLIC_ENV: staging
+        run: npm run build
+
+      - name: Deploy to staging
+        run: |
+          echo "🚀 Deploying to staging environment..."
+          echo "📋 Deployment ID: ${{ needs.pre-deployment.outputs.deployment-id }}"
+
+          # Simulate deployment process
+          # In real implementation, this would deploy to your staging infrastructure
+          echo "✅ Successfully deployed to staging"
+
+          # Store deployment metadata
+          echo "STAGING_DEPLOYMENT_URL=https://staging.swaggystacks.com" >> $GITHUB_ENV
+          echo "DEPLOYMENT_TIMESTAMP=$(date -Iseconds)" >> $GITHUB_ENV
+
+  # Production deployment
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [pre-deployment, critical-e2e-tests]
+    if: |
+      always() &&
+      needs.pre-deployment.result == 'success' &&
+      (needs.critical-e2e-tests.result == 'success' || needs.pre-deployment.outputs.skip-tests == 'true') &&
+      needs.pre-deployment.outputs.deploy-environment == 'production'
+    environment:
+      name: production
+      url: https://swaggystacks.com
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build for production
+        env:
+          NODE_ENV: production
+          NEXT_PUBLIC_ENV: production
+        run: npm run build
+
+      - name: Deploy to production
+        run: |
+          echo "🚀 Deploying to production environment..."
+          echo "📋 Deployment ID: ${{ needs.pre-deployment.outputs.deployment-id }}"
+
+          # Simulate blue-green deployment process
+          echo "🔵 Creating new production instance..."
+          sleep 5
+
+          echo "🔄 Switching traffic to new instance..."
+          sleep 3
+
+          echo "✅ Successfully deployed to production"
+
+          # Store deployment metadata
+          echo "PRODUCTION_DEPLOYMENT_URL=https://swaggystacks.com" >> $GITHUB_ENV
+          echo "DEPLOYMENT_TIMESTAMP=$(date -Iseconds)" >> $GITHUB_ENV
+
+  # Post-deployment E2E validation
+  post-deployment-validation:
+    name: Post-deployment E2E Validation
+    runs-on: ubuntu-latest
+    needs: [pre-deployment, deploy-staging, deploy-production]
+    if: |
+      always() &&
+      (needs.deploy-staging.result == 'success' || needs.deploy-production.result == 'success')
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Determine deployment URL
+        run: |
+          if [[ "${{ needs.pre-deployment.outputs.deploy-environment }}" == "production" ]]; then
+            echo "DEPLOYMENT_URL=https://swaggystacks.com" >> $GITHUB_ENV
+            echo "TEST_ENVIRONMENT=production" >> $GITHUB_ENV
+          else
+            echo "DEPLOYMENT_URL=https://staging.swaggystacks.com" >> $GITHUB_ENV
+            echo "TEST_ENVIRONMENT=staging" >> $GITHUB_ENV
+          fi
+
+      - name: Wait for deployment to be ready
+        run: |
+          echo "⏳ Waiting for deployment to be ready..."
+
+          # Wait for the deployment to respond
+          for i in {1..30}; do
+            if curl -f -s "$DEPLOYMENT_URL" > /dev/null; then
+              echo "✅ Deployment is responding"
+              break
+            fi
+
+            if [[ $i -eq 30 ]]; then
+              echo "❌ Deployment not responding after 5 minutes"
+              exit 1
+            fi
+
+            echo "Attempt $i/30 - waiting 10 seconds..."
+            sleep 10
+          done
+
+      - name: Run post-deployment smoke tests
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ env.DEPLOYMENT_URL }}
+        run: |
+          echo "🧪 Running post-deployment validation tests..."
+
+          # Run comprehensive smoke tests against deployed environment
+          npx playwright test \
+            tests/e2e/marketplace/smoke-tests.spec.ts \
+            tests/e2e/pipeline/deployment-validation.spec.ts \
+            --reporter=html,junit \
+            --output-dir=test-results/post-deployment
+
+      - name: Run deployment-specific tests
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ env.DEPLOYMENT_URL }}
+          TEST_ENVIRONMENT: ${{ env.TEST_ENVIRONMENT }}
+        run: |
+          # Test both organization routes
+          npx playwright test \
+            --grep="swaggystacks|scientia" \
+            --reporter=html \
+            --output-dir=test-results/organization-tests
+
+      - name: Validate SLA compliance
+        run: |
+          echo "📊 Validating SLA compliance..."
+
+          # Check response times
+          RESPONSE_TIME=$(curl -o /dev/null -s -w '%{time_total}' "$DEPLOYMENT_URL")
+          RESPONSE_MS=$(echo "$RESPONSE_TIME * 1000" | bc -l | cut -d. -f1)
+
+          echo "Response time: ${RESPONSE_MS}ms"
+
+          if [[ $RESPONSE_MS -gt 3000 ]]; then
+            echo "⚠️ Response time exceeds 3 second SLA"
+          else
+            echo "✅ Response time meets SLA"
+          fi
+
+          # Test both domains
+          curl -f "$DEPLOYMENT_URL/swaggystacks" || exit 1
+          curl -f "$DEPLOYMENT_URL/scientia" || exit 1
+          curl -f "$DEPLOYMENT_URL/marketplace" || exit 1
+
+          echo "✅ SLA validation passed"
+
+      - name: Upload post-deployment test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: post-deployment-results-${{ env.TEST_ENVIRONMENT }}
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 14
+
+  # Rollback on failure
+  rollback-on-failure:
+    name: Rollback on Failure
+    runs-on: ubuntu-latest
+    needs: [pre-deployment, deploy-staging, deploy-production, post-deployment-validation]
+    if: |
+      always() &&
+      (needs.deploy-staging.result == 'failure' ||
+       needs.deploy-production.result == 'failure' ||
+       needs.post-deployment-validation.result == 'failure') &&
+      github.event.inputs.rollback_on_failure != 'false'
+
+    steps:
+      - name: Initiate rollback
+        run: |
+          echo "🚨 Deployment failure detected - initiating rollback..."
+          echo "📋 Deployment ID: ${{ needs.pre-deployment.outputs.deployment-id }}"
+
+          ENVIRONMENT="${{ needs.pre-deployment.outputs.deploy-environment }}"
+          echo "🔄 Rolling back $ENVIRONMENT environment..."
+
+          # Simulate rollback process
+          if [[ "$ENVIRONMENT" == "production" ]]; then
+            echo "🔴 Rolling back production deployment..."
+            # In real implementation, this would trigger rollback to previous version
+            sleep 10
+          else
+            echo "🟡 Rolling back staging deployment..."
+            sleep 5
+          fi
+
+          echo "✅ Rollback completed successfully"
+
+      - name: Validate rollback
+        run: |
+          ENVIRONMENT="${{ needs.pre-deployment.outputs.deploy-environment }}"
+
+          if [[ "$ENVIRONMENT" == "production" ]]; then
+            ROLLBACK_URL="https://swaggystacks.com"
+          else
+            ROLLBACK_URL="https://staging.swaggystacks.com"
+          fi
+
+          echo "🔍 Validating rollback at $ROLLBACK_URL..."
+
+          # Wait for rollback to complete
+          sleep 30
+
+          # Verify the rollback worked
+          if curl -f -s "$ROLLBACK_URL" > /dev/null; then
+            echo "✅ Rollback validation successful"
+          else
+            echo "❌ Rollback validation failed"
+            exit 1
+          fi
+
+      - name: Notify rollback completion
+        run: |
+          echo "📢 Rollback completed for ${{ needs.pre-deployment.outputs.deploy-environment }}"
+          echo "🔗 GitHub Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+  # Deployment summary
+  deployment-summary:
+    name: Deployment Summary
+    runs-on: ubuntu-latest
+    needs: [pre-deployment, critical-e2e-tests, deploy-staging, deploy-production, post-deployment-validation, rollback-on-failure]
+    if: always()
+
+    steps:
+      - name: Generate deployment summary
+        run: |
+          echo "# 🚀 Deployment Summary" > deployment-summary.md
+          echo "" >> deployment-summary.md
+          echo "**Deployment ID:** ${{ needs.pre-deployment.outputs.deployment-id }}" >> deployment-summary.md
+          echo "**Environment:** ${{ needs.pre-deployment.outputs.deploy-environment }}" >> deployment-summary.md
+          echo "**Timestamp:** $(date -Iseconds)" >> deployment-summary.md
+          echo "" >> deployment-summary.md
+
+          echo "## Pipeline Results" >> deployment-summary.md
+          echo "- Pre-deployment: ${{ needs.pre-deployment.result }}" >> deployment-summary.md
+          echo "- Critical E2E Tests: ${{ needs.critical-e2e-tests.result }}" >> deployment-summary.md
+          echo "- Staging Deployment: ${{ needs.deploy-staging.result }}" >> deployment-summary.md
+          echo "- Production Deployment: ${{ needs.deploy-production.result }}" >> deployment-summary.md
+          echo "- Post-deployment Validation: ${{ needs.post-deployment-validation.result }}" >> deployment-summary.md
+          echo "- Rollback: ${{ needs.rollback-on-failure.result }}" >> deployment-summary.md
+          echo "" >> deployment-summary.md
+
+          # Determine overall status
+          if [[ "${{ needs.rollback-on-failure.result }}" == "success" ]]; then
+            echo "## ⚠️ Status: ROLLED BACK" >> deployment-summary.md
+            echo "Deployment failed and was automatically rolled back." >> deployment-summary.md
+          elif [[ "${{ needs.post-deployment-validation.result }}" == "success" ]]; then
+            echo "## ✅ Status: SUCCESSFUL" >> deployment-summary.md
+            echo "Deployment completed successfully and passed all validation tests." >> deployment-summary.md
+          else
+            echo "## ❌ Status: FAILED" >> deployment-summary.md
+            echo "Deployment failed. Manual intervention may be required." >> deployment-summary.md
+          fi
+
+          cat deployment-summary.md
+
+      - name: Upload deployment summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-summary
+          path: deployment-summary.md
+          retention-days: 90

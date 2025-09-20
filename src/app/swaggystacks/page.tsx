@@ -2,230 +2,391 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Progress } from '@/components/ui/progress'
+import {
+  TerminalWindow,
+  TerminalPrompt,
+  TerminalOutput,
+  ASCIILogo,
+  type TerminalOutputLine
+} from '@/components/terminal'
+import { useTypingEffect, useCommandHistory, useTerminalTheme } from '@/hooks/useTypingEffect'
+import styles from '@/styles/terminal.module.css'
 
 export default function SwaggyStacksPage() {
-  const [terminalText, setTerminalText] = useState('')
-  const [isTyping, setIsTyping] = useState(true)
+  const [activeCommand, setActiveCommand] = useState('')
+  const [terminalLines, setTerminalLines] = useState<TerminalOutputLine[]>([])
+  const [showModelBrowser, setShowModelBrowser] = useState(false)
+  const [deploymentProgress, setDeploymentProgress] = useState(0)
+  const [isDeploying, setIsDeploying] = useState(false)
 
-  const fullText = '> npm install @ai/everything --save-dev'
+  const { addCommand, history } = useCommandHistory()
+  const { applyTheme } = useTerminalTheme()
 
+  // Initialize with classic green terminal theme
   useEffect(() => {
-    let i = 0
-    const timer = setInterval(() => {
-      if (i < fullText.length) {
-        setTerminalText(fullText.slice(0, i + 1))
-        i++
-      } else {
-        setIsTyping(false)
-        clearInterval(timer)
-      }
-    }, 100)
+    applyTheme('classic')
+  }, [applyTheme])
 
-    return () => clearInterval(timer)
-  }, [])
+  const handleCommand = (command: string) => {
+    addCommand(command)
+    setActiveCommand(command)
+
+    // Parse retro terminal commands
+    const cmd = command.toLowerCase().trim()
+
+    if (cmd === 'help' || cmd === 'h') {
+      showHelp()
+    } else if (cmd === 'models' || cmd === 'list') {
+      showModels()
+    } else if (cmd.startsWith('deploy ')) {
+      const model = cmd.replace('deploy ', '')
+      deployModel(model)
+    } else if (cmd === 'clear') {
+      setTerminalLines([])
+    } else if (cmd === 'retro' || cmd === 'arcade') {
+      showRetroMode()
+    } else if (cmd === 'stats') {
+      showStats()
+    } else {
+      setTerminalLines(prev => [...prev,
+        { type: 'command', text: `$ ${command}` },
+        { type: 'error', text: `Command not found: ${command}. Type 'help' for available commands.` }
+      ])
+    }
+  }
+
+  const showHelp = () => {
+    const helpLines: TerminalOutputLine[] = [
+      { type: 'command', text: '$ help' },
+      { type: 'info', text: '╔══════════ SWAGGY STACKS ARCADE COMMANDS ══════════╗' },
+      { type: 'info', text: '║                                                   ║' },
+      { type: 'success', text: '║  🎮 GAME COMMANDS:                               ║' },
+      { type: 'info', text: '║    help          - Show this help screen          ║' },
+      { type: 'info', text: '║    models        - Browse AI model arcade         ║' },
+      { type: 'info', text: '║    deploy <name> - Deploy model to RunPod         ║' },
+      { type: 'info', text: '║    stats         - Show deployment statistics     ║' },
+      { type: 'info', text: '║    clear         - Clear terminal screen          ║' },
+      { type: 'info', text: '║    retro         - Enable retro arcade mode       ║' },
+      { type: 'info', text: '║                                                   ║' },
+      { type: 'warning', text: '║  🕹️  POWER-UPS:                                 ║' },
+      { type: 'info', text: '║    Theme: Classic Terminal Green                  ║' },
+      { type: 'info', text: '║    Cost Multiplier: 0.03x (97% savings!)         ║' },
+      { type: 'info', text: '║    Model Database: 500,000+ unlocked             ║' },
+      { type: 'info', text: '║                                                   ║' },
+      { type: 'info', text: '╚═══════════════════════════════════════════════════╝' },
+      { type: 'success', text: '' },
+      { type: 'success', text: 'Ready to play! Type a command to continue...' }
+    ]
+    setTerminalLines(prev => [...prev, ...helpLines])
+  }
+
+  const showModels = () => {
+    setShowModelBrowser(true)
+    const modelLines: TerminalOutputLine[] = [
+      { type: 'command', text: '$ models' },
+      { type: 'loading', text: 'Scanning HuggingFace model database...', delay: 1000 },
+      { type: 'ascii', text: `
+    ┌──────────────────────────────────────────────────────┐
+    │                 🎮 MODEL ARCADE 🎮                  │
+    ├──────────────────────────────────────────────────────┤
+    │ MODEL_ID               SIZE    COST/HR    STATUS     │
+    ├──────────────────────────────────────────────────────┤
+    │ meta-llama/Llama-3.2   7B      $0.10      READY ✅  │
+    │ microsoft/DialoGPT     117M     $0.05      READY ✅  │
+    │ openai/gpt-4          ~1.7T     $30.00     LOCKED 🔒 │
+    │ anthropic/claude       ~500B    $15.00     LOCKED 🔒 │
+    │ google/gemini          ~540B    $7.00      LOCKED 🔒 │
+    ├──────────────────────────────────────────────────────┤
+    │ 🎯 TARGET: Deploy open-source models for 97% savings │
+    │ 💰 CREDITS: UNLIMITED                                │
+    │ 🏆 HIGH SCORE: 500,000+ models discovered            │
+    └──────────────────────────────────────────────────────┘`, delay: 2000 },
+      { type: 'success', text: 'Use: deploy <model-name> to activate deployment sequence!' }
+    ]
+    setTerminalLines(prev => [...prev, ...modelLines])
+  }
+
+  const deployModel = (modelName: string) => {
+    setIsDeploying(true)
+    setDeploymentProgress(0)
+
+    const deployLines: TerminalOutputLine[] = [
+      { type: 'command', text: `$ deploy ${modelName}` },
+      { type: 'info', text: '🎮 DEPLOYMENT SEQUENCE INITIATED 🎮' },
+      { type: 'loading', text: 'Inserting quarter... 💰' },
+      { type: 'success', text: 'Player Ready!' },
+      { type: 'progress', text: 'Level 1: Connecting to RunPod...', progress: 25 },
+    ]
+
+    setTerminalLines(prev => [...prev, ...deployLines])
+
+    // Simulate retro game-style deployment
+    const progressSteps = [
+      { progress: 25, text: 'Level 1: RunPod connection established! 🔗' },
+      { progress: 50, text: 'Level 2: Docker container spawning... 🐳' },
+      { progress: 75, text: 'Level 3: Model weights loading... ⚡' },
+      { progress: 100, text: 'GAME OVER - YOU WIN! 🏆 Model deployed successfully!' }
+    ]
+
+    progressSteps.forEach((step, index) => {
+      setTimeout(() => {
+        setDeploymentProgress(step.progress)
+        setTerminalLines(prev => [...prev, {
+          type: step.progress === 100 ? 'success' : 'info',
+          text: step.text
+        }])
+
+        if (step.progress === 100) {
+          setIsDeploying(false)
+          setTerminalLines(prev => [...prev, {
+            type: 'success',
+            text: `🎊 Endpoint ready: https://api.runpod.ai/v2/${modelName.toLowerCase()}/runsync`
+          }])
+        }
+      }, (index + 1) * 1500)
+    })
+  }
+
+  const showStats = () => {
+    const statsLines: TerminalOutputLine[] = [
+      { type: 'command', text: '$ stats' },
+      { type: 'ascii', text: `
+    ╔═══════════════════════════════════════════════════════╗
+    ║                 🎮 PLAYER STATISTICS 🎮              ║
+    ╠═══════════════════════════════════════════════════════╣
+    ║  Models Deployed: 1,337                              ║
+    ║  Total Savings: $42,069 (vs OpenAI/Anthropic)       ║
+    ║  Current Streak: 🔥 420 successful deployments       ║
+    ║  Favorite Model: meta-llama/Llama-3.2-7B             ║
+    ║  Power Level: OVER 9000! ⚡                           ║
+    ║                                                       ║
+    ║  🏆 ACHIEVEMENTS UNLOCKED:                            ║
+    ║  ✅ First Deployment (Deploy your first model)       ║
+    ║  ✅ Cost Saver (Save $1000+ vs traditional APIs)     ║
+    ║  ✅ Speed Demon (Sub-3min deployment time)           ║
+    ║  ✅ Model Master (Deploy 100+ different models)      ║
+    ║  🔒 Arcade Legend (Deploy 10,000+ models) - LOCKED   ║
+    ╚═══════════════════════════════════════════════════════╝` },
+      { type: 'success', text: 'Keep playing to unlock more achievements! 🎯' }
+    ]
+    setTerminalLines(prev => [...prev, ...statsLines])
+  }
+
+  const showRetroMode = () => {
+    setTerminalLines(prev => [...prev,
+      { type: 'command', text: '$ retro' },
+      { type: 'success', text: '🕹️ RETRO ARCADE MODE ACTIVATED! 🕹️' },
+      { type: 'info', text: 'Welcome to 1985... but with 2025 AI technology!' }
+    ])
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 text-white theme-swaggystacks">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-black/20 backdrop-blur-md border-b border-purple-500/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-purple-400 to-green-400 rounded-lg"></div>
-              <span className="text-xl font-bold">SwaggyStacks</span>
+    <div className={`${styles.terminal} min-h-screen relative overflow-hidden`}>
+      {/* Retro scanlines effect */}
+      <div className="absolute inset-0 pointer-events-none opacity-10">
+        <div className="h-full w-full bg-gradient-to-b from-transparent via-green-500 to-transparent opacity-20 animate-pulse" />
+      </div>
+
+      {/* Terminal Header */}
+      <div className="sticky top-0 z-50 bg-black border-b border-green-600 p-2">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="text-green-400 font-bold text-lg font-mono">
+              █▓▒░ SWAGGY STACKS ARCADE ░▒▓█
             </div>
-            <div className="hidden md:flex space-x-8">
-              <a href="#features" className="hover:text-purple-400 transition-colors">Features</a>
-              <a href="#pricing" className="hover:text-purple-400 transition-colors">Pricing</a>
-              <a href="#docs" className="hover:text-purple-400 transition-colors">Docs</a>
+            <Badge variant="outline" className="border-green-500 text-green-400">
+              PLAYER 1
+            </Badge>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="text-amber-400 text-sm font-mono">
+              CREDITS: ∞ | LEVEL: PRO | STATUS: ONLINE ●
             </div>
-            <button className="bg-gradient-to-r from-purple-500 to-green-500 px-4 py-2 rounded-lg font-semibold hover:from-purple-600 hover:to-green-600 transition-all">
-              Start Free
-            </button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="border-green-500 text-green-400 hover:bg-green-500/20"
+              onClick={() => window.location.href = '/scientia'}
+            >
+              SWITCH TO ENTERPRISE MODE
+            </Button>
           </div>
         </div>
-      </nav>
+      </div>
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4">
-        <div className="max-w-7xl mx-auto text-center">
-          <motion.h1
-            className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-purple-400 via-green-400 to-yellow-400 bg-clip-text text-transparent"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            Ship AI Products
-            <br />
-            <span className="terminal-glow">10x Faster</span>
-          </motion.h1>
+      {/* Main Terminal Interface */}
+      <div className="container mx-auto p-4 pt-20 pb-8">
+        <div className="grid lg:grid-cols-3 gap-6">
+          {/* ASCII Logo Section */}
+          <div className="lg:col-span-1">
+            <Card className="bg-black border-green-600 h-fit">
+              <CardContent className="p-4">
+                <ASCIILogo animated={true} size="small" glow={true} />
+              </CardContent>
+            </Card>
 
-          <motion.p
-            className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            Access 500,000+ AI models for <span className="text-green-400 font-semibold">$0.001/token</span> instead of
-            <span className="text-red-400 line-through"> $0.03/token</span>.
-            Mobile-first discovery, one-click deployment.
-          </motion.p>
+            {/* Quick Stats Card */}
+            <Card className="bg-black border-amber-600 mt-4">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-amber-400 font-mono text-sm">
+                  🏆 QUICK STATS
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-0 text-xs font-mono space-y-1">
+                <div className="flex justify-between">
+                  <span className="text-green-400">Models Available:</span>
+                  <span className="text-white">500,000+</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-green-400">Cost Savings:</span>
+                  <span className="text-white">97%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-green-400">Avg Deploy Time:</span>
+                  <span className="text-white">2.3 min</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-green-400">Success Rate:</span>
+                  <span className="text-white">99.9%</span>
+                </div>
+                <hr className="border-amber-800 my-2" />
+                <div className="text-center text-amber-400">
+                  ⚡ POWER LEVEL: MAXIMUM ⚡
+                </div>
+              </CardContent>
+            </Card>
 
-          {/* Terminal Animation */}
-          <motion.div
-            className="bg-black/60 rounded-lg p-6 max-w-2xl mx-auto mb-8 font-mono text-left border border-green-500/30"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            <div className="flex items-center mb-4">
-              <div className="flex space-x-2">
-                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              </div>
-              <span className="ml-4 text-gray-400">terminal</span>
-            </div>
-            <div className="text-green-400">
-              {terminalText}
-              {isTyping && <span className="animate-terminal-cursor">|</span>}
-            </div>
-            {!isTyping && (
-              <motion.div
-                className="mt-2 text-green-400"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-              >
-                ✓ Connected to 500,000+ models
-                <br />
-                ✓ RunPod serverless ready
-                <br />
-                ✓ Cost optimized: 97% savings
-              </motion.div>
+            {/* Theme Selector */}
+            <Card className="bg-black border-cyan-600 mt-4">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-cyan-400 font-mono text-sm">
+                  🎨 ARCADE THEMES
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-0 space-y-2">
+                {['classic', 'amber', 'cyan', 'matrix'].map((theme) => (
+                  <Button
+                    key={theme}
+                    variant="outline"
+                    size="sm"
+                    className="w-full justify-start font-mono text-xs border-gray-600 hover:bg-green-500/20"
+                    onClick={() => applyTheme(theme as any)}
+                  >
+                    {theme === 'classic' && '🟢'}
+                    {theme === 'amber' && '🟡'}
+                    {theme === 'cyan' && '🔵'}
+                    {theme === 'matrix' && '🟢'}
+                    {theme.toUpperCase()}
+                  </Button>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Main Terminal Window */}
+          <div className="lg:col-span-2">
+            <TerminalWindow title="SwaggyStacks AI Arcade Terminal v2.1.0">
+              <TerminalOutput lines={terminalLines} />
+              <TerminalPrompt
+                user="swaggy"
+                directory="~/ai-arcade"
+                onCommand={handleCommand}
+                placeholder="Type 'help' to start your AI adventure..."
+              />
+            </TerminalWindow>
+
+            {/* Deployment Progress */}
+            {isDeploying && (
+              <Card className="mt-4 bg-black border-yellow-600">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-yellow-400 font-mono text-sm flex items-center gap-2">
+                    🚀 DEPLOYMENT IN PROGRESS
+                    <span className="animate-spin">⚡</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Progress value={deploymentProgress} className="mb-2" />
+                  <div className="text-center text-green-400 font-mono text-sm">
+                    {deploymentProgress}% Complete - {
+                      deploymentProgress < 25 ? 'Connecting...' :
+                      deploymentProgress < 50 ? 'Building...' :
+                      deploymentProgress < 75 ? 'Loading...' :
+                      deploymentProgress < 100 ? 'Finalizing...' :
+                      'GAME OVER - YOU WIN! 🏆'
+                    }
+                  </div>
+                </CardContent>
+              </Card>
             )}
-          </motion.div>
-
-          {/* CTA Buttons */}
-          <motion.div
-            className="flex flex-col sm:flex-row gap-4 justify-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          >
-            <button className="bg-gradient-to-r from-purple-500 to-green-500 px-8 py-4 rounded-lg text-lg font-semibold hover:from-purple-600 hover:to-green-600 transition-all transform hover:scale-105">
-              Start Building Free
-            </button>
-            <button className="border border-purple-500 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-purple-500/20 transition-all">
-              View GitHub
-            </button>
-          </motion.div>
+          </div>
         </div>
-      </section>
+      </div>
 
-      {/* Features Section */}
-      <section id="features" className="py-20 px-4">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-16">Developer-First Features</h2>
+      {/* Retro Footer/Status Bar */}
+      <div className="fixed bottom-0 left-0 right-0 bg-black border-t border-green-600 p-2 z-40">
+        <div className="flex items-center justify-between font-mono text-xs">
+          <div className="flex items-center gap-4">
+            <span className="text-green-400">
+              ░▒▓█ SWAGGY STACKS v2.1.0 █▓▒░
+            </span>
+            <Badge variant="outline" className="border-green-500 text-green-400">
+              {terminalLines.length} COMMANDS EXECUTED
+            </Badge>
+          </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "Mobile Discovery",
-                description: "Browse 500k+ models on your phone. Save favorites, compare performance metrics.",
-                icon: "📱",
-              },
-              {
-                title: "One-Click Deploy",
-                description: "RunPod serverless endpoints created instantly. No YAML, no Docker, no pain.",
-                icon: "🚀",
-              },
-              {
-                title: "Cost Optimizer",
-                description: "Automatically route to cheapest model that meets your quality requirements.",
-                icon: "💰",
-              },
-              {
-                title: "IDE Integration",
-                description: "QR codes to sync configs with Cursor, VS Code, Claude Code. Works offline.",
-                icon: "🔧",
-              },
-              {
-                title: "Western LLM Bridge",
-                description: "Drop-in replacement for OpenAI/Anthropic APIs. Same interface, 97% savings.",
-                icon: "🌉",
-              },
-              {
-                title: "Open Source",
-                description: "MIT licensed. Self-host, modify, contribute. No vendor lock-in ever.",
-                icon: "🔓",
-              },
-            ].map((feature, index) => (
-              <motion.div
-                key={index}
-                className="bg-gray-800/50 p-6 rounded-lg border border-purple-500/20 hover:border-purple-500/40 transition-all"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
+          <div className="flex items-center gap-4">
+            <span className="text-amber-400">
+              🎮 MADE BY DEVS, FOR DEVS
+            </span>
+            <div className="flex gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-green-400 hover:bg-green-500/20 text-xs"
+                onClick={() => window.open('https://github.com/swaggystacks', '_blank')}
               >
-                <div className="text-4xl mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-semibold mb-3 text-purple-400">{feature.title}</h3>
-                <p className="text-gray-300">{feature.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Cost Comparison */}
-      <section className="py-20 px-4 bg-black/20">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-8">Stop Overpaying for AI</h2>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-red-900/30 p-8 rounded-lg border border-red-500/30">
-              <h3 className="text-2xl font-bold mb-4 text-red-400">Traditional APIs</h3>
-              <div className="text-4xl font-bold mb-4 text-red-400">$0.03/1K tokens</div>
-              <ul className="text-left space-y-2 text-gray-300">
-                <li>• OpenAI GPT-4: $30/1M tokens</li>
-                <li>• Anthropic Claude: $15/1M tokens</li>
-                <li>• Google Gemini: $7/1M tokens</li>
-                <li>• Limited model selection</li>
-                <li>• No customization</li>
-              </ul>
-            </div>
-
-            <div className="bg-green-900/30 p-8 rounded-lg border border-green-500/30">
-              <h3 className="text-2xl font-bold mb-4 text-green-400">SwaggyStacks</h3>
-              <div className="text-4xl font-bold mb-4 text-green-400">$0.001/1K tokens</div>
-              <ul className="text-left space-y-2 text-gray-300">
-                <li>• 500,000+ open-source models</li>
-                <li>• Fine-tuned for your use case</li>
-                <li>• RunPod serverless scaling</li>
-                <li>• 97% cost reduction</li>
-                <li>• Full customization</li>
-              </ul>
+                GITHUB
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-green-400 hover:bg-green-500/20 text-xs"
+                onClick={() => window.open('https://discord.gg/swaggystacks', '_blank')}
+              >
+                DISCORD
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-green-400 hover:bg-green-500/20 text-xs"
+                onClick={() => handleCommand('help')}
+              >
+                API DOCS
+              </Button>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Footer */}
-      <footer className="py-12 px-4 border-t border-purple-500/20">
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <div className="w-8 h-8 bg-gradient-to-r from-purple-400 to-green-400 rounded-lg"></div>
-            <span className="text-xl font-bold">SwaggyStacks</span>
-          </div>
-          <p className="text-gray-400 mb-4">Built by developers, for developers</p>
-          <div className="flex justify-center space-x-6">
-            <a href="#" className="text-gray-400 hover:text-purple-400 transition-colors">GitHub</a>
-            <a href="#" className="text-gray-400 hover:text-purple-400 transition-colors">Discord</a>
-            <a href="#" className="text-gray-400 hover:text-purple-400 transition-colors">Docs</a>
-            <a href="#" className="text-gray-400 hover:text-purple-400 transition-colors">API</a>
+      {/* Easter Egg: Konami Code Detection */}
+      <div className="hidden">
+        {/* This would be activated by the Konami code sequence */}
+        <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
+          <div className="text-center">
+            <div className="text-6xl mb-4">🎊</div>
+            <div className="text-green-400 text-2xl font-mono mb-4">
+              KONAMI CODE ACTIVATED!
+            </div>
+            <div className="text-amber-400 font-mono">
+              UNLIMITED DEPLOYMENTS UNLOCKED!
+            </div>
           </div>
         </div>
-      </footer>
+      </div>
     </div>
   )
 }

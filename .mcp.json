@@ -67,6 +67,18 @@
 				"DC_FILE_READ_LINE_LIMIT": "2000",
 				"DC_FILE_WRITE_LINE_LIMIT": "50"
 			}
+		},
+		"hf-swaggystacks": {
+			"url": "https://huggingface.co/mcp",
+			"headers": {
+				"Authorization": "Bearer ${SWAGGYSTACKS_HF_TOKEN}"
+			}
+		},
+		"hf-scientiacapital": {
+			"url": "https://huggingface.co/mcp",
+			"headers": {
+				"Authorization": "Bearer ${SCIENTIACAPITAL_HF_TOKEN}"
+			}
 		}
 	}
 }

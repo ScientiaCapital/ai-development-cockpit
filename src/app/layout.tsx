@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import { HuggingFaceAuthProvider } from '@/contexts/HuggingFaceAuth'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -35,7 +36,9 @@ export default function RootLayout({
         <meta name="msapplication-tap-highlight" content="no" />
       </head>
       <body className={inter.className} suppressHydrationWarning>
-        {children}
+        <HuggingFaceAuthProvider>
+          {children}
+        </HuggingFaceAuthProvider>
       </body>
     </html>
   )

@@ -601,6 +601,7 @@ jobs:
   auto-fixes:
     name: Automated Security Fixes
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: [dependency-scan]
     if: |
       needs.dependency-scan.result == 'failure' &&
@@ -619,33 +620,162 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
-      - name: Attempt automatic fixes
+      - name: Configure Git with timeouts
+        timeout-minutes: 1
         run: |
+          set -e
+          echo "⚙️ Configuring Git with security timeouts..."
+
+          # Configure Git timeouts for security
+          git config http.postBuffer 524288000
+          git config http.timeout 60
+          git config user.name "Security Bot"
+          git config user.email "security-bot@github.com"
+
+          echo "✅ Git configuration completed"
+
+      - name: Apply automatic security fixes
+        timeout-minutes: 2
+        run: |
+          set -e
           echo "🔧 Attempting automatic security fixes..."
-          
-          # Run npm audit fix for non-breaking changes
-          npm audit fix --only=prod
-          
-          # Check if package-lock.json changed
-          if git diff --quiet package-lock.json; then
-            echo "ℹ️ No automatic fixes available"
+
+          # Run npm audit fix for non-breaking changes only
+          npm audit fix --only=prod || {
+            echo "⚠️ npm audit fix encountered issues, but continuing..."
+            true
+          }
+
+          echo "✅ Automatic fixes attempt completed"
+
+      - name: Commit security fixes
+        timeout-minutes: 2
+        run: |
+          set -e
+          echo "📝 Committing security fixes if any were applied..."
+
+          # Check if any files were modified
+          if git diff --quiet && git diff --quiet --cached; then
+            echo "ℹ️ No changes detected - no automatic fixes were available"
+            echo "NO_CHANGES=true" >> $GITHUB_ENV
           else
-            echo "✅ Automatic fixes applied"
-            
-            # Create PR with fixes
-            git config user.name "Security Bot"
-            git config user.email "security-bot@github.com"
-            git add package-lock.json
+            echo "✅ Changes detected - proceeding with commit"
+
+            # Add all changed files
+            git add package-lock.json package.json || true
+
+            # Create commit with detailed message
             git commit -m "fix: automatic security vulnerability fixes
-            
-            - Applied npm audit fix for non-breaking security updates
-            - Automated fix via security scanning pipeline"
-            
-            # Push to new branch and create PR
-            BRANCH_NAME="security/auto-fixes-$(date +%Y%m%d-%H%M%S)"
-            git checkout -b "$BRANCH_NAME"
-            git push origin "$BRANCH_NAME"
-            
-            echo "🔀 Created branch: $BRANCH_NAME"
-            echo "📝 Manual PR creation recommended for review"
+
+- Applied npm audit fix for non-breaking security updates
+- Automated fix via security scanning pipeline
+- Scan Date: $(date)
+- Workflow Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+            echo "✅ Security fixes committed successfully"
+            echo "BRANCH_NAME=security/auto-fixes-$(date +%Y%m%d-%H%M%S)" >> $GITHUB_ENV
           fi
+
+      - name: Push security fixes with retry logic
+        timeout-minutes: 5
+        if: env.NO_CHANGES != 'true'
+        run: |
+          set -e
+          echo "🚀 Pushing security fixes to new branch with retry logic..."
+
+          BRANCH_NAME="${{ env.BRANCH_NAME }}"
+          MAX_ATTEMPTS=3
+          ATTEMPT=1
+
+          # Create and switch to new branch
+          git checkout -b "$BRANCH_NAME"
+          echo "📋 Created branch: $BRANCH_NAME"
+
+          # Retry logic for git push
+          while [ $ATTEMPT -le $MAX_ATTEMPTS ]; do
+            echo "🔄 Push attempt $ATTEMPT of $MAX_ATTEMPTS..."
+
+            if git push origin "$BRANCH_NAME"; then
+              echo "✅ Successfully pushed branch $BRANCH_NAME on attempt $ATTEMPT"
+              echo "PUSH_SUCCESS=true" >> $GITHUB_ENV
+              break
+            else
+              echo "❌ Push attempt $ATTEMPT failed"
+
+              if [ $ATTEMPT -eq $MAX_ATTEMPTS ]; then
+                echo "🚨 All push attempts failed - manual intervention required"
+                echo "PUSH_SUCCESS=false" >> $GITHUB_ENV
+                exit 1
+              else
+                echo "⏳ Waiting 5 seconds before retry..."
+                sleep 5
+                ATTEMPT=$((ATTEMPT + 1))
+              fi
+            fi
+          done
+
+      - name: Verify remote branch creation
+        timeout-minutes: 2
+        if: env.NO_CHANGES != 'true' && env.PUSH_SUCCESS == 'true'
+        run: |
+          set -e
+          echo "🔍 Verifying remote branch creation..."
+
+          BRANCH_NAME="${{ env.BRANCH_NAME }}"
+          MAX_VERIFICATION_ATTEMPTS=3
+          ATTEMPT=1
+
+          while [ $ATTEMPT -le $MAX_VERIFICATION_ATTEMPTS ]; do
+            echo "🔄 Verification attempt $ATTEMPT of $MAX_VERIFICATION_ATTEMPTS..."
+
+            # Check if remote branch exists and has our commit
+            if git ls-remote --heads origin "$BRANCH_NAME" | grep -q "$BRANCH_NAME"; then
+              REMOTE_SHA=$(git ls-remote --heads origin "$BRANCH_NAME" | cut -f1)
+              LOCAL_SHA=$(git rev-parse HEAD)
+
+              if [ "$REMOTE_SHA" = "$LOCAL_SHA" ]; then
+                echo "✅ Remote branch verification successful"
+                echo "📋 Branch: $BRANCH_NAME"
+                echo "📋 Local SHA: $LOCAL_SHA"
+                echo "📋 Remote SHA: $REMOTE_SHA"
+                break
+              else
+                echo "⚠️ SHA mismatch - Local: $LOCAL_SHA, Remote: $REMOTE_SHA"
+              fi
+            else
+              echo "❌ Remote branch not found on attempt $ATTEMPT"
+            fi
+
+            if [ $ATTEMPT -eq $MAX_VERIFICATION_ATTEMPTS ]; then
+              echo "⚠️ Branch verification failed - branch may still be propagating"
+            else
+              sleep 3
+              ATTEMPT=$((ATTEMPT + 1))
+            fi
+          done
+
+      - name: Provide PR creation instructions
+        timeout-minutes: 1
+        if: env.NO_CHANGES != 'true' && env.PUSH_SUCCESS == 'true'
+        run: |
+          echo "📝 Security fixes have been applied and pushed successfully!"
+          echo ""
+          echo "🔗 Create a Pull Request:"
+          echo "Branch: ${{ env.BRANCH_NAME }}"
+          echo "Title: 'fix: automatic security vulnerability fixes'"
+          echo "URL: ${{ github.server_url }}/${{ github.repository }}/compare/${{ env.BRANCH_NAME }}"
+          echo ""
+          echo "📋 PR Description Template:"
+          echo "## 🔒 Automatic Security Fixes"
+          echo "This PR contains automatic security vulnerability fixes generated by the security scanning pipeline."
+          echo ""
+          echo "### Changes"
+          echo "- Applied npm audit fix for non-breaking security updates"
+          echo "- Updated package-lock.json with security patches"
+          echo ""
+          echo "### Verification"
+          echo "- [ ] Review all dependency changes"
+          echo "- [ ] Run tests to ensure no breaking changes"
+          echo "- [ ] Verify application functionality"
+          echo ""
+          echo "Workflow Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

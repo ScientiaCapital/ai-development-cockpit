@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import { useRBAC } from '../../hooks/useRBAC'
 import {
-  type UserRole,
+  type Role,
   type Permission,
   ROLES,
   getRoleDisplayName,
@@ -15,7 +15,7 @@ import {
 interface RoleManagerProps {
   userId?: string
   organizationId?: string
-  onRoleChange?: (userId: string, newRole: UserRole) => void
+  onRoleChange?: (userId: string, newRole: Role) => void
   className?: string
 }
 
@@ -23,7 +23,7 @@ interface UserWithRole {
   id: string
   email: string
   name?: string
-  role: UserRole
+  role: Role
   lastActive?: string
   status: 'active' | 'inactive' | 'pending'
 }
@@ -35,10 +35,10 @@ export default function RoleManager({
   className = ''
 }: RoleManagerProps) {
   const { user } = useAuth()
-  const { currentRole, can, features } = useRBAC()
+  const { currentRole, canManageUsers, canViewUsers } = useRBAC()
   const [selectedUser, setSelectedUser] = useState<UserWithRole | null>(null)
   const [isUpdating, setIsUpdating] = useState(false)
-  const [showRoleDetails, setShowRoleDetails] = useState<UserRole | null>(null)
+  const [showRoleDetails, setShowRoleDetails] = useState<Role | null>(null)
 
   // Mock users data - in real app, this would come from API
   const [users] = useState<UserWithRole[]>([
@@ -76,7 +76,7 @@ export default function RoleManager({
     }
   ])
 
-  if (!features.canViewUsers) {
+  if (!canViewUsers) {
     return (
       <div className={`bg-white dark:bg-gray-800 shadow rounded-lg p-6 ${className}`}>
         <div className="text-center">
@@ -96,8 +96,8 @@ export default function RoleManager({
     )
   }
 
-  const handleRoleChange = async (targetUser: UserWithRole, newRole: UserRole) => {
-    if (!can.writeUsers) {
+  const handleRoleChange = async (targetUser: UserWithRole, newRole: Role) => {
+    if (!canManageUsers) {
       alert('You do not have permission to change user roles.')
       return
     }
@@ -127,7 +127,7 @@ export default function RoleManager({
     }
   }
 
-  const getRoleIcon = (role: UserRole) => {
+  const getRoleIcon = (role: Role) => {
     switch (role) {
       case 'admin':
         return (
@@ -174,7 +174,7 @@ export default function RoleManager({
     }
   }
 
-  const getRoleBadgeColor = (role: UserRole) => {
+  const getRoleBadgeColor = (role: Role) => {
     const color = getRoleColor(role)
     switch (color) {
       case 'red':
@@ -241,7 +241,7 @@ export default function RoleManager({
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                     Last Active
                   </th>
-                  {can.writeUsers && (
+                  {canManageUsers && (
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Actions
                     </th>
@@ -276,7 +276,7 @@ export default function RoleManager({
                         : 'Never'
                       }
                     </td>
-                    {can.writeUsers && (
+                    {canManageUsers && (
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
                         <button
                           onClick={() => setSelectedUser(userItem)}
@@ -308,33 +308,33 @@ export default function RoleManager({
 
             <div className="space-y-3 mb-6">
               {Object.values(ROLES).map((roleInfo) => {
-                const canAssign = !currentRole || isHigherRole(currentRole, roleInfo.role)
+                const canAssign = !currentRole || isHigherRole(currentRole, roleInfo.name)
 
                 return (
                   <div
-                    key={roleInfo.role}
+                    key={roleInfo.name}
                     className={`p-3 border rounded-lg cursor-pointer transition-colors ${
                       canAssign
                         ? 'border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600'
                         : 'border-gray-100 dark:border-gray-800 opacity-50 cursor-not-allowed'
                     } ${
-                      selectedUser.role === roleInfo.role
+                      selectedUser.role === roleInfo.name
                         ? 'bg-blue-50 dark:bg-blue-900/50 border-blue-300 dark:border-blue-600'
                         : 'bg-gray-50 dark:bg-gray-700'
                     }`}
-                    onClick={() => canAssign && handleRoleChange(selectedUser, roleInfo.role)}
+                    onClick={() => canAssign && handleRoleChange(selectedUser, roleInfo.name)}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
-                        <div className={`flex items-center space-x-2 px-2 py-1 rounded ${getRoleBadgeColor(roleInfo.role)}`}>
-                          {getRoleIcon(roleInfo.role)}
+                        <div className={`flex items-center space-x-2 px-2 py-1 rounded ${getRoleBadgeColor(roleInfo.name)}`}>
+                          {getRoleIcon(roleInfo.name)}
                           <span className="text-sm font-medium">{roleInfo.description.split(' ')[0]}</span>
                         </div>
                         {!canAssign && (
                           <span className="text-xs text-gray-500 dark:text-gray-400">(Cannot assign)</span>
                         )}
                       </div>
-                      {selectedUser.role === roleInfo.role && (
+                      {selectedUser.role === roleInfo.name && (
                         <span className="text-xs font-medium text-blue-600 dark:text-blue-400">Current</span>
                       )}
                     </div>
@@ -399,19 +399,6 @@ export default function RoleManager({
                 </div>
               </div>
 
-              {ROLES[showRoleDetails].limitations && (
-                <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white mb-2">Limitations</h4>
-                  <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                    {ROLES[showRoleDetails].limitations!.map((limitation, index) => (
-                      <li key={index} className="flex items-start">
-                        <span className="text-red-500 mr-2">•</span>
-                        {limitation}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
             </div>
 
             <div className="mt-6 flex justify-end">

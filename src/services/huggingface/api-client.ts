@@ -50,6 +50,154 @@ export interface RequestOptions extends AxiosRequestConfig {
   context?: string;
 }
 
+// ===== NEW: Enhanced TypeScript Interfaces =====
+
+export interface ModelSearchResult {
+  id: string;
+  author: string;
+  sha: string;
+  created_at: string;
+  last_modified: string;
+  private: boolean;
+  gated: boolean;
+  downloads: number;
+  likes: number;
+  tags: string[];
+  pipeline_tag?: string;
+  library_name?: string;
+  mask_token?: string;
+  widget_data?: any[];
+  model_index?: any;
+  config?: any;
+  transformers_info?: {
+    auto_model: string;
+    custom_class?: string;
+    pipeline_tag?: string;
+    processor?: string;
+  };
+  cardData?: {
+    language?: string[];
+    license?: string;
+    tags?: string[];
+    datasets?: string[];
+    metrics?: string[];
+    model_name?: string;
+    base_model?: string;
+  };
+}
+
+export interface ModelInfo extends ModelSearchResult {
+  modelId: string;
+  siblings: ModelFile[];
+  spaces?: string[];
+  safetensors?: {
+    parameters?: Record<string, number>;
+    total?: number;
+  };
+  description?: string;
+  citation?: string;
+  widgetData?: any[];
+  inference?: boolean;
+  securityStatus?: {
+    scansDone: boolean;
+    hasUnsafeFile: boolean;
+    clamAVInfectedFiles: string[];
+    pickleImportScanDone: boolean;
+    pickleImportScanResults: any[];
+  };
+}
+
+export interface ModelFile {
+  path: string;
+  type: 'file' | 'directory';
+  oid: string;
+  size?: number;
+  lastCommit?: {
+    oid: string;
+    title: string;
+    date: string;
+  };
+  security?: {
+    safe: boolean;
+    avScan?: {
+      virusFound: boolean;
+      virusNames?: string[];
+    };
+    pickleImportScan?: {
+      highestSafetyLevel: string;
+      imports: Array<{
+        module: string;
+        name: string;
+        safety: string;
+      }>;
+    };
+  };
+}
+
+export interface ModelStats {
+  views: {
+    downloads: number;
+    downloads_7d: number;
+    downloads_30d: number;
+    likes: number;
+  };
+}
+
+export interface BatchSearchResult {
+  id: string;
+  success: boolean;
+  data?: ModelSearchResult[];
+  error?: {
+    code: string;
+    message: string;
+  };
+}
+
+export interface BatchModelResult {
+  id: string;
+  success: boolean;
+  data?: ModelInfo;
+  error?: {
+    code: string;
+    message: string;
+  };
+}
+
+export interface EnhancedModelInfo extends ModelInfo {
+  isPopular: boolean;
+  chineseCapabilities: string[];
+  recommendedUseCase: string;
+  deploymentComplexity?: 'low' | 'medium' | 'high';
+  estimatedMemoryRequirement?: string;
+  supportedFrameworks?: string[];
+}
+
+export interface WebSocketConfig {
+  url: string;
+  protocols?: string[];
+  reconnectInterval?: number;
+  maxReconnectAttempts?: number;
+  pingInterval?: number;
+  pongTimeout?: number;
+}
+
+export interface WebSocketMessage {
+  id: string;
+  type: 'model_update' | 'new_model' | 'model_deleted' | 'stats_update';
+  timestamp: string;
+  data: any;
+}
+
+export interface WebSocketSubscription {
+  id: string;
+  topics: string[];
+  filters?: {
+    authors?: string[];
+    tags?: string[];
+    languages?: string[];
+  };
+}
+
 // Default configuration
 const DEFAULT_CONFIG: ApiClientConfig = {
   baseURL: 'https://huggingface.co/api',
@@ -400,6 +548,471 @@ export class HuggingFaceApiClient {
 
   public async delete<T = any>(url: string, config?: RequestOptions): Promise<HuggingFaceApiResponse<T>> {
     return this.request<T>({ ...config, method: 'delete', url });
+  }
+
+  // ===== NEW: Model Discovery Methods =====
+  
+  /**
+   * Search for models with advanced filtering
+   */
+  public async searchModels(searchParams: {
+    query?: string;
+    author?: string;
+    filter?: string;
+    sort?: 'downloads' | 'modified' | 'created' | 'trending';
+    direction?: 'asc' | 'desc';
+    limit?: number;
+    full?: boolean;
+    config?: boolean;
+  } = {}): Promise<HuggingFaceApiResponse<ModelSearchResult[]>> {
+    const params = new URLSearchParams();
+    
+    if (searchParams.query) params.append('search', searchParams.query);
+    if (searchParams.author) params.append('author', searchParams.author);
+    if (searchParams.filter) params.append('filter', searchParams.filter);
+    if (searchParams.sort) params.append('sort', searchParams.sort);
+    if (searchParams.direction) params.append('direction', searchParams.direction);
+    if (searchParams.limit) params.append('limit', searchParams.limit.toString());
+    if (searchParams.full) params.append('full', 'true');
+    if (searchParams.config) params.append('config', 'true');
+
+    return this.get<ModelSearchResult[]>(`/models?${params.toString()}`);
+  }
+
+  /**
+   * Get detailed model information
+   */
+  public async getModel(modelId: string, options: {
+    revision?: string;
+    securityStatus?: boolean;
+    files_metadata?: boolean;
+  } = {}): Promise<HuggingFaceApiResponse<ModelInfo>> {
+    const params = new URLSearchParams();
+    if (options.revision) params.append('revision', options.revision);
+    if (options.securityStatus) params.append('securityStatus', 'true');
+    if (options.files_metadata) params.append('files_metadata', 'true');
+
+    const url = `/models/${encodeURIComponent(modelId)}${params.toString() ? `?${params.toString()}` : ''}`;
+    return this.get<ModelInfo>(url);
+  }
+
+  /**
+   * Get model files listing
+   */
+  public async getModelFiles(modelId: string, options: {
+    revision?: string;
+    recursive?: boolean;
+  } = {}): Promise<HuggingFaceApiResponse<ModelFile[]>> {
+    const params = new URLSearchParams();
+    if (options.revision) params.append('revision', options.revision);
+    if (options.recursive) params.append('recursive', 'true');
+
+    const url = `/models/${encodeURIComponent(modelId)}/tree/main${params.toString() ? `?${params.toString()}` : ''}`;
+    return this.get<ModelFile[]>(url);
+  }
+
+  /**
+   * Get model download count and stats
+   */
+  public async getModelStats(modelId: string): Promise<HuggingFaceApiResponse<ModelStats>> {
+    return this.get<ModelStats>(`/models/${encodeURIComponent(modelId)}/usage`);
+  }
+
+  // ===== NEW: Batch Operations =====
+
+  /**
+   * Batch search multiple model queries
+   */
+  public async batchSearchModels(
+    queries: Array<{
+      id: string;
+      query?: string;
+      author?: string;
+      filter?: string;
+      limit?: number;
+    }>
+  ): Promise<HuggingFaceApiResponse<BatchSearchResult[]>> {
+    const batchRequests = queries.map(q => ({
+      id: q.id,
+      method: 'GET',
+      url: `/models?${new URLSearchParams(
+        Object.entries(q).filter(([key, value]) => key !== 'id' && value !== undefined) as [string, string][]
+      ).toString()}`
+    }));
+
+    return this.post<BatchSearchResult[]>('/batch', { requests: batchRequests });
+  }
+
+  /**
+   * Batch get model details
+   */
+  public async batchGetModels(
+    modelIds: string[],
+    options: {
+      revision?: string;
+      securityStatus?: boolean;
+      files_metadata?: boolean;
+    } = {}
+  ): Promise<HuggingFaceApiResponse<BatchModelResult[]>> {
+    const batchRequests = modelIds.map(modelId => {
+      const params = new URLSearchParams();
+      if (options.revision) params.append('revision', options.revision);
+      if (options.securityStatus) params.append('securityStatus', 'true');
+      if (options.files_metadata) params.append('files_metadata', 'true');
+
+      return {
+        id: modelId,
+        method: 'GET',
+        url: `/models/${encodeURIComponent(modelId)}${params.toString() ? `?${params.toString()}` : ''}`
+      };
+    });
+
+    return this.post<BatchModelResult[]>('/batch', { requests: batchRequests });
+  }
+
+  // ===== NEW: Chinese Model Specific Methods =====
+
+  /**
+   * Search specifically for Chinese language models
+   */
+  public async searchChineseModels(options: {
+    query?: string;
+    author?: string;
+    minDownloads?: number;
+    limit?: number;
+    includeInstruct?: boolean;
+    includeChat?: boolean;
+  } = {}): Promise<HuggingFaceApiResponse<ModelSearchResult[]>> {
+    let filter = 'language:zh';
+    
+    if (options.includeInstruct) {
+      filter += ',instruct';
+    }
+    
+    if (options.includeChat) {
+      filter += ',conversational';
+    }
+
+    const searchParams = {
+      query: options.query,
+      author: options.author,
+      filter,
+      sort: 'downloads' as const,
+      direction: 'desc' as const,
+      limit: options.limit || 50,
+      full: true,
+    };
+
+    const response = await this.searchModels(searchParams);
+    
+    // Additional filtering for minimum downloads
+    if (options.minDownloads && response.data) {
+      response.data = response.data.filter(model => 
+        model.downloads >= (options.minDownloads || 0)
+      );
+    }
+
+    return response;
+  }
+
+  /**
+   * Get popular Chinese models with enhanced metadata
+   */
+  public async getPopularChineseModels(limit = 20): Promise<HuggingFaceApiResponse<EnhancedModelInfo[]>> {
+    const popularModels = [
+      'Qwen/Qwen2.5-7B-Instruct',
+      'Qwen/Qwen2.5-14B-Instruct',
+      'Qwen/Qwen2.5-72B-Instruct',
+      'deepseek-ai/deepseek-coder-6.7b-instruct',
+      'deepseek-ai/deepseek-llm-7b-chat',
+      'THUDM/chatglm3-6b',
+      'baichuan-inc/Baichuan2-7B-Chat',
+      'baichuan-inc/Baichuan2-13B-Chat',
+      'internlm/internlm2-7b',
+      'internlm/internlm2-20b',
+      '01-ai/Yi-6B-Chat',
+      '01-ai/Yi-34B-Chat',
+      'THUDM/glm-4-9b-chat',
+    ].slice(0, limit);
+
+    const batchResult = await this.batchGetModels(popularModels, {
+      securityStatus: true,
+      files_metadata: true,
+    });
+
+    if (!batchResult.success || !batchResult.data) {
+      return { success: false, data: [] };
+    }
+
+    const enhancedModels: EnhancedModelInfo[] = batchResult.data
+      .filter(result => result.success)
+      .map(result => ({
+        ...result.data as ModelInfo,
+        isPopular: true,
+        chineseCapabilities: this.analyzeChineseCapabilities(result.data as ModelInfo),
+        recommendedUseCase: this.getRecommendedUseCase(result.data as ModelInfo),
+      }));
+
+    return {
+      success: true,
+      data: enhancedModels,
+      rateLimit: batchResult.rateLimit,
+      requestId: batchResult.requestId,
+    };
+  }
+
+  private analyzeChineseCapabilities(model: ModelInfo): string[] {
+    const capabilities: string[] = [];
+    const tags = model.tags || [];
+    const modelName = model.id.toLowerCase();
+
+    if (tags.includes('conversational') || modelName.includes('chat')) {
+      capabilities.push('chat');
+    }
+    if (tags.includes('text-generation') || modelName.includes('instruct')) {
+      capabilities.push('instruction-following');
+    }
+    if (modelName.includes('coder') || modelName.includes('code')) {
+      capabilities.push('code-generation');
+    }
+    if (tags.includes('translation')) {
+      capabilities.push('translation');
+    }
+    if (tags.includes('summarization')) {
+      capabilities.push('summarization');
+    }
+
+    return capabilities;
+  }
+
+  private getRecommendedUseCase(model: ModelInfo): string {
+    const modelName = model.id.toLowerCase();
+    const tags = model.tags || [];
+
+    if (modelName.includes('coder') || modelName.includes('code')) {
+      return 'Code generation and programming assistance';
+    }
+    if (modelName.includes('chat') || tags.includes('conversational')) {
+      return 'Conversational AI and customer support';
+    }
+    if (modelName.includes('instruct')) {
+      return 'Task-specific instructions and automation';
+    }
+    if (tags.includes('translation')) {
+      return 'Language translation and localization';
+    }
+
+    return 'General-purpose text generation';
+  }
+
+  // ===== NEW: WebSocket Support for Real-time Updates =====
+
+  private wsConnections: Map<string, WebSocket> = new Map();
+  private wsSubscriptions: Map<string, WebSocketSubscription> = new Map();
+  private wsReconnectTimers: Map<string, NodeJS.Timeout> = new Map();
+
+  /**
+   * Subscribe to real-time model updates via WebSocket
+   */
+  public subscribeToModelUpdates(
+    subscription: WebSocketSubscription,
+    onMessage: (message: WebSocketMessage) => void,
+    onError?: (error: Event) => void,
+    onClose?: (event: CloseEvent) => void
+  ): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const wsConfig: WebSocketConfig = {
+        url: `wss://huggingface.co/api/models/subscribe`,
+        reconnectInterval: 5000,
+        maxReconnectAttempts: 10,
+        pingInterval: 30000,
+        pongTimeout: 5000,
+      };
+
+      try {
+        const ws = new WebSocket(wsConfig.url);
+        const connectionId = this.generateRequestId();
+
+        ws.onopen = () => {
+          this.log('WEBSOCKET_CONNECTED', { connectionId, subscription });
+
+          // Send subscription message
+          ws.send(JSON.stringify({
+            type: 'subscribe',
+            id: subscription.id,
+            topics: subscription.topics,
+            filters: subscription.filters,
+            auth: this.config.apiKey ? `Bearer ${this.config.apiKey}` : undefined,
+          }));
+
+          this.wsConnections.set(connectionId, ws);
+          this.wsSubscriptions.set(connectionId, subscription);
+
+          // Set up ping interval
+          if (wsConfig.pingInterval) {
+            const pingTimer = setInterval(() => {
+              if (ws.readyState === WebSocket.OPEN) {
+                ws.ping();
+              }
+            }, wsConfig.pingInterval);
+
+            // Store timer for cleanup
+            this.wsReconnectTimers.set(`${connectionId}_ping`, pingTimer);
+          }
+
+          resolve(connectionId);
+        };
+
+        ws.onmessage = (event) => {
+          try {
+            const message: WebSocketMessage = JSON.parse(event.data);
+            this.log('WEBSOCKET_MESSAGE', { connectionId, type: message.type });
+            onMessage(message);
+          } catch (error) {
+            this.log('WEBSOCKET_PARSE_ERROR', { connectionId, error });
+          }
+        };
+
+        ws.onerror = (error) => {
+          this.log('WEBSOCKET_ERROR', { connectionId, error });
+          if (onError) onError(error);
+        };
+
+        ws.onclose = (event) => {
+          this.log('WEBSOCKET_CLOSED', { connectionId, code: event.code, reason: event.reason });
+
+          // Clean up
+          this.wsConnections.delete(connectionId);
+          this.clearConnectionTimers(connectionId);
+
+          if (onClose) onClose(event);
+
+          // Auto-reconnect if not a clean close
+          if (event.code !== 1000 && wsConfig.maxReconnectAttempts) {
+            this.scheduleReconnect(connectionId, subscription, onMessage, onError, onClose, wsConfig);
+          }
+        };
+
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  private scheduleReconnect(
+    connectionId: string,
+    subscription: WebSocketSubscription,
+    onMessage: (message: WebSocketMessage) => void,
+    onError?: (error: Event) => void,
+    onClose?: (event: CloseEvent) => void,
+    wsConfig: WebSocketConfig,
+    attempt = 1
+  ): void {
+    if (attempt > (wsConfig.maxReconnectAttempts || 10)) {
+      this.log('WEBSOCKET_MAX_RECONNECTS', { connectionId, attempt });
+      return;
+    }
+
+    const delay = Math.min(
+      (wsConfig.reconnectInterval || 5000) * Math.pow(2, attempt - 1),
+      30000
+    );
+
+    this.log('WEBSOCKET_RECONNECT_SCHEDULED', { connectionId, attempt, delay });
+
+    const timer = setTimeout(async () => {
+      try {
+        await this.subscribeToModelUpdates(subscription, onMessage, onError, onClose);
+        this.log('WEBSOCKET_RECONNECTED', { connectionId, attempt });
+      } catch (error) {
+        this.log('WEBSOCKET_RECONNECT_FAILED', { connectionId, attempt, error });
+        this.scheduleReconnect(connectionId, subscription, onMessage, onError, onClose, wsConfig, attempt + 1);
+      }
+    }, delay);
+
+    this.wsReconnectTimers.set(`${connectionId}_reconnect`, timer);
+  }
+
+  private clearConnectionTimers(connectionId: string): void {
+    const pingTimer = this.wsReconnectTimers.get(`${connectionId}_ping`);
+    const reconnectTimer = this.wsReconnectTimers.get(`${connectionId}_reconnect`);
+
+    if (pingTimer) {
+      clearInterval(pingTimer);
+      this.wsReconnectTimers.delete(`${connectionId}_ping`);
+    }
+
+    if (reconnectTimer) {
+      clearTimeout(reconnectTimer);
+      this.wsReconnectTimers.delete(`${connectionId}_reconnect`);
+    }
+  }
+
+  /**
+   * Unsubscribe from WebSocket updates
+   */
+  public unsubscribeFromModelUpdates(connectionId: string): void {
+    const ws = this.wsConnections.get(connectionId);
+    const subscription = this.wsSubscriptions.get(connectionId);
+
+    if (ws && subscription) {
+      // Send unsubscribe message
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({
+          type: 'unsubscribe',
+          id: subscription.id,
+        }));
+      }
+
+      // Close connection
+      ws.close(1000, 'Client unsubscribe');
+    }
+
+    // Clean up
+    this.wsConnections.delete(connectionId);
+    this.wsSubscriptions.delete(connectionId);
+    this.clearConnectionTimers(connectionId);
+
+    this.log('WEBSOCKET_UNSUBSCRIBED', { connectionId });
+  }
+
+  /**
+   * Get active WebSocket connections
+   */
+  public getActiveWebSocketConnections(): Array<{
+    connectionId: string;
+    subscription: WebSocketSubscription;
+    readyState: number;
+  }> {
+    const connections: Array<{
+      connectionId: string;
+      subscription: WebSocketSubscription;
+      readyState: number;
+    }> = [];
+
+    for (const [connectionId, ws] of this.wsConnections) {
+      const subscription = this.wsSubscriptions.get(connectionId);
+      if (subscription) {
+        connections.push({
+          connectionId,
+          subscription,
+          readyState: ws.readyState,
+        });
+      }
+    }
+
+    return connections;
+  }
+
+  /**
+   * Close all WebSocket connections
+   */
+  public closeAllWebSocketConnections(): void {
+    for (const [connectionId] of this.wsConnections) {
+      this.unsubscribeFromModelUpdates(connectionId);
+    }
+
+    this.log('ALL_WEBSOCKETS_CLOSED', { count: this.wsConnections.size });
   }
 
   // Configuration methods

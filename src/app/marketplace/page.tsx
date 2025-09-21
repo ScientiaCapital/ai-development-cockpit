@@ -90,7 +90,7 @@ export default function MarketplacePage() {
     }
   }
 
-  const asciiHeader = currentOrganization === 'swaggystacks' ? `
+  const asciiHeader = currentOrganization?.slug === 'swaggystacks' ? `
 ╔═══════════════════════════════════════════════════════════════════════════════════╗
 ║  🎮🕹️  SWAGGY STACKS MODEL ARCADE  🕹️🎮                                           ║
 ║                                                                                   ║
@@ -120,7 +120,7 @@ export default function MarketplacePage() {
     <div className={`${styles.terminal} min-h-screen`}>
       <div className="container mx-auto p-6">
         {/* ASCII Header */}
-        <pre className={`${styles.asciiArt} text-center mb-8 ${currentOrganization === 'swaggystacks' ? 'text-green-400' : 'text-amber-400'}`}>
+        <pre className={`${styles.asciiArt} text-center mb-8 ${currentOrganization?.slug === 'swaggystacks' ? 'text-green-400' : 'text-amber-400'}`}>
           {asciiHeader}
         </pre>
 
@@ -129,8 +129,8 @@ export default function MarketplacePage() {
           <div className={`${styles.terminalWindow} p-4`}>
             <div className="flex items-center gap-4">
               <span className="text-cyan-400 font-bold">ACTIVE ORGANIZATION:</span>
-              <span className={`font-bold uppercase ${currentOrganization === 'swaggystacks' ? 'text-green-400' : 'text-amber-400'}`}>
-                {currentOrganization === 'swaggystacks' ? '🎮 SWAGGY STACKS' : '🏢 SCIENTIA CAPITAL'}
+              <span className={`font-bold uppercase ${currentOrganization?.slug === 'swaggystacks' ? 'text-green-400' : 'text-amber-400'}`}>
+                {currentOrganization?.slug === 'swaggystacks' ? '🎮 SWAGGY STACKS' : '🏢 SCIENTIA CAPITAL'}
               </span>
               <Button
                 onClick={handleOrganizationSwitch}
@@ -160,7 +160,7 @@ export default function MarketplacePage() {
               <span className="text-amber-400">DEPLOYMENT COST: 97% SAVINGS</span>
             </div>
             <div className="text-gray-400 text-sm">
-              Powered by RunPod Serverless • HuggingFace • {currentOrganization.toUpperCase()}
+              Powered by RunPod Serverless • HuggingFace • {(currentOrganization?.slug || 'UNKNOWN').toUpperCase()}
             </div>
           </div>
         </div>

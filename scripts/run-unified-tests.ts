@@ -3,7 +3,7 @@
 import { TestCoordinator, DEFAULT_TEST_COORDINATOR_CONFIG, TestCoordinatorConfig } from '../tests/utils/TestCoordinator';
 import { E2EFrameworkIntegrator, DEFAULT_E2E_INTEGRATION_CONFIG } from '../tests/integration/E2EFrameworkIntegrator';
 import { RealApiValidator, DEFAULT_REAL_API_CONFIG } from '../tests/api/RealApiValidator';
-import { TestOrchestratorConfig } from '../tests/utils/TestOrchestrator';
+import { OrchestrationConfig } from '../tests/utils/TestOrchestrator';
 import { ChaosConfig } from '../tests/utils/ChaosEngine';
 
 interface UnifiedTestConfig {
@@ -160,15 +160,25 @@ class UnifiedTestRunner {
       checkPerformance: true
     };
 
-    const orchestratorConfig: TestOrchestratorConfig = {
-      testSuite: 'unified-comprehensive',
-      environment: this.config.environment
+    const orchestratorConfig: OrchestrationConfig = {
+      browser: null as any, // Will be provided by coordinator
+      parallelSessions: 3,
+      organizations: ['swaggystacks', 'scientia'],
+      environments: [this.config.environment],
+      testSuites: ['integration'],
+      enableChaosMode: this.config.enableChaosTests,
+      enableNetworkSimulation: true,
+      enableComplianceValidation: true,
+      maxExecutionTime: 600000,
+      reportingLevel: 'standard'
     };
 
     let chaosConfig: ChaosConfig | undefined;
     if (this.config.enableChaosTests) {
       chaosConfig = {
-        scenarios: ['network-partition', 'api-latency', 'rollback-validation'],
+        enabled: true,
+        duration: 300000, // 5 minutes
+        scenarios: ['network_failures', 'slow_responses', 'api_timeouts'],
         intensity: this.config.environment === 'production' ? 'low' : 'medium'
       };
     }
@@ -371,4 +381,5 @@ if (require.main === module) {
   main();
 }
 
-export { UnifiedTestRunner, UnifiedTestConfig };
+export { UnifiedTestRunner };
+export type { UnifiedTestConfig };

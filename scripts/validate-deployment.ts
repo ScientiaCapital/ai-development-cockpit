@@ -50,7 +50,20 @@ class DeploymentValidator {
     };
 
     this.coordinator = new TestCoordinator(coordinatorConfig);
-    this.orchestrator = new TestOrchestrator();
+    // Create basic orchestrator config for validation
+    const basicOrchestratorConfig = {
+      browser: null as any, // Will be provided later
+      parallelSessions: 1,
+      organizations: ['swaggystacks' as const],
+      environments: ['development' as const],
+      testSuites: ['smoke' as const],
+      enableChaosMode: false,
+      enableNetworkSimulation: false,
+      enableComplianceValidation: true,
+      maxExecutionTime: 300000,
+      reportingLevel: 'minimal' as const
+    };
+    this.orchestrator = new TestOrchestrator(basicOrchestratorConfig);
 
     const apiConfig = {
       ...DEFAULT_REAL_API_CONFIG,
@@ -160,10 +173,16 @@ class DeploymentValidator {
       try {
         console.log(`  🔍 Checking health: ${endpoint}`);
 
+        // Create abort controller for timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+        
         const response = await fetch(endpoint, {
           method: 'GET',
-          timeout: 10000
+          signal: controller.signal
         });
+        
+        clearTimeout(timeoutId);
 
         const result = {
           endpoint,
@@ -271,7 +290,9 @@ class DeploymentValidator {
       endpoints: performanceResults,
       summary: {
         totalEndpoints: performanceResults.length,
-        averageResponseTime: performanceResults.reduce((sum, r) => sum + (r.averageResponseTime || 0), 0) / performanceResults.length
+        averageResponseTime: performanceResults
+          .filter(r => 'averageResponseTime' in r)
+          .reduce((sum, r) => sum + (r.averageResponseTime || 0), 0) / Math.max(1, performanceResults.filter(r => 'averageResponseTime' in r).length)
       }
     };
   }
@@ -582,4 +603,5 @@ if (require.main === module) {
   main();
 }
 
-export { DeploymentValidator, DeploymentValidationConfig, ValidationResult };
+export { DeploymentValidator };
+export type { DeploymentValidationConfig, ValidationResult };

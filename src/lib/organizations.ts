@@ -15,17 +15,11 @@ export interface OrganizationWithMembers extends Organization {
 export interface CreateOrganizationData {
   name: string
   description?: string
-  website_url?: string
-  logo_url?: string
-  settings?: Record<string, any>
 }
 
 export interface UpdateOrganizationData {
   name?: string
   description?: string
-  website_url?: string
-  logo_url?: string
-  settings?: Record<string, any>
 }
 
 export interface InviteUserData {

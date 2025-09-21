@@ -2,7 +2,7 @@
  * Role-Based Access Control (RBAC) utilities and permissions system
  */
 
-export type Role = 'owner' | 'admin' | 'developer' | 'viewer'
+export type Role = 'admin' | 'developer' | 'viewer'
 
 export type Permission = 
   // Organization permissions
@@ -48,33 +48,6 @@ export interface RoleDefinition {
  * Role definitions with permissions and hierarchy
  */
 export const ROLE_DEFINITIONS: Record<Role, RoleDefinition> = {
-  owner: {
-    name: 'owner',
-    displayName: 'Owner',
-    description: 'Full access to all organization features and settings',
-    hierarchy: 100,
-    permissions: [
-      'org:manage',
-      'org:view',
-      'org:invite_users',
-      'org:remove_users',
-      'models:create',
-      'models:deploy',
-      'models:manage',
-      'models:view',
-      'models:delete',
-      'billing:manage',
-      'billing:view',
-      'settings:manage',
-      'settings:view',
-      'users:manage',
-      'users:view',
-      'users:invite',
-      'api:manage',
-      'api:view',
-      'api:create_keys'
-    ]
-  },
   admin: {
     name: 'admin',
     displayName: 'Administrator',
@@ -287,3 +260,45 @@ export const PERMISSION_DESCRIPTIONS: Record<Permission, string> = {
   'api:view': 'View API usage and documentation',
   'api:create_keys': 'Create new API keys'
 }
+
+/**
+ * Check if a role is equal to or higher than another role based on hierarchy
+ */
+export function isEqualOrHigherRole(userRole: Role, minimumRole: Role): boolean {
+  const userHierarchy = ROLE_DEFINITIONS[userRole]?.hierarchy ?? 0
+  const minimumHierarchy = ROLE_DEFINITIONS[minimumRole]?.hierarchy ?? 0
+  return userHierarchy >= minimumHierarchy
+}
+
+/**
+ * Check if one role is higher than another in the hierarchy
+ */
+export function isHigherRole(userRole: Role, targetRole: Role): boolean {
+  const userHierarchy = ROLE_DEFINITIONS[userRole]?.hierarchy ?? 0
+  const targetHierarchy = ROLE_DEFINITIONS[targetRole]?.hierarchy ?? 0
+  return userHierarchy > targetHierarchy
+}
+
+/**
+ * Get the display name for a role
+ */
+export function getRoleDisplayName(role: Role): string {
+  return ROLE_DEFINITIONS[role]?.displayName ?? role
+}
+
+/**
+ * Get color class for a role (for UI styling)
+ */
+export function getRoleColor(role: Role): string {
+  switch (role) {
+    case 'admin': return 'text-blue-600'
+    case 'developer': return 'text-green-600'
+    case 'viewer': return 'text-gray-600'
+    default: return 'text-gray-600'
+  }
+}
+
+/**
+ * Export ROLES as an alias for ROLE_DEFINITIONS for backward compatibility
+ */
+export const ROLES = ROLE_DEFINITIONS

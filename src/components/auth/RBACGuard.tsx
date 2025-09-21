@@ -4,7 +4,7 @@ import { ReactNode } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import {
   type Permission,
-  type UserRole,
+  type Role,
   hasPermission,
   hasAnyPermission,
   hasAllPermissions,
@@ -21,9 +21,9 @@ interface RBACGuardProps {
   requireAll?: boolean // If true, requires all permissions; if false, requires any
 
   // Role-based access
-  role?: UserRole
-  roles?: UserRole[]
-  minimumRole?: UserRole
+  role?: Role
+  roles?: Role[]
+  minimumRole?: Role
 
   // Organization-specific access
   organizationId?: string
@@ -144,7 +144,7 @@ export function ViewerOrAbove({ children, fallback }: { children: ReactNode; fal
 // Permission-based guards
 export function CanManageUsers({ children, fallback }: { children: ReactNode; fallback?: ReactNode }) {
   return (
-    <RBACGuard permission="user:write" fallback={fallback}>
+    <RBACGuard permission="users:manage" fallback={fallback}>
       {children}
     </RBACGuard>
   )
@@ -152,7 +152,7 @@ export function CanManageUsers({ children, fallback }: { children: ReactNode; fa
 
 export function CanDeployModels({ children, fallback }: { children: ReactNode; fallback?: ReactNode }) {
   return (
-    <RBACGuard permission="model:deploy" fallback={fallback}>
+    <RBACGuard permission="models:deploy" fallback={fallback}>
       {children}
     </RBACGuard>
   )

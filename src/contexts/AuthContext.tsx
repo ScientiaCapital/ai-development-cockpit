@@ -4,6 +4,7 @@ import React, { createContext, useContext, useEffect, useState, ReactNode } from
 import { User, Session, AuthError } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
 import type { Database, Tables } from '../lib/supabase'
+import { getMFAFactors, createMFAChallenge, verifyMFAChallenge } from '../lib/mfa'
 
 // Types for our auth context
 export interface AuthUser extends User {
@@ -40,6 +41,10 @@ export interface AuthContextType extends AuthState {
   // Social authentication
   signInWithGitHub: () => Promise<{ error: AuthError | null }>
   signInWithGoogle: () => Promise<{ error: AuthError | null }>
+
+  // Multi-Factor Authentication
+  checkMFARequired: () => Promise<{ required: boolean; factors: any[] | null; error: AuthError | null }>
+  verifyMFACode: (factorId: string, challengeId: string, code: string) => Promise<{ data: any | null; error: AuthError | null }>
 
   // Organization management
   switchOrganization: (organizationId: string) => Promise<{ error: Error | null }>
@@ -323,6 +328,42 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return session?.access_token || null
   }
 
+  // Multi-Factor Authentication methods
+  const checkMFARequired = async () => {
+    try {
+      const { data, error } = await getMFAFactors()
+
+      if (error) {
+        return { required: false, factors: null, error }
+      }
+
+      const verifiedFactors = data?.filter(factor => factor.status === 'verified') || []
+      return {
+        required: verifiedFactors.length > 0,
+        factors: verifiedFactors,
+        error: null
+      }
+    } catch (error) {
+      return {
+        required: false,
+        factors: null,
+        error: error as AuthError
+      }
+    }
+  }
+
+  const verifyMFACode = async (factorId: string, challengeId: string, code: string) => {
+    try {
+      const { data, error } = await verifyMFAChallenge(factorId, challengeId, code)
+      return { data, error }
+    } catch (error) {
+      return {
+        data: null,
+        error: error as AuthError
+      }
+    }
+  }
+
   const value: AuthContextType = {
     // State
     user,
@@ -342,6 +383,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     // Social authentication
     signInWithGitHub,
     signInWithGoogle,
+
+    // Multi-Factor Authentication
+    checkMFARequired,
+    verifyMFACode,
 
     // Organization management
     switchOrganization,

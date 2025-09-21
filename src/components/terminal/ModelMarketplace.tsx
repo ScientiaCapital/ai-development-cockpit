@@ -181,7 +181,7 @@ export default function ModelMarketplace({
           <div className="flex items-center space-x-4 mb-4">
             <div className="flex-1 relative">
               <div className="flex items-center">
-                <span className={`${themeClasses.primary} font-mono mr-2`}>SEARCH></span>
+                <span className={`${themeClasses.primary} font-mono mr-2`}>SEARCH&gt;</span>
                 <input
                   type="text"
                   value={searchState.query}

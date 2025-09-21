@@ -3,6 +3,7 @@ import { defineConfig, devices } from '@playwright/test';
 /**
  * Playwright Configuration for AI Development Cockpit
  * E2E testing for dual-domain LLM platform with comprehensive coverage
+ * Enhanced with TestCoordinator and E2EFrameworkIntegrator support
  */
 export default defineConfig({
   testDir: './tests/e2e',
@@ -46,6 +47,12 @@ export default defineConfig({
 
     /* Global timeout for navigation */
     navigationTimeout: 30000,
+
+    /* TestCoordinator integration settings */
+    extraHTTPHeaders: {
+      'X-Test-Framework': 'Playwright-TestCoordinator',
+      'X-Test-Integration': 'E2EFrameworkIntegrator'
+    },
   },
 
   /* Configure projects for major browsers */
@@ -108,6 +115,42 @@ export default defineConfig({
       testMatch: /.*\.api\.spec\.ts/,
       use: {
         baseURL: process.env.API_BASE_URL || 'http://localhost:3001/api',
+      }
+    },
+
+    /* Real API validation testing */
+    {
+      name: 'real-api',
+      testMatch: /.*real-api.*\.spec\.ts/,
+      use: {
+        baseURL: process.env.API_BASE_URL || 'http://localhost:3001/api',
+        extraHTTPHeaders: {
+          'X-Test-Mode': 'real-api-validation'
+        }
+      }
+    },
+
+    /* Infrastructure integration testing */
+    {
+      name: 'infrastructure',
+      testMatch: /.*infrastructure.*\.spec\.ts/,
+      use: {
+        baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3001',
+        extraHTTPHeaders: {
+          'X-Test-Mode': 'infrastructure-integration'
+        }
+      }
+    },
+
+    /* Comprehensive validation testing */
+    {
+      name: 'comprehensive',
+      testMatch: /.*comprehensive.*\.spec\.ts/,
+      use: {
+        baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3001',
+        extraHTTPHeaders: {
+          'X-Test-Mode': 'comprehensive-validation'
+        }
       }
     }
   ],

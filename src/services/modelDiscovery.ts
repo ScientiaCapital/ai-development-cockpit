@@ -1,50 +1,6 @@
 import { Organization } from '@/contexts/HuggingFaceAuth'
 import { huggingFaceApi, ModelInfo, ModelSearchParams } from '@/lib/huggingface-api'
-
-export interface ModelMetadata {
-  id: string
-  name: string
-  organization: Organization
-  description: string
-  modelType: string
-  size: string
-  downloads: number
-  likes: number
-  trending: boolean
-  lastUpdated: string
-  tags: string[]
-  libraryName?: string
-  pipelineTag?: string
-  author: string
-  language: string[]
-  license: string
-  pricing: {
-    tier: 'free' | 'pro' | 'enterprise'
-    costPerHour: number
-    costPerToken: number
-    estimatedMonthlyCost: number
-  }
-  performance: {
-    inferenceSpeed: 'fast' | 'medium' | 'slow'
-    memoryUsage: 'low' | 'medium' | 'high'
-    accuracy: number
-    benchmarkScore?: number
-  }
-  deployment: {
-    supported: boolean
-    estimatedSetupTime: number
-    minMemoryMB: number
-    gpuRequired: boolean
-    instanceTypes: string[]
-  }
-  popularity: {
-    rank: number
-    weeklyDownloads: number
-    monthlyDownloads: number
-    totalDownloads: number
-    communityRating: number
-  }
-}
+import { ModelMetadata, ModelPricing, ModelPerformance, ModelDeployment, ModelPopularity } from '@/types/models'
 
 export interface DiscoveryFilters {
   organizations: Organization[]
@@ -76,6 +32,7 @@ export interface DiscoveryResults {
       featuredModels: string[]
     }
   }
+  cacheHit?: boolean
 }
 
 class ModelDiscoveryService {
@@ -129,7 +86,7 @@ class ModelDiscoveryService {
     const cachedResult = this.getCache<DiscoveryResults>(cacheKey)
     if (cachedResult) {
       console.log('📋 Returning cached discovery results')
-      return cachedResult
+      return { ...cachedResult, cacheHit: true }
     }
 
     console.log('🔍 Starting model discovery...', { filters, searchQuery, page })
@@ -199,7 +156,8 @@ class ModelDiscoveryService {
         hasNextPage: endIndex < allModels.length,
         filters: filters as DiscoveryFilters,
         searchQuery,
-        organizationStats
+        organizationStats,
+        cacheHit: false
       }
 
       // Cache results
@@ -254,7 +212,9 @@ class ModelDiscoveryService {
         pricing: enhancedPricing,
         performance,
         deployment,
-        popularity
+        popularity,
+        createdAt: model.createdAt || model.updatedAt,
+        updatedAt: model.updatedAt
       }
 
       return enrichedModel
@@ -277,7 +237,10 @@ class ModelDiscoveryService {
         author: 'Unknown',
         language: ['en'],
         license: 'Unknown',
-        pricing: model.pricing!,
+        pricing: {
+          ...model.pricing!,
+          estimatedMonthlyCost: this.calculateMonthlyCost(model.pricing!)
+        },
         performance: {
           inferenceSpeed: 'medium',
           memoryUsage: 'medium',
@@ -296,7 +259,9 @@ class ModelDiscoveryService {
           monthlyDownloads: model.downloads,
           totalDownloads: model.downloads,
           communityRating: 4.0
-        }
+        },
+        createdAt: model.createdAt || model.updatedAt,
+        updatedAt: model.updatedAt
       }
     }
   }
@@ -358,14 +323,14 @@ class ModelDiscoveryService {
     })
   }
 
-  private generatePerformanceMetrics(model: ModelInfo) {
+  private generatePerformanceMetrics(model: ModelInfo): ModelPerformance {
     // Generate realistic metrics based on model characteristics
     const isLargeModel = model.downloads > 10000
     const isPopular = model.likes > 100
 
     return {
-      inferenceSpeed: isLargeModel ? 'slow' : isPopular ? 'fast' : 'medium' as const,
-      memoryUsage: isLargeModel ? 'high' : 'medium' as const,
+      inferenceSpeed: isLargeModel ? 'slow' : isPopular ? 'fast' : 'medium',
+      memoryUsage: isLargeModel ? 'high' : 'medium',
       accuracy: Math.min(0.99, 0.7 + (model.likes / 1000) + Math.random() * 0.2),
       benchmarkScore: Math.floor(Math.random() * 100) + 50
     }

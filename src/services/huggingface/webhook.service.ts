@@ -37,7 +37,7 @@ export interface WebhookHandler {
   eventType: WebhookEventType | 'all';
   handler: (event: WebhookEvent) => Promise<void> | void;
   organization?: string;
-  priority?: number;
+  priority?: 'low' | 'normal' | 'high';
 }
 
 export interface WebhookSubscription {
@@ -144,7 +144,9 @@ export class HuggingFaceWebhookService extends EventEmitter {
 
     // Sort handlers by priority (higher priority first)
     const handlers = this.handlers.get(eventType)!;
-    const insertIndex = handlers.findIndex(h => (h.priority || 0) < (handler.priority || 0));
+    const priorityOrder = { 'high': 3, 'normal': 2, 'low': 1 };
+    const getPriorityValue = (priority?: 'low' | 'normal' | 'high') => priorityOrder[priority || 'normal'];
+    const insertIndex = handlers.findIndex(h => getPriorityValue(h.priority) < getPriorityValue(handler.priority));
 
     if (insertIndex >= 0) {
       handlers.splice(insertIndex, 0, { ...handler });
@@ -547,7 +549,7 @@ export class HuggingFaceWebhookService extends EventEmitter {
       eventType: 'model.updated',
       handler,
       organization,
-      priority: 5,
+      priority: 'normal',
     });
   }
 
@@ -556,7 +558,7 @@ export class HuggingFaceWebhookService extends EventEmitter {
       eventType: 'deployment.completed',
       handler,
       organization,
-      priority: 5,
+      priority: 'normal',
     });
   }
 
@@ -565,7 +567,7 @@ export class HuggingFaceWebhookService extends EventEmitter {
       eventType: 'quota.warning',
       handler,
       organization,
-      priority: 10,
+      priority: 'high',
     });
   }
 
@@ -574,7 +576,7 @@ export class HuggingFaceWebhookService extends EventEmitter {
       eventType: 'rate_limit.exceeded',
       handler,
       organization,
-      priority: 8,
+      priority: 'high',
     });
   }
 }

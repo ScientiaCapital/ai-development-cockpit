@@ -43,7 +43,7 @@ class ModelCacheManager {
 
   // Generate cache key from search parameters
   private generateCacheKey(
-    type: 'discovery' | 'model' | 'stats' | 'availability',
+    type: 'discovery' | 'model' | 'stats' | 'availability' | 'preload',
     params: any
   ): string {
     const baseParams = {

@@ -281,8 +281,9 @@ export class HuggingFaceApiClient {
     // Response interceptor
     this.client.interceptors.response.use(
       (response) => {
-        const duration = performance.now() - response.config.metadata?.startTime;
-        const requestId = response.config.metadata?.requestId;
+        const metadata = response.config.metadata;
+        const duration = metadata?.startTime ? performance.now() - metadata.startTime : 0;
+        const requestId = metadata?.requestId;
 
         // Extract rate limit information
         this.lastRateLimitInfo = this.extractRateLimitInfo(response);
@@ -298,10 +299,11 @@ export class HuggingFaceApiClient {
       },
       async (error: AxiosError) => {
         this.errorCount++;
-        const duration = error.config?.metadata?.startTime
-          ? performance.now() - error.config.metadata.startTime
+        const metadata = error.config?.metadata;
+        const duration = metadata?.startTime
+          ? performance.now() - metadata.startTime
           : 0;
-        const requestId = error.config?.metadata?.requestId;
+        const requestId = metadata?.requestId;
 
         // Extract rate limit info even from error responses
         if (error.response) {
@@ -851,7 +853,7 @@ export class HuggingFaceApiClient {
           // Set up ping interval
           if (wsConfig.pingInterval) {
             const pingTimer = setInterval(() => {
-              if (ws.readyState === WebSocket.OPEN) {
+              if (ws.readyState === WebSocket.OPEN && typeof ws.ping === 'function') {
                 ws.ping();
               }
             }, wsConfig.pingInterval);

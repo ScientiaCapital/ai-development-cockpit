@@ -410,7 +410,7 @@ export class DashboardIntegration {
 
       try {
         await this.sendToEndpoint(endpoint, metrics);
-      } catch (error) {
+      } catch (error: unknown) {
         console.error(`Failed to send metrics to ${endpoint.name}:`, error);
       }
     }
@@ -660,7 +660,7 @@ export class DashboardIntegration {
     for (const channel of this.config.alerting.channels) {
       try {
         await this.sendToAlertChannel(channel, alert);
-      } catch (error) {
+      } catch (error: unknown) {
         console.error(`Failed to send alert to ${channel.type}:`, error);
       }
     }

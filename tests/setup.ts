@@ -9,7 +9,11 @@ global.console = {
 };
 
 // Set test environment variables
-process.env.NODE_ENV = 'test';
+Object.defineProperty(process.env, 'NODE_ENV', {
+  value: 'test',
+  writable: true,
+  configurable: true
+});
 process.env.HUGGINGFACE_API_KEY = 'test-api-key';
 process.env.REDIS_URL = 'redis://localhost:6379';
 process.env.SUPABASE_URL = 'https://test.supabase.co';

@@ -6,12 +6,12 @@ import {
   verifyMFAChallenge,
   validateTOTPCode,
   formatTOTPCode,
-  type MFAFactor,
   type MFAChallenge
 } from '../../lib/mfa'
+import type { Factor } from '@supabase/supabase-js'
 
 interface MFAVerificationProps {
-  factors: MFAFactor[]
+  factors: Factor[]
   onSuccess: (data: any) => void
   onError: (error: string) => void
   onCancel?: () => void
@@ -25,7 +25,7 @@ export default function MFAVerification({
   onCancel,
   className = ''
 }: MFAVerificationProps) {
-  const [selectedFactor, setSelectedFactor] = useState<MFAFactor | null>(null)
+  const [selectedFactor, setSelectedFactor] = useState<Factor | null>(null)
   const [challenge, setChallenge] = useState<MFAChallenge | null>(null)
   const [verificationCode, setVerificationCode] = useState('')
   const [loading, setLoading] = useState(false)

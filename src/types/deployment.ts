@@ -66,6 +66,14 @@ export interface DeploymentConfiguration {
   envVars: Record<string, string>
   ports: number[]
   healthCheck: HealthCheckConfig
+  scalerSettings?: {
+    min: number;
+    max: number;
+  };
+  networkSettings?: {
+    ports?: number[];
+    allowedPorts?: number[];
+  };
 }
 
 export interface HealthCheckConfig {

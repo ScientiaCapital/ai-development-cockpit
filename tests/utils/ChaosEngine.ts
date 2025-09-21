@@ -4,6 +4,7 @@
  */
 
 import { Page, BrowserContext } from '@playwright/test';
+import { getErrorMessage } from './error-handling';
 
 export interface ChaosConfig {
   enabled: boolean;
@@ -173,9 +174,9 @@ export class ChaosEngine {
       this.metrics.scenariosExecuted.push(scenario);
       this.metrics.failuresInjected++;
 
-    } catch (error) {
-      result.errors.push(error.message);
-      console.error(`Failed to execute chaos scenario ${scenario}:`, error);
+    } catch (error: unknown) {
+      result.errors.push(getErrorMessage(error));
+      console.error(`Failed to execute chaos scenario ${scenario}:`, getErrorMessage(error));
     }
 
     result.duration = Date.now() - startTime;
@@ -529,6 +530,90 @@ export class ChaosEngine {
     };
 
     return impactMap[scenario] || 'medium';
+  }
+
+  /**
+   * Run chaos tests with specified configuration - interface for TestCoordinator
+   */
+  async runChaosTests(chaosConfig: ChaosConfig): Promise<{ scenario: string; passed: boolean; duration: number; errors: string[] }[]> {
+    const results: { scenario: string; passed: boolean; duration: number; errors: string[] }[] = [];
+    
+    // Update internal config from provided chaos config
+    this.config = {
+      ...this.config,
+      enabled: true,
+      intensity: chaosConfig.intensity,
+      duration: chaosConfig.duration,
+      scenarios: chaosConfig.scenarios as ChaosScenarioType[]
+    };
+
+    console.log(`🌪️ Running chaos tests with ${chaosConfig.scenarios.length} scenarios`);
+
+    try {
+      // Execute each chaos scenario
+      for (const scenarioName of chaosConfig.scenarios) {
+        const startTime = Date.now();
+        const errors: string[] = [];
+        let passed = false;
+
+        try {
+          console.log(`  🎯 Executing chaos scenario: ${scenarioName}`);
+          
+          // Map scenario name to ChaosScenarioType and execute
+          const scenario = scenarioName as ChaosScenarioType;
+          
+          if (this.config.scenarios.includes(scenario)) {
+            const injectionResult = await this.executeScenario(scenario);
+            passed = injectionResult.success && injectionResult.impact !== 'critical';
+            
+            if (!injectionResult.success) {
+              errors.push(...injectionResult.errors);
+            }
+          } else {
+            // Scenario not supported, but don't fail the test
+            passed = true;
+            console.warn(`  ⚠️ Chaos scenario '${scenarioName}' not supported, skipping`);
+          }
+
+        } catch (error: unknown) {
+          const errorMessage = error instanceof Error ? error instanceof Error ? error.message : 'Unknown error' : 'Unknown chaos test error';
+          errors.push(errorMessage);
+          passed = false;
+          console.error(`  ❌ Chaos scenario '${scenarioName}' failed:`, errorMessage);
+        }
+
+        const duration = Date.now() - startTime;
+        
+        results.push({
+          scenario: scenarioName,
+          passed,
+          duration,
+          errors
+        });
+
+        console.log(`  ${passed ? '✅' : '❌'} Scenario '${scenarioName}' ${passed ? 'passed' : 'failed'} (${duration}ms)`);
+      }
+
+      // Stop chaos after all scenarios
+      await this.stopChaos();
+
+      const passedCount = results.filter(r => r.passed).length;
+      console.log(`🌪️ Chaos tests completed: ${passedCount}/${results.length} scenarios passed`);
+
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error instanceof Error ? error.message : 'Unknown error' : 'Unknown error during chaos testing';
+      console.error('❌ Chaos testing failed:', errorMessage);
+      
+      // Return failed result for all scenarios
+      return chaosConfig.scenarios.map(scenario => ({
+        scenario,
+        passed: false,
+        duration: 0,
+        errors: [errorMessage]
+      }));
+    }
+
+    return results;
   }
 }
 

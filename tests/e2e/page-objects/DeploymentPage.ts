@@ -3,7 +3,7 @@
  * Page object for deployment management interface
  */
 
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 export class DeploymentPage extends BasePage {
@@ -108,7 +108,7 @@ export class DeploymentPage extends BasePage {
     await this.waitForVisible(this.costEstimate);
 
     const estimate = await this.getText(this.costEstimate);
-    return estimate.includes('$') && parseFloat(estimate.replace(/[^0-9.]/g, '')) > 0;
+    expect(estimate.includes('$') && parseFloat(estimate.replace(/[^0-9.]/g, '')) > 0).toBe(true);
   }
 
   // Deployment List and Status
@@ -132,7 +132,7 @@ export class DeploymentPage extends BasePage {
         const statusElement = document.querySelector(`[data-testid="status-badge-${id}"]`);
         return statusElement?.textContent?.toLowerCase() === status.toLowerCase();
       },
-      { deploymentId, expectedStatus },
+      { id: deploymentId, status: expectedStatus },
       { timeout }
     );
   }
@@ -171,15 +171,15 @@ export class DeploymentPage extends BasePage {
     const metrics = await this.getMetrics(deploymentId);
 
     // CPU should be reasonable
-    return metrics.cpu > 0 && metrics.cpu < 90;
+    expect(metrics.cpu > 0 && metrics.cpu < 90).toBe(true);
     // GPU should be utilized if model is loaded
-    return metrics.gpu >= 0 && metrics.gpu <= 100;
+    expect(metrics.gpu >= 0 && metrics.gpu <= 100).toBe(true);
     // Memory should be within limits
-    return metrics.memory > 0 && metrics.memory < 95;
+    expect(metrics.memory > 0 && metrics.memory < 95).toBe(true);
     // Response time should be reasonable
-    return metrics.responseTime < 5000; // 5 seconds max
+    expect(metrics.responseTime < 5000).toBe(true); // 5 seconds max
     // Error rate should be low
-    return metrics.errorRate < 5; // Less than 5%
+    expect(metrics.errorRate < 5).toBe(true); // Less than 5%
   }
 
   // Deployment Actions
@@ -232,7 +232,7 @@ export class DeploymentPage extends BasePage {
   async expectNoErrors(deploymentId: string): Promise<void> {
     const logs = await this.getLogEntries(deploymentId);
     const errorLogs = logs.filter(log => log.toLowerCase().includes('error'));
-    return errorLogs.length === 0;
+    expect(errorLogs.length === 0).toBe(true);
   }
 
   // Cost Tracking
@@ -243,7 +243,7 @@ export class DeploymentPage extends BasePage {
     await this.waitForVisible(`[data-testid="current-cost-${deploymentId}"]`);
 
     const cost = await costElement.textContent() || '';
-    return cost.includes('$') && parseFloat(cost.replace(/[^0-9.]/g, '')) >= 0;
+    expect(cost.includes('$') && parseFloat(cost.replace(/[^0-9.]/g, '')) >= 0).toBe(true);
   }
 
   async getCostPerHour(deploymentId: string): Promise<number> {
@@ -296,7 +296,7 @@ export class DeploymentPage extends BasePage {
     await this.waitForVisible('[data-testid="load-test-results"]');
 
     const results = await resultsElement.textContent() || '';
-    return results.includes('requests/sec') && results.includes('avg response time');
+    expect(results.includes('requests/sec') && results.includes('avg response time')).toBe(true);
   }
 
   // Refresh and Real-time Updates
@@ -311,11 +311,302 @@ export class DeploymentPage extends BasePage {
     const updatedMetrics = await this.getMetrics(deploymentId);
 
     // At least some metrics should have changed (timestamps, request counts, etc.)
-    return JSON.stringify(initialMetrics) !== JSON.stringify(updatedMetrics);
+    expect(JSON.stringify(initialMetrics) !== JSON.stringify(updatedMetrics)).toBe(true);
   }
 
   async refreshDeployments(): Promise<void> {
     await this.clickElement('[data-testid="refresh-deployments"]');
     await this.waitForApiResponse('/api/deployments');
+  }
+
+  // Missing methods required by E2E tests
+
+  async expectDeploymentPage(): Promise<void> {
+    await this.waitForVisible('[data-testid="deployment-page"]');
+    await this.expectDeploymentForm();
+  }
+
+  async expectTerminalTheme(): Promise<void> {
+    const body = this.page.locator('body');
+    const classes = await body.getAttribute('class') || '';
+    if (!classes.includes('terminal-theme') && !classes.includes('dark')) {
+      throw new Error('Terminal theme not detected');
+    }
+  }
+
+  async expectCorporateTheme(): Promise<void> {
+    const body = this.page.locator('body');
+    const classes = await body.getAttribute('class') || '';
+    if (!classes.includes('corporate-theme') && !classes.includes('light')) {
+      throw new Error('Corporate theme not detected');
+    }
+  }
+
+  async setInstanceCount(count: number): Promise<void> {
+    await this.fillField('[data-testid="instance-count"]', count.toString());
+  }
+
+  async enableAutoScaling(enabled: boolean): Promise<void> {
+    const checkbox = this.page.locator('[data-testid="auto-scaling-enabled"]');
+    const isChecked = await checkbox.isChecked();
+    if (isChecked !== enabled) {
+      await checkbox.click();
+    }
+  }
+
+  async setMaxInstances(maxInstances: number): Promise<void> {
+    await this.fillField('[data-testid="max-instances"]', maxInstances.toString());
+  }
+
+  async expectCostEstimation(): Promise<void> {
+    await this.waitForVisible('[data-testid="cost-estimation"]');
+  }
+
+  async getEstimatedCost(): Promise<number> {
+    const costElement = this.page.locator('[data-testid="estimated-cost"]');
+    const costText = await costElement.textContent() || '';
+    return parseFloat(costText.replace(/[^0-9.]/g, '')) || 0;
+  }
+
+  async createDeployment(): Promise<void> {
+    await this.clickElement('[data-testid="create-deployment-button"]');
+    await this.waitForApiResponse('/api/deployments');
+  }
+
+  async expectDeploymentCreating(): Promise<void> {
+    await this.waitForVisible('[data-testid="deployment-creating"]');
+  }
+
+  async waitForDeploymentReady(timeout = 30000): Promise<void> {
+    await this.page.waitForSelector('[data-testid="deployment-ready"]', { timeout });
+  }
+
+  async expectDeploymentRunning(): Promise<void> {
+    await this.waitForVisible('[data-testid="deployment-running"]');
+  }
+
+  async getDeploymentId(): Promise<string> {
+    const deploymentElement = this.page.locator('[data-testid^="deployment-id-"]');
+    return await deploymentElement.getAttribute('data-deployment-id') || '';
+  }
+
+  async expectMonitoringData(): Promise<void> {
+    await this.waitForVisible('[data-testid="monitoring-data"]');
+  }
+
+  async getPerformanceMetrics(): Promise<{
+    uptime: number;
+    avgResponseTime: number;
+    errorRate: number;
+  }> {
+    const uptime = parseFloat(await this.getText('[data-testid="uptime"]')) || 0;
+    const avgResponseTime = parseFloat(await this.getText('[data-testid="avg-response-time"]')) || 0;
+    const errorRate = parseFloat(await this.getText('[data-testid="error-rate"]')) || 0;
+    return { uptime, avgResponseTime, errorRate };
+  }
+
+  async getEndpointUrl(): Promise<string> {
+    const urlElement = this.page.locator('[data-testid="endpoint-url"]');
+    return await urlElement.textContent() || '';
+  }
+
+  async testEndpoint(): Promise<void> {
+    await this.clickElement('[data-testid="test-endpoint-button"]');
+    await this.waitForApiResponse('/api/test-endpoint');
+  }
+
+  async expectEndpointHealthy(): Promise<void> {
+    await this.waitForVisible('[data-testid="endpoint-healthy"]');
+  }
+
+  async expectDeploymentStopped(): Promise<void> {
+    await this.waitForVisible('[data-testid="deployment-stopped"]');
+  }
+
+  async expectDeploymentError(): Promise<void> {
+    await this.waitForVisible('[data-testid="deployment-error"]');
+  }
+
+  async getErrorMessage(): Promise<string> {
+    const errorElement = this.page.locator('[data-testid="error-message"]');
+    return await errorElement.textContent() || '';
+  }
+
+  async retryDeployment(): Promise<void> {
+    await this.clickElement('[data-testid="retry-deployment-button"]');
+  }
+
+  async expectDetailedCostBreakdown(): Promise<void> {
+    await this.waitForVisible('[data-testid="detailed-cost-breakdown"]');
+  }
+
+  async getCostBreakdown(): Promise<{
+    compute: number;
+    storage: number;
+    network: number;
+  }> {
+    const compute = parseFloat(await this.getText('[data-testid="cost-compute"]')) || 0;
+    const storage = parseFloat(await this.getText('[data-testid="cost-storage"]')) || 0;
+    const network = parseFloat(await this.getText('[data-testid="cost-network"]')) || 0;
+    return { compute, storage, network };
+  }
+
+  async expectEnterpriseMonitoring(): Promise<void> {
+    await this.waitForVisible('[data-testid="enterprise-monitoring"]');
+  }
+
+  async getAdvancedMetrics(): Promise<{
+    securityCompliance: string;
+    dataGovernance: string;
+    auditTrail: string;
+  }> {
+    const securityCompliance = await this.getText('[data-testid="security-compliance"]');
+    const dataGovernance = await this.getText('[data-testid="data-governance"]');
+    const auditTrail = await this.getText('[data-testid="audit-trail"]');
+    return { securityCompliance, dataGovernance, auditTrail };
+  }
+
+  async expectComplianceValidation(): Promise<void> {
+    await this.waitForVisible('[data-testid="compliance-validation"]');
+  }
+
+  async getComplianceStatus(): Promise<{
+    dataProtection: string;
+    accessControl: string;
+  }> {
+    const dataProtection = await this.getText('[data-testid="data-protection-status"]');
+    const accessControl = await this.getText('[data-testid="access-control-status"]');
+    return { dataProtection, accessControl };
+  }
+
+  async createSnapshot(snapshotName: string): Promise<void> {
+    await this.clickElement('[data-testid="create-snapshot-button"]');
+    await this.fillField('[data-testid="snapshot-name"]', snapshotName);
+    await this.clickElement('[data-testid="confirm-create-snapshot"]');
+    await this.waitForApiResponse('/api/snapshots');
+  }
+
+  async expectSnapshotCreated(): Promise<void> {
+    await this.waitForVisible('[data-testid="snapshot-created"]');
+  }
+
+  async updateDeployment(): Promise<void> {
+    await this.clickElement('[data-testid="update-deployment-button"]');
+    await this.waitForApiResponse('/api/deployments/*/update');
+  }
+
+  async initiateRollback(snapshotName: string): Promise<void> {
+    await this.clickElement('[data-testid="rollback-button"]');
+    await this.clickElement(`[data-testid="snapshot-option-${snapshotName}"]`);
+    await this.clickElement('[data-testid="confirm-rollback"]');
+    await this.waitForApiResponse('/api/rollback');
+  }
+
+  async expectRollbackInProgress(): Promise<void> {
+    await this.waitForVisible('[data-testid="rollback-in-progress"]');
+  }
+
+  async waitForRollbackComplete(): Promise<void> {
+    await this.waitForVisible('[data-testid="rollback-complete"]');
+  }
+
+  async getRollbackStatus(): Promise<string> {
+    const statusElement = this.page.locator('[data-testid="rollback-status"]');
+    return await statusElement.textContent() || '';
+  }
+
+  async getAuditLog(): Promise<string> {
+    const logElement = this.page.locator('[data-testid="audit-log"]');
+    return await logElement.textContent() || '';
+  }
+
+  async gotoDeployment(deploymentId: string): Promise<void> {
+    await this.page.goto(`/dashboard/deployments/${deploymentId}`);
+    await this.waitForLoad();
+  }
+
+  async getResourceUsage(): Promise<{
+    organizationId: string;
+    gpuType: string;
+  }> {
+    const organizationId = await this.getText('[data-testid="resource-organization-id"]');
+    const gpuType = await this.getText('[data-testid="resource-gpu-type"]');
+    return { organizationId, gpuType };
+  }
+
+  async simulateHighLoad(): Promise<void> {
+    await this.clickElement('[data-testid="simulate-high-load"]');
+  }
+
+  async expectAutoScalingTriggered(): Promise<void> {
+    await this.waitForVisible('[data-testid="auto-scaling-triggered"]');
+  }
+
+  async expectDeploymentRetrying(): Promise<void> {
+    await this.waitForVisible('[data-testid="deployment-retrying"]');
+  }
+
+  async getAllMetrics(): Promise<{
+    performance: any;
+    resources: any;
+    costs: any;
+    errors: any;
+  }> {
+    return {
+      performance: JSON.parse(await this.getText('[data-testid="performance-metrics"]') || '{}'),
+      resources: JSON.parse(await this.getText('[data-testid="resource-metrics"]') || '{}'),
+      costs: JSON.parse(await this.getText('[data-testid="cost-metrics"]') || '{}'),
+      errors: JSON.parse(await this.getText('[data-testid="error-metrics"]') || '{}')
+    };
+  }
+
+  async simulateHighErrorRate(): Promise<void> {
+    await this.clickElement('[data-testid="simulate-high-error-rate"]');
+  }
+
+  async expectAlertTriggered(): Promise<void> {
+    await this.waitForVisible('[data-testid="alert-triggered"]');
+  }
+
+  async getAlertStatus(): Promise<{
+    errorRateAlert: string;
+  }> {
+    const errorRateAlert = await this.getText('[data-testid="error-rate-alert-status"]');
+    return { errorRateAlert };
+  }
+
+  // Add missing expectText method required by tests
+  async expectText(selector: string, expectedText: string): Promise<void> {
+    const element = await this.waitForVisible(selector);
+    await expect(element).toContainText(expectedText);
+  }
+
+  // Add missing methods required by performance tests
+  async createRollbackPlan(): Promise<void> {
+    await this.clickElement('[data-testid="create-rollback-plan"]');
+  }
+
+  async expectRollbackPlan(): Promise<void> {
+    await this.waitForVisible('[data-testid="rollback-plan"]');
+  }
+
+  async executeRollback(): Promise<void> {
+    await this.clickElement('[data-testid="execute-rollback"]');
+  }
+
+  // Additional methods for pre-rollback checks and validation
+  async executePreRollbackChecks(planId: string): Promise<void> {
+    await this.clickElement(`[data-testid="execute-pre-rollback-checks-${planId}"]`);
+    await this.waitForVisible('[data-testid="pre-rollback-checks-running"]');
+  }
+
+  async expectPreCheckResults(): Promise<void> {
+    await this.waitForVisible('[data-testid="pre-check-results"]');
+    await this.waitForHidden('[data-testid="pre-rollback-checks-running"]');
+  }
+
+  async validateRollbackSafety(planId: string): Promise<void> {
+    await this.clickElement(`[data-testid="validate-rollback-safety-${planId}"]`);
+    await this.waitForVisible('[data-testid="rollback-safety-validated"]');
   }
 }

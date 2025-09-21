@@ -53,10 +53,10 @@ export interface PerformanceContext extends LogContext {
  */
 export class LoggingService {
   private static instance: LoggingService;
-  private logger: winston.Logger;
-  private performanceLogger: winston.Logger;
-  private securityLogger: winston.Logger;
-  private businessLogger: winston.Logger;
+  private logger!: winston.Logger;
+  private performanceLogger!: winston.Logger;
+  private securityLogger!: winston.Logger;
+  private businessLogger!: winston.Logger;
 
   private constructor() {
     this.initializeLoggers();
@@ -79,7 +79,7 @@ export class LoggingService {
       winston.format.errors({ stack: true }),
       winston.format.json(),
       winston.format.printf(({ timestamp, level, message, organization, ...meta }) => {
-        const orgPrefix = this.getOrganizationPrefix(organization);
+        const orgPrefix = this.getOrganizationPrefix(organization as Organization);
         return JSON.stringify({
           timestamp,
           level,
@@ -95,7 +95,7 @@ export class LoggingService {
       winston.format.colorize(),
       winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
       winston.format.printf(({ timestamp, level, message, organization, ...meta }) => {
-        const orgPrefix = this.getOrganizationPrefix(organization);
+        const orgPrefix = this.getOrganizationPrefix(organization as Organization);
         const metaStr = Object.keys(meta).length > 0 ? ` ${JSON.stringify(meta)}` : '';
         return `${timestamp} [${level}] ${orgPrefix}${message}${metaStr}`;
       })

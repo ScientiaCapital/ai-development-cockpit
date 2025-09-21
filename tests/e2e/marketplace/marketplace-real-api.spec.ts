@@ -105,7 +105,7 @@ test.describe('Real HuggingFace API Integration', () => {
         // Check if we get results or a rate limit response
         try {
           await marketplacePage.expectSearchResults();
-        } catch (error) {
+        } catch (error: unknown) {
           // If rate limited, verify error handling
           await marketplacePage.expectErrorMessage('rate limit');
         }

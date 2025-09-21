@@ -454,10 +454,10 @@ export class DeploymentValidator {
       try {
         const result = await this.validateDeployment(config, context);
         results.set(configKey, result);
-      } catch (error) {
+      } catch (error: unknown) {
         results.set(configKey, {
           isValid: false,
-          errors: [`Validation failed: ${error.message}`],
+          errors: [`Validation failed: ${error instanceof Error ? error.message : 'Unknown error'}`],
           warnings: [],
           score: 0,
           details: {

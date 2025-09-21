@@ -4,12 +4,12 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { getMFAFactors, removeMFAFactor, hasMFAEnabled } from '../../lib/mfa'
-import type { MFAFactor } from '../../lib/mfa'
+import type { Factor } from '@supabase/supabase-js'
 
 export default function MFASetup() {
   const router = useRouter()
   
-  const [factors, setFactors] = useState<MFAFactor[]>([])
+  const [factors, setFactors] = useState<Factor[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string>('')
   const [removingFactor, setRemovingFactor] = useState<string | null>(null)

@@ -785,7 +785,7 @@ export class TestReporter {
       await fs.writeFile(latestPath, JSON.stringify(report, null, 2));
 
       console.log(`📊 Test report saved: ${reportPath}`);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to save test report:', error);
     }
   }
@@ -808,11 +808,11 @@ export class TestReporter {
           const content = await fs.readFile(path.join(this.reportDir, file), 'utf8');
           const report = JSON.parse(content) as TestReport;
           this.historicalData.push(report);
-        } catch (error) {
+        } catch (error: unknown) {
           console.warn(`Failed to load historical report ${file}:`, error);
         }
       }
-    } catch (error) {
+    } catch (error: unknown) {
       // Directory doesn't exist or no historical data
       this.historicalData = [];
     }

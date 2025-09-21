@@ -160,9 +160,12 @@ export function WebVitalsOptimizer({
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             const img = entry.target as HTMLImageElement
-            img.src = img.dataset.src || ''
-            img.classList.remove('lazy')
-            imageObserver.unobserve(img)
+            const dataSrc = img.getAttribute('data-src')
+            if (dataSrc) {
+              img.src = dataSrc
+              img.classList.remove('lazy')
+              imageObserver.unobserve(img)
+            }
           }
         })
       })
@@ -187,8 +190,9 @@ export function WebVitalsOptimizer({
 
     // Defer non-critical JavaScript
     const scripts = document.querySelectorAll('script[src]:not([async]):not([defer])')
-    scripts.forEach(script => {
-      if (!script.src.includes('vital')) { // Don't defer critical scripts
+    scripts.forEach(scriptElement => {
+      const script = scriptElement as HTMLScriptElement
+      if (script.src && !script.src.includes('vital')) { // Don't defer critical scripts
         script.setAttribute('defer', '')
       }
     })

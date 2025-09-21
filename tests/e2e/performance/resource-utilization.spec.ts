@@ -84,7 +84,7 @@ test.describe('Resource Utilization Monitoring', () => {
         });
 
         resourceMetrics.push(metrics);
-      } catch (error) {
+      } catch (error: unknown) {
         // Ignore monitoring errors during test execution
       }
     }, 1000); // Collect metrics every second
@@ -177,7 +177,8 @@ test.describe('Resource Utilization Monitoring', () => {
 
       // Create deployment and monitor resource spike
       await deploymentPage.selectGpuType('NVIDIA_RTX_A6000');
-      const deploymentId = await deploymentPage.createDeployment();
+      await deploymentPage.createDeployment();
+      const deploymentId = await deploymentPage.getDeploymentId();
       await deploymentPage.waitForDeploymentReady(30000);
 
       // Allow monitoring during deployment
@@ -195,7 +196,7 @@ test.describe('Resource Utilization Monitoring', () => {
       expect(maxGpuDuringDeployment).toBeLessThan(95); // Under 95% GPU
 
       // Resource usage should return to baseline after deployment
-      await deploymentPage.stopDeployment();
+      await deploymentPage.stopDeployment(deploymentId);
       await new Promise(resolve => setTimeout(resolve, 3000));
 
       const postDeploymentMetrics = resourceMetrics.slice(-3);
@@ -221,7 +222,8 @@ test.describe('Resource Utilization Monitoring', () => {
       await deploymentPage.setInstanceCount(4);
       await deploymentPage.enableAutoScaling(true);
 
-      const deploymentId = await deploymentPage.createDeployment();
+      await deploymentPage.createDeployment();
+      const deploymentId = await deploymentPage.getDeploymentId();
       await deploymentPage.waitForDeploymentReady(45000);
 
       // Monitor enterprise deployment resources
@@ -248,7 +250,7 @@ test.describe('Resource Utilization Monitoring', () => {
       const overhead = (complianceCpu - avgResourceUsage.cpu) / avgResourceUsage.cpu;
       expect(overhead).toBeLessThan(0.1);
 
-      await deploymentPage.stopDeployment();
+      await deploymentPage.stopDeployment(deploymentId);
     });
   });
 
@@ -316,7 +318,7 @@ test.describe('Resource Utilization Monitoring', () => {
                 await marketplacePage.searchModels(`concurrent-${i}-${j}`);
                 await new Promise(resolve => setTimeout(resolve, 1000));
               }
-            } catch (error) {
+            } catch (error: unknown) {
               // Expected under high load
             }
           })();
@@ -363,6 +365,7 @@ test.describe('Resource Utilization Monitoring', () => {
 
         // Mock deployment creation to simulate GPU usage
         await deploymentPage.createDeployment();
+        const deploymentId = await deploymentPage.getDeploymentId();
         await new Promise(resolve => setTimeout(resolve, 3000));
 
         const gpuMetrics = resourceMetrics.slice(-3);
@@ -372,7 +375,7 @@ test.describe('Resource Utilization Monitoring', () => {
         expect(avgGpuUsage).toBeGreaterThan(config.expectedUtilization * 0.7); // At least 70% of expected
         expect(avgGpuUsage).toBeLessThan(config.expectedUtilization * 1.2); // Not more than 120% of expected
 
-        await deploymentPage.stopDeployment();
+        await deploymentPage.stopDeployment(deploymentId);
         await new Promise(resolve => setTimeout(resolve, 2000));
       }
     });
@@ -426,7 +429,8 @@ test.describe('Resource Utilization Monitoring', () => {
       // Perform resource-intensive operations
       await deploymentPage.selectGpuType('NVIDIA_A100_SXM4_80GB');
       await deploymentPage.setInstanceCount(4);
-      const deploymentId = await deploymentPage.createDeployment();
+      await deploymentPage.createDeployment();
+      const deploymentId = await deploymentPage.getDeploymentId();
       await deploymentPage.waitForDeploymentReady(30000);
 
       // Monitor during active deployment
@@ -439,7 +443,7 @@ test.describe('Resource Utilization Monitoring', () => {
       };
 
       // Stop deployment and verify cleanup
-      await deploymentPage.stopDeployment();
+      await deploymentPage.stopDeployment(deploymentId);
       await new Promise(resolve => setTimeout(resolve, 5000)); // Allow cleanup time
 
       const cleanupMetrics = resourceMetrics.slice(-3);

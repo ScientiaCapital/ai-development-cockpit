@@ -86,7 +86,7 @@ test.describe('E2E Testing Infrastructure Validation', () => {
       // Test model deployment
       if (filteredResults.length > 0) {
         await marketplacePage.selectModel(filteredResults[0].id);
-        await marketplacePage.deployModel();
+        await marketplacePage.deployFirstModel();
 
         // Verify deployment started
         const deploymentStatus = await marketplacePage.getDeploymentStatus();
@@ -96,7 +96,7 @@ test.describe('E2E Testing Infrastructure Validation', () => {
       validationResults.basicFunctionality = true;
       console.log('✅ Basic marketplace functionality validated');
 
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('❌ Basic functionality validation failed:', error);
       validationResults.recommendations.push('Fix basic marketplace functionality issues');
       throw error;
@@ -136,7 +136,7 @@ test.describe('E2E Testing Infrastructure Validation', () => {
       validationResults.performanceMonitoring = true;
       console.log('✅ Performance monitoring validated');
 
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('❌ Performance monitoring validation failed:', error);
       validationResults.recommendations.push('Optimize performance monitoring implementation');
       throw error;
@@ -165,7 +165,7 @@ test.describe('E2E Testing Infrastructure Validation', () => {
         try {
           await page.reload();
           await page.waitForLoadState('networkidle', { timeout: 8000 });
-        } catch (error) {
+        } catch (error: unknown) {
           // Some failures are expected with chaos testing
           console.log(`Expected failure during chaos test iteration ${i + 1}`);
         }
@@ -182,7 +182,7 @@ test.describe('E2E Testing Infrastructure Validation', () => {
       validationResults.chaosResilience = true;
       console.log('✅ Chaos testing and resilience validated');
 
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('❌ Chaos testing validation failed:', error);
       validationResults.recommendations.push('Improve system resilience to failures');
       throw error;
@@ -263,7 +263,7 @@ test.describe('E2E Testing Infrastructure Validation', () => {
       validationResults.reportingAnalytics = true;
       console.log('✅ Test reporting and analytics validated');
 
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('❌ Reporting and analytics validation failed:', error);
       validationResults.recommendations.push('Fix test reporting and analytics pipeline');
       throw error;
@@ -293,7 +293,7 @@ test.describe('E2E Testing Infrastructure Validation', () => {
       try {
         await dashboardIntegration.sendTestMetrics(testMetrics);
         console.log('✅ Test metrics sent to dashboard successfully');
-      } catch (error) {
+      } catch (error: unknown) {
         console.log('ℹ️ Dashboard endpoints not available (expected in test environment)');
       }
 
@@ -307,7 +307,7 @@ test.describe('E2E Testing Infrastructure Validation', () => {
       try {
         await dashboardIntegration.sendTestReport(mockReport);
         console.log('✅ Test report sent to dashboard successfully');
-      } catch (error) {
+      } catch (error: unknown) {
         console.log('ℹ️ Dashboard endpoints not available (expected in test environment)');
       }
 
@@ -321,7 +321,7 @@ test.describe('E2E Testing Infrastructure Validation', () => {
       validationResults.dashboardIntegration = true;
       console.log('✅ Dashboard integration validated');
 
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('❌ Dashboard integration validation failed:', error);
       validationResults.recommendations.push('Review dashboard integration configuration');
       throw error;

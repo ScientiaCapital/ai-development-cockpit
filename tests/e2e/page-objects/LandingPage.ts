@@ -105,7 +105,7 @@ export class LandingPage extends BasePage {
     if (this.domain === 'swaggystacks') {
       const body = this.page.locator('body');
       const classes = await body.getAttribute('class') || '';
-      return classes.includes('dark') || classes.includes('terminal');
+      expect(classes.includes('dark') || classes.includes('terminal')).toBe(true);
     }
   }
 
@@ -132,7 +132,7 @@ export class LandingPage extends BasePage {
     if (this.domain === 'scientia') {
       const body = this.page.locator('body');
       const classes = await body.getAttribute('class') || '';
-      return classes.includes('corporate') || classes.includes('professional');
+      expect(classes.includes('corporate') || classes.includes('professional')).toBe(true);
     }
   }
 
@@ -167,7 +167,7 @@ export class LandingPage extends BasePage {
       await this.page.waitForTimeout(3000);
 
       const text = await terminalText.textContent();
-      return text && text.length > 0;
+      expect(text && text.length > 0).toBe(true);
     }
   }
 
@@ -197,10 +197,10 @@ export class LandingPage extends BasePage {
 
       if (this.domain === 'swaggystacks') {
         // Should have terminal/dark theme classes
-        return classes.includes('terminal') || classes.includes('dark');
+        expect(classes.includes('terminal') || classes.includes('dark')).toBe(true);
       } else {
         // Should have corporate/professional theme classes
-        return classes.includes('corporate') || classes.includes('professional');
+        expect(classes.includes('corporate') || classes.includes('professional')).toBe(true);
       }
     }
   }
@@ -212,7 +212,7 @@ export class LandingPage extends BasePage {
     const loadTime = Date.now() - startTime;
 
     // Page should load within 3 seconds
-    return loadTime < 3000;
+    expect(loadTime < 3000).toBe(true);
   }
 
   async expectAccessibility(): Promise<void> {
@@ -222,7 +222,7 @@ export class LandingPage extends BasePage {
 
     // Check for proper heading structure
     const h1 = this.page.locator('h1');
-    return await h1.count() >= 1;
+    expect(await h1.count() >= 1).toBe(true);
   }
 
   // Cross-domain functionality

@@ -20,7 +20,7 @@ test.describe('Deployment Validation', () => {
     if (testDeploymentId) {
       try {
         await deploymentPage.terminateDeployment(testDeploymentId);
-      } catch (error) {
+      } catch (error: unknown) {
         console.log('Cleanup: Deployment may have already been terminated');
       }
     }

@@ -392,7 +392,7 @@ export function estimateDeploymentCost(templateId: string): {
   }
 
   // RunPod pricing estimates (varies by availability)
-  const gpuPricing = {
+  const gpuPricing: Record<string, number> = {
     'RTX 4090': 0.79,
     'RTX A6000': 0.79,
     'A40': 0.89,

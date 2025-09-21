@@ -220,7 +220,10 @@ export class TestApiClient {
     // Configure API endpoints to use real services
     await this.page.addInitScript((config) => {
       window.E2E_CONFIG = {
-        mode: 'real',
+        apiBaseUrl: 'https://api.example.com',
+        testMode: 'real',
+        organization: 'test-org',
+        // Additional configuration
         apiEndpoints: {
           huggingface: 'https://huggingface.co/api',
           runpod: 'https://api.runpod.ai/graphql'
@@ -450,6 +453,110 @@ export class TestApiClient {
   }
 
   // Cleanup methods
+  /**
+   * Validate API endpoint with comprehensive testing
+   */
+  async validateEndpoint(
+    endpoint: string, 
+    options: {
+      checkAuth: { huggingface: boolean; runpod: boolean };
+      validateSchema: boolean;
+      measurePerformance: boolean;
+    }
+  ): Promise<ApiTestResult> {
+    const startTime = Date.now();
+    const timestamp = new Date().toISOString();
+    
+    const result: ApiTestResult = {
+      endpoint,
+      method: 'GET',
+      success: false,
+      responseTime: 0,
+      statusCode: 0,
+      validationDetails: {
+        authValidation: false,
+        schemaValidation: false,
+        performanceValidation: false,
+        rateLimitValidation: false
+      },
+      retryAttempts: 0,
+      timestamp
+    };
+
+    try {
+      // Determine if this is a real API test or mock test
+      if (this.mode === 'mock') {
+        // Mock validation - simulate successful validation
+        result.success = true;
+        result.statusCode = 200;
+        result.responseTime = Math.random() * 200 + 50; // 50-250ms
+        result.validationDetails = {
+          authValidation: true,
+          schemaValidation: options.validateSchema,
+          performanceValidation: options.measurePerformance,
+          rateLimitValidation: true
+        };
+        
+        console.log(`✅ Mock validation successful for endpoint: ${endpoint}`);
+        return result;
+      }
+
+      // Real API validation
+      const response = await this.page.request.get(endpoint, {
+        headers: {
+          ...(this.config.huggingfaceToken && options.checkAuth.huggingface && {
+            'Authorization': `Bearer ${this.config.huggingfaceToken}`
+          })
+        },
+        timeout: 10000
+      });
+
+      result.statusCode = response.status();
+      result.responseTime = Date.now() - startTime;
+      result.success = response.ok();
+
+      // Auth validation
+      if (options.checkAuth.huggingface || options.checkAuth.runpod) {
+        result.validationDetails.authValidation = response.status() !== 401 && response.status() !== 403;
+      } else {
+        result.validationDetails.authValidation = true; // Skip auth check if not required
+      }
+
+      // Schema validation
+      if (options.validateSchema && response.ok()) {
+        try {
+          const responseData = await response.json();
+          result.validationDetails.schemaValidation = typeof responseData === 'object' && responseData !== null;
+        } catch (e) {
+          result.validationDetails.schemaValidation = false;
+        }
+      } else {
+        result.validationDetails.schemaValidation = !options.validateSchema; // Pass if not required
+      }
+
+      // Performance validation
+      if (options.measurePerformance) {
+        result.validationDetails.performanceValidation = result.responseTime < 5000; // 5 second threshold
+      } else {
+        result.validationDetails.performanceValidation = true; // Pass if not required
+      }
+
+      // Rate limit validation (check if we're not being rate limited)
+      result.validationDetails.rateLimitValidation = response.status() !== 429;
+
+      console.log(`${result.success ? '✅' : '❌'} API validation ${result.success ? 'successful' : 'failed'} for endpoint: ${endpoint} (${result.responseTime}ms)`);
+
+    } catch (error: unknown) {
+      result.error = error instanceof Error ? error instanceof Error ? error.message : 'Unknown error' : 'Unknown error occurred';
+      result.responseTime = Date.now() - startTime;
+      result.success = false;
+      
+      console.error(`❌ API validation error for endpoint ${endpoint}:`, result.error);
+    }
+
+    return result;
+  }
+
   async cleanup(): Promise<void> {
     // Remove all route handlers
     await this.page.unrouteAll();
@@ -457,6 +564,55 @@ export class TestApiClient {
     // Clear any test-specific headers
     if (this.mode === 'real') {
       await this.page.setExtraHTTPHeaders({});
+    }
+  }
+
+  // Additional methods expected by E2E tests
+  async runComprehensiveTests(): Promise<void> {
+    console.log('Running comprehensive API tests...');
+
+    if (this.mode === 'mock') {
+      // Mock comprehensive test simulation
+      await this.page.waitForTimeout(1000);
+      return;
+    }
+
+    // Real API comprehensive testing
+    const endpoints = [
+      '/api/models',
+      '/api/deployments',
+      '/api/health'
+    ];
+
+    for (const endpoint of endpoints) {
+      await this.validateEndpoint(endpoint, {
+        checkAuth: { huggingface: true, runpod: true },
+        validateSchema: true,
+        measurePerformance: true
+      });
+    }
+  }
+
+  async runChaosTests(): Promise<void> {
+    console.log('Running chaos engineering tests...');
+
+    if (this.mode === 'mock') {
+      // Mock chaos test simulation
+      await this.simulateApiError('/api/deployments', 'timeout');
+      await this.page.waitForTimeout(500);
+      return;
+    }
+
+    // Real API chaos testing
+    const chaosScenarios = [
+      { endpoint: '/api/models', error: 'timeout' as const },
+      { endpoint: '/api/deployments', error: 'server_error' as const },
+      { endpoint: '/api/health', error: 'rate_limit' as const }
+    ];
+
+    for (const scenario of chaosScenarios) {
+      await this.simulateApiError(scenario.endpoint, scenario.error);
+      await this.page.waitForTimeout(1000);
     }
   }
 }

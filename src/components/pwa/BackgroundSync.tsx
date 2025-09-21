@@ -6,6 +6,17 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { toast } from 'sonner'
 
+// Extend ServiceWorkerRegistration to include sync property
+declare global {
+  interface ServiceWorkerRegistration {
+    sync?: SyncManager
+  }
+  
+  interface SyncManager {
+    register(tag: string): Promise<void>
+  }
+}
+
 interface QueuedMessage {
   id: string
   timestamp: number

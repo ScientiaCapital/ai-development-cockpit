@@ -72,7 +72,7 @@ const RESILIENCE_SCENARIOS: ResilienceTestScenario[] = [
     },
     validate: async (page: Page, metrics: any) => {
       // System should implement circuit breakers or retry logic
-      const apiErrors = metrics.errors.filter(e => e.type === 'network').length;
+      const apiErrors = metrics.errors.filter((e: any) => e.type === 'network').length;
       const totalRequests = metrics.network.requestCount;
 
       // Should have some error handling but not all requests should fail
@@ -116,7 +116,7 @@ const RESILIENCE_SCENARIOS: ResilienceTestScenario[] = [
       const memoryUsage = metrics.resources.memoryUsage;
       if (memoryUsage.length === 0) return false;
 
-      const maxMemory = Math.max(...memoryUsage.map(m => m.percentage));
+      const maxMemory = Math.max(...memoryUsage.map((m: any) => m.percentage));
 
       // System should not exceed 90% memory usage for extended periods
       return maxMemory < 90;
@@ -160,7 +160,7 @@ const RESILIENCE_SCENARIOS: ResilienceTestScenario[] = [
     },
     validate: async (page: Page, metrics: any) => {
       // Should show deployment failure and rollback indication
-      const deploymentErrors = metrics.errors.filter(e =>
+      const deploymentErrors = metrics.errors.filter((e: any) =>
         e.message?.includes('deployment') ||
         e.context?.url?.includes('deployments')
       ).length;
@@ -189,6 +189,7 @@ test.describe('Resilience Testing - Fault Tolerance', () => {
 
   test.beforeEach(async ({ page, context }) => {
     metricsCollector = new MetricsCollector(
+      {},
       page,
       `resilience-${Date.now()}`,
       'Resilience Testing',
@@ -211,9 +212,9 @@ test.describe('Resilience Testing - Fault Tolerance', () => {
     const metrics = await metricsCollector.stopCollection();
 
     console.log('🛡️ Resilience Test Results:');
-    console.log(`- Scenarios executed: ${metrics.customMetrics.scenariosExecuted?.value || 0}`);
-    console.log(`- Recovery time: ${metrics.customMetrics.totalRecoveryTime?.value || 0}ms`);
-    console.log(`- Errors handled: ${metrics.errors.length}`);
+    console.log(`- Scenarios executed: ${metrics?.customMetrics?.scenariosExecuted?.value || 0}`);
+    console.log(`- Recovery time: ${metrics?.customMetrics?.totalRecoveryTime?.value || 0}ms`);
+    console.log(`- Errors handled: ${metrics?.errors?.length || 0}`);
   });
 
   RESILIENCE_SCENARIOS.forEach((scenario) => {
@@ -256,10 +257,10 @@ test.describe('Resilience Testing - Fault Tolerance', () => {
         const totalTestTime = Date.now() - testStartTime;
         console.log(`✅ Resilience test completed in ${totalTestTime}ms (Recovery: ${recoveryTime}ms)`);
 
-      } catch (error) {
+      } catch (error: unknown) {
         metricsCollector.recordError({
           type: 'assertion',
-          message: `Resilience test failed: ${error.message}`,
+          message: `Resilience test failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
           severity: 'critical',
           context: { scenario: scenario.name }
         });
@@ -408,13 +409,13 @@ test.describe('Resilience Testing - Fault Tolerance', () => {
       console.log('✅ System remained stable under concurrent failures');
       metricsCollector.addCustomMetric('concurrentFailureHandling', 'success');
 
-    } catch (error) {
+    } catch (error: unknown) {
       console.warn('⚠️ System degraded under concurrent failures');
       metricsCollector.addCustomMetric('concurrentFailureHandling', 'degraded');
 
       // Degraded performance is acceptable, but complete failure is not
       const isCompleteFailure = await page.locator('body').textContent()
-        .then(text => text?.includes('Application Error') || text?.length < 100);
+        .then(text => text?.includes('Application Error') || (text?.length || 0) < 100);
 
       expect(isCompleteFailure).toBe(false);
     }
@@ -424,10 +425,12 @@ test.describe('Resilience Testing - Fault Tolerance', () => {
 test.describe('Recovery Time Objectives (RTO) Validation', () => {
   test('should meet 30-second rollback SLA requirement', async ({ page, context }) => {
     const metricsCollector = new MetricsCollector(
+      {},
       page,
       'rto-validation',
       'RTO Validation',
-      'swaggystacks'
+      'swaggystacks',
+      'development'
     );
     await metricsCollector.startCollection();
 

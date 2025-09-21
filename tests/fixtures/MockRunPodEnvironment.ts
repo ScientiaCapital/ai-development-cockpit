@@ -390,12 +390,12 @@ export class MockRunPodEnvironment {
             contentType: 'application/json',
             body: JSON.stringify(deployment)
           });
-        } catch (error) {
+        } catch (error: unknown) {
           await route.fulfill({
             status: 400,
             contentType: 'application/json',
             body: JSON.stringify({
-              error: error instanceof Error ? error.message : 'Deployment creation failed'
+              error: error instanceof Error ? error instanceof Error ? error.message : 'Unknown error' : 'Deployment creation failed'
             })
           });
         }
@@ -446,12 +446,12 @@ export class MockRunPodEnvironment {
           contentType: 'application/json',
           body: JSON.stringify({ success: true })
         });
-      } catch (error) {
+      } catch (error: unknown) {
         await route.fulfill({
           status: 400,
           contentType: 'application/json',
           body: JSON.stringify({
-            error: error instanceof Error ? error.message : 'Stop deployment failed'
+            error: error instanceof Error ? error instanceof Error ? error.message : 'Unknown error' : 'Stop deployment failed'
           })
         });
       }

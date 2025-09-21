@@ -143,9 +143,9 @@ export class DeploymentTestPipeline {
       await this.executeStage('summary-generation', () => this.summaryGenerationStage());
 
       this.currentExecution.status = 'completed';
-    } catch (error) {
+    } catch (error: unknown) {
       this.currentExecution.status = 'failed';
-      this.addExecutionError(`Pipeline execution failed: ${error.message}`);
+      this.addExecutionError(`Pipeline execution failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       this.currentExecution.endTime = new Date();
       this.currentExecution.totalDuration =
@@ -191,9 +191,9 @@ export class DeploymentTestPipeline {
     try {
       await stageFunction();
       stage.status = 'completed';
-    } catch (error) {
+    } catch (error: unknown) {
       stage.status = 'failed';
-      stage.errors = [error.message];
+      stage.errors = [error instanceof Error ? error.message : 'Unknown error'];
       throw error;
     } finally {
       stage.endTime = new Date();
@@ -319,8 +319,8 @@ export class DeploymentTestPipeline {
       const deploymentSuccess = await this.monitorDeploymentProgress(page, config);
 
       return { success: deploymentSuccess };
-    } catch (error) {
-      console.error(`Deployment failed for ${config.modelId}:`, error.message);
+    } catch (error: unknown) {
+      console.error(`Deployment failed for ${config.modelId}:`, error instanceof Error ? error.message : 'Unknown error');
       return { success: false };
     }
   }
@@ -344,7 +344,7 @@ export class DeploymentTestPipeline {
         }
 
         await page.waitForTimeout(checkInterval);
-      } catch (error) {
+      } catch (error: unknown) {
         // Continue monitoring even if status check fails
         await page.waitForTimeout(checkInterval);
       }
@@ -377,7 +377,7 @@ export class DeploymentTestPipeline {
       await page.waitForSelector('[data-testid="deployment-monitor"]', { timeout: 10000 });
       const healthStatus = await page.locator('[data-testid="health-status"]').textContent();
       return healthStatus?.includes('Healthy') || healthStatus?.includes('Running') || false;
-    } catch (error) {
+    } catch (error: unknown) {
       return false;
     }
   }
@@ -465,10 +465,10 @@ export class DeploymentTestPipeline {
         throw new Error('Rollback exceeded 30-second SLA requirement');
       }
 
-    } catch (error) {
+    } catch (error: unknown) {
       this.currentExecution!.summary.rollbackTested = true;
       this.currentExecution!.summary.rollbackSuccessful = false;
-      throw new Error(`Rollback testing failed: ${error.message}`);
+      throw new Error(`Rollback testing failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
@@ -491,7 +491,7 @@ export class DeploymentTestPipeline {
         }
 
         await page.waitForTimeout(checkInterval);
-      } catch (error) {
+      } catch (error: unknown) {
         await page.waitForTimeout(checkInterval);
       }
     }
@@ -556,7 +556,7 @@ export class DeploymentTestPipeline {
     for (const page of this.pages) {
       try {
         await page.click('[data-testid="cleanup-button"]', { timeout: 5000 });
-      } catch (error) {
+      } catch (error: unknown) {
         // Continue cleanup even if some fail
       }
     }

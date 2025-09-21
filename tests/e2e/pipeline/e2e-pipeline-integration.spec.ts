@@ -90,7 +90,7 @@ test.describe('Complete E2E Pipeline Integration', () => {
       await deploymentPage.expectEndpointHealthy();
 
       // Step 7: Cleanup
-      await deploymentPage.stopDeployment();
+      await deploymentPage.stopDeployment(deploymentId);
       await deploymentPage.expectDeploymentStopped();
     });
 
@@ -213,7 +213,8 @@ test.describe('Complete E2E Pipeline Integration', () => {
       expect(performance.avgResponseTime).toBeLessThan(500); // Performance requirement
 
       // Step 8: Controlled Shutdown
-      await deploymentPage.stopDeployment();
+      const deploymentId = await deploymentPage.getDeploymentId();
+      await deploymentPage.stopDeployment(deploymentId);
       await deploymentPage.expectDeploymentStopped();
     });
 
@@ -315,10 +316,10 @@ test.describe('Complete E2E Pipeline Integration', () => {
       await deploymentPage.expectDeploymentRunning();
 
       // Cleanup both deployments
-      await deploymentPage.stopDeployment();
+      await deploymentPage.stopDeployment(swaggyDeploymentId);
       await marketplacePage.selectOrganization('scientia');
       await deploymentPage.gotoDeployment(scientiaDeploymentId);
-      await deploymentPage.stopDeployment();
+      await deploymentPage.stopDeployment(scientiaDeploymentId);
     });
 
     test('should validate resource isolation between organizations', async () => {
@@ -352,9 +353,11 @@ test.describe('Complete E2E Pipeline Integration', () => {
       expect(swaggyResources.gpuType).not.toBe(scientiaResources.gpuType);
 
       // Cleanup
-      await deploymentPage.stopDeployment();
+      const scientiaDeploymentId = await deploymentPage.getDeploymentId();
+      await deploymentPage.stopDeployment(scientiaDeploymentId);
       await marketplacePage.selectOrganization('swaggystacks');
-      await deploymentPage.stopDeployment();
+      const swaggyDeploymentId = await deploymentPage.getDeploymentId();
+      await deploymentPage.stopDeployment(swaggyDeploymentId);
     });
   });
 
@@ -387,7 +390,8 @@ test.describe('Complete E2E Pipeline Integration', () => {
       expect(metrics.errorRate).toBeLessThan(1.0); // Less than 1% error rate
       expect(metrics.avgResponseTime).toBeLessThan(2000); // Under 2 seconds
 
-      await deploymentPage.stopDeployment();
+      const deploymentId = await deploymentPage.getDeploymentId();
+      await deploymentPage.stopDeployment(deploymentId);
     });
 
     test('should validate deployment pipeline resilience', async () => {
@@ -414,7 +418,8 @@ test.describe('Complete E2E Pipeline Integration', () => {
       await deploymentPage.waitForDeploymentReady(60000);
       await deploymentPage.expectDeploymentRunning();
 
-      await deploymentPage.stopDeployment();
+      const deploymentId = await deploymentPage.getDeploymentId();
+      await deploymentPage.stopDeployment(deploymentId);
     });
 
     test('should validate complete monitoring and alerting pipeline', async () => {
@@ -444,7 +449,8 @@ test.describe('Complete E2E Pipeline Integration', () => {
       const alertStatus = await deploymentPage.getAlertStatus();
       expect(alertStatus.errorRateAlert).toBe('active');
 
-      await deploymentPage.stopDeployment();
+      const deploymentId = await deploymentPage.getDeploymentId();
+      await deploymentPage.stopDeployment(deploymentId);
     });
   });
 

@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import ModelCard, { ModelCardSkeleton } from './ModelCard'
-import { useModelSearch } from '@/hooks/useModelSearch'
+import { useModelSearch, mapModelMetadataToModelData } from '@/hooks/useModelSearch'
 import { useModels } from '@/hooks/useModels'
 import { useHuggingFaceAuth } from '@/contexts/HuggingFaceAuth'
 import { useTerminalTheme } from '@/hooks/useTypingEffect'
@@ -23,14 +23,14 @@ interface ModelMarketplaceProps {
 }
 
 // Memoized filter component to prevent unnecessary re-renders
-const FilterControls = memo(function FilterControls({ 
-  filters, 
+const FilterControls = memo(function FilterControls({
+  filters,
   onFiltersChange,
-  theme 
+  theme
 }: {
-  filters: DiscoveryFilters
-  onFiltersChange: (filters: DiscoveryFilters) => void
-  theme: string
+  filters: Partial<DiscoveryFilters>
+  onFiltersChange: (filters: Partial<DiscoveryFilters>) => void
+  theme: 'swaggystacks' | 'scientiacapital'
 }) {
   const handleFilterChange = useCallback((key: keyof DiscoveryFilters, value: any) => {
     onFiltersChange({ ...filters, [key]: value })
@@ -41,7 +41,7 @@ const FilterControls = memo(function FilterControls({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
           <label className="block text-sm font-medium mb-2">Task Type</label>
-          <select 
+          <select
             value={filters.task || ''}
             onChange={(e) => handleFilterChange('task', e.target.value || undefined)}
             className={`w-full p-2 rounded ${theme === 'swaggystacks' ? 'bg-gray-800 text-green-400' : 'bg-gray-100'}`}
@@ -54,10 +54,10 @@ const FilterControls = memo(function FilterControls({
             <option value="translation">Translation</option>
           </select>
         </div>
-        
+
         <div>
           <label className="block text-sm font-medium mb-2">Model Size</label>
-          <select 
+          <select
             value={filters.modelSize || ''}
             onChange={(e) => handleFilterChange('modelSize', e.target.value || undefined)}
             className={`w-full p-2 rounded ${theme === 'swaggystacks' ? 'bg-gray-800 text-green-400' : 'bg-gray-100'}`}
@@ -68,10 +68,10 @@ const FilterControls = memo(function FilterControls({
             <option value="large">Large (&gt; 10B params)</option>
           </select>
         </div>
-        
+
         <div>
           <label className="block text-sm font-medium mb-2">Sort By</label>
-          <select 
+          <select
             value={filters.sortBy || 'downloads'}
             onChange={(e) => handleFilterChange('sortBy', e.target.value as any)}
             className={`w-full p-2 rounded ${theme === 'swaggystacks' ? 'bg-gray-800 text-green-400' : 'bg-gray-100'}`}
@@ -88,18 +88,18 @@ const FilterControls = memo(function FilterControls({
 })
 
 // Memoized model grid to prevent unnecessary re-renders
-const ModelGrid = memo(function ModelGrid({ 
-  models, 
-  isLoading, 
-  onDeploy, 
+const ModelGrid = memo(function ModelGrid({
+  models,
+  isLoading,
+  onDeploy,
   onTest,
-  theme 
+  theme
 }: {
   models: any[]
   isLoading: boolean
   onDeploy?: (modelId: string) => void
   onTest?: (modelId: string) => void
-  theme: string
+  theme: 'swaggystacks' | 'scientiacapital'
 }) {
   // Memoize skeleton array to prevent recreation
   const skeletons = useMemo(() => Array.from({ length: 12 }, (_, i) => i), [])
@@ -108,7 +108,7 @@ const ModelGrid = memo(function ModelGrid({
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {skeletons.map((i) => (
-          <ModelCardSkeleton key={i} theme={theme as 'swaggystacks' | 'scientiacapital'} />
+          <ModelCardSkeleton key={i} theme={theme} />
         ))}
       </div>
     )
@@ -119,7 +119,7 @@ const ModelGrid = memo(function ModelGrid({
       {models.map((model) => (
         <ModelCard
           key={model.id}
-          model={model}
+          model={mapModelMetadataToModelData(model)}
           onDeploy={onDeploy}
           onTest={onTest}
           theme={theme}
@@ -137,8 +137,8 @@ export default memo(function OptimizedModelMarketplace({
   availableModels = [],
   inferenceState
 }: ModelMarketplaceProps) {
-  const [currentTheme, setCurrentTheme] = useState(defaultTheme)
-  const [filters, setFilters] = useState<DiscoveryFilters>({
+  const [currentTheme, setCurrentTheme] = useState<'swaggystacks' | 'scientiacapital'>(defaultTheme)
+  const [filters, setFilters] = useState<Partial<DiscoveryFilters>>({
     sortBy: 'downloads',
     limit: 24
   })
@@ -152,18 +152,22 @@ export default memo(function OptimizedModelMarketplace({
     onTest?.(modelId)
   }, [onTest])
 
-  const handleFiltersChange = useCallback((newFilters: DiscoveryFilters) => {
+  const handleFiltersChange = useCallback((newFilters: Partial<DiscoveryFilters>) => {
     setFilters(newFilters)
   }, [])
 
-  // Use the model search hook
+  // Use the model search hook with proper options interface
   const { 
     models, 
     loading: isLoading, 
     error,
     hasMore,
     loadMore 
-  } = useModelSearch(filters)
+  } = useModelSearch({
+    initialFilters: filters,
+    pageSize: filters.limit || 24,
+    enableRealTimeSearch: true
+  })
 
   // Memoize filtered and processed models
   const processedModels = useMemo(() => {

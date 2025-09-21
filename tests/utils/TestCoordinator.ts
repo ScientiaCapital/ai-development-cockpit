@@ -1,6 +1,6 @@
 import { TestOrchestrator } from './TestOrchestrator';
-import { MetricsCollector } from './MetricsCollector';
-import { ChaosEngine } from './ChaosEngine';
+import { MetricsCollector, TestMetrics } from './MetricsCollector';
+import { ChaosEngine, ChaosConfig } from './ChaosEngine';
 import { TestApiClient, ApiTestResult } from '../e2e/utils/TestApiClient';
 import { Page } from '@playwright/test';
 
@@ -71,6 +71,27 @@ export interface TestCoordinationContext {
   metadata: Record<string, any>;
 }
 
+export interface TestResults {
+  grade: 'A' | 'B' | 'C' | 'D' | 'F';
+  score: number;
+  breakdown: Record<string, any>;
+  recommendations: string[];
+}
+
+
+export interface ChaosTestResult {
+  scenario: string;
+  passed: boolean;
+  duration: number;
+  errors: string[];
+}
+
+
+export interface TestGrade {
+  overall: 'A' | 'B' | 'C' | 'D' | 'F';
+  breakdown: Record<string, any>;
+}
+
 /**
  * Central test coordination system that orchestrates all testing components
  * Integrates with TestOrchestrator, MetricsCollector, ChaosEngine, and Playwright E2E tests
@@ -78,17 +99,40 @@ export interface TestCoordinationContext {
 export class TestCoordinator {
   private orchestrator: TestOrchestrator;
   private metricsCollector: MetricsCollector;
-  private chaosEngine: ChaosEngine;
-  private apiClient: TestApiClient;
+  private chaosEngine: ChaosEngine | null;
+  private apiClient: TestApiClient | null;
   private config: TestCoordinatorConfig;
   private context: TestCoordinationContext | null = null;
 
   constructor(config: TestCoordinatorConfig) {
     this.config = config;
-    this.orchestrator = new TestOrchestrator();
+    this.orchestrator = new TestOrchestrator({
+      browser: null as any, // Will be set when browser is available
+      parallelSessions: 1,
+      organizations: ['swaggystacks'],
+      environments: ['development'],
+      testSuites: ['smoke'],
+      enableChaosMode: false,
+      enableNetworkSimulation: false,
+      enableComplianceValidation: false,
+      maxExecutionTime: 60000,
+      reportingLevel: 'minimal'
+    });
     this.metricsCollector = new MetricsCollector({});
-    this.chaosEngine = new ChaosEngine({});
-    this.apiClient = new TestApiClient();
+    // ChaosEngine and TestApiClient will be initialized when needed with proper page/context
+    this.chaosEngine = null as any;
+    this.apiClient = null as any;
+  }
+  /**
+   * Initialize components that require browser context
+   */
+  private initializeBrowserComponents(page: Page, context?: any): void {
+    if (!this.apiClient) {
+      this.apiClient = new TestApiClient(page);
+    }
+    if (!this.chaosEngine && context) {
+      this.chaosEngine = new ChaosEngine(page, context);
+    }
   }
 
   /**
@@ -152,7 +196,7 @@ export class TestCoordinator {
       console.log(`✅ E2E tests completed: ${results.length} scenarios`);
       return results;
 
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('❌ E2E test coordination failed:', error);
       throw error;
     }
@@ -175,6 +219,10 @@ export class TestCoordinator {
       for (const endpoint of validationConfig.endpoints) {
         console.log(`🌐 Validating API endpoint: ${endpoint}`);
 
+        if (!this.apiClient) {
+          throw new Error('TestApiClient not initialized - browser context required');
+        }
+        
         const result = await this.apiClient.validateEndpoint(endpoint, {
           checkAuth: validationConfig.authentication,
           validateSchema: validationConfig.validateResponses,
@@ -187,7 +235,7 @@ export class TestCoordinator {
       console.log(`✅ API validation completed: ${results.length} endpoints`);
       return results;
 
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('❌ API validation failed:', error);
       throw error;
     }
@@ -209,7 +257,7 @@ export class TestCoordinator {
       console.log(`✅ Infrastructure tests completed with grade: ${results.grade}`);
       return results;
 
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('❌ Infrastructure testing failed:', error);
       throw error;
     }
@@ -227,11 +275,15 @@ export class TestCoordinator {
     console.log('🌪️ Executing chaos tests...');
 
     try {
+      if (!this.chaosEngine) {
+        throw new Error('ChaosEngine not initialized - browser context required');
+      }
+      
       const results = await this.chaosEngine.runChaosTests(chaosConfig);
       console.log(`✅ Chaos tests completed: ${results.length} scenarios`);
       return results;
 
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('❌ Chaos testing failed:', error);
       throw error;
     }
@@ -245,10 +297,13 @@ export class TestCoordinator {
 
     try {
       const metrics = await this.metricsCollector.getMetrics();
+      if (!metrics) {
+        throw new Error('Failed to collect metrics');
+      }
       console.log('✅ Test metrics collected successfully');
       return metrics;
 
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('❌ Metrics collection failed:', error);
       throw error;
     }
@@ -342,7 +397,7 @@ export class TestCoordinator {
 
       return results;
 
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('❌ Hybrid test execution failed:', error);
       throw error;
     }
@@ -405,8 +460,8 @@ export class TestCoordinator {
 
     // Infrastructure grade
     if (results.orchestrator) {
-      const gradeMap = { 'A': 90, 'B': 80, 'C': 70, 'D': 60, 'F': 50 };
-      scores.push(gradeMap[results.orchestrator.grade] || 50);
+      const gradeMap: Record<string, number> = { 'A': 90, 'B': 80, 'C': 70, 'D': 60, 'F': 50 };
+      scores.push(gradeMap[results.orchestrator.grade as string] || 50);
     }
 
     // API success rate
@@ -543,7 +598,7 @@ Generated by TestCoordinator v1.0.0
       this.context = null;
       console.log('✅ Test session cleanup completed');
 
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('❌ Session cleanup failed:', error);
     }
   }

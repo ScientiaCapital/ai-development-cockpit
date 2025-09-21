@@ -28,6 +28,9 @@ export default defineConfig({
     ['./tests/reporters/AnalyticsReporter.ts', { outputDir: 'test-results/analytics' }]
   ],
 
+  /* Global setup file for custom matchers and configurations */
+  globalSetup: require.resolve('./tests/e2e/global-setup'),
+
   /* Shared settings for all the projects below */
   use: {
     /* Base URL to use in actions like `await page.goto('/')` */
@@ -155,8 +158,7 @@ export default defineConfig({
     }
   ],
 
-  /* Global setup and teardown */
-  globalSetup: require.resolve('./tests/e2e/global-setup'),
+  /* Global teardown */
   globalTeardown: require.resolve('./tests/e2e/global-teardown'),
 
   /* Output directory for test artifacts */

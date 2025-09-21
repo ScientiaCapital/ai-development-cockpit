@@ -153,7 +153,7 @@ export class RunPodDeploymentService {
 
     } catch (error) {
       console.error('RunPod deployment failed:', error);
-      throw new Error(`Deployment failed: ${error.message}`);
+      throw new Error(`Deployment failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
@@ -248,7 +248,7 @@ export class RunPodDeploymentService {
       const data = await response.json();
       const endpoints = data.endpoints || [];
 
-      return endpoints.map(endpoint => ({
+      return endpoints.map((endpoint: any) => ({
         id: endpoint.id,
         name: endpoint.name,
         status: endpoint.status,
@@ -327,7 +327,7 @@ export class RunPodDeploymentService {
    */
   private calculateCost(requirements: { memory: number; type: string[] }): number {
     // RunPod pricing (approximate, varies by availability)
-    const gpuPricing = {
+    const gpuPricing: Record<string, number> = {
       'NVIDIA RTX A6000': 0.79,
       'NVIDIA A40': 0.89,
       'NVIDIA A100': 2.89

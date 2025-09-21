@@ -3,7 +3,7 @@
  */
 
 import { supabase } from './supabase'
-import { AuthError } from '@supabase/supabase-js'
+import { AuthError, Factor } from '@supabase/supabase-js'
 import { isError, getErrorMessage } from '../utils/errorGuards'
 
 export interface MFAEnrollment {
@@ -15,14 +15,7 @@ export interface MFAEnrollment {
   uri?: string
 }
 
-export interface MFAFactor {
-  id: string
-  friendly_name?: string
-  factor_type: 'totp' | 'phone'
-  status: 'verified' | 'unverified'
-  created_at: string
-  updated_at: string
-}
+// Using Factor type from @supabase/supabase-js instead of custom MFAFactor
 
 export interface MFAChallenge {
   id: string
@@ -71,7 +64,7 @@ export const verifyMFAEnrollment = async (
   factorId: string,
   code: string
 ): Promise<{
-  data: MFAFactor | null
+  data: MFAVerification | null
   error: AuthError | null
 }> => {
   try {
@@ -147,7 +140,7 @@ export const verifyMFAChallenge = async (
  * Get all MFA factors for the current user
  */
 export const getMFAFactors = async (): Promise<{
-  data: MFAFactor[] | null
+  data: Factor[] | null
   error: AuthError | null
 }> => {
   try {
@@ -157,7 +150,7 @@ export const getMFAFactors = async (): Promise<{
       return { data: null, error }
     }
 
-    return { data: data.factors || [], error: null }
+    return { data: data.all || [], error: null }
   } catch (error: unknown) {
     console.error('Get MFA factors error:', error)
     return {
@@ -266,7 +259,7 @@ export const hasMFAEnabled = async (): Promise<boolean> => {
 /**
  * Get the user's verified MFA factors
  */
-export const getVerifiedMFAFactors = async (): Promise<MFAFactor[]> => {
+export const getVerifiedMFAFactors = async (): Promise<Factor[]> => {
   try {
     const { data } = await getMFAFactors()
     return data ? data.filter(factor => factor.status === 'verified') : []

@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import ModelCard, { ModelCardSkeleton } from './ModelCard'
-import { useModelSearch } from '@/hooks/useModelSearch'
+import { useModelSearch, mapModelMetadataToModelData } from '@/hooks/useModelSearch'
 import { useModels } from '@/hooks/useModels'
 import { useHuggingFaceAuth } from '@/contexts/HuggingFaceAuth'
 import { useTerminalTheme } from '@/hooks/useTypingEffect'
@@ -420,7 +420,7 @@ export default function ModelMarketplace({
               {models.map((model) => (
                 <ModelCard
                   key={model.id}
-                  model={model}
+                  model={mapModelMetadataToModelData(model)}
                   theme={currentTheme}
                   onDeploy={onDeploy || ((modelId) => console.log(`Deployed ${modelId}`))}
                   onTest={onTest}

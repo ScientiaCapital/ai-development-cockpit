@@ -6,7 +6,7 @@
 import { Page, Locator, expect } from '@playwright/test';
 
 export abstract class BasePage {
-  protected page: Page;
+  public page: Page;
 
   constructor(page: Page) {
     this.page = page;

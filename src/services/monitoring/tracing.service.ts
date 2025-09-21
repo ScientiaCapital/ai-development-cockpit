@@ -38,7 +38,7 @@ export interface CustomSpan {
  */
 export class TracingService {
   private static instance: TracingService;
-  private sdk: NodeSDK;
+  private sdk!: NodeSDK;
   private tracer: any;
   private isInitialized = false;
 
@@ -83,23 +83,17 @@ export class TracingService {
           // Add custom attributes to HTTP spans
           requestHook: (span, request) => {
             const organization = this.extractOrganizationFromRequest(request);
+            const headers = 'headers' in request ? request.headers : {};
             span.setAttributes({
               'http.organization': organization,
-              'http.user_agent': request.headers['user-agent'] || 'unknown',
-              'http.real_ip': request.headers['x-real-ip'] || request.headers['x-forwarded-for'] || 'unknown',
+              'http.user_agent': headers['user-agent'] || 'unknown',
+              'http.real_ip': headers['x-real-ip'] || headers['x-forwarded-for'] || 'unknown',
             });
           },
         }),
 
-        // File system instrumentation for debugging
-        new FsInstrumentation({
-          // Only trace relevant file operations
-          ignoreIncomingRequestHook: (info) => {
-            return info.pathname?.includes('node_modules') ||
-                   info.pathname?.includes('.next') ||
-                   info.pathname?.includes('logs');
-          },
-        }),
+        // File system instrumentation for debugging (simplified configuration)
+        new FsInstrumentation(),
       ],
     });
 
@@ -292,7 +286,7 @@ export class TracingService {
 
       // Log error with tracing context
       loggingService.error(`Operation ${operationName} failed`, {
-        error,
+        error: error instanceof Error ? error : new Error(String(error)),
         organization: spanContext?.organization,
         operationId: spanContext?.operationId,
         duration,

@@ -36,7 +36,7 @@ async function cleanupTestData() {
     // 4. Reset database state
 
     console.log('✅ Test data cleanup completed');
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('❌ Failed to cleanup test data:', error);
   }
 }
@@ -71,7 +71,7 @@ async function cleanupTestArtifacts() {
     }
 
     console.log('✅ Test artifacts cleanup completed');
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('❌ Failed to cleanup test artifacts:', error);
   }
 }
@@ -118,7 +118,7 @@ async function generateTestSummary() {
     }
 
     console.log('✅ Test summary generated');
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('❌ Failed to generate test summary:', error);
   }
 }

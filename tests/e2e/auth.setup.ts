@@ -74,7 +74,7 @@ setup('authenticate', async ({ page }) => {
     } else {
       console.log('⚠️  Dashboard content not found, saving unauthenticated state');
     }
-  } catch (error) {
+  } catch (error: unknown) {
     console.log('⚠️  Dashboard access failed, saving current state anyway');
   }
 

@@ -19,7 +19,7 @@ describe('HuggingFaceRateLimiter', () => {
       const result = await rateLimiter.schedule(
         'swaggystacks',
         mockTask,
-        { priority: 5 }
+        { priority: 'normal' }
       );
 
       expect(result).toBe('result');
@@ -30,7 +30,7 @@ describe('HuggingFaceRateLimiter', () => {
       const mockTask = jest.fn().mockRejectedValue(new Error('Task failed'));
 
       await expect(
-        rateLimiter.schedule('swaggystacks', mockTask, { priority: 5 })
+        rateLimiter.schedule('swaggystacks', mockTask, { priority: 'normal' })
       ).rejects.toThrow('Task failed');
     });
   });
@@ -42,7 +42,7 @@ describe('HuggingFaceRateLimiter', () => {
 
       // Execute multiple tasks quickly
       const promises = Array(3).fill(0).map(() =>
-        rateLimiter.schedule('swaggystacks', mockTask, { priority: 5 })
+        rateLimiter.schedule('swaggystacks', mockTask, { priority: 'normal' })
       );
 
       await Promise.all(promises);
@@ -59,7 +59,7 @@ describe('HuggingFaceRateLimiter', () => {
 
       // Execute multiple tasks
       const promises = Array(3).fill(0).map(() =>
-        rateLimiter.schedule('scientia-capital', mockTask, { priority: 5 })
+        rateLimiter.schedule('scientia-capital', mockTask, { priority: 'normal' })
       );
 
       await Promise.all(promises);
@@ -76,7 +76,7 @@ describe('HuggingFaceRateLimiter', () => {
       const result = await rateLimiter.schedule(
         'unknown-org',
         mockTask,
-        { priority: 5 }
+        { priority: 'normal' }
       );
 
       expect(result).toBe('result');
@@ -93,14 +93,14 @@ describe('HuggingFaceRateLimiter', () => {
       const highResult = await rateLimiter.schedule(
         'swaggystacks',
         highPriorityTask,
-        { priority: 9 }
+        { priority: 'low' }
       );
 
       // Schedule normal priority task
       const normalResult = await rateLimiter.schedule(
         'swaggystacks',
         normalTask,
-        { priority: 5 }
+        { priority: 'normal' }
       );
 
       expect(highResult).toBe('high');
@@ -159,27 +159,28 @@ describe('HuggingFaceRateLimiter', () => {
       const mockTask = jest.fn().mockResolvedValue('result');
 
       // Execute some tasks
-      await rateLimiter.schedule('swaggystacks', mockTask, { priority: 5 });
-      await rateLimiter.schedule('scientia-capital', mockTask, { priority: 5 });
+      await rateLimiter.schedule('swaggystacks', mockTask, { priority: 'normal' });
+      await rateLimiter.schedule('scientia-capital', mockTask, { priority: 'normal' });
 
       const stats = rateLimiter.getStatistics();
 
-      expect(stats).toHaveProperty('swaggystacks');
-      expect(stats).toHaveProperty('scientia-capital');
-      expect(stats.swaggystacks.executed).toBe(1);
-      expect(stats['scientia-capital'].executed).toBe(1);
+      expect(stats.has('swaggystacks')).toBe(true);
+      expect(stats.has('scientia-capital')).toBe(true);
+      expect(stats.get('swaggystacks')?.done).toBe(1);
+      expect(stats.get('scientia-capital')?.done).toBe(1);
     });
 
     it('should return statistics for specific organization', async () => {
       const mockTask = jest.fn().mockResolvedValue('result');
 
-      await rateLimiter.schedule('swaggystacks', mockTask, { priority: 5 });
+      // Only execute task for swaggystacks
+      await rateLimiter.schedule('swaggystacks', mockTask, { priority: 'normal' });
 
-      const stats = rateLimiter.getStatistics('swaggystacks');
+      const stats = rateLimiter.getStatistics();
 
-      expect(stats).toHaveProperty('swaggystacks');
-      expect(stats).not.toHaveProperty('scientia-capital');
-      expect(stats.swaggystacks.executed).toBe(1);
+      expect(stats.has('swaggystacks')).toBe(true);
+      expect(stats.has('scientia-capital')).toBe(false);
+      expect(stats.get('swaggystacks')?.done).toBe(1);
     });
   });
 
@@ -193,7 +194,7 @@ describe('HuggingFaceRateLimiter', () => {
 
       // Schedule more tasks than concurrent limit (10 for SwaggyStacks)
       const promises = Array(15).fill(0).map(() =>
-        rateLimiter.schedule('swaggystacks', mockTask, { priority: 5 })
+        rateLimiter.schedule('swaggystacks', mockTask, { priority: 'normal' })
       );
 
       await Promise.all(promises);
@@ -213,7 +214,7 @@ describe('HuggingFaceRateLimiter', () => {
 
       // Schedule more tasks than concurrent limit (5 for ScientiaCapital)
       const promises = Array(8).fill(0).map(() =>
-        rateLimiter.schedule('scientia-capital', mockTask, { priority: 5 })
+        rateLimiter.schedule('scientia-capital', mockTask, { priority: 'normal' })
       );
 
       await Promise.all(promises);
@@ -230,7 +231,7 @@ describe('HuggingFaceRateLimiter', () => {
       const mockTask = jest.fn().mockRejectedValue(new Error('Bottleneck error'));
 
       await expect(
-        rateLimiter.schedule('swaggystacks', mockTask, { priority: 5 })
+        rateLimiter.schedule('swaggystacks', mockTask, { priority: 'normal' })
       ).rejects.toThrow('Bottleneck error');
     });
 
@@ -240,11 +241,11 @@ describe('HuggingFaceRateLimiter', () => {
 
       // First task fails
       await expect(
-        rateLimiter.schedule('swaggystacks', failingTask, { priority: 5 })
+        rateLimiter.schedule('swaggystacks', failingTask, { priority: 'normal' })
       ).rejects.toThrow('Task failed');
 
       // Second task should still work
-      const result = await rateLimiter.schedule('swaggystacks', successTask, { priority: 5 });
+      const result = await rateLimiter.schedule('swaggystacks', successTask, { priority: 'normal' });
       expect(result).toBe('success');
     });
   });

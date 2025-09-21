@@ -350,4 +350,47 @@ export function useModelSearch(options: UseModelSearchOptions = {}): UseModelSea
   }
 }
 
+// For backward compatibility with ModelCard component
+export interface ModelData {
+  id: string
+  name: string
+  author: string
+  organization: string
+  modelType: string
+  description: string
+  tags: string[]
+  downloads: number
+  likes: number
+  status: 'active' | 'deploying' | 'inactive'
+  estimatedCost?: string
+  deploymentUrl?: string
+  createdAt: string
+  updatedAt: string
+}
+
+export function useModelOperations() {
+  const [isDeploying, setIsDeploying] = useState(false)
+
+  const deployModel = useCallback(async (modelId: string) => {
+    setIsDeploying(true)
+    try {
+      // Simulate deployment process
+      await new Promise(resolve => setTimeout(resolve, 2000))
+
+      console.log(`✅ Model ${modelId} deployed successfully`)
+      return { success: true, deploymentUrl: `https://deployed.example.com/${modelId}` }
+    } catch (error) {
+      console.error('Deployment failed:', error)
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' }
+    } finally {
+      setIsDeploying(false)
+    }
+  }, [])
+
+  return {
+    deployModel,
+    isDeploying
+  }
+}
+
 export default useModelSearch

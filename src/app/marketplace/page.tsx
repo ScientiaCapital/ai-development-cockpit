@@ -3,18 +3,91 @@
 import { useState } from 'react'
 import ModelMarketplace from '@/components/terminal/ModelMarketplace'
 import { Button } from '@/components/ui/button'
+import { useInference } from '@/hooks/useInference'
+import { useOrganization } from '@/hooks/useOrganization'
 import styles from '@/styles/terminal.module.css'
 
 export default function MarketplacePage() {
-  const [currentOrganization, setCurrentOrganization] = useState<'swaggystacks' | 'scientiacapital'>('swaggystacks')
+  const { currentOrganization } = useOrganization()
+  const [currentTheme, setCurrentTheme] = useState<'swaggystacks' | 'scientiacapital'>(
+    currentOrganization?.slug === 'swaggystacks' ? 'swaggystacks' : 'scientiacapital'
+  )
+
+  const {
+    state: inferenceState,
+    models: availableModels,
+    setModel,
+    generateText,
+    estimateCost,
+    scaleEndpoint
+  } = useInference({
+    autoScale: true,
+    enableMetrics: true,
+    preferredCostTier: 'medium'
+  })
 
   const handleOrganizationSwitch = () => {
-    setCurrentOrganization(prev => prev === 'swaggystacks' ? 'scientiacapital' : 'swaggystacks')
+    setCurrentTheme(prev => prev === 'swaggystacks' ? 'scientiacapital' : 'swaggystacks')
   }
 
-  const handleModelDeploy = (modelId: string) => {
-    console.log(`🚀 Deploying model ${modelId} for ${currentOrganization}`)
-    // TODO: Integrate with RunPod API
+  const handleModelDeploy = async (modelId: string) => {
+    console.log(`🚀 Deploying model ${modelId} for ${currentTheme}`)
+
+    try {
+      // Find the model in our available models
+      const targetModel = availableModels.find(m => m.id === modelId || m.name.includes(modelId))
+
+      if (targetModel) {
+        // Set the model for testing
+        setModel(targetModel)
+
+        // Scale endpoint for deployment
+        await scaleEndpoint('standard')
+
+        console.log(`✅ Model ${targetModel.displayName} deployed successfully`)
+
+        // Redirect to chat interface for testing
+        window.location.href = '/chat'
+      } else {
+        console.warn(`Model ${modelId} not found in available models`)
+      }
+    } catch (error) {
+      console.error('Failed to deploy model:', error)
+    }
+  }
+
+  const handleModelTest = async (modelId: string) => {
+    console.log(`🧪 Testing model ${modelId}`)
+
+    try {
+      const targetModel = availableModels.find(m => m.id === modelId || m.name.includes(modelId))
+
+      if (targetModel) {
+        setModel(targetModel)
+
+        // Test with a simple prompt
+        const testPrompt = currentTheme === 'swaggystacks'
+          ? 'Write a simple Python function to calculate fibonacci numbers.'
+          : 'Analyze the current market trends and provide a brief investment insight.'
+
+        const cost = estimateCost(testPrompt, 100, targetModel)
+        console.log(`Estimated cost for test: $${cost.toFixed(4)}`)
+
+        const response = await generateText({
+          prompt: testPrompt,
+          maxTokens: 100,
+          temperature: 0.7
+        })
+
+        if (response) {
+          console.log(`✅ Test successful:`, response.text.substring(0, 100) + '...')
+          alert(`Model test successful! Cost: $${cost.toFixed(4)}\n\nResponse preview: ${response.text.substring(0, 150)}...`)
+        }
+      }
+    } catch (error) {
+      console.error('Model test failed:', error)
+      alert('Model test failed. Please check console for details.')
+    }
   }
 
   const asciiHeader = currentOrganization === 'swaggystacks' ? `
@@ -71,8 +144,11 @@ export default function MarketplacePage() {
 
         {/* Main Marketplace */}
         <ModelMarketplace
-          organization={currentOrganization}
+          defaultTheme={currentTheme}
           onDeploy={handleModelDeploy}
+          onTest={handleModelTest}
+          availableModels={availableModels}
+          inferenceState={inferenceState}
         />
 
         {/* Footer Status */}

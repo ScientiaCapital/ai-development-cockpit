@@ -16,11 +16,19 @@ import styles from '@/styles/terminal.module.css'
 interface ModelMarketplaceProps {
   defaultTheme?: 'swaggystacks' | 'scientiacapital'
   showThemeSwitcher?: boolean
+  onDeploy?: (modelId: string) => void
+  onTest?: (modelId: string) => void
+  availableModels?: any[]
+  inferenceState?: any
 }
 
 export default function ModelMarketplace({
   defaultTheme = 'swaggystacks',
-  showThemeSwitcher = true
+  showThemeSwitcher = true,
+  onDeploy,
+  onTest,
+  availableModels = [],
+  inferenceState
 }: ModelMarketplaceProps) {
   const [currentTheme, setCurrentTheme] = useState<'swaggystacks' | 'scientiacapital'>(defaultTheme)
   const [showFilters, setShowFilters] = useState(false)
@@ -412,7 +420,10 @@ export default function ModelMarketplace({
                   key={model.id}
                   model={model}
                   theme={currentTheme}
-                  onDeploy={(modelId) => console.log(`Deployed ${modelId}`)}
+                  onDeploy={onDeploy || ((modelId) => console.log(`Deployed ${modelId}`))}
+                  onTest={onTest}
+                  isDeploying={inferenceState?.isLoading}
+                  isTestable={availableModels.some(m => m.id === model.id || m.name.includes(model.id))}
                 />
               ))}
             </div>

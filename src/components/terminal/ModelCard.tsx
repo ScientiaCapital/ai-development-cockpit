@@ -12,16 +12,35 @@ interface ModelCardProps {
   model: ModelData
   theme: 'swaggystacks' | 'scientiacapital'
   onDeploy?: (modelId: string) => void
+  onTest?: (modelId: string) => void
+  isDeploying?: boolean
+  isTestable?: boolean
 }
 
-export default function ModelCard({ model, theme, onDeploy }: ModelCardProps) {
-  const { deployModel, isDeploying } = useModelOperations()
+export default function ModelCard({
+  model,
+  theme,
+  onDeploy,
+  onTest,
+  isDeploying: externalDeploying,
+  isTestable = false
+}: ModelCardProps) {
+  const { deployModel, isDeploying: hookDeploying } = useModelOperations()
   const [expanded, setExpanded] = useState(false)
+
+  // Use external deploying state if provided, otherwise use hook state
+  const isDeploying = externalDeploying ?? hookDeploying
 
   const handleDeploy = async () => {
     const result = await deployModel(model.id)
     if (result.success && onDeploy) {
       onDeploy(model.id)
+    }
+  }
+
+  const handleTest = () => {
+    if (onTest) {
+      onTest(model.id)
     }
   }
 
@@ -158,9 +177,9 @@ export default function ModelCard({ model, theme, onDeploy }: ModelCardProps) {
           size="sm"
           className={`flex-1 ${themeClasses.button} font-mono text-xs transition-all`}
           onClick={handleDeploy}
-          disabled={isDeploying(model.id) || model.status === 'deploying'}
+          disabled={isDeploying || model.status === 'deploying'}
         >
-          {isDeploying(model.id) ? (
+          {isDeploying ? (
             <div className="flex items-center space-x-2">
               <div className="w-3 h-3 border border-current border-t-transparent rounded-full animate-spin" />
               <span>DEPLOYING...</span>
@@ -173,7 +192,20 @@ export default function ModelCard({ model, theme, onDeploy }: ModelCardProps) {
             '🚀 DEPLOY'
           )}
         </Button>
-        
+
+        {/* Test Button (only show if testable) */}
+        {isTestable && onTest && (
+          <Button
+            variant="outline"
+            size="sm"
+            className={`${themeClasses.button} font-mono text-xs px-3`}
+            onClick={handleTest}
+            disabled={isDeploying}
+          >
+            🧪 TEST
+          </Button>
+        )}
+
         <Button
           variant="outline"
           size="sm"

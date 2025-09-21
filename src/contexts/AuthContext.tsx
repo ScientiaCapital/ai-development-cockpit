@@ -226,23 +226,41 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Social authentication
   const signInWithGitHub = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'github',
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`
-      }
-    })
-    return { error }
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'github',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+          queryParams: {
+            scope: 'user:email read:user'
+          }
+        }
+      })
+      return { error }
+    } catch (error) {
+      console.error('GitHub OAuth error:', error)
+      return { error: error as any }
+    }
   }
 
   const signInWithGoogle = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`
-      }
-    })
-    return { error }
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+          queryParams: {
+            scope: 'openid email profile',
+            access_type: 'offline',
+            prompt: 'consent'
+          }
+        }
+      })
+      return { error }
+    } catch (error) {
+      console.error('Google OAuth error:', error)
+      return { error: error as any }
+    }
   }
 
   // Organization management

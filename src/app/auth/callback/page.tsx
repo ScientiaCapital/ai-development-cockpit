@@ -1,29 +1,62 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { supabase } from '../../../lib/supabase'
 
 export default function AuthCallback() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
   const [message, setMessage] = useState('')
+  const [provider, setProvider] = useState<string>('')
 
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
+        // Check for OAuth provider in URL params
+        const providerParam = searchParams.get('provider')
+        if (providerParam) {
+          setProvider(providerParam)
+        }
+
+        // Handle OAuth callback with session exchange
         const { data, error } = await supabase.auth.getSession()
 
         if (error) {
           console.error('Auth callback error:', error)
           setStatus('error')
-          setMessage(error.message)
+
+          // Provide more specific error messages for common OAuth issues
+          if (error.message.includes('Invalid login credentials')) {
+            setMessage('Authentication was cancelled or failed. Please try again.')
+          } else if (error.message.includes('Email not confirmed')) {
+            setMessage('Please check your email and click the confirmation link before signing in.')
+          } else {
+            setMessage(error.message)
+          }
           return
         }
 
         if (data.session) {
+          const { user } = data.session
+
+          // Log successful OAuth authentication
+          console.log('OAuth authentication successful:', {
+            provider: user.app_metadata?.provider || 'unknown',
+            email: user.email,
+            userId: user.id
+          })
+
           setStatus('success')
-          setMessage('Authentication successful! Redirecting...')
+          const authProvider = user.app_metadata?.provider || provider || 'OAuth'
+          setMessage(`${authProvider} authentication successful! Redirecting...`)
+
+          // Handle new user profile setup for OAuth users
+          if (user.app_metadata?.provider && !user.user_metadata?.profile_complete) {
+            // For OAuth users, we might want to redirect to a profile completion page
+            // For now, we'll proceed to the main app
+          }
 
           // Redirect to the intended page or dashboard
           const redirectTo = sessionStorage.getItem('auth_redirect_to') || '/marketplace'
@@ -31,20 +64,35 @@ export default function AuthCallback() {
 
           setTimeout(() => {
             router.push(redirectTo)
-          }, 2000)
+          }, 1500)
         } else {
-          setStatus('error')
-          setMessage('No session found. Please try again.')
+          // Check for specific OAuth error params
+          const errorCode = searchParams.get('error')
+          const errorDescription = searchParams.get('error_description')
+
+          if (errorCode) {
+            setStatus('error')
+            if (errorCode === 'access_denied') {
+              setMessage('Authentication was cancelled. You can try again if you wish.')
+            } else if (errorDescription) {
+              setMessage(decodeURIComponent(errorDescription))
+            } else {
+              setMessage(`Authentication failed: ${errorCode}`)
+            }
+          } else {
+            setStatus('error')
+            setMessage('No session found. Please try again.')
+          }
         }
       } catch (error) {
         console.error('Unexpected error in auth callback:', error)
         setStatus('error')
-        setMessage('An unexpected error occurred.')
+        setMessage('An unexpected error occurred during authentication.')
       }
     }
 
     handleAuthCallback()
-  }, [router])
+  }, [router, searchParams])
 
   const handleRetryLogin = () => {
     router.push('/auth/login')

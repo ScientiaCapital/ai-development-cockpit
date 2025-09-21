@@ -8,6 +8,7 @@ import { prometheusService, Organization } from './prometheus.service';
 import { loggingService } from './logging.service';
 import { tracingService } from './tracing.service';
 import DeploymentMonitoringService, { DeploymentMonitoring } from '../runpod/monitoring.service';
+import { RunPodClient } from '../runpod/client';
 
 export interface MonitoringDashboardData {
   organization: Organization;
@@ -60,7 +61,12 @@ export class MonitoringIntegrationService {
   private isRunning = false;
 
   private constructor() {
-    this.runpodMonitoring = new DeploymentMonitoringService({
+    const runpodClient = new RunPodClient({
+      apiKey: process.env.RUNPOD_API_KEY || '',
+      timeout: 30000,
+      retries: 3
+    });
+    this.runpodMonitoring = new DeploymentMonitoringService(runpodClient, {
       pollInterval: 30000, // 30 seconds
       metricsRetention: 24 * 60 * 60 * 1000, // 24 hours
       enableAlerting: true,
@@ -94,8 +100,7 @@ export class MonitoringIntegrationService {
       // Start tracing service
       tracingService.start();
 
-      // Start RunPod monitoring
-      this.runpodMonitoring.startMonitoring();
+      // RunPod monitoring starts automatically in constructor
 
       // Start periodic data synchronization
       this.startPeriodicSync();
@@ -269,7 +274,7 @@ export class MonitoringIntegrationService {
     outputTokens?: number,
     success: boolean = true,
     errorCode?: string
-  ): void {
+  ): Promise<void> {
     return tracingService.traceOperation(
       'record_model_inference',
       async () => {
@@ -316,9 +321,13 @@ export class MonitoringIntegrationService {
   ): void {
     // Log security events if applicable
     if (alertType.includes('security') || alertType.includes('auth')) {
+      const securitySeverity: 'low' | 'medium' | 'high' | 'critical' =
+        severity === 'info' ? 'low' :
+        severity === 'warning' ? 'medium' : 'critical';
+
       loggingService.security(message, {
         eventType: 'suspicious_activity',
-        severity,
+        severity: securitySeverity,
         organization: context.organization,
         endpointId: context.endpointId,
         metadata: context.metadata,
@@ -367,10 +376,10 @@ export class MonitoringIntegrationService {
       (acc, deployment) => {
         const metrics = deployment.metrics;
         if (metrics) {
-          acc.cpu += metrics.cpuUsage || 0;
+          acc.cpu += 0; // CPU usage not available in EndpointMetrics
           acc.memory += metrics.memoryUsage || 0;
-          acc.gpu += metrics.gpuUsage || 0;
-          acc.requests += metrics.requestsPerSecond || 0;
+          acc.gpu += metrics.gpuUtilization || 0;
+          acc.requests += 0; // Requests per second not available in EndpointMetrics
         }
         return acc;
       },

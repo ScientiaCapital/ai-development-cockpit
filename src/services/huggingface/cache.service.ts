@@ -12,7 +12,7 @@ export interface CacheConfig {
   enablePurging: boolean;
 }
 
-export interface CacheEntry<T = any> {
+export interface CacheEntry<T = unknown> {
   data: T;
   timestamp: number;
   ttl: number;
@@ -180,7 +180,7 @@ export class HuggingFaceCacheService {
     return parts.join(':');
   }
 
-  private async compress(data: any): Promise<string> {
+  private async compress(data: unknown): Promise<string> {
     if (!this.compressionEnabled) {
       return JSON.stringify(data);
     }
@@ -196,7 +196,7 @@ export class HuggingFaceCacheService {
     }
   }
 
-  private async decompress(compressedData: string): Promise<any> {
+  private async decompress(compressedData: string): Promise<unknown> {
     if (!this.compressionEnabled) {
       return JSON.parse(compressedData);
     }
@@ -228,14 +228,14 @@ export class HuggingFaceCacheService {
     };
   }
 
-  private log(level: string, data: any): void {
+  private log(level: string, data: unknown): void {
     if (!this.enableLogging) return;
 
     const timestamp = new Date().toISOString();
     console.log(`[${timestamp}] HF_CACHE_${level}:`, JSON.stringify(data, null, 2));
   }
 
-  public async get<T = any>(key: string, options: CacheOptions = {}): Promise<T | null> {
+  public async get<T = unknown>(key: string, options: CacheOptions = {}): Promise<T | null> {
     const cacheKey = this.generateCacheKey(key, options.organization);
 
     // Try memory cache first (fastest)
@@ -247,7 +247,7 @@ export class HuggingFaceCacheService {
         this.updateHitRates();
 
         this.log('MEMORY_CACHE_HIT', { key: cacheKey });
-        return memoryEntry.data;
+        return memoryEntry.data as T;
       } else {
         this.stats.memoryCache.misses++;
         this.stats.totalMisses++;
@@ -260,8 +260,8 @@ export class HuggingFaceCacheService {
         const redisData = await this.redisCache.get(cacheKey);
         if (redisData) {
           const decompressedData = await this.decompress(redisData);
-          if (decompressedData) {
-            const entry: CacheEntry<T> = decompressedData;
+          if (decompressedData && typeof decompressedData === 'object' && 'data' in decompressedData) {
+            const entry = decompressedData as CacheEntry<T>;
 
             this.stats.redisCache.hits++;
             this.stats.totalHits++;
@@ -273,7 +273,7 @@ export class HuggingFaceCacheService {
             }
 
             this.log('REDIS_CACHE_HIT', { key: cacheKey });
-            return entry.data;
+            return entry.data as T;
           }
         }
       } catch (error) {
@@ -353,11 +353,15 @@ export class HuggingFaceCacheService {
         // Clear specific organization entries
         const keysToDelete: string[] = [];
         for (const [key] of this.memoryCache.entries()) {
-          if (key.startsWith(`${organization}:`)) {
+          if (typeof key === 'string' && key.startsWith(`${organization}:`)) {
             keysToDelete.push(key);
           }
         }
-        keysToDelete.forEach(key => this.memoryCache!.delete(key));
+        keysToDelete.forEach(key => {
+          if (this.memoryCache) {
+            this.memoryCache.delete(key);
+          }
+        });
       } else {
         this.memoryCache.clear();
       }
@@ -475,23 +479,24 @@ export class HuggingFaceCacheService {
 
   public async getDetailedStats(): Promise<CacheStats & { redisMemoryUsage?: number }> {
     const stats = this.getStats();
+    const detailedStats: CacheStats & { redisMemoryUsage?: number } = { ...stats };
 
     if (this.redisCache) {
       try {
         const info = await this.redisCache.info('memory');
         const memoryMatch = info.match(/used_memory:(\d+)/);
         if (memoryMatch) {
-          (stats as any).redisMemoryUsage = parseInt(memoryMatch[1]);
+          detailedStats.redisMemoryUsage = parseInt(memoryMatch[1]);
         }
 
         const keyCount = await this.redisCache.dbsize();
-        stats.redisCache.keys = keyCount;
+        detailedStats.redisCache.keys = keyCount;
       } catch (error) {
         this.log('REDIS_STATS_ERROR', { error: (error as Error).message });
       }
     }
 
-    return stats;
+    return detailedStats;
   }
 
   public resetStats(): void {

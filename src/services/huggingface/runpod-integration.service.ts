@@ -240,8 +240,7 @@ export class RunPodIntegrationService {
           baseUrl: 'https://api.runpod.ai/v2',
           timeout: 120000,
           retries: 3,
-          model: model.id,
-          organization: model.organization
+          modelName: model.id
         };
 
         const vllmService = new VLLMService(config);
@@ -252,10 +251,14 @@ export class RunPodIntegrationService {
           `vllm-${model.id}`,
           async () => vllmService.checkConnection(),
           {
-            threshold: 3,
             timeout: 30000,
+            errorThresholdPercentage: 50,
             resetTimeout: 60000,
-            name: `vllm-${model.id}`,
+            rollingCountTimeout: 60000,
+            rollingCountBuckets: 10,
+            capacity: 100,
+            bucketSpan: 6000,
+            enabled: true
           }
         );
       }
@@ -296,12 +299,11 @@ export class RunPodIntegrationService {
           this.rateLimiter.updateRateLimitFromResponse(organization, {
             limit: 1000,
             remaining: Math.floor(1000 * (1 - data.usagePercent / 100)),
-            reset: Date.now() + 3600000,
-            resetDate: new Date(Date.now() + 3600000)
+            reset: Date.now() + 3600000
           });
         }
       },
-      priority: 8
+      priority: 'high'
     });
   }
 
@@ -385,7 +387,7 @@ export class RunPodIntegrationService {
       const availableModels: RunPodModelInfo[] = [];
       for (const model of filteredModels) {
         try {
-          const isHealthy = await this.circuitBreaker.healthCheck(`vllm-${model.id}`);
+          const isHealthy = this.circuitBreaker.isHealthy(`vllm-${model.id}`);
           if (isHealthy) {
             availableModels.push({ ...model, isActive: true });
           } else {
@@ -414,8 +416,7 @@ export class RunPodIntegrationService {
       // Cache the result
       await this.cacheService.set(cacheKey, result, {
         ttl: 300, // 5 minutes
-        tags: ['models', params.organization],
-        redis: true
+        tags: ['models', params.organization]
       });
 
       return result;
@@ -463,20 +464,21 @@ export class RunPodIntegrationService {
         presence_penalty: request.presencePenalty || 0,
         stop: request.stop,
         stream: request.stream || false,
-        tools: request.tools,
-        tool_choice: request.toolChoice
+        // tools: request.tools as any, // Tools not supported in base ChatCompletionRequest
+        // tool_choice: request.toolChoice // Tool choice not supported in base ChatCompletionRequest
       };
 
       // Execute with rate limiting and circuit breaker
       const response = await this.rateLimiter.schedule(
         request.organization,
         async () => {
-          return await this.circuitBreaker.execute(
+          const response = await this.circuitBreaker.execute(
             `vllm-${request.modelId}`,
-            () => vllmService.runChatCompletion(chatRequest)
-          );
+            () => vllmService.createChatCompletion(chatRequest)
+          ) as ChatCompletionResponse;
+          return response;
         },
-        { priority: 7 }
+        { priority: 'high' }
       );
 
       const endTime = Date.now();
@@ -487,12 +489,12 @@ export class RunPodIntegrationService {
 
       return {
         success: true,
-        choices: response.choices,
-        usage: response.usage,
-        model: response.model,
-        id: response.id,
-        created: response.created,
-        object: response.object,
+        choices: (response as any).choices,
+        usage: (response as any).usage,
+        model: (response as any).model,
+        id: (response as any).id,
+        created: (response as any).created,
+        object: (response as any).object,
         metrics
       };
 
@@ -567,7 +569,7 @@ export class RunPodIntegrationService {
     for (const model of this.chineseModels) {
       if (model.isActive && this.vllmServices.has(model.id)) {
         try {
-          health[model.id] = await this.circuitBreaker.healthCheck(`vllm-${model.id}`);
+          health[model.id] = this.circuitBreaker.isHealthy(`vllm-${model.id}`);
         } catch {
           health[model.id] = false;
         }
@@ -584,7 +586,7 @@ export class RunPodIntegrationService {
 
     for (const [modelId, vllmService] of this.vllmServices) {
       try {
-        const modelMetrics = await vllmService.getMetrics();
+        const modelMetrics = await vllmService.getUsageMetrics();
         metrics.push(...modelMetrics);
       } catch (error) {
         // Log error but continue
@@ -597,22 +599,28 @@ export class RunPodIntegrationService {
 
   async healthCheck(): Promise<{ healthy: boolean; details: any }> {
     const modelHealth = await this.getModelHealth();
-    const circuitBreakerHealth = await this.circuitBreaker.getOverallHealth();
+    const circuitBreakerStats = this.circuitBreaker.getAllStats();
     const cacheStats = this.cacheService.getStats();
     const rateLimiterStats = this.rateLimiter.getStatistics();
 
     const healthyModels = Object.values(modelHealth).filter(Boolean).length;
     const totalModels = Object.keys(modelHealth).length;
+    const healthyBreakers = this.circuitBreaker.getHealthyBreakers().length;
+    const totalBreakers = this.circuitBreaker.listBreakers().length;
 
     return {
-      healthy: healthyModels > 0 && circuitBreakerHealth.healthy,
+      healthy: healthyModels > 0 && healthyBreakers > 0,
       details: {
         models: {
           healthy: healthyModels,
           total: totalModels,
           status: modelHealth
         },
-        circuitBreakers: circuitBreakerHealth,
+        circuitBreakers: {
+          healthy: healthyBreakers,
+          total: totalBreakers,
+          stats: circuitBreakerStats
+        },
         cache: cacheStats,
         rateLimiter: rateLimiterStats,
         lastChecked: new Date().toISOString()

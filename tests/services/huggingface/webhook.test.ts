@@ -26,7 +26,7 @@ describe('HuggingFaceWebhookService', () => {
       const handlerId = webhookService.registerHandler({
         eventType: 'model.updated',
         handler: mockHandler,
-        priority: 5,
+        priority: 'normal',
       });
 
       expect(typeof handlerId).toBe('string');
@@ -79,13 +79,13 @@ describe('HuggingFaceWebhookService', () => {
       webhookService.registerHandler({
         eventType: 'model.updated',
         handler: lowPriorityHandler,
-        priority: 1,
+        priority: 'low',
       });
 
       webhookService.registerHandler({
         eventType: 'model.updated',
         handler: highPriorityHandler,
-        priority: 10,
+        priority: 'high',
       });
 
       const payload = JSON.stringify({

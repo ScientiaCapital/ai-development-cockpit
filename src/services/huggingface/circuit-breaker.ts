@@ -70,7 +70,7 @@ const DEFAULT_HEALTH_CHECK: HealthCheckConfig = {
 };
 
 export class HuggingFaceCircuitBreaker extends EventEmitter {
-  private breakers: Map<string, CircuitBreaker> = new Map();
+  private breakers: Map<string, CircuitBreaker<unknown[], unknown>> = new Map();
   private configs: Map<string, CircuitBreakerConfig> = new Map();
   private fallbackOptions: Map<string, FallbackOptions> = new Map();
   private stats: Map<string, CircuitBreakerStats> = new Map();
@@ -93,32 +93,31 @@ export class HuggingFaceCircuitBreaker extends EventEmitter {
     console.log(`[${timestamp}] HF_CIRCUIT_BREAKER_${level}:`, JSON.stringify(data, null, 2));
   }
 
-  public createBreaker<T>(
+  public createBreaker<TReturn>(
     name: string,
-    action: (...args: any[]) => Promise<T>,
+    action: (...args: unknown[]) => Promise<TReturn>,
     config: Partial<CircuitBreakerConfig> = {},
     fallbackOptions: Partial<FallbackOptions> = {},
     healthCheck?: Partial<HealthCheckConfig>
-  ): CircuitBreaker<T> {
+  ): CircuitBreaker<unknown[], TReturn> {
     const fullConfig = { ...DEFAULT_CONFIG, ...config };
     const fullFallbackOptions = { ...DEFAULT_FALLBACK_OPTIONS, ...fallbackOptions };
 
     // Create the circuit breaker
-    const breaker = new CircuitBreaker<T>(action, {
+    const breaker = new CircuitBreaker<unknown[], TReturn>(action, {
       timeout: fullConfig.timeout,
       errorThresholdPercentage: fullConfig.errorThresholdPercentage,
       resetTimeout: fullConfig.resetTimeout,
       rollingCountTimeout: fullConfig.rollingCountTimeout,
       rollingCountBuckets: fullConfig.rollingCountBuckets,
       capacity: fullConfig.capacity,
-      bucketSpan: fullConfig.bucketSpan,
       enabled: fullConfig.enabled,
       name,
     });
 
     // Set up fallback function
-    breaker.fallback((error: Error, ...args: any[]) =>
-      this.handleFallback(name, error, fullFallbackOptions, ...args)
+    breaker.fallback((error: Error, ...args: unknown[]) =>
+      this.handleFallback<TReturn>(name, error, fullFallbackOptions, ...args)
     );
 
     // Set up event listeners
@@ -146,7 +145,7 @@ export class HuggingFaceCircuitBreaker extends EventEmitter {
     return breaker;
   }
 
-  private setupBreakerEvents(breaker: CircuitBreaker, name: string): void {
+  private setupBreakerEvents(breaker: CircuitBreaker<unknown[], unknown>, name: string): void {
     // State change events
     breaker.on('open', () => {
       this.updateStats(name, { state: 'OPEN', lastFailureTime: new Date() });
@@ -167,43 +166,43 @@ export class HuggingFaceCircuitBreaker extends EventEmitter {
     });
 
     // Request events
-    breaker.on('success', (result, latency) => {
+    breaker.on('success', (result: unknown, latency: number) => {
       this.updateRequestStats(name, true, latency);
       this.log('CIRCUIT_BREAKER_SUCCESS', { name, latency });
     });
 
-    breaker.on('failure', (error) => {
+    breaker.on('failure', (error: Error) => {
       this.updateRequestStats(name, false);
       this.log('CIRCUIT_BREAKER_FAILURE', { name, error: error.message });
     });
 
-    breaker.on('timeout', (error) => {
+    breaker.on('timeout', (error: Error) => {
       this.updateRequestStats(name, false);
       this.log('CIRCUIT_BREAKER_TIMEOUT', { name, error: error.message });
     });
 
-    breaker.on('reject', (error) => {
+    breaker.on('reject', (error: Error) => {
       this.log('CIRCUIT_BREAKER_REJECTED', { name, error: error.message });
     });
 
-    breaker.on('fallback', (data) => {
+    breaker.on('fallback', (data: unknown) => {
       this.log('CIRCUIT_BREAKER_FALLBACK', { name, data: typeof data });
       this.emit('breaker.fallback', { name, data });
     });
 
     // Health check events
-    breaker.on('healthCheckFailed', (error) => {
+    breaker.on('healthCheckFailed', (error: Error) => {
       this.log('HEALTH_CHECK_FAILED', { name, error: error.message });
       this.emit('healthCheck.failed', { name, error });
     });
   }
 
-  private async handleFallback<T>(
+  private async handleFallback<TReturn>(
     name: string,
     error: Error,
     options: FallbackOptions,
-    ...args: any[]
-  ): Promise<T> {
+    ...args: unknown[]
+  ): Promise<TReturn> {
     if (options.enableLogging) {
       this.log('FALLBACK_TRIGGERED', {
         name,
@@ -366,17 +365,17 @@ export class HuggingFaceCircuitBreaker extends EventEmitter {
     });
   }
 
-  public async execute<T>(
+  public async execute<TReturn>(
     breakerName: string,
-    ...args: any[]
-  ): Promise<T> {
+    ...args: unknown[]
+  ): Promise<TReturn> {
     const breaker = this.breakers.get(breakerName);
     if (!breaker) {
       throw new Error(`Circuit breaker '${breakerName}' not found`);
     }
 
     try {
-      const result = await breaker.fire(...args);
+      const result = await breaker.fire(...args) as TReturn;
 
       // Cache successful responses
       this.cacheResponse(breakerName, result);
@@ -388,7 +387,7 @@ export class HuggingFaceCircuitBreaker extends EventEmitter {
     }
   }
 
-  public getBreaker(name: string): CircuitBreaker | undefined {
+  public getBreaker(name: string): CircuitBreaker<unknown[], unknown> | undefined {
     return this.breakers.get(name);
   }
 
@@ -475,13 +474,17 @@ export class HuggingFaceCircuitBreaker extends EventEmitter {
     if (name) {
       const breaker = this.breakers.get(name);
       if (breaker) {
-        breaker.stats.reset();
+        if ('reset' in breaker.stats && typeof breaker.stats.reset === 'function') {
+          breaker.stats.reset();
+        }
         this.initializeStats(name);
         this.log('STATS_RESET', { name });
       }
     } else {
       for (const [breakerName, breaker] of this.breakers) {
-        breaker.stats.reset();
+        if ('reset' in breaker.stats && typeof breaker.stats.reset === 'function') {
+          breaker.stats.reset();
+        }
         this.initializeStats(breakerName);
       }
       this.log('ALL_STATS_RESET', {});
@@ -552,6 +555,28 @@ export class HuggingFaceCircuitBreaker extends EventEmitter {
       return true;
     }
     return false;
+  }
+
+  public getOverallHealth(): { healthy: boolean; details: Record<string, any> } {
+    const allStats = Array.from(this.stats.values());
+    const totalBreakers = allStats.length;
+
+    if (totalBreakers === 0) {
+      return { healthy: true, details: {} };
+    }
+
+    const healthyBreakers = allStats.filter(stats => stats.isHealthy).length;
+    const healthRatio = healthyBreakers / totalBreakers;
+
+    return {
+      healthy: healthRatio >= 0.8, // 80% of breakers must be healthy
+      details: {
+        totalBreakers,
+        healthyBreakers,
+        healthRatio,
+        breakerStats: Object.fromEntries(this.stats.entries())
+      }
+    };
   }
 }
 

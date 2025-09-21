@@ -2,8 +2,10 @@
  * Organization management utilities for multi-tenant functionality
  */
 
-import { supabase } from './supabase'
-import { User } from '@supabase/supabase-js'
+import { supabase, Tables } from './supabase'
+
+// Define User type using profiles table structure
+type User = Tables<'profiles'>
 
 export interface Organization {
   id: string

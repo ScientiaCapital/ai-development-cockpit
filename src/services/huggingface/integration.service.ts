@@ -16,7 +16,7 @@ export interface IntegrationConfig {
   enableHealthChecks: boolean;
 }
 
-export interface ModelSearchParams {
+export interface IntegrationModelSearchParams {
   query?: string;
   organization?: string;
   task?: string;
@@ -219,10 +219,13 @@ export class HuggingFaceIntegrationService {
   }
 
   private setupCircuitBreakers(): void {
-    // Model search circuit breaker
+    // Model search circuit breaker with proper wrapper
     this.circuitBreaker.createBreaker(
       'model-search',
-      this.searchModelsInternal.bind(this),
+      async (...args: unknown[]) => {
+        const params = args[0] as IntegrationModelSearchParams;
+        return this.searchModelsInternal(params);
+      },
       {
         timeout: 15000,
         errorThresholdPercentage: 60,
@@ -235,10 +238,13 @@ export class HuggingFaceIntegrationService {
       }
     );
 
-    // Model info circuit breaker
+    // Model info circuit breaker with proper wrapper
     this.circuitBreaker.createBreaker(
       'model-info',
-      this.getModelInfoInternal.bind(this),
+      async (...args: unknown[]) => {
+        const [modelId, organization] = args as [string, string];
+        return this.getModelInfoInternal(modelId, organization);
+      },
       {
         timeout: 10000,
         errorThresholdPercentage: 50,
@@ -251,10 +257,13 @@ export class HuggingFaceIntegrationService {
       }
     );
 
-    // Deployment circuit breaker
+    // Deployment circuit breaker with proper wrapper
     this.circuitBreaker.createBreaker(
       'deployment',
-      this.deployModelInternal.bind(this),
+      async (...args: unknown[]) => {
+        const request = args[0] as DeploymentRequest;
+        return this.deployModelInternal(request);
+      },
       {
         timeout: 30000,
         errorThresholdPercentage: 40,
@@ -388,7 +397,7 @@ export class HuggingFaceIntegrationService {
   }
 
   // Internal API methods (used by circuit breakers)
-  private async searchModelsInternal(params: ModelSearchParams): Promise<{ models: ModelInfo[]; pagination: any }> {
+  private async searchModelsInternal(params: IntegrationModelSearchParams): Promise<{ models: ModelInfo[]; pagination: any }> {
     const org = params.organization || this.config.defaultOrganization;
     const apiKey = await this.getApiKey(org);
 
@@ -472,7 +481,7 @@ export class HuggingFaceIntegrationService {
   }
 
   // Public API methods
-  public async searchModels(params: ModelSearchParams): Promise<{ models: ModelInfo[]; pagination: any }> {
+  public async searchModels(params: IntegrationModelSearchParams): Promise<{ models: ModelInfo[]; pagination: any }> {
     const cacheKey = `models:search:${JSON.stringify(params)}`;
 
     return this.executeWithServices(
@@ -560,7 +569,27 @@ export class HuggingFaceIntegrationService {
     return { ...this.stats };
   }
 
-  public async healthCheck(): Promise<{ healthy: boolean; details: any }> {
+  public async healthCheck(): Promise<{
+    totalCredentials: number;
+    validCredentials: number;
+    invalidCredentials: number;
+    results: any[];
+  }> {
+    try {
+      const credentialsHealth = await this.credentials.healthCheck();
+      return credentialsHealth;
+    } catch (error) {
+      this.log('HEALTH_CHECK_ERROR', { error: (error as Error).message });
+      return {
+        totalCredentials: 0,
+        validCredentials: 0,
+        invalidCredentials: 0,
+        results: []
+      };
+    }
+  }
+
+  public async getOverallHealth(): Promise<{ healthy: boolean; checks: Record<string, boolean> }> {
     const checks = {
       api: false,
       cache: false,
@@ -594,12 +623,51 @@ export class HuggingFaceIntegrationService {
 
     return {
       healthy,
-      details: {
-        checks,
-        stats: this.getStats(),
-        timestamp: new Date().toISOString(),
-      },
+      checks,
     };
+  }
+
+  public getStatistics(): {
+    cache: any;
+    rateLimiter: { organizations: Array<{ org: string; stats: any }> };
+    circuitBreakers: any;
+    webhooks: any;
+  } {
+    const cacheStats = this.cache.getStats();
+    const rateLimiterStats = this.rateLimiter.getStatistics();
+    const circuitBreakerStats = this.circuitBreaker.getAllStats();
+    const webhookStats = this.webhooks.getStats();
+
+    return {
+      cache: cacheStats,
+      rateLimiter: {
+        organizations: Object.entries(rateLimiterStats).map(([org, stats]) => ({ org, stats }))
+      },
+      circuitBreakers: circuitBreakerStats,
+      webhooks: webhookStats
+    };
+  }
+
+  public async processWebhook(payload: string, signature: string, options: any = {}): Promise<{
+    success: boolean;
+    message: string;
+    eventsProcessed: number;
+  }> {
+    try {
+      const result = await this.webhooks.processWebhook(payload, signature, options);
+      return result;
+    } catch (error) {
+      this.log('WEBHOOK_PROCESSING_ERROR', { error: (error as Error).message });
+      return {
+        success: false,
+        message: (error as Error).message,
+        eventsProcessed: 0
+      };
+    }
+  }
+
+  public async disconnect(): Promise<void> {
+    await this.shutdown();
   }
 
   private log(level: string, data: any): void {

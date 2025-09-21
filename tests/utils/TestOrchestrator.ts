@@ -8,9 +8,11 @@ import { DeploymentTestPipeline, PipelineConfig, PipelineExecution } from '../fi
 import { DeploymentValidationUtils, ValidationUtils } from './DeploymentValidationUtils';
 import { DeploymentValidator } from '../fixtures/DeploymentValidator';
 import { NetworkSimulator } from '../fixtures/NetworkSimulator';
+import { TestOrchestratorConfig } from './TestCoordinator';
 import { MockRunPodEnvironment } from '../fixtures/MockRunPodEnvironment';
 import { createTestEnvironment, TestSuiteFactory } from '../fixtures/index';
 import { swaggyStacksScenarios, scientiaCapitalScenarios, DeploymentScenario } from '../fixtures/deployment-scenarios';
+import { TestResults } from './TestCoordinator';
 
 export interface OrchestrationConfig {
   browser: Browser;
@@ -152,10 +154,11 @@ export class TestOrchestrator {
       this.currentExecution.status = 'completed';
       console.log(`✅ Orchestration completed successfully`);
 
-    } catch (error) {
-      console.error(`❌ Orchestration failed:`, error.message);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error instanceof Error ? error.message : 'Unknown error' : 'Unknown orchestration error';
+      console.error(`❌ Orchestration failed:`, errorMessage);
       this.currentExecution.status = 'failed';
-      this.currentExecution.results.summary.criticalBlockers.push(`Orchestration failed: ${error.message}`);
+      this.currentExecution.results.summary.criticalBlockers.push(`Orchestration failed: ${errorMessage}`);
     } finally {
       this.currentExecution.endTime = new Date();
       this.currentExecution.totalDuration =
@@ -284,8 +287,9 @@ export class TestOrchestrator {
       // Calculate organization metrics
       this.calculateOrganizationMetrics(result);
 
-    } catch (error) {
-      console.error(`❌ Organization testing failed for ${organization}:`, error.message);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error instanceof Error ? error.message : 'Unknown error' : 'Unknown organization testing error';
+      console.error(`❌ Organization testing failed for ${organization}:`, errorMessage);
       result.status = 'failed';
     }
 
@@ -352,8 +356,9 @@ export class TestOrchestrator {
           result.metrics.successfulScenarios++;
         }
 
-      } catch (error) {
-        console.error(`    ❌ Scenario failed: ${scenario.name}`, error.message);
+      } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error instanceof Error ? error.message : 'Unknown error' : 'Unknown scenario error';
+        console.error(`    ❌ Scenario failed: ${scenario.name}`, errorMessage);
         result.status = 'partial';
       }
     }
@@ -390,9 +395,10 @@ export class TestOrchestrator {
 
       result.validationResults.set(scenario.name, { status: 'passed' });
 
-    } catch (error) {
-      console.error(`    ❌ Additional validation failed for ${scenario.name}:`, error.message);
-      result.validationResults.set(scenario.name, { status: 'failed', error: error.message });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error instanceof Error ? error.message : 'Unknown error' : 'Unknown validation error';
+      console.error(`    ❌ Additional validation failed for ${scenario.name}:`, errorMessage);
+      result.validationResults.set(scenario.name, { status: 'failed', error: errorMessage });
     }
   }
 
@@ -711,13 +717,13 @@ export class TestOrchestrator {
           ``,
           result.complianceResults.violations.length > 0 ? [
             `### Violations`,
-            result.complianceResults.violations.map(v =>
+            result.complianceResults.violations.map((v: any) =>
               `- **${v.severity.toUpperCase()}**: ${v.description}`
             ).join('\n'),
             ``
           ].join('\n') : '',
           `### Requirements Status`,
-          result.complianceResults.requirements.map(req =>
+          result.complianceResults.requirements.map((req: any) =>
             `- **${req.name}**: ${req.status === 'met' ? '✅' : '❌'} ${req.details}`
           ).join('\n'),
           ``
@@ -791,6 +797,77 @@ export class TestOrchestrator {
   /**
    * Get current execution status
    */
+  /**
+   * Run comprehensive tests with simplified interface for TestCoordinator
+   */
+  async runComprehensiveTests(config: TestOrchestratorConfig): Promise<TestResults> {
+    // Update internal config from the provided config
+    this.config = {
+      browser: config.browser,
+      parallelSessions: config.parallelSessions || 3,
+      organizations: config.organizations || ['swaggystacks', 'scientia'],
+      environments: config.environments || ['development'],
+      testSuites: (config.testSuites || ['smoke']) as TestSuiteType[],
+      enableChaosMode: config.enableChaosMode || false,
+      enableNetworkSimulation: config.enableNetworkSimulation || true,
+      enableComplianceValidation: config.enableComplianceValidation || true,
+      maxExecutionTime: config.maxExecutionTime || 600000,
+      reportingLevel: config.reportingLevel || 'standard'
+    };
+
+    try {
+      // Execute comprehensive testing
+      const orchestrationResult = await this.execute();
+      
+      // Convert OrchestrationResult to TestResults format expected by TestCoordinator
+      const testResults: TestResults = {
+        grade: this.mapGradeToSimpleGrade(orchestrationResult.results.summary.performanceGrade),
+        score: orchestrationResult.results.overallMetrics.averagePerformanceScore,
+        breakdown: {
+          performance: orchestrationResult.results.summary.performanceGrade,
+          compliance: orchestrationResult.results.summary.complianceGrade,
+          reliability: orchestrationResult.results.summary.reliabilityGrade,
+          successRate: orchestrationResult.results.overallMetrics.successRate,
+          slaCompliance: orchestrationResult.results.overallMetrics.slaCompliance,
+          organizationResults: Object.fromEntries(orchestrationResult.results.organizationResults.entries())
+        },
+        recommendations: [
+          ...orchestrationResult.results.summary.nextSteps,
+          ...orchestrationResult.results.overallMetrics.recommendations.slice(0, 5) // Limit recommendations
+        ]
+      };
+
+      return testResults;
+
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error instanceof Error ? error.message : 'Unknown error' : 'Unknown error during comprehensive testing';
+      console.error('❌ Comprehensive testing failed:', errorMessage);
+      
+      // Return failed test results
+      return {
+        grade: 'F',
+        score: 0,
+        breakdown: {
+          error: errorMessage,
+          performance: 'F',
+          compliance: 'F',
+          reliability: 'F'
+        },
+        recommendations: [
+          'Fix critical issues before retrying comprehensive tests',
+          `Address error: ${errorMessage}`
+        ]
+      };
+    }
+  }
+
+  /**
+   * Map orchestration grade to simple grade format
+   */
+  private mapGradeToSimpleGrade(grade: 'A' | 'B' | 'C' | 'D' | 'F'): 'A' | 'B' | 'C' | 'D' | 'F' {
+    return grade;
+  }
+
   getCurrentExecution(): OrchestrationResult | null {
     return this.currentExecution;
   }

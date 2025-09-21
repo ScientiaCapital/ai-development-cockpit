@@ -39,9 +39,9 @@ export interface SystemMetrics {
 export class PrometheusService {
   private static instance: PrometheusService;
   private registry: client.Registry;
-  private apiMetrics: ApiMetrics;
-  private businessMetrics: BusinessMetrics;
-  private systemMetrics: SystemMetrics;
+  private apiMetrics!: ApiMetrics;
+  private businessMetrics!: BusinessMetrics;
+  private systemMetrics!: SystemMetrics;
   private isInitialized = false;
 
   private constructor() {
@@ -246,16 +246,16 @@ export class PrometheusService {
       const healthValue = deployment.healthStatus === 'healthy' ? 1 : 0;
       this.systemMetrics.deploymentHealth.set({
         endpoint_id: deployment.endpointId,
-        model_name: deployment.endpoint?.model || 'unknown',
+        model_name: deployment.endpoint?.name || 'unknown',
         organization,
       }, healthValue);
 
       // Update resource utilization
       if (deployment.metrics) {
         const resources = [
-          { type: 'cpu', value: deployment.metrics.cpuUsage || 0 },
+          { type: 'cpu', value: 0 }, // CPU usage not available in EndpointMetrics
           { type: 'memory', value: deployment.metrics.memoryUsage || 0 },
-          { type: 'gpu', value: deployment.metrics.gpuUsage || 0 },
+          { type: 'gpu', value: deployment.metrics.gpuUtilization || 0 },
         ];
 
         resources.forEach(({ type, value }) => {

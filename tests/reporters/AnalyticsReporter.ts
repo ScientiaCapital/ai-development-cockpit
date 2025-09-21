@@ -138,7 +138,7 @@ export class AnalyticsReporter implements Reporter {
       // Generate trend analysis if historical data exists
       await this.generateTrendAnalysis();
 
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('❌ Failed to generate analytics report:', error);
     }
   }
@@ -258,7 +258,7 @@ export class AnalyticsReporter implements Reporter {
         await fs.writeFile(trendPath, JSON.stringify(trends, null, 2));
         console.log(`   📈 Trend Analysis: ${trendPath}`);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       // Trend analysis is optional
       console.log('   📈 Trend analysis: Not enough historical data');
     }

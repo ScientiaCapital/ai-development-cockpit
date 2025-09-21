@@ -62,14 +62,15 @@ test.describe('Load Testing - Deployment System Performance', () => {
             await deploymentPage.setInstanceCount(1);
 
             // Create deployment
-            const deploymentId = await deploymentPage.createDeployment();
+            await deploymentPage.createDeployment();
+            const deploymentId = await deploymentPage.getDeploymentId();
             await deploymentPage.waitForDeploymentReady(30000);
 
             const endTime = Date.now();
             const duration = endTime - startTime;
 
             // Stop deployment to free resources
-            await deploymentPage.stopDeployment();
+            await deploymentPage.stopDeployment(deploymentId);
 
             return {
               deploymentIndex: i,
@@ -78,7 +79,7 @@ test.describe('Load Testing - Deployment System Performance', () => {
               duration,
               success: true
             };
-          } catch (error) {
+          } catch (error: unknown) {
             const endTime = Date.now();
             const duration = endTime - startTime;
 
@@ -155,7 +156,8 @@ test.describe('Load Testing - Deployment System Performance', () => {
 
               await deploymentPage.goto();
               await deploymentPage.selectGpuType('NVIDIA_RTX_A6000');
-              const deploymentId = await deploymentPage.createDeployment();
+              await deploymentPage.createDeployment();
+            const deploymentId = await deploymentPage.getDeploymentId();
               await deploymentPage.waitForDeploymentReady(30000);
 
               const deploymentDuration = Date.now() - deploymentStartTime;
@@ -171,9 +173,9 @@ test.describe('Load Testing - Deployment System Performance', () => {
 
               // Keep deployment running for 30 seconds then stop
               await new Promise(resolve => setTimeout(resolve, 30000));
-              await deploymentPage.stopDeployment();
+              await deploymentPage.stopDeployment(deploymentId);
 
-            } catch (error) {
+            } catch (error: unknown) {
               console.error(`Deployment ${deploymentCount} failed:`, error);
             } finally {
               activeDeployments--;
@@ -242,20 +244,21 @@ test.describe('Load Testing - Deployment System Performance', () => {
             await deploymentPage.expectTerminalTheme();
             await deploymentPage.selectGpuType('NVIDIA_RTX_A6000');
 
-            const deploymentId = await deploymentPage.createDeployment();
+            await deploymentPage.createDeployment();
+            const deploymentId = await deploymentPage.getDeploymentId();
             await deploymentPage.waitForDeploymentReady(25000);
 
             // Verify theme consistency under load
             await deploymentPage.expectTerminalTheme();
 
-            await deploymentPage.stopDeployment();
+            await deploymentPage.stopDeployment(deploymentId);
 
             return {
               userId: i,
               duration: Date.now() - startTime,
               success: true
             };
-          } catch (error) {
+          } catch (error: unknown) {
             return {
               userId: i,
               duration: Date.now() - startTime,
@@ -306,21 +309,22 @@ test.describe('Load Testing - Deployment System Performance', () => {
             await deploymentPage.setInstanceCount(4); // Higher instance count
             await deploymentPage.enableAutoScaling(true);
 
-            const deploymentId = await deploymentPage.createDeployment();
+            await deploymentPage.createDeployment();
+            const deploymentId = await deploymentPage.getDeploymentId();
             await deploymentPage.waitForDeploymentReady(45000); // Longer timeout for enterprise
 
             // Verify enterprise features work under load
             await deploymentPage.expectEnterpriseMonitoring();
             await deploymentPage.expectComplianceValidation();
 
-            await deploymentPage.stopDeployment();
+            await deploymentPage.stopDeployment(deploymentId);
 
             return {
               userId: i,
               duration: Date.now() - startTime,
               success: true
             };
-          } catch (error) {
+          } catch (error: unknown) {
             return {
               userId: i,
               duration: Date.now() - startTime,
@@ -363,7 +367,7 @@ test.describe('Load Testing - Deployment System Performance', () => {
               await deploymentPage.goto();
               await deploymentPage.selectGpuType('NVIDIA_RTX_A6000');
               await deploymentPage.createDeployment();
-            } catch (error) {
+            } catch (error: unknown) {
               // Expected to fail under overload
               console.log(`Expected overload failure for deployment ${i}:`, error instanceof Error ? error.message : 'Unknown error');
             }
@@ -415,17 +419,18 @@ test.describe('Load Testing - Deployment System Performance', () => {
             });
 
             await deploymentPage.selectGpuType('NVIDIA_RTX_A6000');
-            const deploymentId = await deploymentPage.createDeployment();
+            await deploymentPage.createDeployment();
+            const deploymentId = await deploymentPage.getDeploymentId();
             await deploymentPage.waitForDeploymentReady(35000);
 
             // Verify deployment works despite memory pressure
             const metrics = await deploymentPage.getPerformanceMetrics();
             expect(metrics.uptime).toBeGreaterThanOrEqual(0);
 
-            await deploymentPage.stopDeployment();
+            await deploymentPage.stopDeployment(deploymentId);
 
             return { success: true, deploymentId };
-          } catch (error) {
+          } catch (error: unknown) {
             return {
               success: false,
               error: error instanceof Error ? error.message : 'Unknown error'

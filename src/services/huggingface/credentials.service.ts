@@ -351,7 +351,7 @@ export class HuggingFaceCredentialsService {
       this.credentials.set(organization, credentials);
     }
 
-    return credentials;
+    return credentials || null;
   }
 
   public async getApiKey(organization: string): Promise<string | null> {
@@ -556,6 +556,53 @@ export class HuggingFaceCredentialsService {
     }
 
     this.log('CONFIG_UPDATED', { oldConfig, newConfig: this.config });
+  }
+
+  public async healthCheck(): Promise<{
+    totalCredentials: number;
+    validCredentials: number;
+    invalidCredentials: number;
+    results: any[];
+  }> {
+    const stats = this.getStats();
+    const results: any[] = [];
+
+    // Check each organization's credentials
+    for (const organization of this.listOrganizations()) {
+      try {
+        const validation = await this.validateCredentials(organization);
+        results.push({
+          organization,
+          valid: validation.valid,
+          error: validation.error,
+          timestamp: new Date(),
+        });
+      } catch (error) {
+        results.push({
+          organization,
+          valid: false,
+          error: (error as Error).message,
+          timestamp: new Date(),
+        });
+      }
+    }
+
+    const validCredentials = results.filter(r => r.valid).length;
+    const invalidCredentials = results.filter(r => !r.valid).length;
+
+    this.log('HEALTH_CHECK_COMPLETED', {
+      totalCredentials: stats.totalCredentials,
+      validCredentials,
+      invalidCredentials,
+      resultsCount: results.length,
+    });
+
+    return {
+      totalCredentials: stats.totalCredentials,
+      validCredentials,
+      invalidCredentials,
+      results,
+    };
   }
 
   public async shutdown(): Promise<void> {

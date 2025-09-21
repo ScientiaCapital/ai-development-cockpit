@@ -87,7 +87,14 @@ export class HuggingFaceRateLimiter {
     enableGlobalLimit = true,
     enableLogging = process.env.NODE_ENV === 'development'
   ) {
-    this.configs = { ...DEFAULT_CONFIGS, ...configs };
+    // Filter out undefined values from configs
+    const filteredConfigs: OrganizationLimits = {};
+    Object.entries(configs).forEach(([key, value]) => {
+      if (value) {
+        filteredConfigs[key] = value;
+      }
+    });
+    this.configs = { ...DEFAULT_CONFIGS, ...filteredConfigs };
     this.enableLogging = enableLogging;
 
     // Create global rate limiter to prevent overwhelming the API
@@ -165,26 +172,29 @@ export class HuggingFaceRateLimiter {
 
     // Update stats on various events
     limiter.on('queued', () => {
+      const counts = limiter.counts();
       this.updateStats(organization, {
-        queued: limiter.queued(),
-        pending: limiter.queued() + limiter.running(),
+        queued: counts.QUEUED,
+        pending: counts.QUEUED + counts.RUNNING + counts.EXECUTING,
       });
     });
 
     limiter.on('received', () => {
+      const counts = limiter.counts();
       this.updateStats(organization, {
-        running: limiter.running(),
-        pending: limiter.queued() + limiter.running(),
+        running: counts.RUNNING + counts.EXECUTING,
+        pending: counts.QUEUED + counts.RUNNING + counts.EXECUTING,
       });
     });
 
     limiter.on('done', () => {
       const stats = this.stats.get(organization);
       if (stats) {
+        const counts = limiter.counts();
         this.updateStats(organization, {
           done: stats.done + 1,
-          running: limiter.running(),
-          pending: limiter.queued() + limiter.running(),
+          running: counts.RUNNING + counts.EXECUTING,
+          pending: counts.QUEUED + counts.RUNNING + counts.EXECUTING,
         });
       }
     });
@@ -192,10 +202,11 @@ export class HuggingFaceRateLimiter {
     limiter.on('failed', () => {
       const stats = this.stats.get(organization);
       if (stats) {
+        const counts = limiter.counts();
         this.updateStats(organization, {
           failed: stats.failed + 1,
-          running: limiter.running(),
-          pending: limiter.queued() + limiter.running(),
+          running: counts.RUNNING + counts.EXECUTING,
+          pending: counts.QUEUED + counts.RUNNING + counts.EXECUTING,
         });
       }
     });
@@ -355,10 +366,11 @@ export class HuggingFaceRateLimiter {
   public getGlobalStats(): { pending: number; running: number; queued: number } | null {
     if (!this.globalLimiter) return null;
 
+    const counts = this.globalLimiter.counts();
     return {
-      pending: this.globalLimiter.queued() + this.globalLimiter.running(),
-      running: this.globalLimiter.running(),
-      queued: this.globalLimiter.queued(),
+      pending: counts.QUEUED + counts.RUNNING + counts.EXECUTING,
+      running: counts.RUNNING + counts.EXECUTING,
+      queued: counts.QUEUED,
     };
   }
 
@@ -368,13 +380,19 @@ export class HuggingFaceRateLimiter {
     return new Promise((resolve) => {
       const timer = setTimeout(() => resolve(false), timeout);
 
-      const checkCapacity = () => {
-        if (limiter.reservoir() > 0 || limiter.queued() === 0) {
+      const checkCapacity = async () => {
+        try {
+          const reservoir = await limiter.currentReservoir();
+          if ((reservoir !== null && reservoir > 0) || limiter.queued() === 0) {
+            clearTimeout(timer);
+            resolve(true);
+            return;
+          }
+          setTimeout(checkCapacity, 100);
+        } catch (error) {
           clearTimeout(timer);
-          resolve(true);
-          return;
+          resolve(false);
         }
-        setTimeout(checkCapacity, 100);
       };
 
       checkCapacity();
@@ -429,7 +447,21 @@ export class HuggingFaceRateLimiter {
 
   public getRunningCount(organization: string): number {
     const limiter = this.limiters.get(organization);
-    return limiter?.running() || 0;
+    if (!limiter) return 0;
+
+    const counts = limiter.counts();
+    return counts.RUNNING + counts.EXECUTING;
+  }
+
+  public getStatistics(): Map<string, RateLimitStats> {
+    return new Map(this.stats);
+  }
+
+  public clearAll(): void {
+    this.limiters.clear();
+    this.stats.clear();
+    this.globalLimiter = undefined;
+    this.log('ALL_LIMITERS_CLEARED', {});
   }
 }
 

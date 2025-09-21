@@ -40,7 +40,7 @@ const CHAOS_SCENARIOS: ChaosScenario[] = [
     },
     validate: async (metrics: any) => {
       // System should handle 70% API failure rate gracefully
-      return metrics.errors.filter(e => e.type === 'network').length < 10;
+      return metrics.errors.filter((e: any) => e.type === 'network').length < 10;
     }
   },
   {
@@ -97,7 +97,7 @@ const CHAOS_SCENARIOS: ChaosScenario[] = [
     },
     validate: async (metrics: any) => {
       // System should recover from network instability
-      const networkErrors = metrics.errors.filter(e => e.type === 'network').length;
+      const networkErrors = metrics.errors.filter((e: any) => e.type === 'network').length;
       return networkErrors < metrics.network.requestCount * 0.5; // Less than 50% network errors
     }
   },
@@ -122,7 +122,7 @@ const CHAOS_SCENARIOS: ChaosScenario[] = [
     },
     validate: async (metrics: any) => {
       // System should handle deployment interruptions gracefully
-      const deploymentErrors = metrics.errors.filter(e =>
+      const deploymentErrors = metrics.errors.filter((e: any) =>
         e.message?.includes('deployment') || e.context?.url?.includes('deployments')
       ).length;
       return deploymentErrors < 5; // Maximum 5 deployment-related errors
@@ -180,11 +180,6 @@ test.describe('Chaos Testing - System Resilience', () => {
 
   test.beforeEach(async ({ page, context }) => {
     metricsCollector = new MetricsCollector(
-      page,
-      `chaos-${Date.now()}`,
-      'Chaos Testing',
-      'swaggystacks',
-      'development',
       {
         collectPerformance: true,
         collectResources: true,
@@ -193,7 +188,12 @@ test.describe('Chaos Testing - System Resilience', () => {
         collectWarnings: true,
         samplingInterval: 500, // More frequent sampling during chaos testing
         maxDataPoints: 600
-      }
+      },
+      page,
+      `chaos-${Date.now()}`,
+      'Chaos Testing',
+      'swaggystacks',
+      'development'
     );
 
     networkSimulator = new NetworkSimulator();
@@ -251,12 +251,12 @@ test.describe('Chaos Testing - System Resilience', () => {
         // Chaos testing allows for degraded performance but not complete failure
         expect(isResilient).toBe(true);
 
-      } catch (error) {
+      } catch (error: unknown) {
         metricsCollector.recordError({
           type: 'javascript',
-          message: `Chaos scenario execution failed: ${error.message}`,
+          message: `Chaos scenario execution failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
           severity: 'critical',
-          context: { scenario: scenario.name, error: error.stack }
+          context: { scenario: scenario.name, error: error instanceof Error ? error.stack : 'Unknown error' }
         });
         throw error;
       }
@@ -291,10 +291,10 @@ test.describe('Chaos Testing - System Resilience', () => {
 
       metricsCollector.addCustomMetric('multiChaosTestPassed', true);
 
-    } catch (error) {
+    } catch (error: unknown) {
       metricsCollector.recordError({
         type: 'javascript',
-        message: `Multi-chaos scenario failed: ${error.message}`,
+        message: `Multi-chaos scenario failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
         severity: 'critical'
       });
 
@@ -312,20 +312,20 @@ test.describe('Chaos Testing - System Resilience', () => {
       switch (severity) {
         case 'light':
           // Light chaos - system should function normally
-          await networkSimulator.simulateCondition(page, 'enterprise_fiber');
+          await networkSimulator.simulateCondition('enterprise_fiber');
           await expect(page.locator('[data-testid="model-list"]')).toBeVisible({ timeout: 5000 });
           break;
 
         case 'moderate':
           // Moderate chaos - system should show degraded performance but remain functional
-          await networkSimulator.simulateCondition(page, 'mobile_3g');
+          await networkSimulator.simulateCondition('mobile_3g');
           await chaosEngine.injectLatency(2000); // 2 second delays
           await expect(page.locator('[data-testid="model-list"]')).toBeVisible({ timeout: 15000 });
           break;
 
         case 'severe':
           // Severe chaos - system should show error messages but not crash
-          await networkSimulator.simulateCondition(page, 'chaos');
+          await networkSimulator.simulateCondition('chaos');
           await chaosEngine.injectRandomFailures(0.3); // 30% failure rate
 
           // Look for error handling UI instead of expecting full functionality
@@ -368,10 +368,10 @@ async function performBasicUserWorkflows(page: Page, metrics: MetricsCollector):
 
     metrics.addCustomMetric('basicWorkflowCompleted', true);
 
-  } catch (error) {
+  } catch (error: unknown) {
     metrics.recordError({
       type: 'javascript',
-      message: `Basic workflow failed during chaos: ${error.message}`,
+      message: `Basic workflow failed during chaos: ${error instanceof Error ? error.message : 'Unknown error'}`,
       severity: 'medium'
     });
     metrics.addCustomMetric('basicWorkflowCompleted', false);
@@ -393,10 +393,10 @@ async function performCriticalUserWorkflows(page: Page, metrics: MetricsCollecto
 
     metrics.addCustomMetric('criticalWorkflowCompleted', true);
 
-  } catch (error) {
+  } catch (error: unknown) {
     metrics.recordError({
       type: 'assertion',
-      message: `Critical workflow failed: ${error.message}`,
+      message: `Critical workflow failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
       severity: 'critical'
     });
     metrics.addCustomMetric('criticalWorkflowCompleted', false);
@@ -424,7 +424,7 @@ async function validateBasicFunctionality(page: Page): Promise<boolean> {
 
     return true;
 
-  } catch (error) {
+  } catch (error: unknown) {
     return false;
   }
 }

@@ -103,7 +103,7 @@ test.describe('Throughput Testing - Request Processing Capacity', () => {
           try {
             await operationFn(page);
             success = true;
-          } catch (error) {
+          } catch (error: unknown) {
             // Track failures
             console.log(`Request ${requestCounter} failed:`, error instanceof Error ? error.message : 'Unknown error');
           } finally {
@@ -292,12 +292,13 @@ test.describe('Throughput Testing - Request Processing Capacity', () => {
         await deploymentPage.selectGpuType('NVIDIA_RTX_A6000');
         await deploymentPage.setInstanceCount(1);
 
-        const deploymentId = await deploymentPage.createDeployment();
+        await deploymentPage.createDeployment();
+        const deploymentId = await deploymentPage.getDeploymentId();
         await deploymentPage.expectDeploymentCreating();
 
         // Wait a bit then stop deployment to free resources
         await new Promise(resolve => setTimeout(resolve, 2000));
-        await deploymentPage.stopDeployment();
+        await deploymentPage.stopDeployment(deploymentId);
       };
 
       const metrics = await executeLoadPattern(browser, deploymentPattern, deploymentOperation);
@@ -325,12 +326,14 @@ test.describe('Throughput Testing - Request Processing Capacity', () => {
         await deploymentPage.selectGpuType('NVIDIA_RTX_A6000');
 
         try {
-          const deploymentId = await deploymentPage.createDeployment();
+          await deploymentPage.createDeployment();
+          const deploymentId = await deploymentPage.getDeploymentId();
           // Quick cleanup
-          await deploymentPage.stopDeployment();
-        } catch (error) {
+          await deploymentPage.stopDeployment(deploymentId);
+        } catch (error: unknown) {
           // Expected to fail at capacity - this is normal behavior
-          if (!error.message.includes('capacity') && !error.message.includes('queue')) {
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+          if (!errorMessage.includes('capacity') && !errorMessage.includes('queue')) {
             throw error;
           }
         }
@@ -402,10 +405,11 @@ test.describe('Throughput Testing - Request Processing Capacity', () => {
         } else {
           // 10% heavy write operations (deployment actions)
           try {
-            const deploymentId = await deploymentPage.createDeployment();
+            await deploymentPage.createDeployment();
+            const deploymentId = await deploymentPage.getDeploymentId();
             await new Promise(resolve => setTimeout(resolve, 1000));
-            await deploymentPage.stopDeployment();
-          } catch (error) {
+            await deploymentPage.stopDeployment(deploymentId);
+          } catch (error: unknown) {
             // May fail under load
           }
         }
@@ -529,9 +533,10 @@ test.describe('Throughput Testing - Request Processing Capacity', () => {
           // 30% actually deploy
           try {
             await deploymentPage.createDeployment();
+            const deploymentId = await deploymentPage.getDeploymentId();
             await new Promise(resolve => setTimeout(resolve, 1000));
-            await deploymentPage.stopDeployment();
-          } catch (error) {
+            await deploymentPage.stopDeployment(deploymentId);
+          } catch (error: unknown) {
             // Gaming users may cancel if too slow
           }
         }
@@ -581,9 +586,10 @@ test.describe('Throughput Testing - Request Processing Capacity', () => {
           // 50% actually deploy (higher conversion than gaming)
           try {
             await deploymentPage.createDeployment();
+            const deploymentId = await deploymentPage.getDeploymentId();
             await new Promise(resolve => setTimeout(resolve, 2000)); // Longer deployment time
-            await deploymentPage.stopDeployment();
-          } catch (error) {
+            await deploymentPage.stopDeployment(deploymentId);
+          } catch (error: unknown) {
             // Enterprise deployments may be more complex and fail occasionally
           }
         }

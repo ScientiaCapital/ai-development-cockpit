@@ -15,16 +15,22 @@ export interface OrganizationWithMembers extends Organization {
 export interface CreateOrganizationData {
   name: string
   description?: string
+  website_url?: string
+  logo_url?: string
+  settings?: Record<string, any>
 }
 
 export interface UpdateOrganizationData {
   name?: string
   description?: string
+  website_url?: string
+  logo_url?: string
+  settings?: Record<string, any>
 }
 
 export interface InviteUserData {
   email: string
-  role: 'admin' | 'developer' | 'viewer'
+  role: 'owner' | 'admin' | 'developer' | 'viewer'
   organizationId: string
 }
 
@@ -32,7 +38,7 @@ export interface OrganizationInvite {
   id: string
   organization_id: string
   email: string
-  role: 'admin' | 'developer' | 'viewer'
+  role: 'owner' | 'admin' | 'developer' | 'viewer'
   invited_by: string
   expires_at: string
   created_at: string
@@ -228,7 +234,7 @@ export class OrganizationManager {
   static async addUserToOrganization(
     userId: string,
     organizationId: string,
-    role: 'admin' | 'developer' | 'viewer'
+    role: 'owner' | 'admin' | 'developer' | 'viewer'
   ): Promise<{
     data: UserOrganization | null
     error: any
@@ -279,7 +285,7 @@ export class OrganizationManager {
   static async updateUserRole(
     userId: string,
     organizationId: string,
-    role: 'admin' | 'developer' | 'viewer'
+    role: 'owner' | 'admin' | 'developer' | 'viewer'
   ): Promise<{
     data: UserOrganization | null
     error: any

@@ -73,7 +73,8 @@ export class RealApiValidator {
 
   constructor(config: RealApiConfig) {
     this.config = config;
-    this.apiClient = new TestApiClient();
+    // TestApiClient requires a Page parameter, using null for API validation
+    this.apiClient = new TestApiClient(null as any);
   }
 
   /**
@@ -82,7 +83,8 @@ export class RealApiValidator {
   async initialize(): Promise<void> {
     console.log('🔧 Initializing Real API Validator...');
 
-    await this.apiClient.initialize();
+    // TestApiClient doesn't have initialize method, using setupRealApiMode instead
+    await this.apiClient.setupRealApiMode();
 
     // Validate configuration
     await this.validateConfiguration();
@@ -135,9 +137,9 @@ export class RealApiValidator {
       // Perform detailed validations
       await this.performDetailedValidations(endpointInfo, response, result);
 
-    } catch (error) {
+    } catch (error: unknown) {
       result.responseTime = Date.now() - startTime;
-      result.error = error instanceof Error ? error.message : String(error);
+      result.error = error instanceof Error ? error instanceof Error ? error.message : 'Unknown error' : String(error);
       result.retryAttempts = retryAttempts;
 
       console.error(`❌ Endpoint validation failed: ${endpointInfo.url}`, error);
@@ -349,8 +351,8 @@ export class RealApiValidator {
         const response = await this.makeApiCall(endpointInfo);
         const responseTime = Date.now() - requestStart;
         results.push(responseTime);
-      } catch (error) {
-        errors.push(error instanceof Error ? error.message : String(error));
+      } catch (error: unknown) {
+        errors.push(error instanceof Error ? error instanceof Error ? error.message : 'Unknown error' : String(error));
       }
     };
 
@@ -406,7 +408,7 @@ export class RealApiValidator {
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       try {
         return await this.makeApiCall(endpointInfo);
-      } catch (error) {
+      } catch (error: unknown) {
         retryCount = attempt;
 
         if (attempt === maxRetries) {
@@ -489,7 +491,7 @@ export class RealApiValidator {
       try {
         const responseData = await response.json();
         result.validationDetails.schemaValidation = this.validateResponseSchema(responseData, endpointInfo.expectedSchema);
-      } catch (error) {
+      } catch (error: unknown) {
         result.validationDetails.schemaValidation = false;
       }
     } else {
@@ -508,7 +510,7 @@ export class RealApiValidator {
         }
       }
       return true;
-    } catch (error) {
+    } catch (error: unknown) {
       return false;
     }
   }

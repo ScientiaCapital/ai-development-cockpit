@@ -487,6 +487,23 @@ export class NetworkSimulator {
   }
 
   /**
+   * Simulate a specific network condition
+   */
+  async simulateCondition(conditionName: string, duration: number = 30000): Promise<void> {
+    const originalCondition = this.currentCondition;
+
+    try {
+      this.setNetworkCondition(conditionName);
+      await new Promise(resolve => setTimeout(resolve, duration));
+    } finally {
+      // Restore original condition
+      this.currentCondition = originalCondition;
+      this.scenarioStartTime = Date.now();
+      this.selectInitialScenario();
+    }
+  }
+
+  /**
    * Export simulation data for analysis
    */
   exportSimulationData(): {

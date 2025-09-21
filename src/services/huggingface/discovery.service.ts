@@ -79,19 +79,11 @@ export class HuggingFaceDiscoveryService {
         offset = 0
       } = params;
 
-      // Build search filter
-      const filter = {
-        task: task === 'all' ? undefined : task,
-        library: library === 'all' ? undefined : library,
-        sort,
-        limit,
-        offset
-      };
-
       // Search models via HuggingFace API
+      // Note: HuggingFace Hub API doesn't support complex filtering in listModels
+      // We'll filter results after fetching
       const modelIterator = listModels({
-        search,
-        filter,
+        search: search ? { owner: search } : undefined,
         accessToken: this.accessToken
       });
 
@@ -133,34 +125,34 @@ export class HuggingFaceDiscoveryService {
     try {
       // Fetch model info from HuggingFace
       const model = await modelInfo({
-        repo: modelId,
+        name: modelId,
         accessToken: this.accessToken
       });
       const modelCard = await this.fetchModelCard(modelId);
 
       // Parse model information
-      const modelInfo: ModelInfo = {
-        id: model.name,
-        name: this.formatModelName(model.name),
-        author: model.name.split('/')[0] || 'Unknown',
-        description: model.description || 'No description available',
-        task: this.normalizeTask(model.pipeline_tag || 'text-generation'),
-        library: this.detectLibrary(model.tags || []),
-        tags: model.tags || [],
-        downloads: model.downloads || 0,
-        likes: model.likes || 0,
-        lastModified: model.lastModified || new Date().toISOString(),
-        modelSize: this.estimateModelSize(model.name, modelCard),
-        parameterCount: this.extractParameterCount(model.name, modelCard),
-        license: model.cardData?.license || 'Unknown',
-        requirements: this.calculateRequirements(model.name, modelCard),
-        cost: this.calculateCost(model.name, modelCard),
-        deployment: this.getDeploymentInfo(model.name, modelCard)
+      const parsedModelInfo: ModelInfo = {
+        id: model.name || modelId,
+        name: this.formatModelName(model.name || modelId),
+        author: (model.name || modelId).split('/')[0] || 'Unknown',
+        description: (model as any).description || 'No description available',
+        task: this.normalizeTask((model as any).pipeline_tag || 'text-generation'),
+        library: this.detectLibrary((model as any).tags || []),
+        tags: (model as any).tags || [],
+        downloads: (model as any).downloads || 0,
+        likes: (model as any).likes || 0,
+        lastModified: (model as any).lastModified || new Date().toISOString(),
+        modelSize: this.estimateModelSize(model.name || modelId, modelCard),
+        parameterCount: this.extractParameterCount(model.name || modelId, modelCard),
+        license: (model as any).cardData?.license || 'Unknown',
+        requirements: this.calculateRequirements(model.name || modelId, modelCard),
+        cost: this.calculateCost(model.name || modelId, modelCard),
+        deployment: this.getDeploymentInfo(model.name || modelId, modelCard)
       };
 
       // Cache the result
-      this.setCache(modelId, modelInfo);
-      return modelInfo;
+      this.setCache(modelId, parsedModelInfo);
+      return parsedModelInfo;
 
     } catch (error) {
       console.error(`Failed to get model info for ${modelId}:`, error);
@@ -228,7 +220,7 @@ export class HuggingFaceDiscoveryService {
    * Normalize task names
    */
   private normalizeTask(task: string): string {
-    const taskMapping = {
+    const taskMapping: Record<string, string> = {
       'text-generation': 'text-generation',
       'conversational': 'text-generation',
       'text2text-generation': 'text-generation',
@@ -282,7 +274,7 @@ export class HuggingFaceDiscoveryService {
     const paramCount = this.extractParameterCount(modelName, modelCard);
 
     // Rough estimation: parameters * 2 bytes (FP16) + overhead
-    const sizeMap = {
+    const sizeMap: Record<string, number> = {
       '1B': 2.5,
       '3B': 7,
       '7B': 15,
@@ -355,7 +347,7 @@ export class HuggingFaceDiscoveryService {
       framework = 'sglang'; // Better for structured generation
     }
 
-    const templateMap = {
+    const templateMap: Record<string, string> = {
       '1B': 'vllm-7b',
       '3B': 'vllm-7b',
       '7B': framework === 'sglang' ? 'sglang-7b' : 'vllm-7b',

@@ -5,7 +5,6 @@ import { Session } from '@supabase/supabase-js'
 import { useAuth } from './useAuth'
 import {
   getCurrentSession,
-  refreshSession,
   signOutCurrentSession,
   signOutAllSessions,
   isSessionValid,
@@ -15,6 +14,7 @@ import {
   logSessionActivity,
   getStoredSessionActivities,
   getSessionSecurityScore,
+  sessionManager,
   type SessionInfo,
   type SessionActivity
 } from '../lib/session'
@@ -70,10 +70,16 @@ export function useSessionManager(): UseSessionManagerReturn {
     }
 
     try {
-      const { sessionInfo: info } = await getCurrentSession()
-      setSessionInfo(info)
+      const { sessionInfo: currentSessionInfo, error } = await getCurrentSession()
 
-      // Load activities
+      if (error) {
+        console.error('Failed to get session info:', error)
+        return
+      }
+
+      setSessionInfo(currentSessionInfo)
+
+      // Reload activities
       const storedActivities = getStoredSessionActivities()
       setActivities(storedActivities)
     } catch (error) {
@@ -81,63 +87,131 @@ export function useSessionManager(): UseSessionManagerReturn {
     }
   }, [session])
 
+  // Get security analysis
+  const getSecurityAnalysis = useCallback(() => {
+    if (!sessionInfo) {
+      return {
+        score: 0,
+        factors: []
+      }
+    }
+
+    return getSessionSecurityScore(sessionInfo)
+  }, [sessionInfo])
+
   // Refresh current session
   const refreshCurrentSession = useCallback(async () => {
-    if (isRefreshing) return
+    if (!session) return
 
     setIsRefreshing(true)
     try {
-      const { session: newSession, error } = await refreshSession()
-      if (error) {
-        console.error('Failed to refresh session:', error)
-      } else if (newSession) {
+      const { success, session: newSession, error } = await sessionManager.refreshSession()
+
+      if (success && newSession) {
+        // Session info will be updated through the loadSessionInfo effect
         await loadSessionInfo()
+
+        // Log activity if we have sessionInfo
+        if (sessionInfo?.id) {
+          await logSessionActivity(sessionInfo.id, 'refresh', {
+            timestamp: new Date().toISOString(),
+            success: true
+          })
+        }
+      } else {
+        console.error('Failed to refresh session:', error)
+        // Log failed refresh attempt
+        if (sessionInfo?.id) {
+          await logSessionActivity(sessionInfo.id, 'error', {
+            type: 'refresh_failed',
+            error: error?.message || 'Unknown error',
+            timestamp: new Date().toISOString()
+          })
+        }
       }
     } catch (error) {
       console.error('Session refresh error:', error)
+      // Log error
+      if (sessionInfo?.id) {
+        await logSessionActivity(sessionInfo.id, 'error', {
+          type: 'refresh_exception',
+          error: error instanceof Error ? error.message : 'Unknown error',
+          timestamp: new Date().toISOString()
+        })
+      }
     } finally {
       setIsRefreshing(false)
     }
-  }, [isRefreshing, loadSessionInfo])
+  }, [session, sessionInfo, loadSessionInfo])
 
   // Sign out current session
   const signOutCurrent = useCallback(async () => {
-    if (isSigningOut) return
+    if (!session) return
 
     setIsSigningOut(true)
     try {
+      // Log logout activity before signing out
+      if (sessionInfo?.id) {
+        await logSessionActivity(sessionInfo.id, 'logout', {
+          timestamp: new Date().toISOString(),
+          type: 'current_session'
+        })
+      }
+
       const { error } = await signOutCurrentSession()
+
       if (error) {
-        console.error('Failed to sign out:', error)
+        console.error('Failed to sign out current session:', error)
+      } else {
+        // Clear local state
+        setSessionInfo(null)
+        setActivities([])
+        setShowTimeoutWarning(false)
+        setWarningDismissed(false)
       }
     } catch (error) {
       console.error('Sign out error:', error)
     } finally {
       setIsSigningOut(false)
     }
-  }, [isSigningOut])
+  }, [session, sessionInfo])
 
   // Sign out all sessions
   const signOutAll = useCallback(async () => {
-    if (isSigningOut) return
+    if (!session) return
 
     setIsSigningOut(true)
     try {
+      // Log logout activity before signing out
+      if (sessionInfo?.id) {
+        await logSessionActivity(sessionInfo.id, 'logout', {
+          timestamp: new Date().toISOString(),
+          type: 'all_sessions'
+        })
+      }
+
       const { error } = await signOutAllSessions()
+
       if (error) {
         console.error('Failed to sign out all sessions:', error)
+      } else {
+        // Clear local state
+        setSessionInfo(null)
+        setActivities([])
+        setShowTimeoutWarning(false)
+        setWarningDismissed(false)
       }
     } catch (error) {
       console.error('Sign out all error:', error)
     } finally {
       setIsSigningOut(false)
     }
-  }, [isSigningOut])
+  }, [session, sessionInfo])
 
-  // Extend session by refreshing
+  // Extend session (refresh and reset warning)
   const extendSession = useCallback(async () => {
     await refreshCurrentSession()
-    setWarningDismissed(true)
+    setWarningDismissed(false)
     setShowTimeoutWarning(false)
   }, [refreshCurrentSession])
 
@@ -152,29 +226,20 @@ export function useSessionManager(): UseSessionManagerReturn {
     type: SessionActivity['activity_type'],
     details?: Record<string, any>
   ) => {
-    if (!sessionInfo) return
+    if (!sessionInfo?.id) {
+      console.warn('Cannot log activity: session ID is undefined')
+      return
+    }
 
     try {
       await logSessionActivity(sessionInfo.id, type, details)
 
-      // Reload activities
+      // Reload activities to include the new one
       const storedActivities = getStoredSessionActivities()
       setActivities(storedActivities)
     } catch (error) {
       console.error('Failed to log activity:', error)
     }
-  }, [sessionInfo])
-
-  // Get security analysis
-  const getSecurityAnalysis = useCallback(() => {
-    if (!sessionInfo) {
-      return {
-        score: 0,
-        factors: []
-      }
-    }
-
-    return getSessionSecurityScore(sessionInfo)
   }, [sessionInfo])
 
   // Set up automatic session refresh

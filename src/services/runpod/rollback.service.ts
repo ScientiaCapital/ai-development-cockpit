@@ -15,7 +15,7 @@ export interface DeploymentSnapshot {
   configuration: DeploymentConfiguration;
   containerImageHash: string;
   envVarsHash: string;
-  healthStatus: 'healthy' | 'warning' | 'critical';
+  healthStatus: 'healthy' | 'warning' | 'critical' | 'unknown';
   performance: {
     avgResponseTime: number;
     requestsPerSecond: number;
@@ -123,24 +123,39 @@ export class DeploymentRollbackService extends EventEmitter {
       const metrics = await this.client.getEndpointMetrics(deploymentId);
 
       // Get health status from monitoring service
-      const monitoring = this.monitoring.getEndpointStatus(deploymentId);
+      const monitoring = this.monitoring.getEndpointMonitoring(deploymentId);
 
       const snapshot: DeploymentSnapshot = {
         id: `snap_${deploymentId}_${Date.now()}`,
         deploymentId,
         timestamp: new Date(),
         configuration: {
-          templateId: endpoint.template.id,
-          gpuType: endpoint.gpu_type,
-          gpuCount: endpoint.gpu_count || 1,
-          scalerSettings: endpoint.scaler_settings,
-          containerImage: endpoint.template.container?.image || '',
-          envVars: endpoint.template.env || {},
-          networkSettings: endpoint.network_settings
+          templateId: endpoint.template?.id || '',
+          gpuType: endpoint.gpuType,
+          gpuCount: endpoint.gpuCount || 1,
+          memoryGB: endpoint.containerDiskSizeGB || 8,
+          scaling: {
+            minReplicas: endpoint.workersMin || 0,
+            maxReplicas: endpoint.workersMax || 1,
+            autoScale: true,
+            targetUtilization: 70
+          },
+          ports: [8080],
+          healthCheck: {
+            path: '/health',
+            interval: 30,
+            timeout: 10,
+            retries: 3,
+            initialDelay: 30
+          },
+          scalerSettings: endpoint.scalerSettings,
+          containerImage: endpoint.template?.container?.image || '',
+          envVars: endpoint.template?.env || {},
+          networkSettings: endpoint.networkSettings
         },
-        containerImageHash: await this.getImageHash(endpoint.template.container?.image || ''),
-        envVarsHash: this.hashObject(endpoint.template.env || {}),
-        healthStatus: monitoring?.health || 'warning',
+        containerImageHash: await this.getImageHash(endpoint.template?.container?.image || ''),
+        envVarsHash: this.hashObject(endpoint.template?.env || {}),
+        healthStatus: monitoring?.healthStatus || 'warning',
         performance: {
           avgResponseTime: metrics.performance?.avgResponseTime || 0,
           requestsPerSecond: metrics.performance?.requestsPerSecond || 0,
@@ -163,7 +178,7 @@ export class DeploymentRollbackService extends EventEmitter {
 
       return snapshot;
     } catch (error) {
-      this.emit('snapshotError', { deploymentId, error: error.message });
+      this.emit('snapshotError', { deploymentId, error: error instanceof Error ? error.message : 'Unknown error' });
       throw error;
     }
   }
@@ -283,9 +298,9 @@ export class DeploymentRollbackService extends EventEmitter {
     } catch (error) {
       execution.status = 'failed';
       execution.endTime = new Date();
-      this.addLog(execution, 'error', undefined, `Rollback failed: ${error.message}`);
+      this.addLog(execution, 'error', undefined, `Rollback failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
 
-      this.emit('rollbackFailed', { executionId, execution, error: error.message });
+      this.emit('rollbackFailed', { executionId, execution, error: error instanceof Error ? error.message : 'Unknown error' });
       throw error;
     }
 
@@ -457,16 +472,16 @@ export class DeploymentRollbackService extends EventEmitter {
     plan: RollbackPlan
   ): Promise<PreRollbackCheck> {
     const targetSnapshot = this.getSnapshot(plan.targetSnapshotId)!;
-    const result = { ...check, status: 'running' as const };
+    const result = { ...check, status: 'running' as 'pending' | 'running' | 'passed' | 'failed' | 'warning' };
 
     try {
       switch (check.type) {
         case 'health':
-          const health = this.monitoring.getEndpointStatus(targetSnapshot.deploymentId);
-          result.status = health?.health === 'healthy' ? 'passed' : 'warning';
+          const health = this.monitoring.getEndpointMonitoring(targetSnapshot.deploymentId);
+          result.status = health?.healthStatus === 'healthy' ? 'passed' : 'warning';
           result.result = {
-            success: health?.health === 'healthy',
-            message: `Current health status: ${health?.health || 'unknown'}`
+            success: health?.healthStatus === 'healthy',
+            message: `Current health status: ${health?.healthStatus || 'unknown'}`
           };
           break;
 
@@ -502,7 +517,7 @@ export class DeploymentRollbackService extends EventEmitter {
       result.status = 'failed';
       result.result = {
         success: false,
-        message: `Check failed: ${error.message}`
+        message: `Check failed: ${error instanceof Error ? error.message : 'Unknown error'}`
       };
     }
 
@@ -550,14 +565,14 @@ export class DeploymentRollbackService extends EventEmitter {
         step.status = 'failed';
         step.result = {
           success: false,
-          error: error.message,
+          error: error instanceof Error ? error.message : 'Unknown error',
           duration: Date.now() - startTime
         };
 
-        this.addLog(execution, 'error', step.id, `Failed step: ${step.name} - ${error.message}`);
-        this.emit('rollbackStepFailed', { executionId: execution.id, step, error: error.message });
+        this.addLog(execution, 'error', step.id, `Failed step: ${step.name} - ${error instanceof Error ? error.message : 'Unknown error'}`);
+        this.emit('rollbackStepFailed', { executionId: execution.id, step, error: error instanceof Error ? error.message : 'Unknown error' });
 
-        throw new Error(`Rollback failed at step ${step.name}: ${error.message}`);
+        throw new Error(`Rollback failed at step ${step.name}: ${error instanceof Error ? error.message : 'Unknown error'}`);
       }
     }
   }
@@ -619,7 +634,8 @@ export class DeploymentRollbackService extends EventEmitter {
     config: DeploymentConfiguration
   ): Promise<void> {
     await this.client.updateEndpoint(deploymentId, {
-      template_id: config.templateId
+      // EndpointConfig doesn't have templateId, update what we can
+      image: config.containerImage
     });
   }
 
@@ -628,8 +644,8 @@ export class DeploymentRollbackService extends EventEmitter {
     config: DeploymentConfiguration
   ): Promise<void> {
     await this.client.updateEndpoint(deploymentId, {
-      gpu_type: config.gpuType,
-      gpu_count: config.gpuCount
+      gpuType: config.gpuType,
+      gpuCount: config.gpuCount
     });
   }
 
@@ -647,9 +663,7 @@ export class DeploymentRollbackService extends EventEmitter {
     config: DeploymentConfiguration
   ): Promise<void> {
     await this.client.updateEndpoint(deploymentId, {
-      container: {
-        image: config.containerImage
-      }
+      image: config.containerImage
     });
   }
 

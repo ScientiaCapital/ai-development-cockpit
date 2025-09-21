@@ -61,7 +61,7 @@ test.describe('Latency Monitoring - Response Time Validation', () => {
 
     try {
       result = await fn();
-    } catch (error) {
+    } catch (error: unknown) {
       success = false;
       throw error;
     } finally {
@@ -229,11 +229,11 @@ test.describe('Latency Monitoring - Response Time Validation', () => {
       });
 
       // Measure deployment creation initiation
-      let deploymentId: string;
+      let deploymentId: string = '';
       await measureLatency('deployment_creation_request', async () => {
-        deploymentId = await deploymentPage.createDeployment();
+        await deploymentPage.createDeployment();
         await deploymentPage.expectDeploymentCreating();
-        return deploymentId;
+        deploymentId = await deploymentPage.getDeploymentId();
       });
 
       // Measure time to deployment ready
@@ -251,7 +251,7 @@ test.describe('Latency Monitoring - Response Time Validation', () => {
       expect(readyLatency?.duration).toBeLessThan(25000); // Under 25 seconds
 
       // Cleanup
-      await deploymentPage.stopDeployment();
+      await deploymentPage.stopDeployment(deploymentId);
     });
 
     test('should monitor deployment metrics quickly', async ({ page }) => {
@@ -295,7 +295,7 @@ test.describe('Latency Monitoring - Response Time Validation', () => {
 
       // Measure stop deployment
       await measureLatency('deployment_stop', async () => {
-        await deploymentPage.stopDeployment();
+        await deploymentPage.stopDeployment(testDeploymentId);
       });
 
       // Measure restart deployment
@@ -326,13 +326,13 @@ test.describe('Latency Monitoring - Response Time Validation', () => {
 
       // Measure rollback plan creation
       await measureLatency('rollback_plan_creation', async () => {
-        await deploymentPage.createRollbackPlan('snap_001', 'snap_002');
+        await deploymentPage.createRollbackPlan();
         await deploymentPage.expectRollbackPlan();
       });
 
       // Measure rollback execution (critical SLA)
       await measureLatency('rollback_execution', async () => {
-        await deploymentPage.executeRollback('plan_001');
+        await deploymentPage.executeRollback();
         await deploymentPage.waitForRollbackComplete();
       });
 

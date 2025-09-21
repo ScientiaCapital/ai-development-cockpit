@@ -28,29 +28,30 @@ export {
 export {
   swaggyStacksModels,
   scientiaCapitalModels,
-  getModelTemplate,
   getModelsByOrganization,
-  getModelsByPerformanceCategory,
-  estimateModelCost,
-  findOptimalGpuForModel,
-  type ModelTemplate,
-  type PerformanceCharacteristics,
-  type CostEstimation
+  getModelsByCategory,
+  getModelsByComplexity,
+  getModelsByPricingTier,
+  getModelsByTag,
+  getRandomModel,
+  getEstimatedCost,
+  validateModelCapabilities,
+  type ModelTemplate
 } from './model-templates';
 
-// Deployment Validation
-export {
-  DeploymentValidator,
-  GamingValidationStrategy,
-  EnterpriseValidationStrategy,
-  createValidationContext,
-  type ValidationResult,
-  type ValidationContext,
-  type OrganizationPolicy,
-  type ResourceConstraints,
-  type ComplianceRequirement,
-  type DeploymentValidationStrategy
-} from './DeploymentValidator';
+// Deployment Validation - TODO: Implement deployment validators
+// export {
+//   DeploymentValidator,
+//   GamingValidationStrategy,
+//   EnterpriseValidationStrategy,
+//   createValidationContext,
+//   type ValidationResult,
+//   type ValidationContext,
+//   type OrganizationPolicy,
+//   type ResourceConstraints,
+//   type ComplianceRequirement,
+//   type DeploymentValidationStrategy
+// } from './DeploymentValidator';
 
 // Test Pipeline Orchestration
 export {
@@ -83,7 +84,6 @@ export function createTestEnvironment(
 ) {
   const mockEnvironment = new MockRunPodEnvironment();
   const networkSimulator = createNetworkSimulatorForScenario(organization, environment);
-  const validationContext = createValidationContext(environment, organization);
 
   // Configure mock environment based on organization
   if (organization === 'swaggystacks') {
@@ -95,7 +95,6 @@ export function createTestEnvironment(
   return {
     mockEnvironment,
     networkSimulator,
-    validationContext,
     scenarios: organization === 'swaggystacks' ? swaggyStacksScenarios : scientiaCapitalScenarios,
     models: organization === 'swaggystacks' ? swaggyStacksModels : scientiaCapitalModels
   };

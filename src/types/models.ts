@@ -85,6 +85,7 @@ export interface DiscoveryFilters {
   task?: string
   modelSize?: string
   sortBy?: string
+  limit?: number  // Add missing limit property for pagination
 }
 
 export interface SearchOptions {
@@ -109,22 +110,20 @@ export interface DiscoveryResults {
   cacheHit?: boolean
 }
 
-export interface OrganizationStats {
-  [key in Organization]: {
-    totalModels: number
-    averageRating: number
-    totalDownloads: number
-    featuredModels: string[]
-    categories: {
-      [category: string]: number
-    }
-    costDistribution: {
-      free: number
-      pro: number
-      enterprise: number
-    }
+export type OrganizationStats = Record<Organization, {
+  totalModels: number
+  averageRating: number
+  totalDownloads: number
+  featuredModels: string[]
+  categories: {
+    [category: string]: number
   }
-}
+  costDistribution: {
+    free: number
+    pro: number
+    enterprise: number
+  }
+}>
 
 export interface ModelDeploymentConfig {
   modelId: string

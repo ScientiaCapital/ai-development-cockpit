@@ -19,7 +19,7 @@ export interface UserOrganization {
   organization: Tables<'organizations'>
   organization_id?: string
   user_id?: string
-  role: 'admin' | 'developer' | 'viewer'
+  role: 'owner' | 'admin' | 'developer' | 'viewer'
   created_at: string
   updated_at: string
 }

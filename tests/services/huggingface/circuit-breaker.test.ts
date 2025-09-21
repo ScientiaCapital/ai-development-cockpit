@@ -93,7 +93,7 @@ describe('HuggingFaceCircuitBreaker', () => {
       for (let i = 0; i < 3; i++) {
         try {
           await circuitBreaker.execute('threshold-breaker');
-        } catch (error) {
+        } catch (error: unknown) {
           // Expected failures
         }
       }
@@ -129,7 +129,7 @@ describe('HuggingFaceCircuitBreaker', () => {
       for (let i = 0; i < 3; i++) {
         try {
           await circuitBreaker.execute('reset-breaker');
-        } catch (error) {
+        } catch (error: unknown) {
           // Expected failures
         }
       }
@@ -244,7 +244,7 @@ describe('HuggingFaceCircuitBreaker', () => {
       for (let i = 0; i < 2; i++) {
         try {
           await circuitBreaker.execute('fallback-breaker');
-        } catch (error) {
+        } catch (error: unknown) {
           // Expected failures
         }
       }

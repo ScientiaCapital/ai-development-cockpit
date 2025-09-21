@@ -48,8 +48,24 @@ export interface EndpointResponse {
   workersIdle: number;
   workersBusy: number;
   gpuType: string;
+  gpuCount?: number;
   containerDiskSizeGB: number;
   lastActivity?: string;
+  template?: {
+    id: string;
+    container?: {
+      image: string;
+    };
+    env?: Record<string, string>;
+  };
+  scalerSettings?: {
+    min: number;
+    max: number;
+  };
+  networkSettings?: {
+    ports?: number[];
+    allowedPorts?: number[];
+  };
 }
 
 export interface EndpointMetrics {
@@ -62,6 +78,12 @@ export interface EndpointMetrics {
   diskUsage: number;
   uptime: number;
   lastUpdated: string;
+  performance?: {
+    avgResponseTime: number;
+    requestsPerSecond: number;
+    errorRate: number;
+    uptime: number;
+  };
 }
 
 export interface DeploymentEvent {
@@ -273,7 +295,7 @@ export class RunPodClient extends EventEmitter {
         this.emit('endpoint_error', {
           type: 'error',
           endpointId,
-          data: { error: error.message },
+          data: { error: error instanceof Error ? error.message : String(error) },
           timestamp: new Date().toISOString()
         } as DeploymentEvent);
       }
@@ -483,7 +505,7 @@ export class RunPodClient extends EventEmitter {
         healthy: false,
         responseTime: Date.now() - startTime,
         status: 'Error',
-        error: error.message
+        error: error instanceof Error ? error.message : String(error)
       };
     }
   }
@@ -555,7 +577,7 @@ export class RunPodClient extends EventEmitter {
         return this.makeRequest(method, path, body, attempt + 1);
       }
 
-      throw new RunPodAPIError(`Network error: ${error.message}`);
+      throw new RunPodAPIError(`Network error: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 

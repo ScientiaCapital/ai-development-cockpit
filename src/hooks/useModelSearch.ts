@@ -323,6 +323,7 @@ export function useModelSearch(options: UseModelSearchOptions = {}): UseModelSea
     totalCount,
     currentPage,
     hasNextPage,
+    hasMore: hasNextPage, // Add missing hasMore property for backward compatibility
     searchTime,
     cacheHit,
 
@@ -367,6 +368,26 @@ export interface ModelData {
   deploymentUrl?: string
   createdAt: string
   updatedAt: string
+}
+
+// Mapper function to convert ModelMetadata to ModelData
+export function mapModelMetadataToModelData(metadata: ModelMetadata): ModelData {
+  return {
+    id: metadata.id,
+    name: metadata.name,
+    author: metadata.author,
+    organization: metadata.organization as string, // Convert Organization type to string
+    modelType: metadata.modelType,
+    description: metadata.description,
+    tags: metadata.tags,
+    downloads: metadata.downloads,
+    likes: metadata.likes,
+    status: metadata.status?.available ? 'active' : 'inactive', // Map from ModelStatus to simplified status
+    estimatedCost: `$${metadata.pricing.costPerHour.toFixed(2)}/hr`,
+    deploymentUrl: metadata.deployment.endpoint,
+    createdAt: metadata.createdAt,
+    updatedAt: metadata.updatedAt
+  }
 }
 
 export function useModelOperations() {

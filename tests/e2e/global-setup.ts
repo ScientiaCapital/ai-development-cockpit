@@ -6,6 +6,8 @@
 import { chromium, FullConfig } from '@playwright/test';
 import path from 'path';
 import fs from 'fs';
+// Import custom Playwright matchers
+import '../playwright-setup';
 
 async function globalSetup(config: FullConfig) {
   console.log('🚀 Starting AI Development Cockpit E2E test setup...');
@@ -42,7 +44,7 @@ async function setupTestDatabase() {
 
     // For now, we'll just ensure clean state
     console.log('✅ Test database ready');
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('❌ Failed to setup test database:', error);
     throw error;
   }
@@ -79,8 +81,8 @@ async function setupAuthentication() {
     await context.storageState({ path: 'playwright/.auth/user.json' });
     console.log('✅ Authentication state saved');
 
-  } catch (error) {
-    console.warn('⚠️  Authentication setup failed, continuing with unauthenticated tests:', error.message);
+  } catch (error: unknown) {
+    console.warn('⚠️  Authentication setup failed, continuing with unauthenticated tests:', error instanceof Error ? error.message : 'Unknown error');
 
     // Create empty auth state for unauthenticated tests
     await context.storageState({ path: 'playwright/.auth/user.json' });
@@ -110,17 +112,15 @@ async function verifyServices() {
 
   for (const service of services) {
     try {
-      const response = await fetch(`${service.url}${service.path}`, {
-        timeout: 5000
-      });
+      const response = await fetch(`${service.url}${service.path}`);
 
       if (response.ok) {
         console.log(`✅ ${service.name} is running`);
       } else {
         console.warn(`⚠️  ${service.name} returned status ${response.status}`);
       }
-    } catch (error) {
-      console.warn(`⚠️  ${service.name} check failed:`, error.message);
+    } catch (error: unknown) {
+      console.warn(`⚠️  ${service.name} check failed:`, error instanceof Error ? error.message : 'Unknown error');
     }
   }
 }

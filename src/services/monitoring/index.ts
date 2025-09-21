@@ -5,7 +5,7 @@
  */
 
 import { prometheusService } from './prometheus.service';
-import { loggingService } from './logging.service';
+import { loggingService, LogLevel } from './logging.service';
 import { tracingService } from './tracing.service';
 import { monitoringIntegration } from './integration.service';
 
@@ -61,7 +61,7 @@ export class MonitoringInitializer {
       });
 
       // Step 1: Configure logging level
-      loggingService.setLogLevel(this.config.logLevel);
+      loggingService.setLogLevel(this.config.logLevel as LogLevel);
       loggingService.info('Logging service configured', {
         level: this.config.logLevel,
       });
@@ -214,7 +214,7 @@ export class MonitoringInitializer {
 
     // Apply updates that can be changed at runtime
     if (updates.logLevel && updates.logLevel !== oldConfig.logLevel) {
-      loggingService.setLogLevel(updates.logLevel);
+      loggingService.setLogLevel(updates.logLevel as LogLevel);
       loggingService.info('Log level updated', {
         from: oldConfig.logLevel,
         to: updates.logLevel,
@@ -264,7 +264,7 @@ export class MonitoringInitializer {
     // Handle unhandled promise rejections
     process.on('unhandledRejection', (reason, promise) => {
       loggingService.error('Unhandled promise rejection', {
-        reason: reason instanceof Error ? reason.message : String(reason),
+        error: reason instanceof Error ? reason : new Error(String(reason)),
         stack: reason instanceof Error ? reason.stack : undefined,
         promise: String(promise),
       });

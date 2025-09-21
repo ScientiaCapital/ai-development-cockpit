@@ -13,19 +13,19 @@ export function createLazyComponent<T extends ComponentType<any>>(
   fallbackComponent?: React.ComponentType<LazyComponentProps>
 ) {
   const LazyComponent = lazy(importFunc)
-  
-  const WrappedComponent = (props: Parameters<T>[0]) => {
+
+  const WrappedComponent = (props: React.ComponentProps<T>) => {
     const Fallback = fallbackComponent || DefaultLazyFallback
-    
+
     return (
       <Suspense fallback={<Fallback />}>
         <LazyComponent {...props} />
       </Suspense>
     )
   }
-  
+
   // Preserve display name for debugging
-  WrappedComponent.displayName = `Lazy(${LazyComponent.displayName || LazyComponent.name || 'Component'})`
+  WrappedComponent.displayName = `Lazy(${(LazyComponent as any).displayName || 'Component'})`
   
   return WrappedComponent
 }
@@ -123,7 +123,7 @@ export function createIntersectionLazyComponent<T extends ComponentType<any>>(
   importFunc: () => Promise<{ default: T }>,
   options: IntersectionObserverInit = { threshold: 0.1 }
 ) {
-  return (props: Parameters<T>[0]) => {
+  return (props: React.ComponentProps<T>) => {
     const [shouldLoad, setShouldLoad] = useState(false)
     const ref = useRef<HTMLDivElement>(null)
     

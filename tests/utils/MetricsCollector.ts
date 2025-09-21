@@ -173,21 +173,21 @@ export interface MetricsCollectionConfig {
  * Comprehensive metrics collection system
  */
 export class MetricsCollector {
-  private page: Page;
+  private page?: Page;
   private config: MetricsCollectionConfig;
-  private metrics: TestMetrics;
+  private metrics?: TestMetrics;
   private isCollecting: boolean = false;
   private collectionInterval: NodeJS.Timeout | null = null;
   private requestTimings = new WeakMap<any, number>();
   private performanceObserver: PerformanceObserver | null = null;
 
   constructor(
-    page: Page,
-    testId: string,
-    testName: string,
-    organization: 'swaggystacks' | 'scientia',
-    environment: 'development' | 'staging' | 'production' = 'development',
-    config: Partial<MetricsCollectionConfig> = {}
+    config: Partial<MetricsCollectionConfig> = {},
+    page?: Page,
+    testId?: string,
+    testName?: string,
+    organization?: 'swaggystacks' | 'scientia',
+    environment: 'development' | 'staging' | 'production' = 'development'
   ) {
     this.page = page;
     this.config = {
@@ -203,6 +203,56 @@ export class MetricsCollector {
       ...config
     };
 
+    if (testId && testName && organization) {
+      this.metrics = {
+        testId,
+        testName,
+        organization,
+        environment,
+        startTime: performance.now(),
+        status: 'running',
+        performance: this.initializePerformanceMetrics(),
+        resources: this.initializeResourceMetrics(),
+        network: this.initializeNetworkMetrics(),
+        errors: [],
+        warnings: [],
+        customMetrics: {}
+      };
+    }
+  }
+  /**
+   * Initialize metrics if not already initialized
+   */
+  private ensureMetricsInitialized(): void {
+    if (!this.metrics) {
+      this.metrics = {
+        testId: `test-${Date.now()}`,
+        testName: 'Unknown Test',
+        organization: 'swaggystacks',
+        environment: 'development',
+        startTime: performance.now(),
+        status: 'running',
+        performance: this.initializePerformanceMetrics(),
+        resources: this.initializeResourceMetrics(),
+        network: this.initializeNetworkMetrics(),
+        errors: [],
+        warnings: [],
+        customMetrics: {}
+      };
+    }
+  }
+
+  /**
+   * Initialize metrics collection for a specific test
+   */
+  initializeForTest(
+    page: Page,
+    testId: string,
+    testName: string,
+    organization: 'swaggystacks' | 'scientia',
+    environment: 'development' | 'staging' | 'production' = 'development'
+  ): void {
+    this.page = page;
     this.metrics = {
       testId,
       testName,
@@ -223,7 +273,10 @@ export class MetricsCollector {
    * Start collecting metrics
    */
   async startCollection(): Promise<void> {
-    if (this.isCollecting) return;
+    if (this.isCollecting || !this.page) return;
+    
+    this.ensureMetricsInitialized();
+    if (!this.metrics) return;
 
     this.isCollecting = true;
     this.metrics.startTime = performance.now();
@@ -255,8 +308,9 @@ export class MetricsCollector {
   /**
    * Stop collecting metrics
    */
-  async stopCollection(): Promise<TestMetrics> {
-    if (!this.isCollecting) return this.metrics;
+  async stopCollection(): Promise<TestMetrics | null> {
+    if (!this.isCollecting) return this.metrics || null;
+    if (!this.metrics) return null;
 
     this.isCollecting = false;
     this.metrics.endTime = performance.now();
@@ -280,14 +334,23 @@ export class MetricsCollector {
   /**
    * Get current metrics snapshot
    */
-  getCurrentMetrics(): TestMetrics {
-    return { ...this.metrics };
+  getCurrentMetrics(): TestMetrics | null {
+    return this.metrics ? { ...this.metrics } : null;
+  }
+
+  /**
+   * Get metrics (alias for getCurrentMetrics)
+   */
+  async getMetrics(): Promise<TestMetrics | null> {
+    return this.getCurrentMetrics();
   }
 
   /**
    * Add custom metric
    */
   addCustomMetric(key: string, value: any, timestamp?: number): void {
+    this.ensureMetricsInitialized();
+    if (!this.metrics) return;
     this.metrics.customMetrics[key] = {
       value,
       timestamp: timestamp || performance.now()
@@ -298,6 +361,8 @@ export class MetricsCollector {
    * Record error
    */
   recordError(error: Omit<ErrorMetric, 'timestamp'>): void {
+    this.ensureMetricsInitialized();
+    if (!this.metrics) return;
     this.metrics.errors.push({
       ...error,
       timestamp: performance.now()
@@ -308,6 +373,8 @@ export class MetricsCollector {
    * Record warning
    */
   recordWarning(warning: Omit<WarningMetric, 'timestamp'>): void {
+    this.ensureMetricsInitialized();
+    if (!this.metrics) return;
     this.metrics.warnings.push({
       ...warning,
       timestamp: performance.now()
@@ -316,17 +383,17 @@ export class MetricsCollector {
 
   private async setupErrorListeners(): Promise<void> {
     // JavaScript errors
-    this.page.on('pageerror', (error) => {
+    this.page?.on('pageerror', (error) => {
       this.recordError({
         type: 'javascript',
-        message: error.message,
+        message: error instanceof Error ? error.message : 'Unknown error',
         stack: error.stack,
         severity: 'high'
       });
     });
 
     // Console errors
-    this.page.on('console', (msg) => {
+    this.page?.on('console', (msg) => {
       if (msg.type() === 'error') {
         this.recordError({
           type: 'console',
@@ -337,7 +404,7 @@ export class MetricsCollector {
     });
 
     // Request failures
-    this.page.on('requestfailed', (request) => {
+    this.page?.on('requestfailed', (request) => {
       this.recordError({
         type: 'network',
         message: `Request failed: ${request.url()}`,
@@ -353,18 +420,18 @@ export class MetricsCollector {
 
   private async setupNetworkMonitoring(): Promise<void> {
     // Monitor all requests
-    this.page.on('request', (request) => {
+    this.page?.on('request', (request) => {
       const timestamp = performance.now();
       this.requestTimings.set(request, timestamp);
     });
 
-    this.page.on('response', async (response) => {
+    this.page?.on('response', async (response) => {
       const request = response.request();
       const startTime = this.requestTimings.get(request) || performance.now();
       const responseTime = performance.now() - startTime;
 
       // Record API response time
-      if (this.isApiRequest(request.url())) {
+      if (this.isApiRequest(request.url()) && this.metrics) {
         this.metrics.performance.apiResponseTimes.push({
           endpoint: request.url(),
           method: request.method(),
@@ -378,7 +445,7 @@ export class MetricsCollector {
       this.updateNetworkMetrics(request.url(), request.method(), responseTime, response.status());
 
       // Check for slow requests
-      if (responseTime > 1000) {
+      if (responseTime > 1000 && this.metrics) {
         this.metrics.network.slowRequests++;
         this.recordWarning({
           type: 'performance',
@@ -392,7 +459,7 @@ export class MetricsCollector {
 
   private async setupPerformanceMonitoring(): Promise<void> {
     // Collect web vitals and performance metrics
-    await this.page.addInitScript(() => {
+    await this.page?.addInitScript(() => {
       // Performance metrics collection script
       window.metricsCollector = {
         performanceEntries: [],
@@ -410,7 +477,7 @@ export class MetricsCollector {
               timeToInteractive: navigation ? navigation.loadEventEnd - navigation.fetchStart : 0,
               pageLoadTime: navigation ? navigation.loadEventEnd - navigation.fetchStart : 0
             };
-          } catch (error) {
+          } catch (error: unknown) {
             console.error('Error collecting vitals:', error);
             return {};
           }
@@ -425,7 +492,7 @@ export class MetricsCollector {
               averageResponseTime: resources.length > 0 ?
                 resources.reduce((sum, r) => sum + r.duration, 0) / resources.length : 0
             };
-          } catch (error) {
+          } catch (error: unknown) {
             console.error('Error collecting resource metrics:', error);
             return {};
           }
@@ -442,7 +509,7 @@ export class MetricsCollector {
               };
             }
             return {};
-          } catch (error) {
+          } catch (error: unknown) {
             console.error('Error collecting memory info:', error);
             return {};
           }
@@ -455,7 +522,9 @@ export class MetricsCollector {
           const lcpObserver = new PerformanceObserver((list) => {
             const entries = list.getEntries();
             const lastEntry = entries[entries.length - 1];
-            window.metricsCollector.vitals.largestContentfulPaint = lastEntry.startTime;
+            if (window.metricsCollector) {
+              window.metricsCollector.vitals.largestContentfulPaint = lastEntry.startTime;
+            }
           });
           lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
 
@@ -468,10 +537,12 @@ export class MetricsCollector {
                 clsValue += (entry as any).value;
               }
             });
-            window.metricsCollector.vitals.cumulativeLayoutShift = clsValue;
+            if (window.metricsCollector) {
+              window.metricsCollector.vitals.cumulativeLayoutShift = clsValue;
+            }
           });
           clsObserver.observe({ entryTypes: ['layout-shift'] });
-        } catch (error) {
+        } catch (error: unknown) {
           console.error('Error setting up performance observers:', error);
         }
       }
@@ -479,6 +550,10 @@ export class MetricsCollector {
   }
 
   private async collectMetrics(): Promise<void> {
+    if (!this.page || !this.isCollecting) return;
+    this.ensureMetricsInitialized();
+    if (!this.metrics) return;
+
     try {
       // Collect performance metrics
       if (this.config.collectPerformance) {
@@ -493,16 +568,19 @@ export class MetricsCollector {
       // Trim data points if exceeding max
       this.trimDataPoints();
 
-    } catch (error) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       this.recordError({
         type: 'javascript',
-        message: `Metrics collection error: ${error.message}`,
+        message: `Metrics collection error: ${errorMessage}`,
         severity: 'low'
       });
     }
   }
 
   private async collectPerformanceMetrics(): Promise<void> {
+    if (!this.page || !this.metrics) return;
+
     try {
       const vitals = await this.page.evaluate(() => {
         return window.metricsCollector?.collectVitals() || {};
@@ -526,12 +604,14 @@ export class MetricsCollector {
         this.metrics.performance.pageLoadTime = vitals.pageLoadTime;
       }
 
-    } catch (error) {
+    } catch (error: unknown) {
       // Silently handle errors to avoid breaking test execution
     }
   }
 
   private async collectResourceMetrics(): Promise<void> {
+    if (!this.page || !this.metrics) return;
+
     try {
       const memoryInfo = await this.page.evaluate(() => {
         return window.metricsCollector?.getMemoryInfo() || {};
@@ -563,7 +643,7 @@ export class MetricsCollector {
         ]
       });
 
-    } catch (error) {
+    } catch (error: unknown) {
       // Silently handle errors
     }
   }
@@ -583,6 +663,7 @@ export class MetricsCollector {
   }
 
   private calculateNetworkAggregates(): void {
+    if (!this.metrics) return;
     const responses = this.metrics.performance.apiResponseTimes;
 
     if (responses.length > 0) {
@@ -594,6 +675,7 @@ export class MetricsCollector {
   }
 
   private calculatePerformanceAggregates(): void {
+    if (!this.metrics) return;
     const renderTimes = this.metrics.performance.renderTimes;
 
     if (renderTimes.length > 0) {
@@ -611,6 +693,7 @@ export class MetricsCollector {
   }
 
   private checkPerformanceWarnings(): void {
+    if (!this.metrics) return;
     // Check for high memory usage
     const memoryUsage = this.metrics.resources.memoryUsage;
     if (memoryUsage.length > 0) {
@@ -648,6 +731,7 @@ export class MetricsCollector {
   }
 
   private updateNetworkMetrics(url: string, method: string, responseTime: number, statusCode: number): void {
+    if (!this.metrics) return;
     const endpoint = this.normalizeEndpoint(url);
 
     if (!this.metrics.network.apiEndpoints.has(endpoint)) {
@@ -663,7 +747,8 @@ export class MetricsCollector {
       });
     }
 
-    const endpointMetrics = this.metrics.network.apiEndpoints.get(endpoint)!;
+    const endpointMetrics = this.metrics.network.apiEndpoints.get(endpoint);
+    if (!endpointMetrics) return;
     endpointMetrics.totalRequests++;
 
     if (statusCode < 400) {
@@ -700,6 +785,8 @@ export class MetricsCollector {
   }
 
   private trimDataPoints(): void {
+    if (!this.metrics) return;
+    
     const maxDataPoints = this.config.maxDataPoints;
 
     // Trim memory usage data
@@ -781,6 +868,7 @@ export class MetricsCollector {
    * Export metrics for analysis or reporting
    */
   exportMetrics(): string {
+    if (!this.metrics) return JSON.stringify({}, null, 2);
     return JSON.stringify({
       ...this.metrics,
       apiEndpoints: Array.from(this.metrics.network.apiEndpoints.entries())
@@ -791,6 +879,8 @@ export class MetricsCollector {
    * Generate performance report
    */
   generateReport(): string {
+    if (!this.metrics) return 'No metrics available';
+    
     const duration = this.metrics.duration || 0;
     const errorCount = this.metrics.errors.length;
     const warningCount = this.metrics.warnings.length;
@@ -826,7 +916,7 @@ export class MetricsCollector {
       errorCount > 0 ? [
         `## Errors (${errorCount})`,
         this.metrics.errors.slice(0, 5).map(error =>
-          `- **${error.type}**: ${error.message}`
+          `- **${error.type}**: ${error instanceof Error ? error.message : 'Unknown error'}`
         ).join('\n'),
         errorCount > 5 ? `- ... and ${errorCount - 5} more errors` : '',
         ``

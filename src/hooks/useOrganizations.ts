@@ -9,6 +9,7 @@ import {
   UpdateOrganizationData
 } from '../lib/organizations'
 import type { Tables } from '../lib/supabase'
+import { Role } from '../lib/rbac'
 
 export interface UseOrganizationsReturn {
   // State
@@ -26,7 +27,7 @@ export interface UseOrganizationsReturn {
 
   // Utilities
   canManageOrganization: (organizationId: string) => boolean
-  getCurrentRole: () => 'owner' | 'admin' | 'developer' | 'viewer' | null
+  getCurrentRole: () => Role | null
   isOwner: boolean
   isAdmin: boolean
 }
@@ -39,7 +40,7 @@ export function useOrganizations(): UseOrganizationsReturn {
 
   // Get current organization from user context
   const currentOrganization = user?.currentOrganization?.organization || null
-  const currentRole = user?.currentOrganization?.role || null
+  const currentRole: Role | null = user?.currentOrganization?.role || null
 
   // Load user organizations
   const loadOrganizations = useCallback(async () => {
@@ -263,7 +264,7 @@ export function useOrganization(organizationId: string | null) {
   }, [loadOrganization])
 
   // Add member to organization
-  const addMember = useCallback(async (userId: string, role: 'owner' | 'admin' | 'developer' | 'viewer') => {
+  const addMember = useCallback(async (userId: string, role: Role) => {
     if (!organizationId) return { success: false, error: 'No organization ID' }
 
     try {
@@ -309,7 +310,7 @@ export function useOrganization(organizationId: string | null) {
   }, [organizationId, loadOrganization])
 
   // Update member role
-  const updateMemberRole = useCallback(async (userId: string, role: 'owner' | 'admin' | 'developer' | 'viewer') => {
+  const updateMemberRole = useCallback(async (userId: string, role: Role) => {
     if (!organizationId) return { success: false, error: 'No organization ID' }
 
     try {

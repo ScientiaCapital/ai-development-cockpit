@@ -625,3 +625,10 @@ export function validateModelCapabilities(modelId: string, requirements: {
 
   return { supported: issues.length === 0, issues };
 }
+
+/**
+ * Get a specific model template by ID and organization
+ */
+export function getModelTemplate(modelId: string, organization: 'swaggystacks' | 'scientia'): ModelTemplate | undefined {
+  return allModels.find(model => model.id === modelId && model.organization === organization);
+}

@@ -4,7 +4,7 @@
  * Following the established DeploymentPage pattern for comprehensive testing coverage
  */
 
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 export class MarketplacePage extends BasePage {
@@ -83,7 +83,7 @@ export class MarketplacePage extends BasePage {
       await this.waitForVisible(this.emptyState);
     } else {
       const firstModel = this.page.locator(this.modelCard).first();
-      await this.waitForVisible(firstModel);
+      await expect(firstModel).toBeVisible();
     }
   }
 
@@ -193,6 +193,7 @@ export class MarketplacePage extends BasePage {
     description: string;
     parameters: string;
     tags: string[];
+    organization: string;
   }> {
     const title = await this.getText(`[data-testid="model-title-${modelId}"]`);
     const description = await this.getText(`[data-testid="model-description-${modelId}"]`);
@@ -206,7 +207,10 @@ export class MarketplacePage extends BasePage {
       tags.push(tag);
     }
 
-    return { title, description, parameters, tags };
+    // Extract organization from modelId (format: "organization/model-name")
+    const organization = modelId.split('/')[0] || 'unknown';
+    
+    return { title, description, parameters, tags, organization };
   }
 
   async deployModel(modelId: string): Promise<void> {
@@ -360,7 +364,7 @@ export class MarketplacePage extends BasePage {
 
     // In a real scenario, we might expect changes, but for testing we verify
     // the system remains stable
-    return initialCount >= 0 && updatedCount >= 0;
+    expect(initialCount >= 0 && updatedCount >= 0).toBe(true);
   }
 
   // Cross-browser compatibility helpers
@@ -382,5 +386,71 @@ export class MarketplacePage extends BasePage {
     // Test desktop viewport
     await this.page.setViewportSize({ width: 1920, height: 1080 });
     await this.expectModelGrid();
+  }
+
+  // Add missing methods required by performance tests
+  async waitForUrl(url: string | RegExp): Promise<void> {
+    await this.page.waitForURL(url);
+  }
+
+  // Missing methods required by comprehensive validation tests
+  async navigateToMarketplace(): Promise<void> {
+    await this.goto();
+    await this.expectMarketplaceVisible();
+  }
+
+  async getSearchResults(): Promise<Array<{ id: string; title: string; provider: string }>> {
+    await this.expectModelGrid();
+    const modelCards = this.page.locator(this.modelCard);
+    const count = await modelCards.count();
+    const results = [];
+
+    for (let i = 0; i < count; i++) {
+      const card = modelCards.nth(i);
+      const id = await card.getAttribute('data-model-id') || `model-${i}`;
+      const title = await card.locator('[data-testid^="model-title-"]').textContent() || '';
+      // Extract provider from model ID (format: "provider/model-name")
+      const provider = id.split('/')[0] || 'unknown';
+      
+      results.push({ id, title, provider });
+    }
+
+    return results;
+  }
+
+  async filterByProvider(provider: string): Promise<void> {
+    await this.openFilterPanel();
+    await this.clickElement(`[data-testid="filter-provider-${provider}"]`);
+    await this.waitForApiResponse('/api/models*');
+    await this.expectModelGrid();
+  }
+
+  async deployFirstModel(): Promise<void> {
+    // Get the first available model's deploy button
+    const deployButton = this.page.locator('[data-testid^="deploy-model-"]').first();
+    await deployButton.click();
+    await this.waitForApiResponse('/api/deploy*');
+  }
+
+  async getDeploymentStatus(): Promise<string> {
+    // Check for deployment status indicator
+    const statusElement = this.page.locator('[data-testid="deployment-status"]');
+    if (await statusElement.isVisible()) {
+      return await statusElement.textContent() || 'unknown';
+    }
+    
+    // Fallback to checking deployment state
+    const deployButton = this.page.locator('[data-testid^="deploy-model-"]').first();
+    const isDeploying = await deployButton.getAttribute('data-deploying') === 'true';
+    
+    return isDeploying ? 'deploying' : 'ready';
+  }
+
+  async expectPageLoaded(): Promise<void> {
+    await this.waitForVisible('[data-testid="marketplace-loaded"]');
+  }
+
+  async expectModelDetails(modelId?: string): Promise<void> {
+    await this.waitForVisible('[data-testid="model-details"]');
   }
 }

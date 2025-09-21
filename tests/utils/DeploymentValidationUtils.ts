@@ -6,6 +6,8 @@
 import { Page, expect } from '@playwright/test';
 import { DeploymentConfig } from '../fixtures/MockRunPodEnvironment';
 import { ValidationResult } from '../fixtures/DeploymentValidator';
+import '../playwright-setup'; // Import custom matchers
+import { getErrorMessage } from './error-handling';
 
 export interface DeploymentState {
   id: string;
@@ -91,10 +93,10 @@ export class DeploymentValidationUtils {
     // Verify organization-specific UI elements
     if (this.organization === 'swaggystacks') {
       await expect(this.page.locator('[data-testid="theme-indicator"]')).toContainText('terminal');
-      await expect(this.page).toHaveClass(/.*terminal-theme.*/);
+      await expect(this.page.locator('body')).toHaveClass(/.*terminal-theme.*/);
     } else {
       await expect(this.page.locator('[data-testid="theme-indicator"]')).toContainText('corporate');
-      await expect(this.page).toHaveClass(/.*corporate-theme.*/);
+      await expect(this.page.locator('body')).toHaveClass(/.*corporate-theme.*/);
     }
 
     // Verify environment variables are set correctly
@@ -286,9 +288,9 @@ export class DeploymentValidationUtils {
 
         // Wait before checking again
         await this.page.waitForTimeout(2000);
-      } catch (error) {
+      } catch (error: unknown) {
         // Continue waiting unless it's a critical error
-        if (error.message.includes('failed')) {
+        if (getErrorMessage(error).includes('failed')) {
           throw error;
         }
         await this.page.waitForTimeout(2000);
@@ -337,8 +339,9 @@ export class DeploymentValidationUtils {
         errors
       };
 
-    } catch (error) {
-      errors.push(`Rollback validation failed: ${error.message}`);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      errors.push(`Rollback validation failed: ${errorMessage}`);
       return {
         success: false,
         duration: Date.now() - startTime,
@@ -366,7 +369,7 @@ export class DeploymentValidationUtils {
       const percentageDifference = difference / expectedCost;
 
       return percentageDifference <= tolerance;
-    } catch (error) {
+    } catch (error: unknown) {
       return false;
     }
   }
@@ -388,7 +391,7 @@ export class DeploymentValidationUtils {
         } as any);
 
         await this.page.waitForTimeout(interval);
-      } catch (error) {
+      } catch (error: unknown) {
         // Continue monitoring even if extraction fails
         await this.page.waitForTimeout(interval);
       }
@@ -414,7 +417,7 @@ export class DeploymentValidationUtils {
       if (lowerStatus.includes('rolling back') || lowerStatus.includes('rollback')) return 'rolling_back';
 
       return 'pending';
-    } catch (error) {
+    } catch (error: unknown) {
       return 'unknown' as any;
     }
   }
@@ -432,7 +435,7 @@ export class DeploymentValidationUtils {
       if (lowerHealth.includes('unhealthy') || lowerHealth.includes('critical')) return 'unhealthy';
 
       return 'unknown';
-    } catch (error) {
+    } catch (error: unknown) {
       return 'unknown';
     }
   }
@@ -448,7 +451,7 @@ export class DeploymentValidationUtils {
         running: parseInt(runningText || '0'),
         failed: parseInt(failedText || '0')
       };
-    } catch (error) {
+    } catch (error: unknown) {
       return { total: 0, running: 0, failed: 0 };
     }
   }
@@ -468,7 +471,7 @@ export class DeploymentValidationUtils {
         requests: parseFloat(requestsText || '0'),
         latency: parseFloat(latencyText?.replace('ms', '') || '0')
       };
-    } catch (error) {
+    } catch (error: unknown) {
       return { cpu: 0, gpu: 0, memory: 0, requests: 0, latency: 0 };
     }
   }
@@ -484,7 +487,7 @@ export class DeploymentValidationUtils {
         deployed: deployedText || undefined,
         lastHealthCheck: lastHealthText || new Date().toISOString()
       };
-    } catch (error) {
+    } catch (error: unknown) {
       const now = new Date().toISOString();
       return {
         created: now,
@@ -523,11 +526,11 @@ export class DeploymentValidationUtils {
           duration
         };
       }
-    } catch (error) {
+    } catch (error: unknown) {
       return {
         name: 'Deployment Status',
         status: 'fail',
-        message: `Failed to check deployment status: ${error.message}`,
+        message: `Failed to check deployment status: ${getErrorMessage(error)}`,
         duration: Date.now() - startTime
       };
     }
@@ -561,11 +564,11 @@ export class DeploymentValidationUtils {
           duration
         };
       }
-    } catch (error) {
+    } catch (error: unknown) {
       return {
         name: 'Instance Health',
         status: 'fail',
-        message: `Failed to check instance health: ${error.message}`,
+        message: `Failed to check instance health: ${getErrorMessage(error)}`,
         duration: Date.now() - startTime
       };
     }
@@ -596,11 +599,11 @@ export class DeploymentValidationUtils {
           duration
         };
       }
-    } catch (error) {
+    } catch (error: unknown) {
       return {
         name: 'API Responsiveness',
         status: 'fail',
-        message: `API health check failed: ${error.message}`,
+        message: `API health check failed: ${getErrorMessage(error)}`,
         duration: Date.now() - startTime
       };
     }
@@ -635,11 +638,11 @@ export class DeploymentValidationUtils {
           duration
         };
       }
-    } catch (error) {
+    } catch (error: unknown) {
       return {
         name: 'Resource Utilization',
         status: 'fail',
-        message: `Failed to check resource utilization: ${error.message}`,
+        message: `Failed to check resource utilization: ${getErrorMessage(error)}`,
         duration: Date.now() - startTime
       };
     }
@@ -668,11 +671,11 @@ export class DeploymentValidationUtils {
           duration
         };
       }
-    } catch (error) {
+    } catch (error: unknown) {
       return {
         name: 'Organization Compliance',
         status: 'fail',
-        message: `Failed to check organization compliance: ${error.message}`,
+        message: `Failed to check organization compliance: ${getErrorMessage(error)}`,
         duration: Date.now() - startTime
       };
     }
@@ -680,7 +683,7 @@ export class DeploymentValidationUtils {
 
   // Compliance check methods
 
-  private async checkThemeCompliance(expectedTheme: string): Promise<{ name: string; status: string; met: boolean; details: string }> {
+  private async checkThemeCompliance(expectedTheme: string): Promise<{ name: string; status: 'met' | 'not_met' | 'partially_met'; met: boolean; details: string }> {
     try {
       const themeElement = await this.page.locator('[data-testid="theme-indicator"]');
       const currentTheme = await themeElement.textContent();
@@ -693,17 +696,18 @@ export class DeploymentValidationUtils {
         met,
         details: `Expected: ${expectedTheme}, Current: ${currentTheme}`
       };
-    } catch (error) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       return {
         name: 'Theme Compliance',
         status: 'not_met',
         met: false,
-        details: `Failed to check theme compliance: ${error.message}`
+        details: `Failed to check theme compliance: ${errorMessage}`
       };
     }
   }
 
-  private async checkContentRating(): Promise<{ name: string; status: string; met: boolean; details: string }> {
+  private async checkContentRating(): Promise<{ name: string; status: 'met' | 'not_met' | 'partially_met'; met: boolean; details: string }> {
     try {
       // For gaming deployments, check content rating compliance
       const ratingElement = await this.page.locator('[data-testid="content-rating"]');
@@ -718,7 +722,7 @@ export class DeploymentValidationUtils {
         met,
         details: `Content rating: ${rating}`
       };
-    } catch (error) {
+    } catch (error: unknown) {
       return {
         name: 'Content Rating',
         status: 'partially_met',
@@ -728,7 +732,7 @@ export class DeploymentValidationUtils {
     }
   }
 
-  private async checkAuditLogging(): Promise<{ name: string; status: string; met: boolean; details: string }> {
+  private async checkAuditLogging(): Promise<{ name: string; status: 'met' | 'not_met' | 'partially_met'; met: boolean; details: string }> {
     try {
       const auditElement = await this.page.locator('[data-testid="audit-logging"]');
       const auditStatus = await auditElement.textContent();
@@ -741,17 +745,18 @@ export class DeploymentValidationUtils {
         met,
         details: `Audit logging status: ${auditStatus}`
       };
-    } catch (error) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       return {
         name: 'Audit Logging',
         status: 'not_met',
         met: false,
-        details: `Failed to check audit logging: ${error.message}`
+        details: `Failed to check audit logging: ${errorMessage}`
       };
     }
   }
 
-  private async checkDataRetention(): Promise<{ name: string; status: string; met: boolean; details: string }> {
+  private async checkDataRetention(): Promise<{ name: string; status: 'met' | 'not_met' | 'partially_met'; met: boolean; details: string }> {
     try {
       const retentionElement = await this.page.locator('[data-testid="data-retention"]');
       const retentionText = await retentionElement.textContent();
@@ -769,12 +774,13 @@ export class DeploymentValidationUtils {
         met,
         details: `Data retention period: ${retentionDays} days (minimum: 90 days)`
       };
-    } catch (error) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       return {
         name: 'Data Retention',
         status: 'not_met',
         met: false,
-        details: `Failed to check data retention: ${error.message}`
+        details: `Failed to check data retention: ${errorMessage}`
       };
     }
   }

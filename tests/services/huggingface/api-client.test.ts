@@ -460,7 +460,7 @@ describe('HuggingFaceApiClient', () => {
 
       // Mock setTimeout to avoid actual delays in tests
       const originalSetTimeout = global.setTimeout;
-      global.setTimeout = jest.fn((fn) => {
+      global.setTimeout = jest.fn((fn: (...args: any[]) => void) => {
         fn();
         return 123 as any;
       });

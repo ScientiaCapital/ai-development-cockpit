@@ -1,750 +1,615 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useOrganization } from '../../hooks/useOrganization'
-import { useAuth } from '../../hooks/useAuth'
+import { useState } from 'react'
+import { useOrganizations, useOrganization } from '../../hooks/useOrganizations'
+import { CreateOrganizationData, UpdateOrganizationData } from '../../lib/organizations'
+import { 
+  Building2, 
+  Plus, 
+  Edit3, 
+  Trash2, 
+  Users, 
+  Settings,
+  X,
+  Save,
+  Globe,
+  Mail,
+  Crown,
+  Shield,
+  Code,
+  Eye
+} from 'lucide-react'
 
 interface OrganizationManagerProps {
-  className?: string
+  isOpen: boolean
+  onClose: () => void
+  selectedOrganizationId?: string | null
 }
 
-export default function OrganizationManager({ className = '' }: OrganizationManagerProps) {
-  const { user } = useAuth()
-  const {
-    organizations,
-    currentOrganization,
-    members,
-    loading,
-    error,
-    switchToOrganization,
-    createNewOrganization,
-    updateCurrentOrganization,
-    inviteMember,
-    updateMemberRoleInOrg,
-    removeMember,
-    leaveCurrentOrganization,
-    deleteCurrentOrganization,
-    isOwner,
-    isAdmin,
-    canInviteMembers,
-    canManageMembers,
-    canEditOrganization,
-    canDeleteOrganization
-  } = useOrganization()
+export function OrganizationManager({ 
+  isOpen, 
+  onClose, 
+  selectedOrganizationId = null 
+}: OrganizationManagerProps) {
+  const [activeTab, setActiveTab] = useState<'list' | 'create' | 'edit' | 'members'>('list')
+  const [editingOrganization, setEditingOrganization] = useState<string | null>(null)
 
-  const [activeTab, setActiveTab] = useState<'overview' | 'members' | 'settings' | 'create'>('overview')
-  const [showCreateForm, setShowCreateForm] = useState(false)
-  const [showInviteForm, setShowInviteForm] = useState(false)
-  const [editingSettings, setEditingSettings] = useState(false)
+  if (!isOpen) return null
 
-  // Create organization form state
-  const [createForm, setCreateForm] = useState({
+  const handleCreateSuccess = () => {
+    setActiveTab('list')
+  }
+
+  const handleEditOrganization = (organizationId: string) => {
+    setEditingOrganization(organizationId)
+    setActiveTab('edit')
+  }
+
+  const handleManageMembers = (organizationId: string) => {
+    setEditingOrganization(organizationId)
+    setActiveTab('members')
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
+        {/* Header */}
+        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center space-x-2">
+            <Building2 className="w-5 h-5 text-blue-600" />
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+              Organization Management
+            </h2>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex border-b border-gray-200 dark:border-gray-700">
+          <button
+            onClick={() => setActiveTab('list')}
+            className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+              activeTab === 'list'
+                ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+            }`}
+          >
+            Organizations
+          </button>
+          <button
+            onClick={() => setActiveTab('create')}
+            className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+              activeTab === 'create'
+                ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+            }`}
+          >
+            Create New
+          </button>
+          {editingOrganization && (
+            <>
+              <button
+                onClick={() => setActiveTab('edit')}
+                className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === 'edit'
+                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                }`}
+              >
+                Edit Organization
+              </button>
+              <button
+                onClick={() => setActiveTab('members')}
+                className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === 'members'
+                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                }`}
+              >
+                Members
+              </button>
+            </>
+          )}
+        </div>
+
+        {/* Content */}
+        <div className="p-6 overflow-y-auto max-h-[60vh]">
+          {activeTab === 'list' && (
+            <OrganizationList
+              onEdit={handleEditOrganization}
+              onManageMembers={handleManageMembers}
+            />
+          )}
+          {activeTab === 'create' && (
+            <CreateOrganizationForm onSuccess={handleCreateSuccess} />
+          )}
+          {activeTab === 'edit' && editingOrganization && (
+            <EditOrganizationForm
+              organizationId={editingOrganization}
+              onSuccess={() => setActiveTab('list')}
+            />
+          )}
+          {activeTab === 'members' && editingOrganization && (
+            <OrganizationMembers organizationId={editingOrganization} />
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function OrganizationList({ 
+  onEdit, 
+  onManageMembers 
+}: { 
+  onEdit: (id: string) => void
+  onManageMembers: (id: string) => void 
+}) {
+  const { organizations, deleteOrganization, isOwner, canManageOrganization } = useOrganizations()
+  const [deleting, setDeleting] = useState<string | null>(null)
+
+  const handleDelete = async (organizationId: string, organizationName: string) => {
+    if (!confirm(`Are you sure you want to delete "${organizationName}"? This action cannot be undone.`)) {
+      return
+    }
+
+    setDeleting(organizationId)
+    try {
+      const { success, error } = await deleteOrganization(organizationId)
+      if (!success) {
+        alert(`Failed to delete organization: ${error}`)
+      }
+    } finally {
+      setDeleting(null)
+    }
+  }
+
+  const getRoleIcon = (role: string) => {
+    switch (role) {
+      case 'owner': return <Crown className="w-4 h-4 text-yellow-500" />
+      case 'admin': return <Shield className="w-4 h-4 text-blue-500" />
+      case 'developer': return <Code className="w-4 h-4 text-green-500" />
+      case 'viewer': return <Eye className="w-4 h-4 text-gray-500" />
+      default: return null
+    }
+  }
+
+  return (
+    <div className="space-y-4">
+      {organizations.length === 0 ? (
+        <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+          <Building2 className="w-12 h-12 mx-auto mb-4 opacity-50" />
+          <p>No organizations found</p>
+          <p className="text-sm">Create your first organization to get started</p>
+        </div>
+      ) : (
+        <div className="grid gap-4">
+          {organizations.map((userOrg) => {
+            const org = userOrg.organization
+            const canManage = canManageOrganization(org.id)
+            const isDeleting = deleting === org.id
+
+            return (
+              <div
+                key={org.id}
+                className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex items-start space-x-3">
+                    <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white font-semibold text-lg">
+                      {org.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 truncate">
+                        {org.name}
+                      </h3>
+                      {org.description && (
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                          {org.description}
+                        </p>
+                      )}
+                      <div className="flex items-center space-x-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
+                        <div className="flex items-center space-x-1">
+                          {getRoleIcon(userOrg.role)}
+                          <span className="capitalize">{userOrg.role}</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <Users className="w-3 h-3" />
+                          <span>Members</span>
+                        </div>
+                        {org.website_url && (
+                          <div className="flex items-center space-x-1">
+                            <Globe className="w-3 h-3" />
+                            <a
+                              href={org.website_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="hover:text-blue-600 dark:hover:text-blue-400"
+                            >
+                              Website
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  {canManage && (
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => onManageMembers(org.id)}
+                        className="p-2 text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors"
+                        title="Manage Members"
+                      >
+                        <Users className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => onEdit(org.id)}
+                        className="p-2 text-gray-500 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 rounded transition-colors"
+                        title="Edit Organization"
+                      >
+                        <Edit3 className="w-4 h-4" />
+                      </button>
+                      {userOrg.role === 'owner' && (
+                        <button
+                          onClick={() => handleDelete(org.id, org.name)}
+                          disabled={isDeleting}
+                          className="p-2 text-gray-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors disabled:opacity-50"
+                          title="Delete Organization"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function CreateOrganizationForm({ onSuccess }: { onSuccess: () => void }) {
+  const { createOrganization } = useOrganizations()
+  const [formData, setFormData] = useState<CreateOrganizationData>({
     name: '',
-    slug: '',
     description: '',
-    plan: 'free' as 'free' | 'pro' | 'enterprise'
+    website_url: '',
+    logo_url: ''
   })
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  // Invite member form state
-  const [inviteForm, setInviteForm] = useState({
-    email: '',
-    role: 'viewer' as 'developer' | 'viewer'
-  })
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!formData.name.trim()) return
 
-  // Settings form state
-  const [settingsForm, setSettingsForm] = useState({
-    name: '',
-    description: '',
-    website: '',
-    allow_public_signup: false,
-    require_email_verification: true,
-    default_member_role: 'viewer' as 'viewer' | 'developer',
-    mfa_required: false,
-    session_timeout_hours: 24
-  })
+    setLoading(true)
+    setError(null)
 
-  // Initialize settings form when organization changes
-  useEffect(() => {
-    if (currentOrganization) {
-      setSettingsForm({
-        name: currentOrganization.name,
-        description: currentOrganization.description || '',
-        website: currentOrganization.website || '',
-        allow_public_signup: currentOrganization.settings.allow_public_signup,
-        require_email_verification: currentOrganization.settings.require_email_verification,
-        default_member_role: currentOrganization.settings.default_member_role,
-        mfa_required: currentOrganization.settings.mfa_required,
-        session_timeout_hours: currentOrganization.settings.session_timeout_hours
+    try {
+      const { success, error } = await createOrganization({
+        ...formData,
+        name: formData.name.trim(),
+        description: formData.description?.trim() || undefined,
+        website_url: formData.website_url?.trim() || undefined,
+        logo_url: formData.logo_url?.trim() || undefined
+      })
+
+      if (success) {
+        onSuccess()
+        setFormData({ name: '', description: '', website_url: '', logo_url: '' })
+      } else {
+        setError(error || 'Failed to create organization')
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      {error && (
+        <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
+          <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+        </div>
+      )}
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          Organization Name *
+        </label>
+        <input
+          type="text"
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Enter organization name"
+          required
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          Description
+        </label>
+        <textarea
+          value={formData.description}
+          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          rows={3}
+          placeholder="Brief description of your organization"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          Website URL
+        </label>
+        <input
+          type="url"
+          value={formData.website_url}
+          onChange={(e) => setFormData({ ...formData, website_url: e.target.value })}
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          placeholder="https://example.com"
+        />
+      </div>
+
+      <div className="flex justify-end space-x-3 pt-4">
+        <button
+          type="submit"
+          disabled={loading || !formData.name.trim()}
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+        >
+          <Building2 className="w-4 h-4" />
+          <span>{loading ? 'Creating...' : 'Create Organization'}</span>
+        </button>
+      </div>
+    </form>
+  )
+}
+
+function EditOrganizationForm({ 
+  organizationId, 
+  onSuccess 
+}: { 
+  organizationId: string
+  onSuccess: () => void 
+}) {
+  const { updateOrganization } = useOrganizations()
+  const { organization, loading: orgLoading } = useOrganization(organizationId)
+  
+  const [formData, setFormData] = useState<UpdateOrganizationData>({})
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  // Initialize form when organization loads
+  React.useEffect(() => {
+    if (organization) {
+      setFormData({
+        name: organization.name || '',
+        description: organization.description || '',
+        website_url: organization.website_url || '',
+        logo_url: organization.logo_url || ''
       })
     }
-  }, [currentOrganization])
+  }, [organization])
 
-  const handleCreateOrganization = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!formData.name?.trim()) return
 
-    const organization = await createNewOrganization(createForm)
-    if (organization) {
-      setShowCreateForm(false)
-      setCreateForm({ name: '', slug: '', description: '', plan: 'free' })
-      setActiveTab('overview')
-    }
-  }
+    setLoading(true)
+    setError(null)
 
-  const handleInviteMember = async (e: React.FormEvent) => {
-    e.preventDefault()
+    try {
+      const { success, error } = await updateOrganization(organizationId, {
+        ...formData,
+        name: formData.name?.trim(),
+        description: formData.description?.trim() || undefined,
+        website_url: formData.website_url?.trim() || undefined,
+        logo_url: formData.logo_url?.trim() || undefined
+      })
 
-    const invitation = await inviteMember(inviteForm.email, inviteForm.role)
-    if (invitation) {
-      setShowInviteForm(false)
-      setInviteForm({ email: '', role: 'viewer' })
-    }
-  }
-
-  const handleUpdateSettings = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    const success = await updateCurrentOrganization({
-      name: settingsForm.name,
-      description: settingsForm.description,
-      website: settingsForm.website,
-      settings: {
-        ...currentOrganization!.settings,
-        allow_public_signup: settingsForm.allow_public_signup,
-        require_email_verification: settingsForm.require_email_verification,
-        default_member_role: settingsForm.default_member_role,
-        mfa_required: settingsForm.mfa_required,
-        session_timeout_hours: settingsForm.session_timeout_hours
+      if (success) {
+        onSuccess()
+      } else {
+        setError(error || 'Failed to update organization')
       }
-    })
-
-    if (success) {
-      setEditingSettings(false)
+    } finally {
+      setLoading(false)
     }
   }
 
-  const formatLastSeen = (lastSeen?: string) => {
-    if (!lastSeen) return 'Never'
-    const date = new Date(lastSeen)
-    const now = new Date()
-    const diffMs = now.getTime() - date.getTime()
-    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
-
-    if (diffDays === 0) return 'Today'
-    if (diffDays === 1) return 'Yesterday'
-    if (diffDays < 7) return `${diffDays} days ago`
-    return date.toLocaleDateString()
+  if (orgLoading) {
+    return <div className="text-center py-8">Loading organization...</div>
   }
 
-  const getRoleColor = (role: string) => {
+  if (!organization) {
+    return <div className="text-center py-8 text-red-600">Organization not found</div>
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      {error && (
+        <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
+          <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+        </div>
+      )}
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          Organization Name *
+        </label>
+        <input
+          type="text"
+          value={formData.name || ''}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          required
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          Description
+        </label>
+        <textarea
+          value={formData.description || ''}
+          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          rows={3}
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          Website URL
+        </label>
+        <input
+          type="url"
+          value={formData.website_url || ''}
+          onChange={(e) => setFormData({ ...formData, website_url: e.target.value })}
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
+
+      <div className="flex justify-end space-x-3 pt-4">
+        <button
+          type="submit"
+          disabled={loading || !formData.name?.trim()}
+          className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+        >
+          <Save className="w-4 h-4" />
+          <span>{loading ? 'Saving...' : 'Save Changes'}</span>
+        </button>
+      </div>
+    </form>
+  )
+}
+
+function OrganizationMembers({ organizationId }: { organizationId: string }) {
+  const { members, loading, addMember, removeMember, updateMemberRole } = useOrganization(organizationId)
+  const [inviteEmail, setInviteEmail] = useState('')
+  const [inviteRole, setInviteRole] = useState<'admin' | 'developer' | 'viewer'>('viewer')
+  const [inviting, setInviting] = useState(false)
+
+  const getRoleIcon = (role: string) => {
     switch (role) {
-      case 'admin': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-      case 'developer': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
-      case 'viewer': return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+      case 'owner': return <Crown className="w-4 h-4 text-yellow-500" />
+      case 'admin': return <Shield className="w-4 h-4 text-blue-500" />
+      case 'developer': return <Code className="w-4 h-4 text-green-500" />
+      case 'viewer': return <Eye className="w-4 h-4 text-gray-500" />
+      default: return null
     }
   }
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-      case 'pending': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-      case 'suspended': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+  const handleInvite = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!inviteEmail.trim()) return
+
+    setInviting(true)
+    try {
+      // TODO: Implement user invitation system
+      // For now, this is a placeholder
+      console.log('Invite user:', { email: inviteEmail, role: inviteRole })
+      alert('User invitation system not yet implemented')
+    } finally {
+      setInviting(false)
     }
   }
 
   if (loading) {
-    return (
-      <div className={`bg-white dark:bg-gray-800 shadow rounded-lg p-6 ${className}`}>
-        <div className="flex items-center justify-center h-32">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-        </div>
-      </div>
-    )
-  }
-
-  if (!user) {
-    return (
-      <div className={`bg-white dark:bg-gray-800 shadow rounded-lg p-6 ${className}`}>
-        <div className="text-center">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-            Organization Management
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400">
-            Please sign in to manage organizations.
-          </p>
-        </div>
-      </div>
-    )
+    return <div className="text-center py-8">Loading members...</div>
   }
 
   return (
-    <div className={`bg-white dark:bg-gray-800 shadow rounded-lg ${className}`}>
-      <div className="border-b border-gray-200 dark:border-gray-700">
-        <div className="p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                Organization Management
-              </h2>
-              <p className="mt-1 text-gray-600 dark:text-gray-400">
-                Manage your organizations and team members.
-              </p>
-            </div>
-            {organizations.length > 0 && (
-              <button
-                onClick={() => setShowCreateForm(true)}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-                New Organization
-              </button>
-            )}
-          </div>
-
-          {/* Organization Selector */}
-          {organizations.length > 1 && (
-            <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Current Organization
-              </label>
-              <select
-                value={currentOrganization?.id || ''}
-                onChange={(e) => switchToOrganization(e.target.value)}
-                className="block w-full max-w-xs rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              >
-                {organizations.map((org) => (
-                  <option key={org.id} value={org.id}>
-                    {org.name} ({org.plan})
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
-        </div>
-
-        {/* Navigation Tabs */}
-        {currentOrganization && (
-          <nav className="-mb-px flex space-x-8 px-6">
-            {['overview', 'members', 'settings'].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab as any)}
-                className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm capitalize ${
-                  activeTab === tab
-                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
-                }`}
-              >
-                {tab}
-              </button>
-            ))}
-          </nav>
-        )}
+    <div className="space-y-6">
+      {/* Invite New Member */}
+      <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
+          Invite New Member
+        </h3>
+        <form onSubmit={handleInvite} className="flex space-x-3">
+          <input
+            type="email"
+            value={inviteEmail}
+            onChange={(e) => setInviteEmail(e.target.value)}
+            placeholder="Enter email address"
+            className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+          <select
+            value={inviteRole}
+            onChange={(e) => setInviteRole(e.target.value as 'admin' | 'developer' | 'viewer')}
+            className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="viewer">Viewer</option>
+            <option value="developer">Developer</option>
+            <option value="admin">Admin</option>
+          </select>
+          <button
+            type="submit"
+            disabled={inviting || !inviteEmail.trim()}
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {inviting ? 'Inviting...' : 'Invite'}
+          </button>
+        </form>
       </div>
 
-      {error && (
-        <div className="p-6 bg-red-50 dark:bg-red-900/50 border-l-4 border-red-400">
-          <p className="text-red-700 dark:text-red-300">{error}</p>
-        </div>
-      )}
-
-      <div className="p-6">
-        {/* No organizations state */}
-        {organizations.length === 0 && !showCreateForm && (
-          <div className="text-center py-12">
-            <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-2m-2 0H7m14 0a2 2 0 002-2V9a2 2 0 00-2-2M9 7h6m-6 4h6m-6 4h6" />
-            </svg>
-            <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">No organizations</h3>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              Get started by creating your first organization.
-            </p>
-            <div className="mt-6">
-              <button
-                onClick={() => setShowCreateForm(true)}
-                className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                <svg className="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-                Create Organization
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Create Organization Form */}
-        {showCreateForm && (
-          <div className="max-w-2xl">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
-              Create New Organization
-            </h3>
-            <form onSubmit={handleCreateOrganization} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Organization Name
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={createForm.name}
-                  onChange={(e) => setCreateForm(prev => ({ ...prev, name: e.target.value }))}
-                  className="block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                  placeholder="Acme Corporation"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  URL Slug
-                </label>
-                <div className="flex">
-                  <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-600 text-gray-500 dark:text-gray-400 text-sm">
-                    yourapp.com/
-                  </span>
-                  <input
-                    type="text"
-                    required
-                    value={createForm.slug}
-                    onChange={(e) => setCreateForm(prev => ({ ...prev, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '') }))}
-                    className="block w-full rounded-none rounded-r-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                    placeholder="acme-corp"
-                  />
+      {/* Current Members */}
+      <div>
+        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
+          Current Members ({members.length})
+        </h3>
+        <div className="space-y-3">
+          {members.map((member) => (
+            <div
+              key={member.id}
+              className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg"
+            >
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center text-sm font-medium">
+                  {member.profiles.full_name?.charAt(0) || member.profiles.email?.charAt(0) || '?'}
                 </div>
-                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                  Only lowercase letters, numbers, and hyphens allowed.
-                </p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Description (Optional)
-                </label>
-                <textarea
-                  value={createForm.description}
-                  onChange={(e) => setCreateForm(prev => ({ ...prev, description: e.target.value }))}
-                  rows={3}
-                  className="block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                  placeholder="Brief description of your organization..."
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Plan
-                </label>
-                <select
-                  value={createForm.plan}
-                  onChange={(e) => setCreateForm(prev => ({ ...prev, plan: e.target.value as any }))}
-                  className="block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                >
-                  <option value="free">Free (5 members)</option>
-                  <option value="pro">Pro (25 members)</option>
-                  <option value="enterprise">Enterprise (100 members)</option>
-                </select>
-              </div>
-
-              <div className="flex space-x-3">
-                <button
-                  type="submit"
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                  Create Organization
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowCreateForm(false)}
-                  className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        )}
-
-        {/* Organization Content */}
-        {currentOrganization && !showCreateForm && (
-          <>
-            {/* Overview Tab */}
-            {activeTab === 'overview' && (
-              <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0">
-                        <svg className="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                        </svg>
-                      </div>
-                      <div className="ml-4">
-                        <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-                          {members.filter(m => m.status === 'active').length}
-                        </h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Active Members</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${
-                          currentOrganization.plan === 'enterprise'
-                            ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
-                            : currentOrganization.plan === 'pro'
-                            ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
-                            : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
-                        }`}>
-                          {currentOrganization.plan}
-                        </span>
-                      </div>
-                      <div className="ml-4">
-                        <h3 className="text-lg font-medium text-gray-900 dark:text-white">Plan</h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          {currentOrganization.max_members} max members
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0">
-                        <svg className="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </div>
-                      <div className="ml-4">
-                        <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-                          {isOwner ? 'Owner' : currentOrganization.current_user_role}
-                        </h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Your Role</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
                 <div>
-                  <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-2">
-                    Organization Details
-                  </h4>
-                  <dl className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
-                    <div>
-                      <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Name</dt>
-                      <dd className="text-sm text-gray-900 dark:text-white">{currentOrganization.name}</dd>
-                    </div>
-                    <div>
-                      <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Slug</dt>
-                      <dd className="text-sm text-gray-900 dark:text-white font-mono">{currentOrganization.slug}</dd>
-                    </div>
-                    <div>
-                      <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Created</dt>
-                      <dd className="text-sm text-gray-900 dark:text-white">
-                        {new Date(currentOrganization.created_at).toLocaleDateString()}
-                      </dd>
-                    </div>
-                    <div>
-                      <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Last Updated</dt>
-                      <dd className="text-sm text-gray-900 dark:text-white">
-                        {new Date(currentOrganization.updated_at).toLocaleDateString()}
-                      </dd>
-                    </div>
-                    {currentOrganization.description && (
-                      <div className="sm:col-span-2">
-                        <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Description</dt>
-                        <dd className="text-sm text-gray-900 dark:text-white">{currentOrganization.description}</dd>
-                      </div>
-                    )}
-                  </dl>
+                  <p className="font-medium text-gray-900 dark:text-gray-100">
+                    {member.profiles.full_name || 'Unknown User'}
+                  </p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    {member.profiles.email}
+                  </p>
                 </div>
               </div>
-            )}
-
-            {/* Members Tab */}
-            {activeTab === 'members' && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-                    Team Members ({members.length})
-                  </h3>
-                  {canInviteMembers && (
-                    <button
-                      onClick={() => setShowInviteForm(true)}
-                      className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                    >
-                      <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                      </svg>
-                      Invite Member
-                    </button>
-                  )}
+              
+              <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-1 px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md">
+                  {getRoleIcon(member.role)}
+                  <span className="text-sm capitalize">{member.role}</span>
                 </div>
-
-                {/* Invite Form */}
-                {showInviteForm && (
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                    <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-3">
-                      Invite New Member
-                    </h4>
-                    <form onSubmit={handleInviteMember} className="flex flex-col sm:flex-row gap-3">
-                      <input
-                        type="email"
-                        required
-                        value={inviteForm.email}
-                        onChange={(e) => setInviteForm(prev => ({ ...prev, email: e.target.value }))}
-                        placeholder="Email address"
-                        className="flex-1 rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                      />
-                      <select
-                        value={inviteForm.role}
-                        onChange={(e) => setInviteForm(prev => ({ ...prev, role: e.target.value as any }))}
-                        className="rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                      >
-                        <option value="viewer">Viewer</option>
-                        <option value="developer">Developer</option>
-                      </select>
-                      <button
-                        type="submit"
-                        className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                      >
-                        Send Invite
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setShowInviteForm(false)}
-                        className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                      >
-                        Cancel
-                      </button>
-                    </form>
-                  </div>
-                )}
-
-                {/* Members List */}
-                <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                  <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-600">
-                    <thead className="bg-gray-50 dark:bg-gray-700">
-                      <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                          Member
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                          Role
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                          Status
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                          Last Seen
-                        </th>
-                        {canManageMembers && (
-                          <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            Actions
-                          </th>
-                        )}
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                      {members.map((member) => (
-                        <tr key={member.id}>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center">
-                              {member.user?.avatar_url ? (
-                                <img
-                                  className="h-8 w-8 rounded-full"
-                                  src={member.user.avatar_url}
-                                  alt={member.user.full_name || member.user.email}
-                                />
-                              ) : (
-                                <div className="h-8 w-8 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
-                                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    {(member.user?.full_name || member.user?.email || '?')[0].toUpperCase()}
-                                  </span>
-                                </div>
-                              )}
-                              <div className="ml-3">
-                                <div className="text-sm font-medium text-gray-900 dark:text-white">
-                                  {member.user?.full_name || 'Unknown'}
-                                </div>
-                                <div className="text-sm text-gray-500 dark:text-gray-400">
-                                  {member.user?.email}
-                                </div>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${getRoleColor(member.role)}`}>
-                              {member.role}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${getStatusColor(member.status)}`}>
-                              {member.status}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                            {formatLastSeen(member.last_seen)}
-                          </td>
-                          {canManageMembers && (
-                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                              <div className="flex items-center justify-end space-x-2">
-                                {member.role !== 'admin' && (
-                                  <button
-                                    onClick={() => updateMemberRoleInOrg(member.id, 'admin')}
-                                    className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
-                                  >
-                                    Promote
-                                  </button>
-                                )}
-                                {member.user_id !== user?.id && (
-                                  <button
-                                    onClick={() => removeMember(member.id)}
-                                    className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
-                                  >
-                                    Remove
-                                  </button>
-                                )}
-                              </div>
-                            </td>
-                          )}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )}
-
-            {/* Settings Tab */}
-            {activeTab === 'settings' && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-                    Organization Settings
-                  </h3>
-                  {canEditOrganization && !editingSettings && (
-                    <button
-                      onClick={() => setEditingSettings(true)}
-                      className="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                    >
-                      <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                      </svg>
-                      Edit Settings
-                    </button>
-                  )}
-                </div>
-
-                {editingSettings ? (
-                  <div className="space-y-6">
-                    <div className="text-center py-8">
-                      <p className="text-gray-500 dark:text-gray-400">
-                        Settings editing form would go here.
-                      </p>
-                      <button
-                        onClick={() => setEditingSettings(false)}
-                        className="mt-4 inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="space-y-6">
-                    <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
-                      <div>
-                        <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Name</dt>
-                        <dd className="mt-1 text-sm text-gray-900 dark:text-white">{currentOrganization.name}</dd>
-                      </div>
-                      <div>
-                        <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Plan</dt>
-                        <dd className="mt-1 text-sm text-gray-900 dark:text-white capitalize">{currentOrganization.plan}</dd>
-                      </div>
-                      <div>
-                        <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">MFA Required</dt>
-                        <dd className="mt-1">
-                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                            currentOrganization.settings.mfa_required
-                              ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                              : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
-                          }`}>
-                            {currentOrganization.settings.mfa_required ? 'Yes' : 'No'}
-                          </span>
-                        </dd>
-                      </div>
-                      <div>
-                        <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Session Timeout</dt>
-                        <dd className="mt-1 text-sm text-gray-900 dark:text-white">
-                          {currentOrganization.settings.session_timeout_hours} hours
-                        </dd>
-                      </div>
-                    </dl>
-
-                    {/* Danger Zone */}
-                    {(canDeleteOrganization || !isOwner) && (
-                      <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-                        <h4 className="text-sm font-medium text-red-600 dark:text-red-400 mb-4">Danger Zone</h4>
-                        <div className="bg-red-50 dark:bg-red-900/50 border border-red-200 dark:border-red-800 rounded-lg p-4">
-                          <div className="flex">
-                            <div className="flex-shrink-0">
-                              <svg className="h-5 w-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L5.082 15.5c-.77.833.192 2.5 1.732 2.5z" />
-                              </svg>
-                            </div>
-                            <div className="ml-3 flex-1">
-                              <div className="space-y-3">
-                                {!isOwner && (
-                                  <div className="flex items-center justify-between">
-                                    <div>
-                                      <h5 className="text-sm font-medium text-red-800 dark:text-red-200">
-                                        Leave Organization
-                                      </h5>
-                                      <p className="text-sm text-red-700 dark:text-red-300">
-                                        You will lose access to this organization and all its resources.
-                                      </p>
-                                    </div>
-                                    <button
-                                      onClick={leaveCurrentOrganization}
-                                      className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 dark:bg-red-800 dark:text-red-200 dark:hover:bg-red-700"
-                                    >
-                                      Leave Organization
-                                    </button>
-                                  </div>
-                                )}
-                                {canDeleteOrganization && (
-                                  <div className="flex items-center justify-between">
-                                    <div>
-                                      <h5 className="text-sm font-medium text-red-800 dark:text-red-200">
-                                        Delete Organization
-                                      </h5>
-                                      <p className="text-sm text-red-700 dark:text-red-300">
-                                        Permanently delete this organization and all its data. This action cannot be undone.
-                                      </p>
-                                    </div>
-                                    <button
-                                      onClick={deleteCurrentOrganization}
-                                      className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                                    >
-                                      Delete Organization
-                                    </button>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                
+                {member.role !== 'owner' && (
+                  <button
+                    onClick={() => removeMember(member.user_id)}
+                    className="p-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors"
+                    title="Remove Member"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 )}
               </div>
-            )}
-          </>
-        )}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )

@@ -5,6 +5,7 @@ import { User, Session, AuthError } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
 import type { Database, Tables } from '../lib/supabase'
 import { getMFAFactors, createMFAChallenge, verifyMFAChallenge } from '../lib/mfa'
+import { sessionManager, SessionInfo } from '../lib/session'
 
 // Types for our auth context
 export interface AuthUser extends User {
@@ -53,9 +54,15 @@ export interface AuthContextType extends AuthState {
   // Profile management
   updateProfile: (updates: Partial<Tables<'profiles'>>) => Promise<{ error: Error | null }>
 
-  // Utility methods
-  refreshSession: () => Promise<void>
+  // Session management
+  refreshSession: () => Promise<{ success: boolean; session: Session | null; error?: any }>
   getAccessToken: () => Promise<string | null>
+  getSessionInfo: () => SessionInfo
+  forceSessionExpiry: () => void
+
+  // Enhanced session state
+  sessionInfo: SessionInfo
+  isSessionHealthy: boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -69,6 +76,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
   const [initialized, setInitialized] = useState(false)
+  const [sessionInfo, setSessionInfo] = useState<SessionInfo>(() => sessionManager.getSessionInfo())
+  const [isSessionHealthy, setIsSessionHealthy] = useState(true)
 
   // Initialize auth state on component mount
   useEffect(() => {
@@ -76,6 +85,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     async function initializeAuth() {
       try {
+        // Initialize session manager
+        const initialSessionInfo = await sessionManager.initialize()
+        
+        if (mounted) {
+          setSessionInfo(initialSessionInfo)
+          setIsSessionHealthy(sessionManager.isSessionHealthy())
+        }
+
         // Get initial session
         const { data: { session: initialSession }, error: sessionError } = await supabase.auth.getSession()
 
@@ -102,6 +119,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     initializeAuth()
 
+    // Set up session manager listener
+    const unsubscribeSession = sessionManager.addListener((newSessionInfo) => {
+      if (mounted) {
+        setSessionInfo(newSessionInfo)
+        setIsSessionHealthy(sessionManager.isSessionHealthy())
+        
+        // Sync session state with auth context
+        if (newSessionInfo.session !== session) {
+          setSession(newSessionInfo.session)
+        }
+      }
+    })
+
     // Set up auth state change listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
@@ -109,6 +139,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         if (mounted) {
           setSession(session)
+
+          // Persist session for cross-tab sync
+          sessionManager.persistSession(session)
 
           if (session?.user) {
             await loadUserData(session.user)
@@ -125,6 +158,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return () => {
       mounted = false
       subscription.unsubscribe()
+      unsubscribeSession()
     }
   }, [])
 
@@ -315,17 +349,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
-  // Utility methods
+  // Enhanced session management methods
   const refreshSession = async () => {
-    const { data: { session } } = await supabase.auth.refreshSession()
-    if (session) {
-      setSession(session)
-    }
+    return await sessionManager.refreshSession()
   }
 
   const getAccessToken = async (): Promise<string | null> => {
     const { data: { session } } = await supabase.auth.getSession()
     return session?.access_token || null
+  }
+
+  const getSessionInfo = () => {
+    return sessionManager.getSessionInfo()
+  }
+
+  const forceSessionExpiry = () => {
+    sessionManager.forceExpiry()
   }
 
   // Multi-Factor Authentication methods
@@ -395,9 +434,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
     // Profile management
     updateProfile,
 
-    // Utility methods
+    // Enhanced session management
     refreshSession,
-    getAccessToken
+    getAccessToken,
+    getSessionInfo,
+    forceSessionExpiry,
+
+    // Enhanced session state
+    sessionInfo,
+    isSessionHealthy
   }
 
   return (

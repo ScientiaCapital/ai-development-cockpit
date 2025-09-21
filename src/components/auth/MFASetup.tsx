@@ -1,349 +1,232 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useAuth } from '../../hooks/useAuth'
-import {
-  enrollMFAFactor,
-  verifyMFAEnrollment,
-  getMFAFactors,
-  removeMFAFactor,
-  generateBackupCodes,
-  validateTOTPCode,
-  formatTOTPCode,
-  parseQRCodeURI,
-  type MFAFactor,
-  type MFAEnrollment
-} from '../../lib/mfa'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { getMFAFactors, removeMFAFactor, hasMFAEnabled } from '../../lib/mfa'
+import type { MFAFactor } from '../../lib/mfa'
 
-interface MFASetupProps {
-  onComplete?: () => void
-  className?: string
-}
-
-export default function MFASetup({ onComplete, className = '' }: MFASetupProps) {
-  const { user } = useAuth()
+export default function MFASetup() {
+  const router = useRouter()
+  
   const [factors, setFactors] = useState<MFAFactor[]>([])
-  const [loading, setLoading] = useState(true)
-  const [enrolling, setEnrolling] = useState(false)
-  const [enrollment, setEnrollment] = useState<MFAEnrollment | null>(null)
-  const [verificationCode, setVerificationCode] = useState('')
-  const [verifying, setVerifying] = useState(false)
-  const [backupCodes, setBackupCodes] = useState<string[]>([])
-  const [showBackupCodes, setShowBackupCodes] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string>('')
+  const [removingFactor, setRemovingFactor] = useState<string | null>(null)
 
-  // Load existing MFA factors
   useEffect(() => {
     loadMFAFactors()
   }, [])
 
   const loadMFAFactors = async () => {
+    setIsLoading(true)
     try {
       const { data, error } = await getMFAFactors()
+      
       if (error) {
-        setError(`Failed to load MFA factors: ${error.message}`)
-      } else {
-        setFactors(data || [])
+        setError(error.message)
+        return
       }
+
+      setFactors(data || [])
     } catch (error) {
-      setError('Failed to load MFA factors')
+      setError('Failed to load MFA settings')
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
   }
 
-  const handleEnrollMFA = async () => {
-    setEnrolling(true)
-    setError(null)
-
-    try {
-      const { data, error } = await enrollMFAFactor({
-        factorType: 'totp',
-        friendlyName: `${user?.email}'s Authenticator`
-      })
-
-      if (error) {
-        setError(`Failed to enroll MFA: ${error.message}`)
-      } else if (data) {
-        setEnrollment(data)
-        // Generate backup codes for recovery
-        setBackupCodes(generateBackupCodes())
-      }
-    } catch (error) {
-      setError('Failed to enroll MFA')
-    } finally {
-      setEnrolling(false)
-    }
-  }
-
-  const handleVerifyEnrollment = async () => {
-    if (!enrollment || !validateTOTPCode(verificationCode)) {
-      setError('Please enter a valid 6-digit code')
-      return
-    }
-
-    setVerifying(true)
-    setError(null)
-
-    try {
-      const { data, error } = await verifyMFAEnrollment(
-        enrollment.id,
-        verificationCode.replace(/\s/g, '')
-      )
-
-      if (error) {
-        setError(`Failed to verify code: ${error.message}`)
-      } else if (data) {
-        setSuccess('Two-factor authentication has been successfully enabled!')
-        setShowBackupCodes(true)
-        setEnrollment(null)
-        setVerificationCode('')
-        await loadMFAFactors()
-
-        // Auto-complete after a short delay
-        setTimeout(() => {
-          onComplete?.()
-        }, 2000)
-      }
-    } catch (error) {
-      setError('Failed to verify enrollment')
-    } finally {
-      setVerifying(false)
-    }
+  const handleSetupMFA = () => {
+    router.push('/auth/mfa/setup')
   }
 
   const handleRemoveFactor = async (factorId: string) => {
-    if (!confirm('Are you sure you want to disable two-factor authentication? This will make your account less secure.')) {
+    if (!confirm('Are you sure you want to remove this authenticator? This will disable two-factor authentication for your account.')) {
       return
     }
 
+    setRemovingFactor(factorId)
     try {
       const { error } = await removeMFAFactor(factorId)
+      
       if (error) {
-        setError(`Failed to remove MFA: ${error.message}`)
-      } else {
-        setSuccess('Two-factor authentication has been disabled')
-        await loadMFAFactors()
+        setError(error.message)
+        return
       }
+
+      // Reload factors
+      await loadMFAFactors()
     } catch (error) {
-      setError('Failed to remove MFA factor')
+      setError('Failed to remove authenticator')
+    } finally {
+      setRemovingFactor(null)
     }
   }
 
-  const getQRCodeSecret = (): string => {
-    if (!enrollment?.uri) return ''
-    const parsed = parseQRCodeURI(enrollment.uri)
-    return parsed.secret || ''
-  }
+  const verifiedFactors = factors.filter(f => f.status === 'verified')
+  const hasActiveMFA = verifiedFactors.length > 0
 
-  if (loading) {
+  if (isLoading) {
     return (
-      <div className={`bg-white dark:bg-gray-800 shadow rounded-lg p-6 ${className}`}>
+      <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
         <div className="animate-pulse">
-          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-4"></div>
-          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
-          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+          <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mb-4"></div>
+          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mb-6"></div>
+          <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded w-32"></div>
         </div>
       </div>
     )
   }
 
   return (
-    <div className={`bg-white dark:bg-gray-800 shadow rounded-lg p-6 ${className}`}>
-      <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-        Two-Factor Authentication
-      </h2>
+    <div className="bg-white dark:bg-gray-800 shadow rounded-lg">
+      <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+        <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+          Two-Factor Authentication
+        </h3>
+        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+          Add an extra layer of security to your account with two-factor authentication.
+        </p>
+      </div>
 
-      {/* Error Message */}
-      {error && (
-        <div className="mb-4 bg-red-50 dark:bg-red-900/50 p-4 rounded-md">
-          <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+      <div className="p-6 space-y-6">
+        {error && (
+          <div className="rounded-md bg-red-50 dark:bg-red-900/50 p-4">
+            <div className="text-sm text-red-700 dark:text-red-300">
+              {error}
+            </div>
+          </div>
+        )}
+
+        {/* MFA Status */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <div className={`flex-shrink-0 w-3 h-3 rounded-full ${hasActiveMFA ? 'bg-green-400' : 'bg-gray-300'}`}></div>
+            <div className="ml-3">
+              <p className="text-sm font-medium text-gray-900 dark:text-white">
+                {hasActiveMFA ? 'Two-factor authentication is enabled' : 'Two-factor authentication is disabled'}
+              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                {hasActiveMFA 
+                  ? 'Your account is protected with 2FA' 
+                  : 'Secure your account with an authenticator app'
+                }
+              </p>
+            </div>
+          </div>
+          
+          {!hasActiveMFA && (
+            <button
+              onClick={handleSetupMFA}
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              Set up 2FA
+            </button>
+          )}
         </div>
-      )}
 
-      {/* Success Message */}
-      {success && (
-        <div className="mb-4 bg-green-50 dark:bg-green-900/50 p-4 rounded-md">
-          <p className="text-sm text-green-800 dark:text-green-200">{success}</p>
-        </div>
-      )}
-
-      {/* Existing Factors */}
-      {factors.length > 0 && (
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-            Active Authenticators
-          </h3>
-          <div className="space-y-3">
-            {factors.map((factor) => (
-              <div
+        {/* Active Factors */}
+        {verifiedFactors.length > 0 && (
+          <div className="space-y-4">
+            <h4 className="text-sm font-medium text-gray-900 dark:text-white">
+              Active Authenticators
+            </h4>
+            
+            {verifiedFactors.map((factor) => (
+              <div 
                 key={factor.id}
                 className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg"
               >
-                <div>
-                  <p className="font-medium text-gray-900 dark:text-white">
-                    {factor.friendly_name || 'Authenticator App'}
-                  </p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    Status: <span className="font-medium">{factor.status}</span>
-                  </p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    Added: {new Date(factor.created_at).toLocaleDateString()}
-                  </p>
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <svg className="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                  </div>
+                  <div className="ml-3">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      {factor.friendly_name || 'Authenticator App'}
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Added {new Date(factor.created_at).toLocaleDateString()}
+                    </p>
+                  </div>
                 </div>
+                
                 <button
                   onClick={() => handleRemoveFactor(factor.id)}
-                  className="px-3 py-1 text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                  disabled={removingFactor === factor.id}
+                  className="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
                 >
-                  Remove
+                  {removingFactor === factor.id ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Removing...
+                    </>
+                  ) : (
+                    'Remove'
+                  )}
                 </button>
               </div>
             ))}
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Backup Codes Display */}
-      {showBackupCodes && backupCodes.length > 0 && (
-        <div className="mb-6 bg-yellow-50 dark:bg-yellow-900/50 p-4 rounded-md">
-          <h3 className="text-lg font-semibold text-yellow-800 dark:text-yellow-200 mb-3">
-            ⚠️ Save Your Recovery Codes
-          </h3>
-          <p className="text-sm text-yellow-700 dark:text-yellow-300 mb-3">
-            Save these recovery codes in a safe place. You can use them to access your account if you lose your authenticator device.
-          </p>
-          <div className="grid grid-cols-2 gap-2 mb-3">
-            {backupCodes.map((code, index) => (
-              <code
-                key={index}
-                className="block p-2 bg-yellow-100 dark:bg-yellow-800 text-yellow-900 dark:text-yellow-100 rounded font-mono text-sm"
-              >
-                {code}
-              </code>
-            ))}
-          </div>
-          <button
-            onClick={() => setShowBackupCodes(false)}
-            className="text-sm text-yellow-700 dark:text-yellow-300 hover:underline"
-          >
-            I've saved these codes
-          </button>
-        </div>
-      )}
-
-      {/* Enrollment Process */}
-      {!enrollment && factors.length === 0 && (
-        <div>
-          <p className="text-gray-600 dark:text-gray-400 mb-4">
-            Add an extra layer of security to your account with two-factor authentication using an authenticator app.
-          </p>
-          <button
-            onClick={handleEnrollMFA}
-            disabled={enrolling}
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {enrolling ? (
-              <>
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Setting up...
-              </>
-            ) : (
-              'Enable Two-Factor Authentication'
-            )}
-          </button>
-        </div>
-      )}
-
-      {/* QR Code and Manual Setup */}
-      {enrollment && (
-        <div className="space-y-6">
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-              Step 1: Scan QR Code
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Scan this QR code with your authenticator app (Google Authenticator, Authy, 1Password, etc.)
-            </p>
-
-            {enrollment.qr_code && (
-              <div className="mb-4">
-                <img
-                  src={enrollment.qr_code}
-                  alt="QR Code for Two-Factor Authentication"
-                  className="border border-gray-200 dark:border-gray-700 rounded"
-                />
-              </div>
-            )}
-
-            <details className="mb-4">
-              <summary className="text-sm text-blue-600 dark:text-blue-400 cursor-pointer hover:underline">
-                Can't scan the QR code? Enter manually
-              </summary>
-              <div className="mt-2 p-3 bg-gray-50 dark:bg-gray-700 rounded">
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                  Secret key:
+        {/* Info Box */}
+        <div className="bg-blue-50 dark:bg-blue-900/50 border border-blue-200 dark:border-blue-800 rounded-md p-4">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <h3 className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                About Two-Factor Authentication
+              </h3>
+              <div className="mt-2 text-sm text-blue-700 dark:text-blue-300">
+                <p>
+                  Two-factor authentication adds an extra layer of security to your account by requiring 
+                  a code from your authenticator app in addition to your password when signing in.
                 </p>
-                <code className="block p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded font-mono text-sm break-all">
-                  {getQRCodeSecret()}
-                </code>
+                <div className="mt-3">
+                  <p className="font-medium">Recommended authenticator apps:</p>
+                  <ul className="mt-1 list-disc list-inside">
+                    <li>Google Authenticator</li>
+                    <li>Authy</li>
+                    <li>Microsoft Authenticator</li>
+                    <li>1Password</li>
+                  </ul>
+                </div>
               </div>
-            </details>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-              Step 2: Enter Verification Code
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Enter the 6-digit code from your authenticator app to complete setup.
-            </p>
-
-            <div className="flex items-center space-x-3">
-              <input
-                type="text"
-                value={formatTOTPCode(verificationCode)}
-                onChange={(e) => setVerificationCode(e.target.value.replace(/\s/g, ''))}
-                placeholder="123 456"
-                maxLength={7}
-                className="block w-32 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white text-center font-mono"
-              />
-              <button
-                onClick={handleVerifyEnrollment}
-                disabled={verifying || !validateTOTPCode(verificationCode)}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {verifying ? (
-                  <>
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Verifying...
-                  </>
-                ) : (
-                  'Verify & Enable'
-                )}
-              </button>
             </div>
           </div>
         </div>
-      )}
 
-      {/* Security Information */}
-      <div className="mt-6 bg-blue-50 dark:bg-blue-900/50 p-4 rounded-md">
-        <h4 className="text-sm font-medium text-blue-800 dark:text-blue-200 mb-2">
-          🔒 Security Information
-        </h4>
-        <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-          <p>• Two-factor authentication adds an extra layer of security to your account</p>
-          <p>• You'll need your phone or authenticator app to sign in</p>
-          <p>• Keep your recovery codes in a safe place</p>
-          <p>• Supported apps: Google Authenticator, Authy, 1Password, Microsoft Authenticator</p>
-        </div>
+        {/* Backup Codes Section */}
+        {hasActiveMFA && (
+          <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="text-sm font-medium text-gray-900 dark:text-white">
+                  Backup Recovery Codes
+                </h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Generate backup codes to access your account if you lose your authenticator
+                </p>
+              </div>
+              <Link
+                href="/auth/mfa/backup-codes"
+                className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Manage Backup Codes
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

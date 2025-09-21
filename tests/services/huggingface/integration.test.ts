@@ -1,0 +1,567 @@
+import { HuggingFaceIntegrationService } from '../../../src/services/huggingface/integration.service';
+
+// Mock all the services
+jest.mock('../../../src/services/huggingface/api-client');
+jest.mock('../../../src/services/huggingface/rate-limiter');
+jest.mock('../../../src/services/huggingface/cache.service');
+jest.mock('../../../src/services/huggingface/webhook.service');
+jest.mock('../../../src/services/huggingface/circuit-breaker');
+jest.mock('../../../src/services/huggingface/credentials.service');
+
+import { HuggingFaceApiClient } from '../../../src/services/huggingface/api-client';
+import { HuggingFaceRateLimiter } from '../../../src/services/huggingface/rate-limiter';
+import { HuggingFaceCacheService } from '../../../src/services/huggingface/cache.service';
+import { HuggingFaceWebhookService } from '../../../src/services/huggingface/webhook.service';
+import { HuggingFaceCircuitBreaker } from '../../../src/services/huggingface/circuit-breaker';
+import { HuggingFaceCredentialsService } from '../../../src/services/huggingface/credentials.service';
+
+describe('HuggingFaceIntegrationService', () => {
+  let integrationService: HuggingFaceIntegrationService;
+  let mockApiClient: jest.Mocked<HuggingFaceApiClient>;
+  let mockRateLimiter: jest.Mocked<HuggingFaceRateLimiter>;
+  let mockCacheService: jest.Mocked<HuggingFaceCacheService>;
+  let mockWebhookService: jest.Mocked<HuggingFaceWebhookService>;
+  let mockCircuitBreaker: jest.Mocked<HuggingFaceCircuitBreaker>;
+  let mockCredentialsService: jest.Mocked<HuggingFaceCredentialsService>;
+
+  beforeEach(() => {
+    // Create mock instances
+    mockApiClient = {
+      request: jest.fn(),
+    } as any;
+
+    mockRateLimiter = {
+      schedule: jest.fn(),
+      updateRateLimitFromResponse: jest.fn(),
+      getStatistics: jest.fn(),
+      clearAll: jest.fn(),
+    } as any;
+
+    mockCacheService = {
+      get: jest.fn(),
+      set: jest.fn(),
+      invalidateByTags: jest.fn(),
+      getStats: jest.fn(),
+      disconnect: jest.fn(),
+    } as any;
+
+    mockWebhookService = {
+      registerHandler: jest.fn(),
+      onModelUpdate: jest.fn(),
+      onDeploymentStatus: jest.fn(),
+      getStats: jest.fn(),
+      processWebhook: jest.fn(),
+    } as any;
+
+    mockCircuitBreaker = {
+      createBreaker: jest.fn(),
+      execute: jest.fn(),
+      getStats: jest.fn(),
+      getAllStats: jest.fn(),
+      healthCheck: jest.fn(),
+      getOverallHealth: jest.fn(),
+    } as any;
+
+    mockCredentialsService = {
+      getCredentials: jest.fn(),
+      validateCredentials: jest.fn(),
+      healthCheck: jest.fn(),
+    } as any;
+
+    // Mock constructors to return our mocks
+    (HuggingFaceApiClient as jest.MockedClass<typeof HuggingFaceApiClient>).mockImplementation(() => mockApiClient);
+    (HuggingFaceRateLimiter as jest.MockedClass<typeof HuggingFaceRateLimiter>).mockImplementation(() => mockRateLimiter);
+    (HuggingFaceCacheService as jest.MockedClass<typeof HuggingFaceCacheService>).mockImplementation(() => mockCacheService);
+    (HuggingFaceWebhookService as jest.MockedClass<typeof HuggingFaceWebhookService>).mockImplementation(() => mockWebhookService);
+    (HuggingFaceCircuitBreaker as jest.MockedClass<typeof HuggingFaceCircuitBreaker>).mockImplementation(() => mockCircuitBreaker);
+    (HuggingFaceCredentialsService as jest.MockedClass<typeof HuggingFaceCredentialsService>).mockImplementation(() => mockCredentialsService);
+
+    integrationService = new HuggingFaceIntegrationService();
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('initialization', () => {
+    it('should initialize all services', () => {
+      expect(HuggingFaceApiClient).toHaveBeenCalled();
+      expect(HuggingFaceRateLimiter).toHaveBeenCalled();
+      expect(HuggingFaceCacheService).toHaveBeenCalled();
+      expect(HuggingFaceWebhookService).toHaveBeenCalled();
+      expect(HuggingFaceCircuitBreaker).toHaveBeenCalled();
+      expect(HuggingFaceCredentialsService).toHaveBeenCalled();
+    });
+
+    it('should register webhook handlers', () => {
+      expect(mockWebhookService.onModelUpdate).toHaveBeenCalled();
+      expect(mockWebhookService.onDeploymentStatus).toHaveBeenCalled();
+    });
+
+    it('should create circuit breakers', () => {
+      expect(mockCircuitBreaker.createBreaker).toHaveBeenCalledWith(
+        'models-api',
+        expect.any(Function),
+        expect.any(Object),
+        undefined
+      );
+      expect(mockCircuitBreaker.createBreaker).toHaveBeenCalledWith(
+        'deployments-api',
+        expect.any(Function),
+        expect.any(Object),
+        undefined
+      );
+    });
+  });
+
+  describe('model search', () => {
+    it('should search models with caching', async () => {
+      const mockModels = [
+        { id: 'model1', name: 'Test Model 1' },
+        { id: 'model2', name: 'Test Model 2' },
+      ];
+
+      // Mock cache miss
+      mockCacheService.get.mockResolvedValue(null);
+
+      // Mock API response
+      mockRateLimiter.schedule.mockResolvedValue({
+        data: mockModels,
+        status: 200,
+        headers: new Headers(),
+        rateLimitInfo: {
+          limit: 1000,
+          remaining: 999,
+          reset: Date.now() + 3600,
+          resetDate: new Date(Date.now() + 3600000),
+        },
+      });
+
+      const result = await integrationService.searchModels({
+        organization: 'swaggystacks',
+        query: 'test',
+        limit: 10,
+      });
+
+      expect(result.success).toBe(true);
+      expect(result.models).toEqual(mockModels);
+      expect(result.total).toBe(2);
+      expect(result.fromCache).toBe(false);
+
+      // Verify caching
+      expect(mockCacheService.set).toHaveBeenCalledWith(
+        expect.stringContaining('models:search'),
+        expect.objectContaining({
+          models: mockModels,
+          total: 2,
+          query: 'test',
+        }),
+        expect.objectContaining({
+          ttl: 300,
+          tags: ['models', 'swaggystacks'],
+        })
+      );
+    });
+
+    it('should return cached results', async () => {
+      const cachedData = {
+        models: [{ id: 'cached-model', name: 'Cached Model' }],
+        total: 1,
+        query: 'test',
+        timestamp: Date.now(),
+      };
+
+      mockCacheService.get.mockResolvedValue(cachedData);
+
+      const result = await integrationService.searchModels({
+        organization: 'swaggystacks',
+        query: 'test',
+        limit: 10,
+      });
+
+      expect(result.success).toBe(true);
+      expect(result.models).toEqual(cachedData.models);
+      expect(result.fromCache).toBe(true);
+      expect(mockRateLimiter.schedule).not.toHaveBeenCalled();
+    });
+
+    it('should handle search errors', async () => {
+      mockCacheService.get.mockResolvedValue(null);
+      mockRateLimiter.schedule.mockRejectedValue(new Error('API Error'));
+
+      const result = await integrationService.searchModels({
+        organization: 'swaggystacks',
+        query: 'test',
+        limit: 10,
+      });
+
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('API Error');
+    });
+
+    it('should use credentials from credentials service', async () => {
+      mockCredentialsService.getCredentials.mockResolvedValue({
+        organization: 'swaggystacks',
+        apiKey: 'hf_test_key',
+        organizationId: 'org_123',
+        permissions: ['read'],
+        metadata: {},
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      mockCacheService.get.mockResolvedValue(null);
+      mockRateLimiter.schedule.mockResolvedValue({
+        data: [],
+        status: 200,
+        headers: new Headers(),
+      });
+
+      await integrationService.searchModels({
+        organization: 'swaggystacks',
+        query: 'test',
+      });
+
+      expect(mockCredentialsService.getCredentials).toHaveBeenCalledWith('swaggystacks');
+    });
+  });
+
+  describe('model deployment', () => {
+    it('should deploy model successfully', async () => {
+      const deploymentRequest = {
+        organization: 'swaggystacks',
+        modelId: 'test-model',
+        instanceType: 'cpu-medium',
+        minReplicas: 1,
+        maxReplicas: 3,
+        name: 'test-deployment',
+      };
+
+      const mockDeploymentResponse = {
+        id: 'deployment-123',
+        status: 'deploying',
+        modelId: 'test-model',
+        endpoint: null,
+        createdAt: new Date().toISOString(),
+      };
+
+      mockRateLimiter.schedule.mockResolvedValue({
+        data: mockDeploymentResponse,
+        status: 201,
+        headers: new Headers(),
+      });
+
+      const result = await integrationService.deployModel(deploymentRequest);
+
+      expect(result.success).toBe(true);
+      expect(result.deployment).toEqual(mockDeploymentResponse);
+      expect(mockRateLimiter.schedule).toHaveBeenCalledWith(
+        'swaggystacks',
+        expect.any(Function),
+        { priority: 8 }
+      );
+    });
+
+    it('should handle deployment errors', async () => {
+      const deploymentRequest = {
+        organization: 'swaggystacks',
+        modelId: 'test-model',
+        instanceType: 'cpu-medium',
+        minReplicas: 1,
+        maxReplicas: 3,
+        name: 'test-deployment',
+      };
+
+      mockRateLimiter.schedule.mockRejectedValue(new Error('Deployment failed'));
+
+      const result = await integrationService.deployModel(deploymentRequest);
+
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('Deployment failed');
+    });
+
+    it('should invalidate cache after deployment', async () => {
+      const deploymentRequest = {
+        organization: 'swaggystacks',
+        modelId: 'test-model',
+        instanceType: 'cpu-medium',
+        minReplicas: 1,
+        maxReplicas: 3,
+        name: 'test-deployment',
+      };
+
+      mockRateLimiter.schedule.mockResolvedValue({
+        data: { id: 'deployment-123' },
+        status: 201,
+        headers: new Headers(),
+      });
+
+      await integrationService.deployModel(deploymentRequest);
+
+      expect(mockCacheService.invalidateByTags).toHaveBeenCalledWith([
+        'deployments',
+        'swaggystacks',
+      ]);
+    });
+  });
+
+  describe('webhook processing', () => {
+    it('should process webhooks', async () => {
+      const webhookPayload = JSON.stringify({
+        type: 'model.updated',
+        organization: 'swaggystacks',
+        data: { model: 'test-model' },
+      });
+
+      mockWebhookService.processWebhook.mockResolvedValue({
+        success: true,
+        message: 'Processed 1 events',
+        eventsProcessed: 1,
+      });
+
+      const result = await integrationService.processWebhook(
+        webhookPayload,
+        'test-signature'
+      );
+
+      expect(result.success).toBe(true);
+      expect(result.eventsProcessed).toBe(1);
+      expect(mockWebhookService.processWebhook).toHaveBeenCalledWith(
+        webhookPayload,
+        'test-signature',
+        {}
+      );
+    });
+
+    it('should handle webhook errors', async () => {
+      mockWebhookService.processWebhook.mockResolvedValue({
+        success: false,
+        message: 'Invalid signature',
+        eventsProcessed: 0,
+      });
+
+      const result = await integrationService.processWebhook(
+        'invalid-payload',
+        'invalid-signature'
+      );
+
+      expect(result.success).toBe(false);
+      expect(result.message).toBe('Invalid signature');
+    });
+  });
+
+  describe('health check', () => {
+    it('should perform comprehensive health check', async () => {
+      // Mock all health checks to pass
+      mockCredentialsService.healthCheck.mockResolvedValue({
+        totalCredentials: 2,
+        validCredentials: 2,
+        invalidCredentials: 0,
+        results: [],
+      });
+
+      mockCircuitBreaker.getOverallHealth.mockResolvedValue({
+        healthy: true,
+        checks: {
+          'models-api': true,
+          'deployments-api': true,
+        },
+      });
+
+      mockCacheService.getStats.mockReturnValue({
+        lru: { size: 100, maxSize: 500, hits: 90, misses: 10, hitRate: 0.9 },
+        redis: { connected: true, hits: 50, misses: 5, hitRate: 0.91 },
+      });
+
+      mockRateLimiter.getStatistics.mockReturnValue({
+        'swaggystacks': {
+          executed: 100,
+          queued: 2,
+          errors: 1,
+          averageTime: 150,
+        },
+      });
+
+      const result = await integrationService.healthCheck();
+
+      expect(result.healthy).toBe(true);
+      expect(result.details).toHaveProperty('credentials');
+      expect(result.details).toHaveProperty('circuitBreakers');
+      expect(result.details).toHaveProperty('cache');
+      expect(result.details).toHaveProperty('rateLimiter');
+      expect(result.details.credentials.validCredentials).toBe(2);
+    });
+
+    it('should detect unhealthy services', async () => {
+      mockCredentialsService.healthCheck.mockResolvedValue({
+        totalCredentials: 2,
+        validCredentials: 1,
+        invalidCredentials: 1,
+        results: [],
+      });
+
+      mockCircuitBreaker.getOverallHealth.mockResolvedValue({
+        healthy: false,
+        checks: {
+          'models-api': false,
+          'deployments-api': true,
+        },
+      });
+
+      const result = await integrationService.healthCheck();
+
+      expect(result.healthy).toBe(false);
+      expect(result.details.credentials.invalidCredentials).toBe(1);
+      expect(result.details.circuitBreakers.healthy).toBe(false);
+    });
+  });
+
+  describe('statistics', () => {
+    it('should return comprehensive statistics', () => {
+      mockCacheService.getStats.mockReturnValue({
+        lru: { size: 50, maxSize: 500, hits: 80, misses: 20, hitRate: 0.8 },
+        redis: { connected: true, hits: 40, misses: 10, hitRate: 0.8 },
+      });
+
+      mockRateLimiter.getStatistics.mockReturnValue({
+        'swaggystacks': { executed: 50, queued: 1, errors: 0, averageTime: 120 },
+        'scientia-capital': { executed: 30, queued: 0, errors: 1, averageTime: 200 },
+      });
+
+      mockCircuitBreaker.getAllStats.mockReturnValue({
+        'models-api': { state: 'CLOSED', failures: 0, successes: 10 },
+        'deployments-api': { state: 'CLOSED', failures: 1, successes: 5 },
+      });
+
+      mockWebhookService.getStats.mockReturnValue({
+        totalEvents: 25,
+        eventsByType: { 'model.updated': 15, 'deployment.completed': 10 },
+        successfulDeliveries: 24,
+        failedDeliveries: 1,
+        averageProcessingTime: 50,
+      });
+
+      const stats = integrationService.getStatistics();
+
+      expect(stats).toHaveProperty('cache');
+      expect(stats).toHaveProperty('rateLimiter');
+      expect(stats).toHaveProperty('circuitBreakers');
+      expect(stats).toHaveProperty('webhooks');
+      expect(stats.webhooks.totalEvents).toBe(25);
+      expect(stats.rateLimiter.organizations).toHaveLength(2);
+    });
+  });
+
+  describe('cleanup', () => {
+    it('should disconnect all services gracefully', async () => {
+      await integrationService.disconnect();
+
+      expect(mockCacheService.disconnect).toHaveBeenCalled();
+    });
+  });
+
+  describe('error handling', () => {
+    it('should handle missing credentials gracefully', async () => {
+      mockCredentialsService.getCredentials.mockResolvedValue(null);
+
+      const result = await integrationService.searchModels({
+        organization: 'nonexistent',
+        query: 'test',
+      });
+
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('No credentials found');
+    });
+
+    it('should handle circuit breaker failures', async () => {
+      mockCredentialsService.getCredentials.mockResolvedValue({
+        organization: 'swaggystacks',
+        apiKey: 'test-key',
+        organizationId: 'org_123',
+        permissions: ['read'],
+        metadata: {},
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      mockCacheService.get.mockResolvedValue(null);
+      mockRateLimiter.schedule.mockRejectedValue(new Error('Circuit breaker open'));
+
+      const result = await integrationService.searchModels({
+        organization: 'swaggystacks',
+        query: 'test',
+      });
+
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('Circuit breaker open');
+    });
+  });
+
+  describe('organization-specific behavior', () => {
+    it('should handle SwaggyStacks organization', async () => {
+      mockCredentialsService.getCredentials.mockResolvedValue({
+        organization: 'swaggystacks',
+        apiKey: 'test-key',
+        organizationId: 'swaggy_org',
+        permissions: ['read', 'write'],
+        metadata: { type: 'gaming' },
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      mockCacheService.get.mockResolvedValue(null);
+      mockRateLimiter.schedule.mockResolvedValue({
+        data: [],
+        status: 200,
+        headers: new Headers(),
+      });
+
+      const result = await integrationService.searchModels({
+        organization: 'swaggystacks',
+        query: 'gaming',
+      });
+
+      expect(result.success).toBe(true);
+      expect(mockRateLimiter.schedule).toHaveBeenCalledWith(
+        'swaggystacks',
+        expect.any(Function),
+        { priority: 5 }
+      );
+    });
+
+    it('should handle ScientiaCapital organization', async () => {
+      mockCredentialsService.getCredentials.mockResolvedValue({
+        organization: 'scientia-capital',
+        apiKey: 'test-key',
+        organizationId: 'scientia_org',
+        permissions: ['read'],
+        metadata: { type: 'enterprise' },
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      mockCacheService.get.mockResolvedValue(null);
+      mockRateLimiter.schedule.mockResolvedValue({
+        data: [],
+        status: 200,
+        headers: new Headers(),
+      });
+
+      const result = await integrationService.searchModels({
+        organization: 'scientia-capital',
+        query: 'finance',
+      });
+
+      expect(result.success).toBe(true);
+      expect(mockRateLimiter.schedule).toHaveBeenCalledWith(
+        'scientia-capital',
+        expect.any(Function),
+        { priority: 5 }
+      );
+    });
+  });
+});

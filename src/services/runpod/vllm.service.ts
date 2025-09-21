@@ -21,7 +21,7 @@ import {
   InferenceEvent,
   InferenceEventHandler,
   ConnectionStatus
-} from '@/types/vllm'
+} from '../../types/vllm'
 
 export class VLLMService {
   private config: VLLMConfig

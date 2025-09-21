@@ -32,7 +32,7 @@ export interface UseOrganizationsReturn {
 }
 
 export function useOrganizations(): UseOrganizationsReturn {
-  const { user, refreshUserOrganizations } = useAuth()
+  const { user, refreshUserOrganizations, switchOrganization: authSwitchOrganization } = useAuth()
   const [organizations, setOrganizations] = useState<(UserOrganization & { organization: Organization })[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -113,7 +113,7 @@ export function useOrganizations(): UseOrganizationsReturn {
       }
 
       // Update user's current organization in auth context
-      const { error: switchError } = await user?.switchOrganization?.(organizationId) || { error: new Error('Switch function not available') }
+      const { error: switchError } = await authSwitchOrganization(organizationId)
 
       if (switchError) {
         const errorMessage = switchError.message || 'Failed to switch organization'
@@ -127,7 +127,7 @@ export function useOrganizations(): UseOrganizationsReturn {
       setError(errorMessage)
       return { success: false, error: errorMessage }
     }
-  }, [organizations, user])
+  }, [organizations, authSwitchOrganization])
 
   // Update organization
   const updateOrganization = useCallback(async (organizationId: string, data: UpdateOrganizationData) => {
@@ -263,7 +263,7 @@ export function useOrganization(organizationId: string | null) {
   }, [loadOrganization])
 
   // Add member to organization
-  const addMember = useCallback(async (userId: string, role: 'admin' | 'developer' | 'viewer') => {
+  const addMember = useCallback(async (userId: string, role: 'owner' | 'admin' | 'developer' | 'viewer') => {
     if (!organizationId) return { success: false, error: 'No organization ID' }
 
     try {
@@ -309,7 +309,7 @@ export function useOrganization(organizationId: string | null) {
   }, [organizationId, loadOrganization])
 
   // Update member role
-  const updateMemberRole = useCallback(async (userId: string, role: 'admin' | 'developer' | 'viewer') => {
+  const updateMemberRole = useCallback(async (userId: string, role: 'owner' | 'admin' | 'developer' | 'viewer') => {
     if (!organizationId) return { success: false, error: 'No organization ID' }
 
     try {

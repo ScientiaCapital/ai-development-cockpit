@@ -3,10 +3,10 @@
  * Provides detailed insights into test execution, performance trends, and quality metrics
  */
 
-import { TestResult, TestCase, TestSuite } from '@playwright/test/reporter';
+import { TestResult, TestCase, Suite } from '@playwright/test/reporter';
 import { MetricsCollector, TestMetrics } from './MetricsCollector';
-import fs from 'fs/promises';
-import path from 'path';
+import { promises as fs } from 'fs';
+import * as path from 'path';
 
 export interface TestReport {
   summary: TestSummary;
@@ -306,7 +306,7 @@ export class TestReporter {
   /**
    * Process test suite results
    */
-  async processSuite(suite: TestSuite): Promise<void> {
+  async processSuite(suite: Suite): Promise<void> {
     const suiteReport: TestSuiteReport = {
       name: suite.title,
       file: suite.location?.file || 'unknown',

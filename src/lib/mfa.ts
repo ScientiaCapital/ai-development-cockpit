@@ -4,6 +4,7 @@
 
 import { supabase } from './supabase'
 import { AuthError } from '@supabase/supabase-js'
+import { isError, getErrorMessage } from '../utils/errorGuards'
 
 export interface MFAEnrollment {
   id: string
@@ -17,7 +18,7 @@ export interface MFAEnrollment {
 export interface MFAFactor {
   id: string
   friendly_name?: string
-  factor_type: 'totp'
+  factor_type: 'totp' | 'phone'
   status: 'verified' | 'unverified'
   created_at: string
   updated_at: string
@@ -25,7 +26,7 @@ export interface MFAFactor {
 
 export interface MFAChallenge {
   id: string
-  type: 'totp'
+  type: 'totp' | 'phone'
   expires_at: number
 }
 
@@ -81,11 +82,11 @@ export const verifyMFAEnrollment = async (
     })
 
     return { data, error }
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('MFA verification error:', error)
     return {
       data: null,
-      error: error as AuthError
+      error: isError(error) ? error as AuthError : new Error(getErrorMessage(error)) as AuthError
     }
   }
 }
@@ -105,11 +106,11 @@ export const createMFAChallenge = async (
     })
 
     return { data, error }
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('MFA challenge error:', error)
     return {
       data: null,
-      error: error as AuthError
+      error: isError(error) ? error as AuthError : new Error(getErrorMessage(error)) as AuthError
     }
   }
 }
@@ -157,11 +158,11 @@ export const getMFAFactors = async (): Promise<{
     }
 
     return { data: data.factors || [], error: null }
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Get MFA factors error:', error)
     return {
       data: null,
-      error: error as AuthError
+      error: isError(error) ? error as AuthError : new Error(getErrorMessage(error)) as AuthError
     }
   }
 }

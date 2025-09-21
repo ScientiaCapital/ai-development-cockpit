@@ -46,6 +46,8 @@ export default function ModelMarketplace({
     cacheHit,
     setQuery,
     setFilters,
+    setSortBy,
+    setSortOrder,
     addFilter,
     removeFilter,
     clearFilters,

@@ -27,6 +27,7 @@ export interface UseModelSearchReturn {
   totalCount: number
   currentPage: number
   hasNextPage: boolean
+  hasMore: boolean
   searchTime?: number
   cacheHit?: boolean
 

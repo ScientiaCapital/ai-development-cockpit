@@ -1,7 +1,7 @@
 import { TestOrchestrator } from './TestOrchestrator';
 import { MetricsCollector } from './MetricsCollector';
 import { ChaosEngine } from './ChaosEngine';
-import { TestApiClient } from '../e2e/utils/TestApiClient';
+import { TestApiClient, ApiTestResult } from '../e2e/utils/TestApiClient';
 import { Page } from '@playwright/test';
 
 export interface TestCoordinatorConfig {
@@ -30,6 +30,19 @@ export interface ApiValidationConfig {
   };
   validateResponses: boolean;
   checkPerformance: boolean;
+}
+
+export interface TestOrchestratorConfig {
+  browser?: any;
+  parallelSessions: number;
+  organizations: ('swaggystacks' | 'scientia')[];
+  environments: ('development' | 'staging' | 'production')[];
+  testSuites: string[];
+  enableChaosMode: boolean;
+  enableNetworkSimulation: boolean;
+  enableComplianceValidation: boolean;
+  maxExecutionTime: number;
+  reportingLevel: 'minimal' | 'standard' | 'detailed';
 }
 
 export interface UnifiedTestResults {

@@ -478,3 +478,21 @@ export function hasRequiredTokens(): boolean {
 export function canRunRealApiTests(): boolean {
   return isRealApiTest() && hasRequiredTokens();
 }
+
+// Missing interfaces for testing framework
+export interface ApiTestResult {
+  endpoint: string;
+  method: string;
+  success: boolean;
+  responseTime: number;
+  statusCode: number;
+  error?: string;
+  validationDetails: {
+    authValidation: boolean;
+    schemaValidation: boolean;
+    performanceValidation: boolean;
+    rateLimitValidation: boolean;
+  };
+  retryAttempts: number;
+  timestamp: string;
+}

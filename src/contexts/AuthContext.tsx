@@ -17,6 +17,8 @@ export interface AuthUser extends User {
 export interface UserOrganization {
   id: string
   organization: Tables<'organizations'>
+  organization_id?: string
+  user_id?: string
   role: 'admin' | 'developer' | 'viewer'
   created_at: string
   updated_at: string
@@ -184,6 +186,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
           role,
           created_at,
           updated_at,
+          organization_id,
+          user_id,
           organization:organizations(*)
         `)
         .eq('user_id', authUser.id)
@@ -192,12 +196,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
         console.error('Error loading organizations:', orgsError)
       }
 
+      // Transform the data to match UserOrganization interface
+      const transformedOrgs: UserOrganization[] = userOrgs?.map(org => ({
+        id: org.id,
+        organization: Array.isArray(org.organization) ? org.organization[0] : org.organization,
+        organization_id: org.organization_id,
+        user_id: org.user_id,
+        role: org.role,
+        created_at: org.created_at,
+        updated_at: org.updated_at
+      })) || []
+
       // Create enhanced user object
       const enhancedUser: AuthUser = {
         ...authUser,
         profile: profile || undefined,
-        organizations: userOrgs || [],
-        currentOrganization: userOrgs?.[0] || null
+        organizations: transformedOrgs,
+        currentOrganization: transformedOrgs[0] || null
       }
 
       setUser(enhancedUser)

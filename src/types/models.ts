@@ -22,6 +22,8 @@ export interface ModelMetadata {
   deployment: ModelDeployment
   popularity: ModelPopularity
   status?: ModelStatus
+  createdAt: string
+  updatedAt: string
 }
 
 export interface ModelPricing {
@@ -80,6 +82,9 @@ export interface DiscoveryFilters {
   license?: string[]
   inferenceSpeed?: ModelPerformance['inferenceSpeed'][]
   pricingTier?: ModelPricing['tier'][]
+  task?: string
+  modelSize?: string
+  sortBy?: string
 }
 
 export interface SearchOptions {

@@ -889,7 +889,7 @@ export class HuggingFaceApiClient {
 
           // Auto-reconnect if not a clean close
           if (event.code !== 1000 && wsConfig.maxReconnectAttempts) {
-            this.scheduleReconnect(connectionId, subscription, onMessage, onError, onClose, wsConfig);
+            this.scheduleReconnect(connectionId, subscription, onMessage, wsConfig, onError, onClose);
           }
         };
 
@@ -903,9 +903,9 @@ export class HuggingFaceApiClient {
     connectionId: string,
     subscription: WebSocketSubscription,
     onMessage: (message: WebSocketMessage) => void,
+    wsConfig: WebSocketConfig,
     onError?: (error: Event) => void,
     onClose?: (event: CloseEvent) => void,
-    wsConfig: WebSocketConfig,
     attempt = 1
   ): void {
     if (attempt > (wsConfig.maxReconnectAttempts || 10)) {
@@ -926,7 +926,7 @@ export class HuggingFaceApiClient {
         this.log('WEBSOCKET_RECONNECTED', { connectionId, attempt });
       } catch (error) {
         this.log('WEBSOCKET_RECONNECT_FAILED', { connectionId, attempt, error });
-        this.scheduleReconnect(connectionId, subscription, onMessage, onError, onClose, wsConfig, attempt + 1);
+        this.scheduleReconnect(connectionId, subscription, onMessage, wsConfig, onError, onClose, attempt + 1);
       }
     }, delay);
 

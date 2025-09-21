@@ -1,5 +1,5 @@
 import { LRUCache } from 'lru-cache';
-import Redis from 'ioredis';
+import Redis, { RedisOptions } from 'ioredis';
 
 export interface CacheConfig {
   enableMemoryCache: boolean;
@@ -72,7 +72,7 @@ export class HuggingFaceCacheService {
 
   constructor(
     config: Partial<CacheConfig> = {},
-    redisConfig?: Parameters<typeof Redis>[0],
+    redisConfig?: RedisOptions,
     enableLogging = process.env.NODE_ENV === 'development'
   ) {
     this.config = { ...DEFAULT_CONFIG, ...config };
@@ -121,7 +121,7 @@ export class HuggingFaceCacheService {
     });
   }
 
-  private async initializeRedisCache(redisConfig?: Parameters<typeof Redis>[0]): Promise<void> {
+  private async initializeRedisCache(redisConfig?: RedisOptions): Promise<void> {
     if (!this.config.enableRedisCache) return;
 
     try {

@@ -178,6 +178,7 @@ export class MetricsCollector {
   private metrics: TestMetrics;
   private isCollecting: boolean = false;
   private collectionInterval: NodeJS.Timeout | null = null;
+  private requestTimings = new WeakMap<any, number>();
   private performanceObserver: PerformanceObserver | null = null;
 
   constructor(
@@ -354,12 +355,12 @@ export class MetricsCollector {
     // Monitor all requests
     this.page.on('request', (request) => {
       const timestamp = performance.now();
-      request['startTime'] = timestamp;
+      this.requestTimings.set(request, timestamp);
     });
 
     this.page.on('response', async (response) => {
       const request = response.request();
-      const startTime = request['startTime'] as number;
+      const startTime = this.requestTimings.get(request) || performance.now();
       const responseTime = performance.now() - startTime;
 
       // Record API response time
@@ -400,14 +401,14 @@ export class MetricsCollector {
         collectVitals: () => {
           try {
             // Collect Web Vitals
-            const paint = performance.getEntriesByType('paint');
-            const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+            const paint = performance.getEntriesByType('paint' as any);
+            const navigation = performance.getEntriesByType('navigation' as any)[0] as PerformanceNavigationTiming;
 
             return {
               firstContentfulPaint: paint.find(p => p.name === 'first-contentful-paint')?.startTime || 0,
               largestContentfulPaint: 0, // Will be updated by LCP observer
               timeToInteractive: navigation ? navigation.loadEventEnd - navigation.fetchStart : 0,
-              pageLoadTime: navigation ? navigation.loadEventEnd - navigation.navigationStart : 0
+              pageLoadTime: navigation ? navigation.loadEventEnd - navigation.fetchStart : 0
             };
           } catch (error) {
             console.error('Error collecting vitals:', error);
@@ -420,7 +421,7 @@ export class MetricsCollector {
             const resources = performance.getEntriesByType('resource');
             return {
               totalResources: resources.length,
-              totalSize: resources.reduce((sum, r) => sum + (r.transferSize || 0), 0),
+              totalSize: resources.reduce((sum, r) => sum + ((r as any).transferSize || 0), 0),
               averageResponseTime: resources.length > 0 ?
                 resources.reduce((sum, r) => sum + r.duration, 0) / resources.length : 0
             };
@@ -463,8 +464,8 @@ export class MetricsCollector {
             const entries = list.getEntries();
             let clsValue = 0;
             entries.forEach((entry) => {
-              if (!entry.hadRecentInput) {
-                clsValue += entry.value;
+              if (!(entry as any).hadRecentInput) {
+                clsValue += (entry as any).value;
               }
             });
             window.metricsCollector.vitals.cumulativeLayoutShift = clsValue;

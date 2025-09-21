@@ -108,7 +108,7 @@ const ModelGrid = memo(function ModelGrid({
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {skeletons.map((i) => (
-          <ModelCardSkeleton key={i} />
+          <ModelCardSkeleton key={i} theme={theme as 'swaggystacks' | 'scientiacapital'} />
         ))}
       </div>
     )

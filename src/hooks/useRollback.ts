@@ -6,6 +6,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { RunPodClient } from '@/services/runpod/client';
 import { DeploymentMonitoringService } from '@/services/runpod/monitoring.service';
+import { getErrorMessage } from '@/utils/errorGuards';
 import {
   DeploymentRollbackService,
   DeploymentSnapshot,
@@ -176,10 +177,10 @@ export function useRollback(config: UseRollbackConfig): UseRollbackReturn {
         rollbackService.off('preCheckCompleted', handlePreCheckCompleted);
       };
 
-    } catch (error) {
+    } catch (error: unknown) {
       setState(prev => ({
         ...prev,
-        error: `Failed to initialize rollback service: ${error.message}`
+        error: `Failed to initialize rollback service: ${getErrorMessage(error)}`
       }));
     }
   }, [config.clientConfig]);
@@ -219,11 +220,11 @@ export function useRollback(config: UseRollbackConfig): UseRollbackReturn {
     try {
       const snapshot = await rollbackRef.current.createSnapshot(deploymentId, metadata);
       return snapshot;
-    } catch (error) {
+    } catch (error: unknown) {
       setState(prev => ({
         ...prev,
         loading: { ...prev.loading, creating: false },
-        error: `Failed to create snapshot: ${error.message}`
+        error: `Failed to create snapshot: ${getErrorMessage(error)}`
       }));
       return null;
     }
@@ -279,11 +280,11 @@ export function useRollback(config: UseRollbackConfig): UseRollbackReturn {
       }));
 
       return plan;
-    } catch (error) {
+    } catch (error: unknown) {
       setState(prev => ({
         ...prev,
         loading: { ...prev.loading, planning: false },
-        error: `Failed to create rollback plan: ${error.message}`
+        error: `Failed to create rollback plan: ${getErrorMessage(error)}`
       }));
       return null;
     }
@@ -314,11 +315,11 @@ export function useRollback(config: UseRollbackConfig): UseRollbackReturn {
       }));
 
       return checks;
-    } catch (error) {
+    } catch (error: unknown) {
       setState(prev => ({
         ...prev,
         loading: { ...prev.loading, checking: false },
-        error: `Failed to execute pre-checks: ${error.message}`
+        error: `Failed to execute pre-checks: ${getErrorMessage(error)}`
       }));
       return [];
     }
@@ -342,11 +343,11 @@ export function useRollback(config: UseRollbackConfig): UseRollbackReturn {
     try {
       const execution = await rollbackRef.current.executeRollback(planId);
       return execution;
-    } catch (error) {
+    } catch (error: unknown) {
       setState(prev => ({
         ...prev,
         loading: { ...prev.loading, executing: false },
-        error: `Failed to execute rollback: ${error.message}`
+        error: `Failed to execute rollback: ${getErrorMessage(error)}`
       }));
       return null;
     }
@@ -367,10 +368,10 @@ export function useRollback(config: UseRollbackConfig): UseRollbackReturn {
       }
 
       return success;
-    } catch (error) {
+    } catch (error: unknown) {
       setState(prev => ({
         ...prev,
-        error: `Failed to cancel rollback: ${error.message}`
+        error: `Failed to cancel rollback: ${getErrorMessage(error)}`
       }));
       return false;
     }
@@ -396,11 +397,11 @@ export function useRollback(config: UseRollbackConfig): UseRollbackReturn {
         ...prev,
         loading: { ...prev.loading, snapshots: false }
       }));
-    } catch (error) {
+    } catch (error: unknown) {
       setState(prev => ({
         ...prev,
         loading: { ...prev.loading, snapshots: false },
-        error: `Failed to refresh: ${error.message}`
+        error: `Failed to refresh: ${getErrorMessage(error)}`
       }));
     }
   }, []);

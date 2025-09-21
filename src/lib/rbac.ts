@@ -2,7 +2,7 @@
  * Role-Based Access Control (RBAC) utilities and permissions system
  */
 
-export type Role = 'admin' | 'developer' | 'viewer'
+export type Role = 'owner' | 'admin' | 'developer' | 'viewer'
 
 export type Permission = 
   // Organization permissions
@@ -48,6 +48,33 @@ export interface RoleDefinition {
  * Role definitions with permissions and hierarchy
  */
 export const ROLE_DEFINITIONS: Record<Role, RoleDefinition> = {
+  owner: {
+    name: 'owner',
+    displayName: 'Owner',
+    description: 'Full control over organization, billing, and all resources',
+    hierarchy: 100,
+    permissions: [
+      'org:manage',
+      'org:view',
+      'org:invite_users',
+      'org:remove_users',
+      'models:create',
+      'models:deploy',
+      'models:manage',
+      'models:view',
+      'models:delete',
+      'billing:manage',
+      'billing:view',
+      'settings:manage',
+      'settings:view',
+      'users:manage',
+      'users:view',
+      'users:invite',
+      'api:manage',
+      'api:view',
+      'api:create_keys'
+    ]
+  },
   admin: {
     name: 'admin',
     displayName: 'Administrator',
@@ -291,6 +318,7 @@ export function getRoleDisplayName(role: Role): string {
  */
 export function getRoleColor(role: Role): string {
   switch (role) {
+    case 'owner': return 'text-purple-600'
     case 'admin': return 'text-blue-600'
     case 'developer': return 'text-green-600'
     case 'viewer': return 'text-gray-600'

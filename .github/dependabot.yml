@@ -1,0 +1,133 @@
+# Dependabot configuration for automated dependency management
+# Documentation: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  # NPM dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "tmkipper"
+    assignees:
+      - "tmkipper"
+    commit-message:
+      prefix: "chore"
+      prefix-development: "chore"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "npm"
+      - "automated"
+    allow:
+      # Allow version updates for direct dependencies
+      - dependency-type: "direct"
+      # Allow version updates for indirect dependencies (security only)
+      - dependency-type: "indirect"
+        update-types: ["security"]
+    ignore:
+      # Ignore major version updates for these critical packages
+      # to prevent breaking changes in automated updates
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/react-dom"
+        update-types: ["version-update:semver-major"]
+    groups:
+      # Group React ecosystem updates together
+      react-ecosystem:
+        patterns:
+          - "react*"
+          - "@types/react*"
+      # Group Next.js ecosystem updates
+      nextjs-ecosystem:
+        patterns:
+          - "next*"
+          - "@next/*"
+      # Group testing dependencies
+      testing-dependencies:
+        patterns:
+          - "@playwright/*"
+          - "playwright*"
+          - "jest*"
+          - "@types/jest"
+          - "@testing-library/*"
+      # Group ESLint and linting dependencies
+      linting-dependencies:
+        patterns:
+          - "eslint*"
+          - "@typescript-eslint/*"
+          - "prettier*"
+      # Group TypeScript dependencies
+      typescript-dependencies:
+        patterns:
+          - "typescript"
+          - "@types/*"
+      # Group TailwindCSS dependencies
+      tailwind-dependencies:
+        patterns:
+          - "tailwindcss*"
+          - "@tailwindcss/*"
+          - "autoprefixer"
+          - "postcss*"
+    # Custom PR body template
+    pull-request-branch-name:
+      separator: "/"
+
+  # GitHub Actions dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "06:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "tmkipper"
+    assignees:
+      - "tmkipper"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "ci/cd"
+    groups:
+      # Group GitHub Actions updates
+      github-actions:
+        patterns:
+          - "actions/*"
+          - "github/*"
+
+  # Docker dependencies (if using Docker in the future)
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      day: "monday"
+      time: "06:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 3
+    reviewers:
+      - "tmkipper"
+    assignees:
+      - "tmkipper"
+    commit-message:
+      prefix: "docker"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "docker"
+      - "infrastructure"

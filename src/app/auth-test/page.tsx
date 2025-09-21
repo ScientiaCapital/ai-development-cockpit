@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useHuggingFaceAuth } from '@/contexts/HuggingFaceAuth'
 import { huggingFaceApi, ModelInfo } from '@/lib/huggingface-api'
-import OrganizationSwitcher from '@/components/auth/OrganizationSwitcher'
+import { OrganizationSwitcher } from '@/components/auth/OrganizationSwitcher'
 import ModelCard from '@/components/terminal/ModelCard'
 import { AuthStatus } from '@/contexts/HuggingFaceAuth'
 import { Button } from '@/components/ui/button'
@@ -175,7 +175,7 @@ export default function AuthTestPage() {
         </div>
 
         {/* Organization Switcher */}
-        <OrganizationSwitcher showStatus={true} showTokenStatus={true} />
+        <OrganizationSwitcher />
 
         {/* Models Display */}
         <div className={`${styles.terminalWindow} p-6`}>

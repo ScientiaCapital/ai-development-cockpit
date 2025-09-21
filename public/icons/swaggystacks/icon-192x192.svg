@@ -1,0 +1,30 @@
+
+<svg width="192" height="192" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+  <rect width="192" height="192" fill="#000000"/>
+  <rect x="19.200000000000003" y="19.200000000000003" width="153.60000000000002" height="153.60000000000002" 
+        fill="none" stroke="#00ff00" stroke-width="3.84" rx="9.600000000000001"/>
+  
+  <!-- Terminal prompt symbol -->
+  <text x="38.400000000000006" y="76.80000000000001" 
+        font-family="monospace" 
+        font-size="28.799999999999997" 
+        fill="#00ff00" 
+        font-weight="bold">$</text>
+  
+  <!-- Cursor -->
+  <rect x="57.599999999999994" y="61.44" 
+        width="5.76" 
+        height="28.799999999999997" 
+        fill="#00ff00">
+    <animate attributeName="opacity" 
+             values="1;0;1" 
+             dur="1s" 
+             repeatCount="indefinite"/>
+  </rect>
+  
+  <!-- Code brackets -->
+  <text x="76.80000000000001" y="124.80000000000001" 
+        font-family="monospace" 
+        font-size="23.04" 
+        fill="#00ff00">&lt;/&gt;</text>
+</svg>

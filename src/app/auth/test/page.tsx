@@ -55,14 +55,9 @@ export default function AuthTestPage() {
                     <span className="font-medium">Email:</span> {user.email}
                   </p>
                   {user.profile && (
-                    <>
-                      <p className="text-sm">
-                        <span className="font-medium">First Name:</span> {user.profile.first_name}
-                      </p>
-                      <p className="text-sm">
-                        <span className="font-medium">Last Name:</span> {user.profile.last_name}
-                      </p>
-                    </>
+                    <p className="text-sm">
+                      <span className="font-medium">Full Name:</span> {user.profile.full_name || 'Not provided'}
+                    </p>
                   )}
                   <p className="text-sm">
                     <span className="font-medium">Email Confirmed:</span> {user.email_confirmed_at ? 'Yes' : 'No'}

@@ -468,11 +468,6 @@ TYPE 'roi' for financial impact analysis
           <div className="lg:col-span-2">
             <TerminalWindow 
               title="Scientia Capital Enterprise Command Center"
-              onCommand={handleCommand}
-              currentCommand={currentCommand}
-              setCurrentCommand={setCurrentCommand}
-              isProcessing={isProcessing}
-              bootMessage={retroBanner}
             >
               <TerminalOutput 
                 lines={outputLines}

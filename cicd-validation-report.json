@@ -1,0 +1,73 @@
+{
+  "timestamp": "2025-09-21T16:02:12.470Z",
+  "summary": {
+    "passed": 36,
+    "failed": 0,
+    "warnings": 2
+  },
+  "successRate": 94.7,
+  "status": "READY",
+  "details": {
+    "workflows": {
+      "ci.yml": {
+        "exists": true,
+        "valid": true,
+        "issues": []
+      },
+      "deploy.yml": {
+        "exists": true,
+        "valid": true,
+        "issues": []
+      },
+      "security.yml": {
+        "exists": true,
+        "valid": true,
+        "issues": []
+      },
+      "performance.yml": {
+        "exists": true,
+        "valid": true,
+        "issues": []
+      },
+      "e2e-testing.yml": {
+        "exists": true,
+        "valid": true,
+        "issues": []
+      },
+      "cd-with-e2e.yml": {
+        "exists": true,
+        "valid": true,
+        "issues": []
+      }
+    },
+    "files": {
+      ".github/dependabot.yml": {
+        "exists": true
+      },
+      "package.json": {
+        "exists": true
+      },
+      "playwright.config.ts": {
+        "exists": true
+      },
+      "jest.config.js": {
+        "exists": true
+      },
+      "next.config.js": {
+        "exists": true
+      },
+      "tsconfig.json": {
+        "exists": true
+      }
+    },
+    "configuration": {},
+    "security": {},
+    "performance": {},
+    "integration": {},
+    "summary": {
+      "passed": 36,
+      "failed": 0,
+      "warnings": 2
+    }
+  }
+}

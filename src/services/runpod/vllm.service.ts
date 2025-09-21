@@ -233,16 +233,16 @@ export class VLLMService {
     }
   }
 
-  async generateTextStreaming(
+  async generateStreamingText(
     request: InferenceRequest,
     onChunk: (response: StreamingInferenceResponse) => void
   ): Promise<void> {
     const apiType = request.apiType || this.detectOptimalAPI(request)
 
     if (apiType === 'openai' || request.messages) {
-      return await this.generateTextStreamingOpenAI(request, onChunk)
+      return await this.generateStreamingTextOpenAI(request, onChunk)
     } else {
-      return await this.generateTextStreamingNative(request, onChunk)
+      return await this.generateStreamingTextNative(request, onChunk)
     }
   }
 
@@ -316,7 +316,7 @@ export class VLLMService {
     }
   }
 
-  private async generateTextStreamingOpenAI(
+  private async generateStreamingTextOpenAI(
     request: InferenceRequest,
     onChunk: (response: StreamingInferenceResponse) => void
   ): Promise<void> {
@@ -350,7 +350,7 @@ export class VLLMService {
     })
   }
 
-  private async generateTextStreamingNative(
+  private async generateStreamingTextNative(
     request: InferenceRequest,
     onChunk: (response: StreamingInferenceResponse) => void
   ): Promise<void> {

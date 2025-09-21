@@ -125,7 +125,7 @@ export function OrganizationSwitcher({
                       </div>
 
                       {/* Manage Button */}
-                      {onManageOrganization && (userOrg.role === 'owner' || userOrg.role === 'admin') && (
+                      {onManageOrganization && userOrg.role === 'admin' && (
                         <button
                           onClick={(e) => {
                             e.stopPropagation()

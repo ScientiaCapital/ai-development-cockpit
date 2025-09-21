@@ -112,7 +112,7 @@ export default function SessionManager({ className = '' }: SessionManagerProps) 
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Created</span>
                 <span className="text-sm text-gray-900 dark:text-white">
-                  {new Date(sessionInfo.created_at).toLocaleString()}
+                  {sessionInfo.created_at ? new Date(sessionInfo.created_at).toLocaleString() : 'Unknown'}
                 </span>
               </div>
 

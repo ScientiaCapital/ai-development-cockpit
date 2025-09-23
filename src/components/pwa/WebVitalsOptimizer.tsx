@@ -182,16 +182,15 @@ export function WebVitalsOptimizer({
 
   const optimizeRenderBlocking = () => {
     // Remove render-blocking resources
-    const stylesheets = document.querySelectorAll('link[rel="stylesheet"]:not([media])')
+    const stylesheets = document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]:not([media])')
     stylesheets.forEach(link => {
       link.setAttribute('media', 'print')
       link.setAttribute('onload', "this.media='all'")
     })
 
     // Defer non-critical JavaScript
-    const scripts = document.querySelectorAll('script[src]:not([async]):not([defer])')
-    scripts.forEach(scriptElement => {
-      const script = scriptElement as HTMLScriptElement
+    const scripts = document.querySelectorAll<HTMLScriptElement>('script[src]:not([async]):not([defer])')
+    scripts.forEach(script => {
       if (script.src && !script.src.includes('vital')) { // Don't defer critical scripts
         script.setAttribute('defer', '')
       }

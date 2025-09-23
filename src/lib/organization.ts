@@ -13,6 +13,7 @@ export interface Organization {
   slug: string
   description?: string
   website?: string
+  website_url?: string  // For backward compatibility
   logo_url?: string
   plan: 'free' | 'pro' | 'enterprise'
   max_members: number
@@ -24,7 +25,7 @@ export interface Organization {
   owner?: User
 
   // Settings
-  settings: OrganizationSettings
+  settings?: OrganizationSettings  // Make optional for creation
 
   // Computed fields
   member_count?: number

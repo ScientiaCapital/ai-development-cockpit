@@ -1,490 +1,619 @@
-# Claude Code Advanced Configuration - tmkipper/repos
+# Claude Code Configuration - Dual-Domain LLM Platform
+
+**Last Updated**: 2025-11-05
+**Status**: Development - Skills-First Approach
+**Branch**: `claude/code-review-analysis-011CUpk9WcLMT9aFDnQKo8Dz`
+
+---
+
+## 🎯 Project Overview
+
+**What We're Building**: A mobile-first PWA that makes 500,000+ AI models accessible through dual-domain positioning:
+- **SwaggyStacks.com**: Developer-focused (dark/terminal theme)
+- **ScientiaCapital.com**: Enterprise-focused (light/corporate theme)
+
+**Value Proposition**: 97% cost savings vs traditional APIs through RunPod serverless + vLLM
+
+**Current State**: Strong foundation built, needs environment setup and real deployment testing
+
+---
 
 ## 🚀 Quick Start
-Type `/team-start-advanced` to initialize your complete AI team with all MCP servers
 
-## 🧠 MCP Servers Available
-- **Task Master AI**: Task management with research capabilities
-- **Serena**: Code intelligence and navigation
-- **Shrimp Task Manager**: Advanced task planning and verification
-- **Sequential Thinking**: Step-by-step problem solving
-- **Memory**: Context persistence across sessions
+### First Time Setup
 
-## 📋 Power Commands
-
-### Team Orchestration
-- `/team-start-advanced` - Initialize all MCP servers ✅ (Working)
-
-### Task Management (Use MCP Tools Directly)
-- `mcp__taskmaster-ai__next_task` - Get next available task
-- `mcp__taskmaster-ai__get_tasks` - List all tasks with status
-- `mcp__taskmaster-ai__set_task_status` - Update task status
-- `mcp__shrimp-task-manager__list_tasks` - List Shrimp tasks
-- `mcp__shrimp-task-manager__execute_task` - Execute Shrimp task
-
-### Intelligence & Analysis (Use MCP Tools Directly)
-- `mcp__serena__*` - Code analysis and navigation tools
-- `mcp__sequential-thinking__sequentialthinking` - Complex problem solving
-- `mcp__memory__*` - Context persistence tools
-
-### Note on Slash Commands
-Most documented slash commands don't exist - use MCP tools directly instead
-
-## 🔄 Workflow Patterns
-
-### Morning Routine
-1. `/team-start-advanced` - Initialize systems ✅ (Working)
-2. `mcp__taskmaster-ai__next_task` - Get first task
-3. `mcp__taskmaster-ai__get_tasks` - Review current status
-
-### Feature Development
-1. `mcp__serena__*` - Code analysis and navigation
-2. `mcp__shrimp-task-manager__split_tasks` - Detailed planning
-3. Use available tools for implementation
-4. `mcp__serena__*` - Code review
-
-### Problem Solving
-1. `mcp__sequential-thinking__sequentialthinking` - Break down problem
-2. Use research tools and web search
-3. Use available development tools for implementation
-
-## 🎯 MCP Integration Patterns
-
-### Task Synchronization
-- Task Master ↔ Shrimp: Keep tasks synchronized
-- Both systems track different aspects
-- Task Master: Project management view
-- Shrimp: Execution and verification view
-
-### Code Intelligence Flow
-- Serena analyzes → Memory stores → Shrimp plans → Task Master tracks
-
-### Learning Loop
-- Research → Implement → Verify → Remember
-- Each MCP contributes to the learning process
-
-## 🏗️ Repository Structure
-```
-tmkipper/repos/
-├── infrastructure/          # System configuration and setup
-│   ├── setup-ollama.sh     # Local LLM setup for M1 Mac
-│   ├── validate-system.py  # Complete system validation
-│   ├── model-configs/      # AI model configurations
-│   └── runpod-configs/     # Cloud GPU configurations
-├── projects/               # All active development projects (20+)
-│   ├── claude-education-platform/
-│   ├── swaggy-stacks/      # Trading system
-│   ├── scientia_capital/   # Financial analysis
-│   ├── trading-backtesting/
-│   ├── solarvoice-platform/
-│   ├── candlestick-screener/
-│   ├── market-basket-analysis-api/
-│   ├── mcp-server-cookbook/
-│   ├── NetZeroExpert-OS/
-│   ├── robot-brain/
-│   └── ... (and more)
-├── shared/                 # Shared resources and frameworks
-│   ├── agent-frameworks/   # AutoGen, CrewAI, LangGraph configs
-│   │   ├── autogen-configs/
-│   │   ├── crewai-configs/
-│   │   └── langgraph-flows/
-│   └── model-routers/      # Intelligent routing systems
-├── _TEMPLATES/            # Project templates
-├── _ARCHIVE/              # Archived files and resources
-│   ├── pdfs-and-docs/
-│   ├── images-and-media/
-│   ├── scripts-and-configs/
-│   ├── data-files/
-│   └── learning-resources/
-└── Private/               # Private/sensitive files
-```
-
-## 🤖 Your AI Stack
-
-### Cloud Models (Cost-Effective)
-- **Primary**: DeepSeek API ($0.14/M tokens) - 90% of coding tasks
-- **ChatGLM**: 25M free tokens initially
-- **Claude Code**: Complex architecture and reviews (premium)
-
-### Local Models (Free via Ollama)
-- **llama3.2:3b** - Quick queries, chat (~2GB RAM)
-- **qwen2.5:7b** - Complex tasks, analysis (~4GB RAM)
-- **deepseek-coder-v2:6.7b** - Code generation (~4GB RAM)
-- **phi3:mini** - Ultra-fast responses (~2GB RAM)
-
-### Multi-Agent Frameworks Available
-- **AutoGen**: Multi-agent conversations
-- **CrewAI**: Role-based agent teams
-- **LangGraph**: Graph-based agent workflows
-
-## 💡 Development Commands
-
-### Environment Setup
 ```bash
-# Validate entire system
-python infrastructure/validate-system.py
+# 1. Install dependencies
+npm install
 
-# Start local LLMs
-ollama serve
-ollama run llama3.2:3b
+# 2. Configure environment (fill in your keys)
+# Edit .env with your API keys
 
-# Check available models
-ollama list
+# 3. Start development server
+npm run dev
+
+# 4. Open in browser
+# http://localhost:3001
 ```
 
-### Common Project Commands
+### Essential API Keys Needed
+
+**Critical** (must have):
+- `ANTHROPIC_API_KEY` - Claude AI (for Skills and development)
+- `NEXT_PUBLIC_SUPABASE_URL` - Database and auth
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Database public key
+
+**Important** (core features):
+- `RUNPOD_API_KEY` - Model deployments
+- `HUGGINGFACE_API_TOKEN` - Model discovery
+
+**Optional** (enhancements):
+- Other LLM provider keys as needed
+
+---
+
+## 🎨 Claude Skills (Our Preferred Approach)
+
+We're moving away from MCP servers to **Claude Skills** - they're simpler, more powerful, and team-friendly.
+
+### Available Skills
+
+#### 🏭 Skill Factory (Meta-Skill)
+**Purpose**: Generate new skills using natural language
+**Usage**: "Create a skill for deploying models to RunPod"
+**Location**: `.claude/skills/skill-factory/`
+
+This is your **skill creation copilot**. Just describe what you want to automate, and it will:
+1. Analyze your codebase
+2. Generate complete SKILL.md
+3. Add supporting files (scripts, templates, docs)
+4. Test the discovery description
+5. Document usage
+
+**Example**:
+```
+You: "Create a skill for managing Supabase auth"
+Claude: *Uses Skill Factory*
+        *Analyzes auth codebase*
+        *Generates supabase-auth-ops skill*
+        *Ready to use!*
+```
+
+### Skills to Create Next
+
+**Priority Order**:
+1. **runpod-deployment** - Deploy Chinese LLMs to RunPod with vLLM
+2. **supabase-auth-ops** - Manage authentication, orgs, RBAC, MFA
+3. **dual-domain-theme** - Ensure theme consistency across components
+4. **cost-optimization** - Analyze and optimize deployment costs
+5. **e2e-testing** - Write and maintain Playwright tests
+
+### Creating a New Skill
+
+Two ways:
+
+**Quick (using Skill Factory)**:
+```
+You: "Create a skill for [task]"
+Claude: *Generates complete skill automatically*
+```
+
+**Manual**:
 ```bash
-# Navigate to projects
-cd projects/[project-name]
+# 1. Create directory
+mkdir -p .claude/skills/my-skill
 
-# Check for project-specific CLAUDE.md
-cat CLAUDE.md
+# 2. Create SKILL.md
+# See .claude/skills/skill-factory/templates/ for templates
 
-# Initialize Task Master (if available)
-task-master init
-task-master list
-
-# Run tests (varies by project)
-pytest tests/ -v        # Python projects
-npm test               # Node.js projects
+# 3. Test it
+# Ask Claude a question that should trigger the skill
 ```
 
-### Git Workflow
+### Skill Factory Templates
+
+Located in `.claude/skills/skill-factory/templates/`:
+- `service-skill.md` - For wrapping service layers
+- `workflow-skill.md` - For multi-step processes
+- `analysis-skill.md` - For code analysis and reporting
+
+---
+
+## 📁 Project Structure
+
+```
+ai-development-cockpit/
+├── .claude/
+│   └── skills/              # Claude Skills (NEW: Skills-first approach)
+│       └── skill-factory/   # Meta-skill for creating skills
+│           ├── SKILL.md
+│           ├── templates/   # Skill templates
+│           └── examples/    # Example skills
+├── src/
+│   ├── app/                 # Next.js 14 App Router
+│   │   ├── swaggystacks/   # Developer landing page
+│   │   ├── scientia/        # Enterprise landing page
+│   │   ├── marketplace/     # Model discovery
+│   │   ├── chat/           # Chat interface
+│   │   └── auth/           # Authentication flows
+│   ├── components/          # React components (40+)
+│   │   ├── deployment/     # RunPod deployment UI
+│   │   ├── auth/           # Auth components
+│   │   ├── chat/           # Chat UI
+│   │   ├── terminal/       # Terminal theme
+│   │   └── pwa/            # PWA components
+│   ├── services/            # Business logic (25 services)
+│   │   ├── runpod/         # 7 services (client, deployment, monitoring, etc)
+│   │   ├── huggingface/    # 11 services (api, cache, circuit-breaker, etc)
+│   │   ├── inference/      # Streaming and model management
+│   │   └── monitoring/     # Observability
+│   ├── hooks/              # React hooks
+│   ├── lib/                # Utilities
+│   └── types/              # TypeScript types
+├── tests/
+│   ├── e2e/                # Playwright tests
+│   │   ├── chaos/          # Chaos engineering
+│   │   ├── performance/    # Performance tests
+│   │   └── validation/     # Infrastructure validation
+│   └── services/           # Unit tests
+├── docs/                   # Documentation
+├── .env                    # Environment variables (YOU NEED TO CONFIGURE)
+├── .env.example            # Template
+├── GAPS-AND-PRIORITIES.md  # Current gaps and action plan
+└── package.json
+```
+
+---
+
+## 🏗️ Architecture
+
+### Tech Stack
+
+**Frontend**:
+- Next.js 14 (App Router)
+- TypeScript
+- Tailwind CSS + Framer Motion
+- PWA (Progressive Web App)
+
+**Services**:
+- RunPod (serverless GPU deployments)
+- HuggingFace (500K+ model discovery)
+- Supabase (auth + database)
+- vLLM (inference engine)
+
+**Testing**:
+- Playwright (E2E)
+- Chaos engineering
+- Performance validation
+
+### Service Layers
+
+#### RunPod Services (`src/services/runpod/`)
+- `client.ts` - RunPod API client (629 lines)
+- `deployment.service.ts` - Deploy models
+- `monitoring.service.ts` - Health checks (611 lines)
+- `rollback.service.ts` - Automatic rollback (701 lines)
+- `cost.service.ts` - Cost estimation (569 lines)
+- `vllm.service.ts` - vLLM configuration (721 lines)
+
+#### HuggingFace Services (`src/services/huggingface/`)
+- `unified-llm.service.ts` - Main integration (1145 lines)
+- `api-client.ts` - HF API wrapper
+- `cache.service.ts` - LRU + Redis caching
+- `circuit-breaker.ts` - Fault tolerance
+- `rate-limiter.ts` - Org-specific rate limiting
+- `webhook.service.ts` - Real-time webhooks
+
+### Dual-Domain Strategy
+
+**SwaggyStacks** (Developer-focused):
+- Dark/terminal theme
+- Code-first messaging
+- Cost savings emphasis
+- GitHub integration
+- CTA: "Start Building Free"
+
+**ScientiaCapital** (Enterprise-focused):
+- Light/corporate theme
+- ROI and analytics
+- Security and compliance
+- Enterprise features
+- CTA: "Schedule Demo"
+
+---
+
+## 🔧 Development Workflow
+
+### Daily Development
+
 ```bash
-# Check status across projects
-git status
+# 1. Start dev server
+npm run dev
 
-# Create feature branch
-git checkout -b feature/[name]
+# 2. Make changes
+# Use Claude Skills to guide development
 
-# Commit with task reference
-git commit -m "feat: implement [feature] (task X.Y)"
+# 3. Run tests
+npm run test:e2e
 
-# Create PR
-gh pr create --title "[Title]" --body "Implements task X.Y"
+# 4. Commit
+git add .
+git commit -m "feat: implement [feature]"
+git push origin claude/code-review-analysis-011CUpk9WcLMT9aFDnQKo8Dz
 ```
 
-## 📊 Project Categories
+### Using Skills During Development
 
-### AI/ML Projects
-- **claude-education-platform**: Socratic AI tutors for Mexican students
-- **robot-brain**: Multi-agent AI system
-- **my-robot-brain**: Personal AI assistant
-- **cerebras_projects**: Ultra-fast inference projects
+**Example 1: Deploying a Model**
+```
+You: "Deploy Qwen-7B to RunPod"
+Claude: *Uses runpod-deployment skill* (once created)
+        *Reads deployment services*
+        *Configures vLLM*
+        *Estimates costs*
+        *Deploys model*
+```
 
-### Trading & Finance
-- **swaggy-stacks**: Full-stack trading platform
-- **trading-backtesting**: Backtesting engine
-- **scientia_capital**: Financial analysis tools
-- **candlestick-screener**: Technical analysis
+**Example 2: Adding Auth**
+```
+You: "Add organization invitation system"
+Claude: *Uses supabase-auth-ops skill* (once created)
+        *Reads existing auth code*
+        *Implements invitation flow*
+        *Updates components*
+        *Writes tests*
+```
 
-### Web Applications
-- **solarvoice-platform**: Solar energy platform
-- **solarvoice_ai**: AI-powered solar analysis
-- **sunny-web-power-up**: Solar web tools
-- **NetZeroExpert-OS**: Net zero consulting
+**Example 3: Theme Consistency**
+```
+You: "Make sure this component matches the theme"
+Claude: *Uses dual-domain-theme skill* (once created)
+        *Checks current theme*
+        *Applies consistent styling*
+        *Validates across both domains*
+```
 
-### Data & Analytics
-- **market-basket-analysis-api**: Retail analytics
-- **bdr-lead-enrichment-system**: Sales data enrichment
-- **ultra-elite-test**: Performance testing
+### Testing
 
-### Infrastructure & Tools
-- **mcp-server-cookbook**: MCP development examples
-- **mini-claude-project**: Claude integration experiments
-
-## 🔧 Cost Optimization Strategy
-
-### When to Use Each Model
-- **Complex Architecture**: Claude Code (premium, worth it)
-- **Rapid Implementation**: Cursor + DeepSeek ($0.14/M tokens)
-- **Boilerplate/Tests**: Local Ollama (free)
-- **Quick Questions**: Local llama3.2:3b (free)
-- **Code Review**: Local qwen2.5:7b (free)
-
-### Monthly Budget Guidelines
-- Target: <$50/month total AI costs
-- Claude Code: $20-30 for complex work
-- DeepSeek: $10-15 for implementation
-- Local models: Free (electricity only)
-
-## 📚 Learning Resources in Archive
-- O'Reilly books and courses
-- Udemy training materials
-- Research papers and documentation
-- Video tutorials and walkthroughs
-
-## 🔒 Security Notes
-- `.env` files contain API keys (never commit)
-- Private/ directory for sensitive information
-- Each project has individual .gitignore
-- Use environment variables for secrets
-
-## 💡 Pro Tips
-
-1. **Always start with** `/team-start-advanced` for full context
-2. **Use Sequential Thinking** for complex architectural decisions
-3. **Save to Memory** after completing major features
-4. **Verify with Shrimp** before marking tasks complete
-5. **Analyze with Serena** before major refactors
-6. **Use local models** for repetitive tasks
-7. **Switch between models** based on task complexity
-
-## 🔧 Troubleshooting
-
-### MCP Not Responding
-- Check Node.js installation: `node --version`
-- Verify API keys in .env: `cat .env | grep API_KEY`
-- Restart Claude Code with `--mcp-debug` flag
-
-### Local Models Not Working
 ```bash
-# Check Ollama status
-curl http://localhost:11434/api/tags
+# E2E tests
+npm run test:e2e                    # All tests
+npm run test:e2e:ui                 # With UI
+npm run test:e2e:debug              # Debug mode
+npm run test:e2e:comprehensive      # Full suite
 
-# Restart if needed
-pkill ollama && ollama serve
+# Unit tests
+npm run test                        # Jest tests
+npm run test:watch                  # Watch mode
 
-# Pull missing models
-ollama pull llama3.2:3b
+# Type checking
+npm run type-check                  # TypeScript validation
 ```
 
-### Task Sync Issues
-- Run both Task Master and Shrimp list commands
-- Use `/team-orchestrate` to resync
-- Check .taskmaster/ directory exists
+---
 
-### Memory Issues
-- Clear old memories periodically with Memory MCP
-- Use specific queries, not "get all"
-- Restart if memory seems stale
+## 📊 Current Status
 
-## 🎯 Daily Workflow Recommendations
+### ✅ Complete
 
-### Morning (15 minutes)
-1. `/daily-standup-mcp` - Review progress
-2. Check git status across active projects
-3. Plan the day's priorities
-4. Start Ollama if needed
+**Foundation**:
+- ✅ Next.js 14 app with TypeScript
+- ✅ Dual-domain routing
+- ✅ 25 service modules
+- ✅ 40+ React components
+- ✅ Comprehensive E2E testing
+- ✅ CI/CD workflows
+- ✅ Skill Factory (NEW!)
 
-### Coding Session
-1. `/team-start-advanced` - Initialize all systems
-2. Pick a project and read its CLAUDE.md
-3. Use task management tools to get next work item
-4. Implement with appropriate AI assistance
+**Services**:
+- ✅ RunPod integration (7 services)
+- ✅ HuggingFace integration (11 services)
+- ✅ Monitoring and observability
+- ✅ Cost estimation algorithms
+- ✅ Rollback mechanisms
 
-### Evening (10 minutes)
-1. Commit and push changes
-2. Update task status in tracking systems
-3. Document learnings in Memory MCP
-4. Plan tomorrow's priorities
+**UI**:
+- ✅ SwaggyStacks landing page
+- ✅ ScientiaCapital landing page
+- ✅ Model marketplace
+- ✅ Chat interface
+- ✅ Auth flows (login, signup, MFA)
+- ✅ Deployment dashboard
 
-Remember: With great MCP power comes great productivity! Use the right tool for each task and never code alone.
+### ⚠️ In Progress
 
-## 🚀 Current Project: Dual-Domain LLM Platform
+**Environment**:
+- ⚠️ `.env` created but needs your API keys
+- ⚠️ `node_modules` needs `npm install`
+- ⚠️ Supabase database needs setup
 
-### Project Status: Phase 5 Complete ✅ (Updated Sept 20, 2025 Evening)
-- **SwaggyStacks.com** (Developer-focused terminal theme) - LIVE ✅
-- **ScientiaCapital.com** (Enterprise-focused corporate theme) - LIVE ✅
-- **Dual-domain routing** - Working perfectly ✅
-- **HuggingFace Integration** - Both organizations connected ✅
-- **MCP Server Integration** - Task Master AI, Serena, Shrimp Task Manager active ✅
-- **Terminal UI/UX** - Complete retro gaming aesthetic for developers ✅
-- **Corporate Dashboard** - C-suite focused analytics and ROI tools ✅
-- **RunPod Infrastructure** - Complete deployment, monitoring, rollback systems ✅
-- **E2E Testing Framework** - Playwright with comprehensive test coverage ✅
-- **Marketplace Testing Suite** - Complete with real API integration support ✅
-- **Cost Optimization** - Real-time estimation and optimization algorithms ✅
-- **🎉 Phase 5: Chinese LLM RunPod Integration** - Production-ready real API implementation ✅
+**Features**:
+- ⚠️ 5 TODOs to complete (see GAPS-AND-PRIORITIES.md)
+- ⚠️ No real deployments tested yet
+- ⚠️ Skills need to be created (we have the factory!)
 
-### Live Deployment URLs
-- **Development Server**: `http://localhost:3001` (when running)
-- **SwaggyStacks**: `/swaggystacks` - Dark terminal theme
-- **ScientiaCapital**: `/scientia` - Corporate enterprise theme
-- **Model Marketplace**: `/marketplace` - Unified model discovery and testing
-- **Chat Interface**: `/chat` - Modern chat interface with vLLM integration
+### ❌ Not Started
 
-### Phase 3.5 Infrastructure Achievements ✅
-1. **✅ Complete Terminal UI System** - CSS modules, components, animations
-2. **✅ HuggingFace CLI + MCP Integration** - Official server configuration
-3. **✅ Dual-theme Architecture** - SwaggyStacks (dark/gaming) + ScientiaCapital (corporate)
-4. **✅ Model Discovery Service** - Search, filtering, caching with LRU eviction
-5. **✅ Authentication Infrastructure** - Multi-organization token management
-6. **✅ Deployment Hooks** - useDeployment React hook with RunPod integration
-7. **✅ Task Management Sync** - Task Master AI + Shrimp Task Manager coordination
-8. **✅ RunPod API Client** - Complete endpoint management (629 lines)
-9. **✅ Monitoring Service** - Real-time metrics and alerts (611 lines)
-10. **✅ Cost Estimation** - Dynamic pricing with optimization (569 lines)
-11. **✅ Rollback Service** - Snapshot management and orchestration (701 lines)
-12. **✅ E2E Testing Framework** - Playwright with comprehensive test coverage
-13. **✅ Marketplace Testing Suite** - Complete page objects and test scenarios
-14. **✅ Real API Integration Tests** - HuggingFace API validation with error handling
-15. **✅ End-to-End Pipeline Tests** - Complete deployment workflow validation
-16. **✅ Deployment Components** - React UI components for monitoring/control
+**Deployment**:
+- ❌ No production deployment
+- ❌ No custom domains configured
+- ❌ No real users yet
 
-### **LATEST: Phase 4 Complete** - vLLM RunPod Integration with Modern Chat Interface ✅ (Sept 20, 2025)
-17. **✅ MetricsCollector** - Real-time performance monitoring with Web Vitals tracking
-18. **✅ ChaosEngine** - Systematic failure injection for resilience testing
-19. **✅ TestReporter** - Advanced analytics with HTML/JSON reporting
-20. **✅ DashboardIntegration** - Real-time monitoring with Prometheus/Grafana support
-21. **✅ Chaos Testing Suite** - System resilience and 30-second rollback validation
-22. **✅ Performance Testing Suite** - SLA compliance and regression detection
-23. **✅ CI/CD Workflows** - GitHub Actions with automated testing and deployment
-24. **✅ Analytics Reporter** - Playwright integration for comprehensive insights
-25. **✅ Comprehensive Validation** - End-to-end infrastructure validation system
+**Advanced**:
+- ❌ Analytics/monitoring not connected
+- ❌ Payment processing not implemented
+- ❌ Team collaboration features minimal
 
-### **NEW: Phase 4 Infrastructure - vLLM RunPod Integration** ✅ (Sept 20, 2025)
-26. **✅ vLLM Service** - Comprehensive RunPod serverless integration (721 lines)
-27. **✅ Dual API Support** - Native RunPod + OpenAI-compatible endpoints
-28. **✅ Modern Chat Interface** - Qwen/DeepSeek-style UI with light/dark modes
-29. **✅ useInference Hook** - React hook for model management and cost optimization (450 lines)
-30. **✅ ThemeProvider Integration** - next-themes with organization-specific theming
-31. **✅ Chat Page Implementation** - Complete chat interface with streaming support (520 lines)
-32. **✅ Marketplace Integration** - Real inference testing and deployment capabilities
-33. **✅ TypeScript Interfaces** - Complete vLLM type definitions (274 lines)
-34. **✅ Cost Estimation** - Real-time pricing with model-specific optimization
-35. **✅ Organization Models** - SwaggyStacks (gaming) + Scientia Capital (enterprise) configs
+---
 
-### **LATEST: Phase 5 Complete - Chinese LLM RunPod Integration** ✅ (Sept 20, 2025 Evening)
-36. **✅ Unified Chinese LLM Service** - Production-ready HuggingFace → RunPod → vLLM integration (1145 lines)
-37. **✅ Real RunPod API Integration** - Replaced all mock calls with actual RunPod deployment APIs
-38. **✅ Chinese Model Support** - Qwen, DeepSeek, ChatGLM, Baichuan, InternLM, Yi models
-39. **✅ Production Infrastructure** - Circuit breakers, rate limiting, caching, webhooks, credentials
-40. **✅ Dual API Implementation** - Native RunPod + OpenAI-compatible endpoints
-41. **✅ Organization-Specific Configs** - SwaggyStacks (aggressive) + ScientiaCapital (conservative)
-42. **✅ Health Monitoring** - Real-time RunPod health checks and model wake-up
-43. **✅ Cost Optimization** - RunPod pricing calculation and optimization algorithms
-44. **✅ Integration Testing** - Comprehensive validation framework for Chinese LLM deployment
-45. **✅ Complete Documentation** - PHASE-5-INTEGRATION-SUMMARY.md with technical details
+## 🎯 Next Steps
 
-### Key Infrastructure Files
+### Immediate (Phase 1: Get It Running)
 
-#### Phase 3.5 Production Systems
-- `src/services/runpod/client.ts` - Complete RunPod API client (629 lines)
-- `src/services/runpod/monitoring.service.ts` - Real-time monitoring (611 lines)
-- `src/services/runpod/cost.service.ts` - Cost estimation engine (569 lines)
-- `src/services/runpod/rollback.service.ts` - Rollback orchestration (701 lines)
-- `src/hooks/useRollback.ts` - React rollback hook (438 lines)
-- `src/components/deployment/` - UI components (DeploymentMonitor, CostEstimator, RollbackControl)
-- `src/app/api/health/route.ts` - Health check endpoint for monitoring
+See `GAPS-AND-PRIORITIES.md` for complete plan.
 
-#### **Task 3 Complete** - E2E Testing Infrastructure
-- `tests/utils/MetricsCollector.ts` - Comprehensive performance and resource monitoring
-- `tests/utils/ChaosEngine.ts` - Systematic failure injection for resilience testing
-- `tests/utils/TestReporter.ts` - Advanced test analytics and reporting
-- `tests/utils/DashboardIntegration.ts` - Real-time monitoring and alerting integration
-- `tests/reporters/AnalyticsReporter.ts` - Playwright reporter integration
-- `tests/e2e/chaos/` - Chaos testing suites (resilience and recovery validation)
-- `tests/e2e/performance/` - Performance benchmarking and SLA compliance
-- `tests/e2e/validation/comprehensive-validation.spec.ts` - Infrastructure validation
-- `scripts/run-comprehensive-e2e.ts` - Orchestrated test execution runner
-- `.github/workflows/e2e-testing.yml` - Comprehensive E2E testing pipeline
-- `.github/workflows/cd-with-e2e.yml` - Continuous deployment with validation
-- `playwright.config.ts` - E2E testing configuration with analytics reporting
-- `tests/e2e/page-objects/MarketplacePage.ts` - Marketplace page object model (400+ lines)
-- `tests/e2e/marketplace/` - Complete marketplace test suites
-- `tests/e2e/pipeline/` - End-to-end pipeline integration tests
-- `tests/e2e/utils/TestApiClient.ts` - Hybrid mock/real API testing framework
+**Right now**:
+1. Fill in `.env` with your API keys
+2. Run `npm install`
+3. Setup Supabase database
+4. Run `npm run dev`
+5. Verify http://localhost:3001 loads
 
-#### **Phase 4 Complete** - vLLM RunPod Integration
-- `src/services/runpod/vllm.service.ts` - Comprehensive vLLM service with dual API support (721 lines)
-- `src/types/vllm.ts` - Complete TypeScript interfaces for vLLM integration (274 lines)
-- `src/hooks/useInference.ts` - React hook for model management and cost optimization (450 lines)
-- `src/components/chat/ModernChatInterface.tsx` - Modern chat UI similar to Qwen/DeepSeek (425 lines)
-- `src/app/chat/page.tsx` - Complete chat page with organization-specific theming (520 lines)
-- `src/providers/ThemeProvider.tsx` - next-themes integration for light/dark modes
-- `src/app/layout.tsx` - Updated with ThemeProvider integration
-- `src/app/marketplace/page.tsx` - Enhanced with real inference testing capabilities
-- `src/components/terminal/ModelCard.tsx` - Added test button and inference integration
-- `next.config.js` - Converted to JS format for PWA compatibility
-- `.env.local` - Updated with RunPod vLLM configuration variables
+**This week**:
+1. Complete authentication testing
+2. Deploy first test model to RunPod
+3. Create 2-3 essential skills
+4. Complete TODOs in codebase
 
-#### **Phase 5 Complete** - Chinese LLM RunPod Integration
-- `src/services/huggingface/unified-llm.service.ts` - Main integration service (1145 lines)
-- `src/services/huggingface/integration-test.ts` - Comprehensive testing framework
-- `src/services/huggingface/api-client.ts` - Production API client with retry logic
-- `src/services/huggingface/rate-limiter.ts` - Organization-specific rate limiting
-- `src/services/huggingface/cache.service.ts` - Dual-tier caching (LRU + Redis)
-- `src/services/huggingface/webhook.service.ts` - Real-time webhook handlers
-- `src/services/huggingface/circuit-breaker.ts` - Fault tolerance patterns
-- `src/services/huggingface/credentials.service.ts` - Secure credential management
-- `src/services/huggingface/runpod-integration.service.ts` - RunPod deployment service
-- `src/services/huggingface/integration.service.ts` - Service orchestration
-- `PHASE-5-INTEGRATION-SUMMARY.md` - Complete technical documentation
-- Comprehensive test suite with 100+ test scenarios
+### Short Term (Phase 2-3: Validate & Polish)
 
-#### Phase 2 Foundation
-- `src/app/swaggystacks/page.tsx` - Developer-focused landing page
-- `src/app/scientia/page.tsx` - Enterprise-focused landing page
-- `src/styles/terminal.module.css` - Terminal theme styling system
-- `src/app/globals.css` - CSS variables and theme integration
-- `src/hooks/useDeployment.ts` - Complete deployment management hook
-- `src/types/deployment.ts` - Comprehensive deployment type definitions
-- `src/services/models/` - HuggingFace model discovery services
-- `src/contexts/HuggingFaceAuth.tsx` - Multi-organization authentication
+1. Test end-to-end deployment workflow
+2. Validate cost estimation accuracy
+3. Create remaining priority skills
+4. Update documentation
+5. Polish UI/UX
 
-### Development Ready Commands
+### Medium Term (Phase 4: Deploy)
+
+1. Deploy to Vercel
+2. Setup custom domains
+3. Test PWA on mobile
+4. Beta launch
+
+### Long Term (Phase 5: Grow)
+
+1. Get user feedback
+2. Iterate on features
+3. Optimize costs
+4. Scale infrastructure
+
+---
+
+## 💡 Development Tips
+
+### Working with Skills
+
+**Creating Skills**:
+- Use Skill Factory for all new skills
+- Start with the template that matches your need
+- Test with natural language questions
+- Iterate on the description until discovery works
+
+**Skill Best Practices**:
+- Keep skills focused (one capability per skill)
+- Write clear descriptions with trigger keywords
+- Include file references with line numbers
+- Add practical examples
+- Test with real questions
+
+### Working with Services
+
+**Finding Code**:
 ```bash
-npm run dev                        # Start development server (port 3001)
-npm run build                      # Production build
-npm run start                      # Production server
-npm run lint                       # Code quality check
-npm run type-check                 # TypeScript validation
+# Search for functionality
+grep -r "function name" src/
 
-# E2E Testing (Task 3 Complete)
-npm run test:e2e                   # Run all Playwright E2E tests
-npm run test:e2e:ui                # Run E2E tests with UI
-npm run test:e2e:debug             # Debug E2E tests
-npm run test:e2e:comprehensive     # Full orchestrated test suite
-npm run test:e2e:validate          # Comprehensive infrastructure validation
-npm run test:e2e:report            # View test reports
+# Find service files
+ls src/services/*/
+
+# Check types
+cat src/types/[type].ts
 ```
 
-### Phase 6 Planning (Next Development Sprint)
-1. **🎯 PRIORITY: Live Chinese LLM Deployment** - Deploy actual Qwen/DeepSeek models to RunPod serverless
-2. **🎯 PRIORITY: Real Model Testing** - Test end-to-end inference with live Chinese LLMs
-3. **🎯 PRIORITY: Supabase Authentication Integration** - Complete user auth system for both domains
-4. **Production Model Management** - Model versioning, A/B testing, and cost monitoring
-5. **Advanced Chat Features** - Streaming responses, conversation history, model switching
-6. **Mobile PWA Enhancement** - Progressive web app capabilities and offline support
+**Reading Services**:
+- Start with `src/services/[area]/[main].service.ts`
+- Check types in `src/types/`
+- Look at tests in `tests/services/`
 
-### Phase 6 Success Criteria
-- ✅ Live Chinese LLM models deployed and accessible via RunPod
-- ✅ End-to-end inference testing with real models (Qwen, DeepSeek, ChatGLM)
-- ✅ Production authentication flow for dual-domain access
-- ✅ Cost optimization and model performance monitoring
-- ✅ Advanced chat interface with streaming and model selection
-- ✅ Mobile-responsive PWA with offline capabilities
+### Debugging
 
-### Task Management Status (Updated Sept 20, 2025 Evening)
-- **All MCP Servers**: Operational and synchronized ✅
-- **Phase 5**: Complete - Chinese LLM RunPod integration with production-ready infrastructure ✅
-- **Task 3 Complete**: End-to-End Model Deployment Testing System ✅
-- **E2E Testing**: Comprehensive testing infrastructure with chaos engineering ✅
-- **CI/CD Pipeline**: GitHub Actions with automated testing and deployment ✅
-- **Task Master AI**: Active task tracking and coordination
-- **Shrimp Task Manager**: Parallel task tracking system active
-- **Sequential Thinking**: Available for complex problem solving
-- **Memory**: Context persistence for development sessions
+**Common Issues**:
 
-### 🌅 Tomorrow's Team Start Instructions (Updated Sept 20, 2025 Evening)
-**Essential Commands to Begin:**
-1. **`/team-start-advanced`** - Initialize all MCP servers and full context ✅ (Working)
-2. **Use Task Master AI MCP tools directly** - `/team-task-master next` doesn't exist as slash command
+1. **Port already in use**:
+   ```bash
+   # Kill process on port 3001
+   lsof -ti:3001 | xargs kill -9
+   ```
 
-**Working MCP Commands:**
-- `mcp__taskmaster-ai__next_task` - Get next priority task
-- `mcp__taskmaster-ai__get_tasks` - List all tasks
-- `mcp__taskmaster-ai__set_task_status` - Update task status
+2. **Environment variables not loaded**:
+   ```bash
+   # Check .env exists
+   cat .env
 
-**Tomorrow's Priority Focus** (Phase 5 Complete - Phase 6 Ready):
-1. **Live Chinese LLM Deployment**: Deploy actual Qwen/DeepSeek models to RunPod serverless
-2. **Real Model Testing**: Test end-to-end inference with live Chinese LLMs using our integration
-3. **Production Validation**: Validate all Phase 5 infrastructure with real model deployments
-4. **Cost Optimization**: Monitor and optimize real RunPod deployment costs
-5. **Authentication System**: Complete Supabase integration for dual-domain auth
-6. **Advanced Features**: Streaming responses and model switching in chat interface
+   # Restart dev server
+   npm run dev
+   ```
 
-## Task Master AI Instructions
-**Import Task Master's development workflow commands and guidelines, treat as if import is in the main CLAUDE.md file.**
-@./.taskmaster/CLAUDE.md
+3. **TypeScript errors**:
+   ```bash
+   # Check types
+   npm run type-check
+   ```
+
+4. **Supabase connection fails**:
+   ```bash
+   # Verify environment variables
+   echo $NEXT_PUBLIC_SUPABASE_URL
+   ```
+
+---
+
+## 📚 Key Documentation
+
+### Internal Docs
+- `GAPS-AND-PRIORITIES.md` - Current status and action plan
+- `README.md` - Project overview and quick start
+- `PHASE-5-INTEGRATION-SUMMARY.md` - Chinese LLM integration
+- `MCP_INTEGRATION_GUIDE.md` - MCP integration (legacy, moving to Skills)
+- `SECURITY_WORKFLOW_IMPROVEMENTS.md` - Security practices
+
+### Skills Docs
+- `.claude/skills/skill-factory/SKILL.md` - Meta-skill for creating skills
+- `.claude/skills/skill-factory/templates/` - Skill templates
+- `.claude/skills/skill-factory/examples/` - Example skills
+
+### External Resources
+- [Next.js 14 Docs](https://nextjs.org/docs)
+- [Supabase Docs](https://supabase.com/docs)
+- [RunPod Docs](https://docs.runpod.io/)
+- [HuggingFace Hub](https://huggingface.co/docs/hub)
+- [Claude Skills Guide](https://docs.anthropic.com/claude/docs/agent-skills)
+
+---
+
+## 🤝 Team Workflow
+
+### Sharing Skills
+
+Skills are automatically shared via git:
+
+```bash
+# Create skill
+mkdir -p .claude/skills/my-skill
+# ... create SKILL.md ...
+
+# Commit
+git add .claude/skills/my-skill/
+git commit -m "feat: add my-skill for [purpose]"
+git push
+
+# Teammates get it automatically
+git pull  # Skills now available!
+```
+
+### Code Review
+
+When reviewing PRs:
+1. Use e2e-testing skill to ensure test coverage
+2. Use dual-domain-theme skill to check consistency
+3. Use cost-optimization skill to review performance
+4. Check file-by-file changes
+5. Test locally before approving
+
+### Daily Standup
+
+Answer these:
+1. What did I complete yesterday?
+2. What am I working on today?
+3. Any blockers?
+4. Any new skills needed?
+
+---
+
+## 🎨 Skills-First Philosophy
+
+### Why Skills > MCP
+
+**Skills Advantages**:
+- ✅ Model-invoked (Claude decides when to use)
+- ✅ No Node.js server to maintain
+- ✅ Simple Markdown files
+- ✅ Shared via git automatically
+- ✅ Composable (multiple skills work together)
+- ✅ Progressive disclosure (load details only when needed)
+
+**MCP Drawbacks**:
+- ❌ Requires separate server process
+- ❌ Complex configuration
+- ❌ User must invoke manually
+- ❌ Harder to debug
+- ❌ More moving parts
+
+### Transitioning from MCP to Skills
+
+If you were using MCP servers:
+1. Identify workflows you automated with MCP
+2. Use Skill Factory to create equivalent skills
+3. Test skills work as expected
+4. Remove MCP configuration
+5. Celebrate simplicity! 🎉
+
+---
+
+## 🔐 Security Notes
+
+### API Keys
+- **NEVER commit `.env` to git** (it's in .gitignore)
+- Rotate keys regularly
+- Use different keys for dev/staging/prod
+- Store production keys in Vercel/hosting platform
+
+### Supabase Security
+- Enable Row Level Security (RLS)
+- Validate user input
+- Use service role key only server-side
+- Never expose service role key to client
+
+### RunPod Security
+- API keys are sensitive (can cost money)
+- Set spending limits in RunPod dashboard
+- Monitor usage regularly
+- Implement rate limiting
+
+---
+
+## 📞 Getting Help
+
+### In This Project
+
+1. **Check documentation**:
+   - Start with `GAPS-AND-PRIORITIES.md`
+   - Read relevant service files
+   - Check examples in Skills folder
+
+2. **Use Skill Factory**:
+   ```
+   You: "I need help with [task]"
+   Claude: *Analyzes codebase*
+           *Provides guidance*
+           *Or creates a skill to help*
+   ```
+
+3. **Search codebase**:
+   ```bash
+   grep -r "keyword" src/
+   ```
+
+### External Resources
+
+- [Claude Code Docs](https://docs.anthropic.com/claude/docs/claude-code)
+- [Claude Skills Guide](https://docs.anthropic.com/claude/docs/agent-skills)
+- [Project GitHub](https://github.com/ScientiaCapital/ai-development-cockpit)
+
+---
+
+## 🚀 Let's Build!
+
+You have:
+- ✅ Strong foundation (25 services, 40+ components)
+- ✅ Comprehensive testing infrastructure
+- ✅ Skill Factory ready to create capabilities
+- ✅ Clear roadmap in GAPS-AND-PRIORITIES.md
+
+**Next**: Fill in `.env` and run `npm install && npm run dev`
+
+Then say: "Create a skill for deploying models to RunPod" and watch the magic happen! ✨
+
+---
+
+**Remember**: Skills are your superpower. Use the Skill Factory liberally. When in doubt, create a skill! 🎯

@@ -12,10 +12,10 @@ API keys were committed to the repository in documentation files and are present
 
 The following credentials were exposed in `PHASE-5-INTEGRATION-SUMMARY.md` (commit `664e95e`):
 
-1. **RunPod API Key**: `REVOKED`
-2. **HuggingFace API Key**: `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`
-3. **SwaggyStacks HF Token**: `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`
-4. **ScientiaCapital HF Token**: `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`
+1. **RunPod API Key**: `rpa_ATH56...` (40 characters - REDACTED)
+2. **HuggingFace API Key**: `hf_ABUMi...` (37 characters - REDACTED)
+3. **SwaggyStacks HF Token**: `hf_ABUMi...` (37 characters - REDACTED)
+4. **ScientiaCapital HF Token**: `hf_XsNlH...` (37 characters - REDACTED)
 
 ## Required Actions
 
@@ -24,14 +24,12 @@ The following credentials were exposed in `PHASE-5-INTEGRATION-SUMMARY.md` (comm
 1. **Rotate RunPod API Key**
    - Go to: https://www.runpod.io/console/user/settings
    - Navigate to API Keys section
-   - Revoke: `REVOKED`
+   - Revoke the exposed key (starts with `rpa_ATH56...`)
    - Generate new key and update `.env.local`
 
 2. **Rotate HuggingFace Tokens**
    - Go to: https://huggingface.co/settings/tokens
-   - Revoke all exposed tokens:
-     - `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`
-     - `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`
+   - Revoke all exposed tokens (starting with `hf_ABUMi...` and `hf_XsNlH...`)
    - Generate new tokens for each organization
    - Update `.env.local`
 

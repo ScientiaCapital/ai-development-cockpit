@@ -329,7 +329,8 @@ class ModelCacheManager {
 
     // This would typically fetch from API and cache
     // For now, just mark as preloaded in cache
-    const preloadKey = this.generateCacheKey('preload', { organization: typeof organization === 'string' ? organization : organization.id || organization.toString(), modelIds: popularModelIds })
+    const orgString = typeof organization === 'string' ? organization : (organization as any)?.id || String(organization);
+    const preloadKey = this.generateCacheKey('preload', { organization: orgString, modelIds: popularModelIds })
     this.set(preloadKey, { preloaded: true, modelIds: popularModelIds }, this.config.defaultTtl * 6)
   }
 

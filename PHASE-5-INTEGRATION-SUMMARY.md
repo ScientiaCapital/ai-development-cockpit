@@ -114,15 +114,19 @@ HuggingFace Hub Discovery
 
 ### Required Environment Variables
 
-```bash
-# RunPod Configuration (✅ Already configured)
-RUNPOD_API_KEY=REVOKED
+**⚠️ SECURITY WARNING: The API keys previously shown in this file have been REVOKED and must be rotated.**
 
-# HuggingFace Configuration (✅ Already configured)
-HUGGINGFACE_API_KEY=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
-SWAGGYSTACKS_HF_TOKEN=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
-SCIENTIACAPITAL_HF_TOKEN=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
+```bash
+# RunPod Configuration (Required)
+RUNPOD_API_KEY=your_runpod_api_key_here
+
+# HuggingFace Configuration (Required)
+HUGGINGFACE_API_KEY=your_huggingface_api_key_here
+SWAGGYSTACKS_HF_TOKEN=your_swaggystacks_hf_token_here
+SCIENTIACAPITAL_HF_TOKEN=your_scientiacapital_hf_token_here
 ```
+
+**🔐 Security Note**: See `.env.example` for detailed configuration instructions. Never commit actual API keys to git.
 
 ## 📊 Usage Example
 

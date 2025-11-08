@@ -1,5 +1,5 @@
 {
-  "name": "dual-domain-llm-platform",
+  "name": "ai-development-cockpit",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -26,6 +26,10 @@
     "@google/generative-ai": "^0.24.1",
     "@heroicons/react": "^2.0.18",
     "@huggingface/hub": "^2.6.5",
+    "@langchain/core": "^0.3.28",
+    "@langchain/langgraph": "^0.2.42",
+    "@langchain/openai": "^0.3.18",
+    "langchain": "^0.3.11",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/exporter-prometheus": "^0.205.0",
     "@opentelemetry/instrumentation-fs": "^0.25.0",
@@ -69,6 +73,7 @@
     "tailwindcss-animate": "^1.0.7",
     "tiktoken": "^1.0.22",
     "typescript": "^5",
+    "uuid": "^11.0.3",
     "web-vitals": "^5.1.0",
     "winston": "^3.11.0"
   },
@@ -81,6 +86,7 @@
     "@types/opossum": "^8.1.9",
     "@types/redis": "^4.0.10",
     "@types/supertest": "^6.0.3",
+    "@types/uuid": "^10.0.0",
     "eslint": "^8",
     "eslint-config-next": "15.5.3",
     "jest": "^30.1.3",

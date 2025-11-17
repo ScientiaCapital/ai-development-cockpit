@@ -28,7 +28,7 @@
     "@huggingface/hub": "^2.6.5",
     "@langchain/core": "^0.3.28",
     "@langchain/langgraph": "^0.2.42",
-    "@langchain/openai": "^0.3.18",
+    "@langchain/openai": "^0.5.0",
     "langchain": "^0.3.11",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/exporter-prometheus": "^0.205.0",

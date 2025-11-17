@@ -35,10 +35,22 @@ export interface ProjectStatus {
 }
 
 export class AgentOrchestrator {
+  private static instance: AgentOrchestrator | null = null
+
   private graph: any
   private activeProjects: Map<string, ProjectState>
   private eventBus: EventBus
   private costOptimizer: CostOptimizerClient
+
+  /**
+   * Get the singleton orchestrator instance (static method)
+   */
+  static getInstance(): AgentOrchestrator {
+    if (!AgentOrchestrator.instance) {
+      AgentOrchestrator.instance = new AgentOrchestrator()
+    }
+    return AgentOrchestrator.instance
+  }
 
   constructor() {
     this.graph = createOrchestratorGraph()

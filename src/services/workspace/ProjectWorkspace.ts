@@ -9,13 +9,31 @@ export class ProjectWorkspace {
   ) {}
 
   static async create(projectId: string): Promise<ProjectWorkspace> {
+    // Validate projectId to prevent path traversal
+    if (!projectId || !/^[a-zA-Z0-9_-]+$/.test(projectId)) {
+      throw new Error('Invalid projectId: must contain only alphanumeric, hyphen, or underscore')
+    }
+
     const rootDir = path.join(os.tmpdir(), 'ai-cockpit-projects', projectId)
     await fs.mkdir(rootDir, { recursive: true })
 
     return new ProjectWorkspace(projectId, rootDir)
   }
 
+  /**
+   * Validates that a path does not escape the workspace root directory
+   * @throws Error if path traversal is detected
+   */
+  private validatePath(relativePath: string): void {
+    const fullPath = path.resolve(this.rootDir, relativePath)
+    if (!fullPath.startsWith(this.rootDir)) {
+      throw new Error(`Path traversal detected: ${relativePath}`)
+    }
+  }
+
   async writeFile(relativePath: string, content: string): Promise<void> {
+    this.validatePath(relativePath)
+
     const fullPath = path.join(this.rootDir, relativePath)
     const dir = path.dirname(fullPath)
 
@@ -27,11 +45,15 @@ export class ProjectWorkspace {
   }
 
   async readFile(relativePath: string): Promise<string> {
+    this.validatePath(relativePath)
+
     const fullPath = path.join(this.rootDir, relativePath)
     return fs.readFile(fullPath, 'utf-8')
   }
 
   async fileExists(relativePath: string): Promise<boolean> {
+    this.validatePath(relativePath)
+
     const fullPath = path.join(this.rootDir, relativePath)
     return fs.access(fullPath).then(() => true).catch(() => false)
   }
@@ -63,6 +85,8 @@ export class ProjectWorkspace {
   }
 
   getAbsolutePath(relativePath: string): string {
+    this.validatePath(relativePath)
+
     return path.join(this.rootDir, relativePath)
   }
 }

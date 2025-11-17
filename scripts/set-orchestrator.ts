@@ -7,7 +7,6 @@ const validModels = [
   'claude-opus-4',
   'deepseek-r1',
   'kimi-k1.5',
-  'gpt-4-turbo',
   'llama-3.3-70b',
   'qwen-2.5-coder-32b'
 ]

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { RepositoryBrowser } from '@/components/github/RepositoryBrowser'
 
 interface CodebaseReview {
   summary: string
@@ -84,6 +85,24 @@ export default function DashboardPage() {
               {loading ? 'Reviewing...' : 'Review'}
             </Button>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* GitHub Repository Browser */}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle>GitHub Integration</CardTitle>
+          <CardDescription>
+            Connect your GitHub account to analyze repositories
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <RepositoryBrowser
+            onSelectRepo={(repo) => {
+              console.log('Selected repo:', repo)
+              setProjectPath(`github:${repo.fullName}`)
+            }}
+          />
         </CardContent>
       </Card>
 

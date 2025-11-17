@@ -89,8 +89,10 @@ export default function DashboardPage() {
 
       {/* Error Display */}
       {error && (
-        <Alert variant="destructive" className="mb-6">
-          <AlertDescription>{error}</AlertDescription>
+        <Alert variant="destructive" className="mb-6 bg-red-950 border-red-800">
+          <AlertDescription className="text-red-200 font-mono text-sm break-words">
+            {error}
+          </AlertDescription>
         </Alert>
       )}
 

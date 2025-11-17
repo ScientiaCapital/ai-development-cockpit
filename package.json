@@ -19,7 +19,8 @@
     "test:e2e:debug": "playwright test --debug",
     "test:e2e:report": "playwright show-report",
     "test:e2e:comprehensive": "tsx scripts/run-comprehensive-e2e.ts",
-    "test:e2e:validate": "playwright test tests/e2e/validation/comprehensive-validation.spec.ts"
+    "test:e2e:validate": "playwright test tests/e2e/validation/comprehensive-validation.spec.ts",
+    "orchestrator:use": "tsx scripts/set-orchestrator.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.68.0",

@@ -2,3 +2,4 @@ export type { LanguageAdapter, AdapterProjectContext, AdaptedCode, FileStructure
 export { PythonAdapter } from './PythonAdapter'
 export { GoAdapter } from './GoAdapter'
 export { RustAdapter } from './RustAdapter'
+export { LanguageRouter } from './LanguageRouter'

@@ -13,6 +13,9 @@ export { IProvider } from './IProvider'
 // Registry interface
 export { IProviderRegistry } from './ProviderRegistry'
 
+// Provider implementations
+export { ClaudeProvider } from './ClaudeProvider'
+
 // Type exports
 export type {
   ProviderCapabilities,

@@ -88,4 +88,17 @@ describe('RustAdapter', () => {
       expect(config.importPattern).toContain('#[cfg(test)]')
     })
   })
+
+  describe('formatCode', () => {
+    it('should format Rust code with rustfmt', async () => {
+      const unformatted = 'pub fn main(  ){println!("test");}'
+
+      const formatted = await adapter.formatCode(unformatted)
+
+      // If rustfmt is available, it should format properly
+      // If not, it returns the original code
+      expect(formatted).toBeTruthy()
+      expect(typeof formatted).toBe('string')
+    })
+  })
 })

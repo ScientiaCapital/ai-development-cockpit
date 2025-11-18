@@ -1,1 +1,1 @@
-export { LanguageAdapter, AdapterProjectContext, AdaptedCode, FileStructure, TestFramework } from './LanguageAdapter'
+export type { LanguageAdapter, AdapterProjectContext, AdaptedCode, FileStructure, TestFramework } from './LanguageAdapter'

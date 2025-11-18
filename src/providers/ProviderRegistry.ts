@@ -1,10 +1,10 @@
 /**
- * Provider Registry Interface
+ * Provider Registry
  *
- * Interface for managing multiple LLM providers.
- * Implementation will be created in Task 3.4.
+ * Manages all registered AI providers and provides lookup capabilities.
+ * Central registry for all available providers in the system.
  *
- * Part of Phase 3: Multi-Model Provider System - Task 3.1
+ * Part of Phase 3: Multi-Model Provider System - Task 3.4
  * Created: 2025-11-17
  */
 
@@ -14,76 +14,84 @@ import { ProviderCapabilities } from './types'
 /**
  * Provider Registry
  *
- * Central registry for managing multiple LLM providers.
- * Enables provider discovery, registration, and capability-based lookup.
- *
- * Implementation will be created in Task 3.4.
+ * Manages registered AI providers and provides lookup capabilities.
+ * Central registry for all available providers in the system.
  */
-export interface IProviderRegistry {
+export class ProviderRegistry {
+  private providers: Map<string, IProvider> = new Map()
+
   /**
    * Register a provider
    *
-   * Adds a provider to the registry, making it available for routing.
+   * Adds a provider to the registry. If a provider with the same name
+   * already exists, it will be overwritten.
    *
-   * @param provider - Provider instance to register
-   * @throws Error if provider with same name already registered
-   *
-   * @example
-   * ```typescript
-   * const claudeProvider = new ClaudeProvider(apiKey)
-   * registry.register(claudeProvider)
-   * ```
+   * @param provider - The provider to register
    */
-  register(provider: IProvider): void
+  register(provider: IProvider): void {
+    this.providers.set(provider.name, provider)
+  }
 
   /**
    * Get provider by name
    *
-   * Retrieves a specific provider by its name.
-   *
-   * @param name - Provider name (e.g., "anthropic", "qwen")
-   * @returns Provider instance or undefined if not found
-   *
-   * @example
-   * ```typescript
-   * const provider = registry.getProvider('anthropic')
-   * if (provider) {
-   *   const result = await provider.generateCompletion({ ... })
-   * }
-   * ```
+   * @param name - The provider name to lookup
+   * @returns The provider if found, undefined otherwise
    */
-  getProvider(name: string): IProvider | undefined
+  getProvider(name: string): IProvider | undefined {
+    return this.providers.get(name)
+  }
 
   /**
    * Get all registered providers
    *
-   * Returns all providers in the registry.
-   *
    * @returns Array of all registered providers
-   *
-   * @example
-   * ```typescript
-   * const allProviders = registry.getAllProviders()
-   * console.log(`Registered providers: ${allProviders.length}`)
-   * ```
    */
-  getAllProviders(): IProvider[]
+  getAllProviders(): IProvider[] {
+    return Array.from(this.providers.values())
+  }
 
   /**
    * Get providers with specific capability
    *
-   * Filters providers by a specific capability (e.g., vision, jsonMode).
+   * Filters providers based on whether they support a given capability.
    *
-   * @param capability - Capability name to filter by
-   * @returns Array of providers supporting the capability
-   *
-   * @example
-   * ```typescript
-   * const visionProviders = registry.getProvidersWithCapability('vision')
-   * console.log(`Providers with vision: ${visionProviders.length}`)
-   * ```
+   * @param capability - The capability to filter by (vision, jsonMode, etc.)
+   * @returns Array of providers that support the capability
    */
-  getProvidersWithCapability(
-    capability: keyof ProviderCapabilities
-  ): IProvider[]
+  getProvidersWithCapability(capability: keyof ProviderCapabilities): IProvider[] {
+    return this.getAllProviders().filter(
+      provider => provider.capabilities[capability] === true
+    )
+  }
+
+  /**
+   * Get cheapest provider for given token usage
+   *
+   * Calculates the cost for each provider and returns the cheapest one.
+   * Useful for optimizing costs when multiple providers can handle a task.
+   *
+   * @param tokens - Expected token usage (input and output)
+   * @returns The cheapest provider, or undefined if no providers registered
+   */
+  getCheapestProvider(tokens: { input: number; output: number }): IProvider | undefined {
+    const providers = this.getAllProviders()
+    if (providers.length === 0) return undefined
+
+    return providers.reduce((cheapest, current) => {
+      const cheapestCost = cheapest.calculateCost({
+        inputTokens: tokens.input,
+        outputTokens: tokens.output,
+        totalTokens: tokens.input + tokens.output
+      }).totalCost
+
+      const currentCost = current.calculateCost({
+        inputTokens: tokens.input,
+        outputTokens: tokens.output,
+        totalTokens: tokens.input + tokens.output
+      }).totalCost
+
+      return currentCost < cheapestCost ? current : cheapest
+    })
+  }
 }

@@ -10,8 +10,9 @@
 // Core interface
 export { IProvider } from './IProvider'
 
-// Registry interface
-export { IProviderRegistry } from './ProviderRegistry'
+// Registry and Router
+export { ProviderRegistry } from './ProviderRegistry'
+export { ModelRouter } from './ModelRouter'
 
 // Provider implementations
 export { ClaudeProvider } from './ClaudeProvider'

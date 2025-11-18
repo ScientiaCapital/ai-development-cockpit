@@ -15,6 +15,8 @@ export { IProviderRegistry } from './ProviderRegistry'
 
 // Provider implementations
 export { ClaudeProvider } from './ClaudeProvider'
+export { QwenProvider } from './QwenProvider'
+export { DeepSeekProvider } from './DeepSeekProvider'
 
 // Type exports
 export type {

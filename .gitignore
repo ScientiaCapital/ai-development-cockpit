@@ -94,6 +94,15 @@ supabase/config.toml
 context/
 *.mcp.log
 
+# ===================================
+# Python Validator Service
+# ===================================
+python-validator/venv/
+python-validator/__pycache__/
+python-validator/.pytest_cache/
+python-validator/*.json
+python-validator/.env
+
 # Logs
 # Dependency directories
 # Environment variables

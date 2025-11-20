@@ -1,0 +1,19 @@
+# ============================================================================
+# Python JSON Validator - Development Requirements
+# ============================================================================
+# This file includes all dependencies for local development and testing.
+# Production deployment uses requirements-serverless.txt (46% smaller)
+# ============================================================================
+
+# Production dependencies (shared with serverless)
+-r requirements-serverless.txt
+
+# Development Tools
+black==24.10.0
+mypy==1.11.2
+
+# Testing
+pytest==8.3.4
+pytest-asyncio==0.24.0
+
+# Note: httpx already included in requirements-serverless.txt

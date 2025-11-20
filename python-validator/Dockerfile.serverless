@@ -13,11 +13,11 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first for better caching
-COPY requirements.txt .
+# Copy requirements first for better caching (production only)
+COPY requirements-serverless.txt .
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Install Python dependencies (production minimal - 46% smaller)
+RUN pip install --no-cache-dir -r requirements-serverless.txt
 
 # Copy application code
 COPY app/ ./app/

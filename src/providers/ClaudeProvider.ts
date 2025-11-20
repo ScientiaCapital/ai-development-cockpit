@@ -107,7 +107,7 @@ export class ClaudeProvider implements IProvider {
    */
   async generateCompletion(params: CompletionParams): Promise<CompletionResult> {
     // Build messages array
-    const messages: Array<{ role: string; content: string }> = [
+    const messages: Array<{ role: 'user' | 'assistant'; content: string }> = [
       {
         role: 'user',
         content: params.prompt

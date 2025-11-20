@@ -1,11 +1,15 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createMFAChallenge, verifyMFAChallenge, getMFAFactors } from '../../../../lib/mfa'
 
-export default function MFAVerifyPage() {
+/**
+ * Component that handles MFA verification with search params validation
+ * Separated to be wrapped in Suspense boundary
+ */
+function MFAVerifyForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   
@@ -216,5 +220,26 @@ export default function MFAVerifyPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+/**
+ * Page wrapper with Suspense boundary
+ * Required for useSearchParams() in Next.js 15
+ */
+export default function MFAVerifyPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Loading MFA verification...
+          </p>
+        </div>
+      </div>
+    }>
+      <MFAVerifyForm />
+    </Suspense>
   )
 }

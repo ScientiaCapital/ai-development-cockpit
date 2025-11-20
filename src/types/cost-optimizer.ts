@@ -7,6 +7,9 @@
 
 import { Organization } from '@/contexts/HuggingFaceAuth'
 
+// Re-export Organization type for use by other modules
+export type { Organization }
+
 /**
  * Cost optimization tiers for model routing
  */

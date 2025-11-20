@@ -37,6 +37,9 @@ export class CodeArchitect extends BaseAgent {
       // Compile final architecture
       const finalArchitecture: ProjectArchitecture = {
         ...architecture,
+        summary: architecture.summary || 'Architecture design in progress',
+        stack: architecture.stack || { frontend: [], backend: [], database: [], infrastructure: [], testing: [] },
+        deploymentStrategy: architecture.deploymentStrategy || { platform: 'other', environment: 'serverless', cicd: false },
         fileStructure,
         estimatedComplexity: complexity.level,
         estimatedTime: complexity.time,

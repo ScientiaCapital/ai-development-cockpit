@@ -271,7 +271,7 @@ export class CostTracker {
     // Default budgets (can be customized per organization)
     const budgets = {
       swaggystacks: { daily: 2.0, monthly: 50.0 },
-      'scientia-capital': { daily: 10.0, monthly: 200.0 }
+      scientiacapital: { daily: 10.0, monthly: 200.0 }
     }
 
     const orgBudget = budgets[organizationId] || budgets.swaggystacks

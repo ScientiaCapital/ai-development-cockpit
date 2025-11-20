@@ -4,7 +4,7 @@
  * Orchestrates the multi-agent workflow with human-in-the-loop approval gates
  */
 
-import { StateGraph, END } from '@langchain/langgraph'
+import { StateGraph, END, Annotation } from '@langchain/langgraph'
 import { ProjectState } from '@/types/orchestrator'
 import { CodeArchitect } from '@/agents/CodeArchitect'
 
@@ -137,69 +137,119 @@ function shouldContinue(state: ProjectState): string {
 }
 
 /**
+ * State Annotation for LangGraph
+ * Defines the structure and behavior of data flowing through the graph
+ */
+const ProjectStateAnnotation = Annotation.Root({
+  // User input
+  userRequest: Annotation<string>({
+    reducer: (x, y?) => y ?? x,
+    default: () => ''
+  }),
+  userId: Annotation<string>({
+    reducer: (x, y?) => y ?? x,
+    default: () => ''
+  }),
+  organizationId: Annotation<string>({
+    reducer: (x, y?) => y ?? x,
+    default: () => ''
+  }),
+
+  // Project metadata
+  projectId: Annotation<string>({
+    reducer: (x, y?) => y ?? x,
+    default: () => ''
+  }),
+  projectName: Annotation<string>({
+    reducer: (x, y?) => y ?? x,
+    default: () => ''
+  }),
+  createdAt: Annotation<string>({
+    reducer: (x, y?) => y ?? x,
+    default: () => new Date().toISOString()
+  }),
+
+  // Architecture phase
+  architecture: Annotation<any>({
+    reducer: (x, y) => y ?? x,
+    default: () => undefined
+  }),
+  architectureApproved: Annotation<boolean>({
+    reducer: (x, y?) => y ?? x,
+    default: () => false
+  }),
+  architectureRevisionNotes: Annotation<string | undefined>({
+    reducer: (x, y?) => y ?? x,
+    default: () => undefined
+  }),
+
+  // Development phase
+  agentsSpawned: Annotation<string[]>({
+    reducer: (x, y?) => y ?? x,
+    default: () => []
+  }),
+  agentOutputs: Annotation<Record<string, any>>({
+    reducer: (x, y?) => ({ ...x, ...y }),
+    default: () => ({})
+  }),
+
+  // Testing phase
+  testResults: Annotation<any>({
+    reducer: (x, y) => y ?? x,
+    default: () => undefined
+  }),
+  testsApproved: Annotation<boolean>({
+    reducer: (x, y?) => y ?? x,
+    default: () => false
+  }),
+
+  // Deployment phase
+  deploymentConfig: Annotation<any>({
+    reducer: (x, y) => y ?? x,
+    default: () => undefined
+  }),
+  deploymentApproved: Annotation<boolean>({
+    reducer: (x, y?) => y ?? x,
+    default: () => false
+  }),
+  deploymentStatus: Annotation<string | undefined>({
+    reducer: (x, y?) => y ?? x,
+    default: () => undefined
+  }),
+
+  // Feedback & learning
+  feedback: Annotation<any>({
+    reducer: (x, y) => y ?? x,
+    default: () => undefined
+  }),
+
+  // Human-in-the-loop gates
+  needsApproval: Annotation<'architecture' | 'deployment' | 'tests' | null>({
+    reducer: (x, y) => y ?? x,
+    default: () => null
+  }),
+  userApproved: Annotation<boolean>({
+    reducer: (x, y?) => y ?? x,
+    default: () => false
+  }),
+
+  // Error handling
+  errors: Annotation<string[]>({
+    reducer: (x, y?) => [...x, ...(y || [])],
+    default: () => []
+  }),
+  retryCount: Annotation<number>({
+    reducer: (x, y?) => y ?? x,
+    default: () => 0
+  })
+})
+
+/**
  * Create the LangGraph state machine
  */
 export function createOrchestratorGraph() {
-  const graph = new StateGraph<ProjectState>({
-    channels: {
-      userRequest: {
-        value: (x: string, y?: string) => y ?? x,
-        default: () => ''
-      },
-      userId: {
-        value: (x: string, y?: string) => y ?? x,
-        default: () => ''
-      },
-      organizationId: {
-        value: (x: string, y?: string) => y ?? x,
-        default: () => ''
-      },
-      projectId: {
-        value: (x: string, y?: string) => y ?? x,
-        default: () => ''
-      },
-      projectName: {
-        value: (x: string, y?: string) => y ?? x,
-        default: () => ''
-      },
-      createdAt: {
-        value: (x: string, y?: string) => y ?? x,
-        default: () => new Date().toISOString()
-      },
-      architecture: {
-        value: (x: any, y: any) => y ?? x,
-        default: () => undefined
-      },
-      architectureApproved: {
-        value: (x: boolean, y?: boolean) => y ?? x,
-        default: () => false
-      },
-      agentsSpawned: {
-        value: (x: string[], y?: string[]) => y ?? x,
-        default: () => []
-      },
-      agentOutputs: {
-        value: (x: Record<string, any>, y?: Record<string, any>) => ({ ...x, ...y }),
-        default: () => ({})
-      },
-      needsApproval: {
-        value: (x: any, y: any) => y ?? x,
-        default: () => null
-      },
-      userApproved: {
-        value: (x: boolean, y?: boolean) => y ?? x,
-        default: () => false
-      },
-      errors: {
-        value: (x: string[], y?: string[]) => [...x, ...(y || [])],
-        default: () => []
-      },
-      retryCount: {
-        value: (x: number, y?: number) => y ?? x,
-        default: () => 0
-      }
-    }
-  })
+  // @ts-ignore - Type inference issues with Annotation.Root in LangGraph 0.2.x
+  const graph: any = new StateGraph(ProjectStateAnnotation)
 
   // Add nodes
   graph.addNode('architect', architectNode)
@@ -211,7 +261,7 @@ export function createOrchestratorGraph() {
   // Add conditional edges for routing
   graph.addConditionalEdges(
     'architect',
-    (state) => (state.userApproved ? 'build' : 'wait'),
+    (state: any) => (state.userApproved ? 'build' : 'wait'),
     {
       build: 'build',
       wait: END // Pause until approval
@@ -220,7 +270,7 @@ export function createOrchestratorGraph() {
 
   graph.addConditionalEdges(
     'build',
-    (state) => (state.userApproved ? 'test' : 'wait'),
+    (state: any) => (state.userApproved ? 'test' : 'wait'),
     {
       test: 'test',
       wait: END
@@ -229,7 +279,7 @@ export function createOrchestratorGraph() {
 
   graph.addConditionalEdges(
     'test',
-    (state) => (state.userApproved ? 'deploy' : 'wait'),
+    (state: any) => (state.userApproved ? 'deploy' : 'wait'),
     {
       deploy: 'deploy',
       wait: END

@@ -5,10 +5,13 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Docker/standalone output for RunPod deployment
+  output: 'standalone',
+
   // Performance optimizations
   compress: true,
   poweredByHeader: false,
-  
+
   // Image optimization
   images: {
     domains: ['cdn.jsdelivr.net', 'unpkg.com', 'avatars.githubusercontent.com'],

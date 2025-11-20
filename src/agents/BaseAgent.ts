@@ -6,6 +6,8 @@
  */
 
 import { AgentType, AgentOutput, ProjectContext } from '@/types/orchestrator'
+import { LanguageRouter } from '@/adapters/LanguageRouter'
+import { AdapterProjectContext, AdaptedCode } from '@/adapters/LanguageAdapter'
 
 export interface AgentThinkOptions {
   prompt: string
@@ -18,6 +20,10 @@ export abstract class BaseAgent {
   protected agentType: AgentType
   protected context: ProjectContext
   protected output: Partial<AgentOutput>
+  protected languageContext?: {
+    language: 'typescript' | 'python' | 'go' | 'rust'
+    framework: string
+  }
 
   constructor(agentType: AgentType, context: ProjectContext) {
     this.agentType = agentType
@@ -136,6 +142,67 @@ export abstract class BaseAgent {
       ...this.output,
       success: (this.output.errors?.length || 0) === 0
     } as AgentOutput
+  }
+
+  /**
+   * Adapt agent code output to target language
+   *
+   * Transforms generic agent output into language-specific code using
+   * the appropriate language adapter. If no language context is set,
+   * returns empty structure (defaults to TypeScript in Next.js project).
+   *
+   * This method enables all agents to generate code in multiple languages
+   * without needing to know language-specific details themselves.
+   *
+   * @param {Record<string, unknown>} agentOutput - Generic agent output
+   * @returns {Promise<AdaptedCode>} Language-specific code and structure
+   *
+   * @example
+   * ```typescript
+   * // Set language context first
+   * this.languageContext = {
+   *   language: 'python',
+   *   framework: 'fastapi'
+   * }
+   *
+   * // Adapt code
+   * const adapted = await this.adaptCodeToLanguage({
+   *   endpoint: '/users',
+   *   method: 'GET'
+   * })
+   *
+   * // Result contains Python FastAPI code
+   * console.log(adapted.files)
+   * console.log(adapted.projectStructure)
+   * ```
+   */
+  protected async adaptCodeToLanguage(
+    agentOutput: Record<string, unknown>
+  ): Promise<AdaptedCode> {
+    // No language context = return empty structure (TypeScript default)
+    if (!this.languageContext) {
+      return {
+        files: [],
+        projectStructure: {
+          directories: [],
+          configFiles: [],
+        },
+      }
+    }
+
+    // Get the appropriate adapter for the target language
+    const router = new LanguageRouter()
+    const adapter = router.getAdapter(this.languageContext.language)
+
+    // Build adapter context
+    const adapterContext: AdapterProjectContext = {
+      language: this.languageContext.language,
+      framework: this.languageContext.framework,
+      targetDirectory: this.context.state.projectName || '/tmp/project',
+    }
+
+    // Adapt the code using the language adapter
+    return adapter.adaptCode(agentOutput, adapterContext)
   }
 
   /**

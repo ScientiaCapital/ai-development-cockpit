@@ -12,6 +12,7 @@ describe('MessageList', () => {
   it('should render user message with "You" label', () => {
     const messages: Message[] = [
       {
+        id: '1',
         role: 'user',
         content: 'Hello, I need help building an app'
       }
@@ -26,6 +27,7 @@ describe('MessageList', () => {
   it('should render assistant message with "Claude" label', () => {
     const messages: Message[] = [
       {
+        id: '1',
         role: 'assistant',
         content: 'What do you want to build today?'
       }
@@ -40,10 +42,12 @@ describe('MessageList', () => {
   it('should apply different styling for user and assistant messages', () => {
     const messages: Message[] = [
       {
+        id: '1',
         role: 'user',
         content: 'User message'
       },
       {
+        id: '2',
         role: 'assistant',
         content: 'Assistant message'
       }
@@ -61,18 +65,22 @@ describe('MessageList', () => {
   it('should render multiple messages in order', () => {
     const messages: Message[] = [
       {
+        id: '1',
         role: 'assistant',
         content: 'What do you want to build today?'
       },
       {
+        id: '2',
         role: 'user',
         content: 'I need email automation'
       },
       {
+        id: '3',
         role: 'assistant',
         content: 'What kind of emails do you need to automate?'
       },
       {
+        id: '4',
         role: 'user',
         content: 'Follow-ups for clients'
       }
@@ -93,6 +101,7 @@ describe('MessageList', () => {
   it('should preserve line breaks in message content', () => {
     const messages: Message[] = [
       {
+        id: '1',
         role: 'assistant',
         content: 'Here are some options:\n1. Email automation\n2. Task scheduling\n3. Data integration'
       }
@@ -109,6 +118,7 @@ describe('MessageList', () => {
   it('should apply ml-12 class to user messages for alignment', () => {
     const messages: Message[] = [
       {
+        id: '1',
         role: 'user',
         content: 'Test message'
       }
@@ -123,6 +133,7 @@ describe('MessageList', () => {
   it('should apply mr-12 class to assistant messages for alignment', () => {
     const messages: Message[] = [
       {
+        id: '1',
         role: 'assistant',
         content: 'Test message'
       }

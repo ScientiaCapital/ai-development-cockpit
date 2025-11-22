@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { MessageList } from './MessageList';
 
 export interface Message {
+  id: string;
   role: 'user' | 'assistant';
   content: string;
 }
@@ -11,18 +12,28 @@ export interface Message {
 export function ChatInterface() {
   const [messages, setMessages] = useState<Message[]>([
     {
+      id: crypto.randomUUID(),
       role: 'assistant',
       content: 'What do you want to build today?'
     }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
 
-    const userMessage: Message = { role: 'user', content: input };
+    const userMessage: Message = {
+      id: crypto.randomUUID(),
+      role: 'user',
+      content: input
+    };
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
@@ -34,16 +45,45 @@ export function ChatInterface() {
         body: JSON.stringify({ message: input, history: messages })
       });
 
+      if (!response.ok) {
+        let errorMessage = 'Sorry, I encountered an error. Please try again.';
+
+        if (response.status === 429) {
+          errorMessage = 'Too many requests. Please wait a moment and try again.';
+        } else if (response.status === 500) {
+          errorMessage = 'Server error. Our team has been notified.';
+        }
+
+        setMessages(prev => [...prev, {
+          id: crypto.randomUUID(),
+          role: 'assistant',
+          content: errorMessage
+        }]);
+        return;
+      }
+
       const data = await response.json();
       setMessages(prev => [...prev, {
+        id: crypto.randomUUID(),
         role: 'assistant',
         content: data.response
       }]);
     } catch (error) {
       console.error('Chat error:', error);
+
+      let errorMessage = 'Sorry, I encountered an error. Please try again.';
+
+      if (error instanceof Error) {
+        // Network error
+        if (error.message.includes('Failed to fetch')) {
+          errorMessage = 'Unable to connect. Please check your internet connection.';
+        }
+      }
+
       setMessages(prev => [...prev, {
+        id: crypto.randomUUID(),
         role: 'assistant',
-        content: 'Sorry, I encountered an error. Please try again.'
+        content: errorMessage
       }]);
     } finally {
       setIsLoading(false);
@@ -54,7 +94,10 @@ export function ChatInterface() {
     <div className="max-w-4xl mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6">AI Development Cockpit</h1>
 
-      <MessageList messages={messages} />
+      <div role="log" aria-live="polite" aria-busy={isLoading}>
+        <MessageList messages={messages} />
+        <div ref={messagesEndRef} />
+      </div>
 
       <form onSubmit={handleSubmit} className="mt-4">
         <div className="flex gap-2">
@@ -63,6 +106,7 @@ export function ChatInterface() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Describe in plain English..."
+            aria-label="Chat message input"
             className="flex-1 p-3 border rounded-lg"
             disabled={isLoading}
           />

@@ -282,14 +282,14 @@ describe('POST /api/chat', () => {
   });
 
   describe('Security', () => {
-    it('should sanitize user input before sending to AI', async () => {
-      const maliciousInput = '<script>alert("xss")</script>Build an API';
+    it('should accept special characters in user input', async () => {
+      const inputWithSpecialChars = '<script>alert("xss")</script>Build an API';
 
       const request = new NextRequest('http://localhost:3001/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message: maliciousInput,
+          message: inputWithSpecialChars,
           history: []
         })
       });
@@ -298,7 +298,7 @@ describe('POST /api/chat', () => {
 
       const calledPrompt = mockCostOptimizer.complete.mock.calls[0][0];
       expect(calledPrompt).toContain('Build an API');
-      // Should still be escaped in the prompt for AI to see
+      // Special characters are passed through to AI (AI handles context)
       expect(calledPrompt).toContain('script');
     });
 
@@ -315,6 +315,130 @@ describe('POST /api/chat', () => {
       const response = await POST(request);
 
       expect(response.status).toBe(400);
+    });
+  });
+
+  describe('Input validation', () => {
+    it('should reject empty message', async () => {
+      const request = new NextRequest('http://localhost:3001/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: '',
+          history: []
+        })
+      });
+
+      const response = await POST(request);
+
+      expect(response.status).toBe(400);
+      const data = await response.json();
+      expect(data.error).toContain('cannot be empty');
+    });
+
+    it('should reject message exceeding max length', async () => {
+      const longMessage = 'a'.repeat(10001); // 10001 chars > 10000 max
+
+      const request = new NextRequest('http://localhost:3001/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: longMessage,
+          history: []
+        })
+      });
+
+      const response = await POST(request);
+
+      expect(response.status).toBe(400);
+      const data = await response.json();
+      expect(data.error).toContain('too long');
+    });
+
+    it('should reject history exceeding max size', async () => {
+      const largeHistory = Array.from({ length: 51 }, (_, i) => ({
+        id: `msg-${i}`,
+        role: i % 2 === 0 ? 'user' as const : 'assistant' as const,
+        content: `Message ${i}`
+      }));
+
+      const request = new NextRequest('http://localhost:3001/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: 'Test',
+          history: largeHistory
+        })
+      });
+
+      const response = await POST(request);
+
+      expect(response.status).toBe(400);
+      const data = await response.json();
+      expect(data.error).toContain('too large');
+    });
+
+    it('should validate history message structure', async () => {
+      const invalidHistory = [
+        { role: 'invalid', content: 'test' } // Invalid role
+      ];
+
+      const request = new NextRequest('http://localhost:3001/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: 'Test',
+          history: invalidHistory
+        })
+      });
+
+      const response = await POST(request);
+
+      expect(response.status).toBe(400);
+      const data = await response.json();
+      expect(data.error).toContain('Invalid message format');
+    });
+
+    it('should reject history messages missing role', async () => {
+      const invalidHistory = [
+        { content: 'test' } // Missing role
+      ];
+
+      const request = new NextRequest('http://localhost:3001/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: 'Test',
+          history: invalidHistory as any
+        })
+      });
+
+      const response = await POST(request);
+
+      expect(response.status).toBe(400);
+      const data = await response.json();
+      expect(data.error).toContain('Invalid message format');
+    });
+
+    it('should reject history messages missing content', async () => {
+      const invalidHistory = [
+        { role: 'user' } // Missing content
+      ];
+
+      const request = new NextRequest('http://localhost:3001/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: 'Test',
+          history: invalidHistory as any
+        })
+      });
+
+      const response = await POST(request);
+
+      expect(response.status).toBe(400);
+      const data = await response.json();
+      expect(data.error).toContain('Invalid message format');
     });
   });
 });

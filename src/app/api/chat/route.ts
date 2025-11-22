@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { CostOptimizerClient } from '@/services/CostOptimizerClient';
 import { RequirementsExtractor, ExtractedRequirements } from '@/services/RequirementsExtractor';
-import { AgentOrchestrator } from '@/orchestrator/AgentOrchestrator';
+import { AgentOrchestrator, ProjectStatus } from '@/orchestrator/AgentOrchestrator';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface ChatMessage {
@@ -22,7 +22,7 @@ export interface ChatResponse {
   requirementsExtracted?: ExtractedRequirements;
   buildStarted?: boolean;
   projectId?: string;
-  buildStatus?: any;
+  buildStatus?: ProjectStatus;
   error?: string;
 }
 
@@ -40,6 +40,17 @@ function getCostOptimizer(): CostOptimizerClient {
   return new CostOptimizerClient({
     baseURL: process.env.COST_OPTIMIZER_URL || 'http://localhost:8000'
   });
+}
+
+/**
+ * Sanitize user input to prevent shell injection attacks
+ * Removes shell metacharacters and non-printable characters
+ */
+function sanitizeUserInput(input: string): string {
+  return input
+    .replace(/[`${}]/g, '')             // Remove shell metacharacters
+    .replace(/[^\x20-\x7E\n\r\t]/g, '') // Remove non-printable chars (keep newlines, tabs)
+    .substring(0, 5000);                // Limit length to prevent DoS
 }
 
 /**
@@ -93,10 +104,10 @@ function formatUserRequest(requirements: ExtractedRequirements, conversation: Ch
     parts.push(`Constraints: ${requirements.constraints.join(', ')}`);
   }
 
-  // Include original user messages for context
+  // Include original user messages for context (sanitized for security)
   const userMessages = conversation
     .filter(msg => msg.role === 'user')
-    .map(msg => msg.content)
+    .map(msg => sanitizeUserInput(msg.content))
     .join('. ');
 
   if (userMessages) {

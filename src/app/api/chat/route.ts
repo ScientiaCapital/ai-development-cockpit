@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { CostOptimizerClient } from '@/services/CostOptimizerClient';
+import { RequirementsExtractor, ExtractedRequirements } from '@/services/RequirementsExtractor';
+import { AgentOrchestrator } from '@/orchestrator/AgentOrchestrator';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface ChatMessage {
   id: string;
@@ -16,6 +19,11 @@ export interface ChatResponse {
   response: string;
   cost?: number;
   provider?: string;
+  requirementsExtracted?: ExtractedRequirements;
+  buildStarted?: boolean;
+  projectId?: string;
+  buildStatus?: any;
+  error?: string;
 }
 
 // Allow dependency injection for testing
@@ -35,7 +43,76 @@ function getCostOptimizer(): CostOptimizerClient {
 }
 
 /**
+ * Check if user message indicates build confirmation
+ */
+function isBuildConfirmation(message: string): boolean {
+  const lowerMessage = message.toLowerCase().trim();
+  const confirmationKeywords = [
+    'yes',
+    'ready',
+    'build it',
+    'build',
+    'start',
+    'go ahead',
+    'proceed',
+    "let's go",
+    'do it'
+  ];
+
+  return confirmationKeywords.some(keyword => lowerMessage.includes(keyword));
+}
+
+/**
+ * Format requirements into a user request string
+ */
+function formatUserRequest(requirements: ExtractedRequirements, conversation: ChatMessage[]): string {
+  const parts: string[] = [];
+
+  // Add project type
+  if (requirements.projectType) {
+    parts.push(`Build a ${requirements.projectType.replace('_', ' ')}`);
+  } else {
+    parts.push('Build an application');
+  }
+
+  // Add language and framework
+  if (requirements.language) {
+    parts.push(`using ${requirements.language}`);
+  }
+  if (requirements.framework) {
+    parts.push(`with ${requirements.framework}`);
+  }
+
+  // Add features
+  if (requirements.features && requirements.features.length > 0) {
+    parts.push(`Features: ${requirements.features.join(', ')}`);
+  }
+
+  // Add constraints
+  if (requirements.constraints && requirements.constraints.length > 0) {
+    parts.push(`Constraints: ${requirements.constraints.join(', ')}`);
+  }
+
+  // Include original user messages for context
+  const userMessages = conversation
+    .filter(msg => msg.role === 'user')
+    .map(msg => msg.content)
+    .join('. ');
+
+  if (userMessages) {
+    parts.push(`\n\nOriginal request: ${userMessages}`);
+  }
+
+  return parts.join('. ');
+}
+
+/**
  * POST /api/chat - Chat endpoint using Claude SDK and CostOptimizerClient
+ *
+ * Task 7: Connects chat to orchestrator
+ * 1. Extracts requirements from conversation
+ * 2. Asks clarifying questions when confidence is low/medium
+ * 3. Triggers build when confidence is high and user confirms
  *
  * Accepts:
  *   - message: string (required) - User's message
@@ -45,6 +122,10 @@ function getCostOptimizer(): CostOptimizerClient {
  *   - response: string - AI's response
  *   - cost: number (optional) - Cost of the request
  *   - provider: string (optional) - Provider used
+ *   - requirementsExtracted: ExtractedRequirements (optional) - Extracted requirements
+ *   - buildStarted: boolean (optional) - Whether build was triggered
+ *   - projectId: string (optional) - ID of started project
+ *   - buildStatus: object (optional) - Status of the build
  */
 export async function POST(request: NextRequest): Promise<NextResponse<ChatResponse | { error: string }>> {
   try {
@@ -111,7 +192,25 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
       }
     }
 
-    // Build conversation context
+    // TASK 7: Extract requirements from conversation
+    const costOptimizer = getCostOptimizer();
+    const requirementsExtractor = new RequirementsExtractor(costOptimizer);
+
+    let requirements: ExtractedRequirements | null = null;
+    try {
+      // Build full conversation including current message
+      const fullConversation = [
+        ...history,
+        { id: uuidv4(), role: 'user' as const, content: message }
+      ];
+
+      requirements = await requirementsExtractor.extractFromConversation(fullConversation);
+    } catch (error) {
+      // If requirements extraction fails, continue with normal chat
+      console.error('Requirements extraction failed:', error);
+    }
+
+    // Build conversation context for AI response
     const conversationContext = history
       .map(msg => `${msg.role}: ${msg.content}`)
       .join('\n');
@@ -121,20 +220,21 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
       ? `${conversationContext}\nuser: ${message}\nassistant:`
       : `user: ${message}\nassistant:`;
 
-    // Call cost optimizer
+    // Call cost optimizer for AI response
+    let aiResponse: string;
+    let cost: number;
+    let provider: string;
+
     try {
-      const costOptimizer = getCostOptimizer();
       const result = await costOptimizer.complete(prompt, {
         task_type: 'conversation',
         complexity: 'simple',
         max_tokens: 500
       });
 
-      return NextResponse.json({
-        response: result.response,
-        cost: result.cost,
-        provider: result.provider
-      });
+      aiResponse = result.response;
+      cost = result.cost;
+      provider = result.provider;
     } catch (error) {
       // Check if circuit breaker is open
       if (error instanceof Error && error.message.includes('Circuit breaker is open')) {
@@ -147,6 +247,57 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
       // Other errors
       throw error;
     }
+
+    // TASK 7: Check if we should trigger build
+    const shouldBuild =
+      requirements !== null &&
+      requirements.confidence === 'high' &&
+      isBuildConfirmation(message);
+
+    if (shouldBuild && requirements) {
+      // Trigger AgentOrchestrator
+      try {
+        const orchestrator = new AgentOrchestrator({ costOptimizerClient: costOptimizer });
+        const userRequest = formatUserRequest(requirements, [...history, { id: uuidv4(), role: 'user', content: message }]);
+
+        const buildResult = await orchestrator.startProject({
+          userRequest,
+          userId: 'chat-user-' + uuidv4(),
+          organizationId: 'chat-org-default',
+          projectName: requirements.projectType
+            ? `${requirements.language || 'app'}-${requirements.projectType}`
+            : 'chat-project'
+        });
+
+        return NextResponse.json({
+          response: aiResponse,
+          cost,
+          provider,
+          requirementsExtracted: requirements,
+          buildStarted: true,
+          projectId: buildResult.projectId,
+          buildStatus: buildResult.status
+        });
+      } catch (buildError) {
+        console.error('Build startup error:', buildError);
+        return NextResponse.json({
+          response: aiResponse,
+          cost,
+          provider,
+          requirementsExtracted: requirements,
+          buildStarted: false,
+          error: 'Failed to start build process. Please try again.'
+        });
+      }
+    }
+
+    // Return normal chat response with extracted requirements
+    return NextResponse.json({
+      response: aiResponse,
+      cost,
+      provider,
+      ...(requirements && { requirementsExtracted: requirements })
+    });
   } catch (error) {
     console.error('Chat API error:', error);
     return NextResponse.json(

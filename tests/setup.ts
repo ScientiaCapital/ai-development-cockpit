@@ -9,6 +9,39 @@ global.console = {
   error: jest.fn(),
 };
 
+// Mock crypto.randomUUID for tests
+if (!global.crypto) {
+  global.crypto = {
+    randomUUID: () => Math.random().toString(36).substring(7)
+  } as any;
+}
+
+// Mock Next.js server environment (Request/Response)
+// This polyfills the Web API standards that Next.js uses
+import { Request as NodeRequest, Response as NodeResponse, Headers as NodeHeaders } from 'node-fetch';
+
+// Create proper Response.json implementation
+class MockResponse extends NodeResponse {
+  static json(data: any, init?: ResponseInit) {
+    return new MockResponse(JSON.stringify(data), {
+      ...init,
+      headers: {
+        'content-type': 'application/json',
+        ...init?.headers
+      }
+    });
+  }
+
+  async json() {
+    const text = await this.text();
+    return JSON.parse(text);
+  }
+}
+
+global.Request = NodeRequest as any;
+global.Response = MockResponse as any;
+global.Headers = NodeHeaders as any;
+
 // Set test environment variables
 Object.defineProperty(process.env, 'NODE_ENV', {
   value: 'test',

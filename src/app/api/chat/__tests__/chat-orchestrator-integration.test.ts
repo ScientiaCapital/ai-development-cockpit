@@ -505,6 +505,125 @@ describe('Chat to Orchestrator Integration (Task 7)', () => {
     });
   });
 
+  describe('Security: Input Sanitization', () => {
+    it('should sanitize shell metacharacters from user input', async () => {
+      const history = [
+        { id: '1', role: 'user' as const, content: 'Build API with `rm -rf /` in description' }
+      ];
+
+      mockRequirementsExtractor.extractFromConversation.mockResolvedValue({
+        projectType: 'api',
+        language: 'python',
+        framework: 'fastapi',
+        features: ['rest'],
+        confidence: 'high'
+      });
+
+      const request = new NextRequest('http://localhost:3001/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: 'yes start',
+          history
+        })
+      });
+
+      await POST(request);
+
+      // Verify orchestrator was called with sanitized input (no backticks)
+      const callArgs = mockOrchestrator.startProject.mock.calls[0][0];
+      expect(callArgs.userRequest).not.toContain('`');
+      expect(callArgs.userRequest).toContain('rm -rf /'); // Content preserved, just metacharacters removed
+    });
+
+    it('should remove shell metacharacters: backticks, dollar signs, braces', async () => {
+      const history = [
+        { id: '1', role: 'user' as const, content: 'Build ${MALICIOUS} API with `echo "test"` and {braces}' }
+      ];
+
+      mockRequirementsExtractor.extractFromConversation.mockResolvedValue({
+        projectType: 'api',
+        language: 'python',
+        features: ['rest'],
+        confidence: 'high'
+      });
+
+      const request = new NextRequest('http://localhost:3001/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: 'build it',
+          history
+        })
+      });
+
+      await POST(request);
+
+      const callArgs = mockOrchestrator.startProject.mock.calls[0][0];
+      expect(callArgs.userRequest).not.toContain('`');
+      expect(callArgs.userRequest).not.toContain('$');
+      expect(callArgs.userRequest).not.toContain('{');
+      expect(callArgs.userRequest).not.toContain('}');
+    });
+
+    it('should preserve safe characters: letters, numbers, spaces, newlines, tabs', async () => {
+      const history = [
+        { id: '1', role: 'user' as const, content: 'Build API\nwith\ttabs and newlines\r\nTest 123!' }
+      ];
+
+      mockRequirementsExtractor.extractFromConversation.mockResolvedValue({
+        projectType: 'api',
+        language: 'python',
+        features: ['rest'],
+        confidence: 'high'
+      });
+
+      const request = new NextRequest('http://localhost:3001/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: 'yes',
+          history
+        })
+      });
+
+      await POST(request);
+
+      const callArgs = mockOrchestrator.startProject.mock.calls[0][0];
+      expect(callArgs.userRequest).toContain('Build API');
+      expect(callArgs.userRequest).toContain('Test 123!');
+    });
+
+    it('should truncate extremely long input to prevent DoS', async () => {
+      const longContent = 'A'.repeat(10000); // 10k characters
+      const history = [
+        { id: '1', role: 'user' as const, content: longContent }
+      ];
+
+      mockRequirementsExtractor.extractFromConversation.mockResolvedValue({
+        projectType: 'api',
+        language: 'python',
+        features: ['rest'],
+        confidence: 'high'
+      });
+
+      const request = new NextRequest('http://localhost:3001/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: 'yes',
+          history
+        })
+      });
+
+      await POST(request);
+
+      const callArgs = mockOrchestrator.startProject.mock.calls[0][0];
+      // Should be truncated to 5000 chars max (plus other request parts)
+      expect(callArgs.userRequest.length).toBeLessThan(longContent.length);
+    });
+  });
+
   describe('Full E2E Flow', () => {
     it('should complete full flow: low confidence → questions → high confidence → build', async () => {
       // Step 1: Initial vague request (low confidence)

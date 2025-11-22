@@ -31,6 +31,8 @@ export class CostOptimizerClient {
   private circuitState: CircuitState;
   private failures: number;
   private failureThreshold: number;
+  private resetTimeout: number;
+  private openedAt?: number;
 
   constructor(config: CostOptimizerConfig) {
     this.baseURL = config.baseURL;
@@ -39,14 +41,36 @@ export class CostOptimizerClient {
     this.circuitState = CircuitState.CLOSED;
     this.failures = 0;
     this.failureThreshold = 5;
+    this.resetTimeout = 60000; // 60 seconds
   }
 
   async complete(
     prompt: string,
     options: CompletionRequest = {}
   ): Promise<CompletionResponse> {
+    // Check if circuit should transition from OPEN to HALF_OPEN
     if (this.circuitState === CircuitState.OPEN) {
-      throw new Error('Circuit breaker is open - service unavailable');
+      const now = Date.now();
+      if (this.openedAt && now - this.openedAt >= this.resetTimeout) {
+        this.circuitState = CircuitState.HALF_OPEN;
+      } else {
+        throw new Error('Circuit breaker is open - service unavailable');
+      }
+    }
+
+    // In HALF_OPEN state, allow one test request
+    if (this.circuitState === CircuitState.HALF_OPEN) {
+      try {
+        const result = await this.makeRequest(prompt, options);
+        // Success in HALF_OPEN → transition to CLOSED
+        this.onSuccess();
+        return result;
+      } catch (error) {
+        // Failure in HALF_OPEN → re-open circuit
+        this.circuitState = CircuitState.OPEN;
+        this.openedAt = Date.now();
+        throw error;
+      }
     }
 
     return this.callWithRetry(() => this.makeRequest(prompt, options));
@@ -66,7 +90,8 @@ export class CostOptimizerClient {
         await this.sleep(Math.pow(2, i) * 1000); // Exponential backoff
       }
     }
-    throw new Error('Max retries exceeded');
+    // Unreachable - TypeScript requires a return/throw after loop
+    throw new Error('Unexpected: exceeded max retries');
   }
 
   private async makeRequest(
@@ -97,12 +122,15 @@ export class CostOptimizerClient {
   private onSuccess() {
     this.failures = 0;
     this.circuitState = CircuitState.CLOSED;
+    this.openedAt = undefined;
   }
 
   private onFailure() {
-    this.failures++;
-    if (this.failures >= this.failureThreshold) {
+    // Atomic increment to prevent race conditions
+    const currentFailures = ++this.failures;
+    if (currentFailures >= this.failureThreshold) {
       this.circuitState = CircuitState.OPEN;
+      this.openedAt = Date.now();
     }
   }
 

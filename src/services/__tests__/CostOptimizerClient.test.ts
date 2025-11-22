@@ -100,4 +100,83 @@ describe('CostOptimizerClient', () => {
       expect(elapsed).toBeLessThan(100); // No retry delay
     }
   });
+
+  it('should recover from OPEN to HALF_OPEN to CLOSED after timeout', async () => {
+    const mockFetch = jest.fn(() => Promise.reject(new Error('Service down')));
+    global.fetch = mockFetch as any;
+
+    // Trigger circuit breaker (5 failures)
+    for (let i = 0; i < 5; i++) {
+      try {
+        await client.complete('test');
+      } catch (e) {
+        // Expected
+      }
+    }
+
+    // Circuit is now OPEN
+    await expect(client.complete('test')).rejects.toThrow('Circuit breaker is open');
+
+    // Wait 60 seconds for reset timeout
+    await new Promise(resolve => setTimeout(resolve, 60100));
+
+    // Now mock should succeed to test HALF_OPEN → CLOSED transition
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve({
+        response: 'recovered',
+        provider: 'test',
+        model: 'test-model',
+        tokens_in: 10,
+        tokens_out: 20,
+        cost: 0.001
+      })
+    });
+
+    // This request should succeed and close the circuit
+    const response = await client.complete('test');
+    expect(response.response).toBe('recovered');
+
+    // Verify circuit is CLOSED by making another successful request
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve({
+        response: 'still working',
+        provider: 'test',
+        model: 'test-model',
+        tokens_in: 10,
+        tokens_out: 20,
+        cost: 0.001
+      })
+    });
+
+    const response2 = await client.complete('test');
+    expect(response2.response).toBe('still working');
+  }, 70000);
+
+  it('should re-open circuit if HALF_OPEN request fails', async () => {
+    const mockFetch = jest.fn(() => Promise.reject(new Error('Service down')));
+    global.fetch = mockFetch as any;
+
+    // Trigger circuit breaker (5 failures)
+    for (let i = 0; i < 5; i++) {
+      try {
+        await client.complete('test');
+      } catch (e) {
+        // Expected
+      }
+    }
+
+    // Circuit is now OPEN
+    await expect(client.complete('test')).rejects.toThrow('Circuit breaker is open');
+
+    // Wait 60 seconds for reset timeout
+    await new Promise(resolve => setTimeout(resolve, 60100));
+
+    // Request in HALF_OPEN state fails - circuit should re-open
+    await expect(client.complete('test')).rejects.toThrow('Service down');
+
+    // Circuit should be OPEN again
+    await expect(client.complete('test')).rejects.toThrow('Circuit breaker is open');
+  }, 70000);
 });

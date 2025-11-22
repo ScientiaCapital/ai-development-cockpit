@@ -61,10 +61,28 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
 
     const { message, history } = body;
 
+    // Input validation constants
+    const MAX_MESSAGE_LENGTH = 10000;
+    const MAX_HISTORY_SIZE = 50;
+
     // Validate inputs
-    if (!message || typeof message !== 'string') {
+    if (typeof message !== 'string') {
       return NextResponse.json(
         { error: 'Message is required and must be a string' },
+        { status: 400 }
+      );
+    }
+
+    if (message.length === 0) {
+      return NextResponse.json(
+        { error: 'Message cannot be empty' },
+        { status: 400 }
+      );
+    }
+
+    if (message.length > MAX_MESSAGE_LENGTH) {
+      return NextResponse.json(
+        { error: `Message too long (max ${MAX_MESSAGE_LENGTH} characters)` },
         { status: 400 }
       );
     }
@@ -74,6 +92,23 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
         { error: 'History must be an array' },
         { status: 400 }
       );
+    }
+
+    if (history.length > MAX_HISTORY_SIZE) {
+      return NextResponse.json(
+        { error: `History too large (max ${MAX_HISTORY_SIZE} messages)` },
+        { status: 400 }
+      );
+    }
+
+    // Validate history message structure
+    for (const msg of history) {
+      if (!msg.role || !msg.content || !['user', 'assistant'].includes(msg.role)) {
+        return NextResponse.json(
+          { error: 'Invalid message format in history' },
+          { status: 400 }
+        );
+      }
     }
 
     // Build conversation context

@@ -9,8 +9,8 @@ import { ProjectState, ProjectFeedback } from '@/types/orchestrator'
 import { CodebaseReview } from '@/types/events'
 import { createOrchestratorGraph } from './graph'
 import { EventBus, AgentEvent } from './EventBus'
-import { CostOptimizerClient as NewCostOptimizerClient } from '@/services/CostOptimizerClient'
-import { CostOptimizerClient as LegacyCostOptimizerClient } from '@/services/cost-optimizer/CostOptimizerClient'
+import { CostOptimizerClient } from '@/services/CostOptimizerClient'
+import { CostOptimizerClient as Phase2CostOptimizerClient } from '@/services/cost-optimizer/CostOptimizerClient'
 import { v4 as uuidv4 } from 'uuid'
 import { promises as fs } from 'fs'
 import path from 'path'
@@ -36,7 +36,7 @@ export interface ProjectStatus {
 }
 
 export interface OrchestratorConfig {
-  costOptimizerClient?: NewCostOptimizerClient
+  costOptimizerClient?: CostOptimizerClient
 }
 
 export interface BuildStats {
@@ -50,8 +50,8 @@ export class AgentOrchestrator {
   private graph: any
   private activeProjects: Map<string, ProjectState>
   private eventBus: EventBus
-  private legacyCostOptimizer: LegacyCostOptimizerClient
-  private newCostOptimizer: NewCostOptimizerClient | null
+  private phase2CostOptimizer: Phase2CostOptimizerClient
+  private costOptimizer: CostOptimizerClient | null
   private buildCosts: number[]
 
   /**
@@ -70,14 +70,14 @@ export class AgentOrchestrator {
     this.eventBus = EventBus.getInstance()
     this.buildCosts = []
 
-    // Store optional new cost optimizer client
-    this.newCostOptimizer = config.costOptimizerClient || null
+    // Store optional cost optimizer client
+    this.costOptimizer = config.costOptimizerClient || null
 
-    // Initialize legacy cost optimizer client for backward compatibility
+    // Initialize Phase 2 cost optimizer client for backward compatibility
     const apiUrl = process.env.COST_OPTIMIZER_API_URL || 'http://localhost:3001'
     const apiKey = process.env.COST_OPTIMIZER_API_KEY || 'dev-key'
 
-    this.legacyCostOptimizer = new LegacyCostOptimizerClient({
+    this.phase2CostOptimizer = new Phase2CostOptimizerClient({
       apiUrl,
       apiKey
     })
@@ -316,9 +316,9 @@ Provide a brief analysis of:
       let responseContent: string
       let cost: number
 
-      // Use new CostOptimizerClient if provided, otherwise use legacy
-      if (this.newCostOptimizer) {
-        const response = await this.newCostOptimizer.complete(prompt, {
+      // Use CostOptimizerClient if provided, otherwise use Phase 2 client
+      if (this.costOptimizer) {
+        const response = await this.costOptimizer.complete(prompt, {
           task_type: 'code-generation',
           complexity: 'medium',
           max_tokens: 1000
@@ -329,7 +329,7 @@ Provide a brief analysis of:
         // Track costs
         this.buildCosts.push(cost)
       } else {
-        const response = await this.legacyCostOptimizer.optimizeCompletion({
+        const response = await this.phase2CostOptimizer.optimizeCompletion({
           prompt,
           complexity: 'medium',
           agentType: 'AgentOrchestrator',
@@ -338,6 +338,9 @@ Provide a brief analysis of:
         })
         responseContent = response.content
         cost = response.cost
+
+        // Track costs
+        this.buildCosts.push(cost)
       }
 
       // Parse the response into structured data

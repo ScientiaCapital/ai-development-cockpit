@@ -50,4 +50,54 @@ describe('CostOptimizerClient', () => {
 
     await expect(badClient.complete('test')).rejects.toThrow();
   });
+
+  it('should retry on transient failures', async () => {
+    let attempts = 0;
+    const mockFetch = jest.fn(() => {
+      attempts++;
+      if (attempts < 3) {
+        return Promise.reject(new Error('Network error'));
+      }
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({
+          response: 'success',
+          provider: 'test',
+          model: 'test-model',
+          tokens_in: 10,
+          tokens_out: 20,
+          cost: 0.001
+        })
+      });
+    });
+
+    global.fetch = mockFetch as any;
+
+    const response = await client.complete('test');
+    expect(attempts).toBe(3);
+    expect(response.response).toBe('success');
+  });
+
+  it('should open circuit breaker after threshold failures', async () => {
+    const mockFetch = jest.fn(() => Promise.reject(new Error('Always fails')));
+    global.fetch = mockFetch as any;
+
+    // Trigger circuit breaker
+    for (let i = 0; i < 5; i++) {
+      try {
+        await client.complete('test');
+      } catch (e) {
+        // Expected
+      }
+    }
+
+    // Circuit should be open, request fails immediately
+    const start = Date.now();
+    try {
+      await client.complete('test');
+    } catch (e) {
+      const elapsed = Date.now() - start;
+      expect(elapsed).toBeLessThan(100); // No retry delay
+    }
+  });
 });

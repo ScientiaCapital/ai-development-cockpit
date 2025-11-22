@@ -8,9 +8,9 @@ interface MessageListProps {
 export function MessageList({ messages }: MessageListProps) {
   return (
     <div className="space-y-4 mb-4">
-      {messages.map((message, index) => (
+      {messages.map((message) => (
         <div
-          key={index}
+          key={message.id}
           className={`p-4 rounded-lg ${
             message.role === 'user'
               ? 'bg-blue-100 ml-12'

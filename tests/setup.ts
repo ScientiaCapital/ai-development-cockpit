@@ -23,6 +23,9 @@ process.env.SUPABASE_ANON_KEY = 'test-anon-key';
 // Mock fetch globally
 global.fetch = jest.fn() as jest.MockedFunction<typeof fetch>;
 
+// Mock scrollIntoView (not available in jsdom)
+Element.prototype.scrollIntoView = jest.fn();
+
 // Mock Redis
 jest.mock('redis', () => ({
   createClient: jest.fn(() => ({

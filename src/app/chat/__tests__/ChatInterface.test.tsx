@@ -152,6 +152,88 @@ describe('ChatInterface', () => {
     });
   });
 
+  it('should show network error message when fetch fails', async () => {
+    (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('Failed to fetch'));
+
+    render(<ChatInterface />);
+
+    const input = screen.getByPlaceholderText('Describe in plain English...');
+    fireEvent.change(input, { target: { value: 'Test' } });
+    fireEvent.click(screen.getByRole('button', { name: /send/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/unable to connect/i)).toBeInTheDocument();
+    });
+  });
+
+  it('should show rate limit error message when API returns 429', async () => {
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: false,
+      status: 429,
+      json: async () => ({})
+    });
+
+    render(<ChatInterface />);
+
+    const input = screen.getByPlaceholderText('Describe in plain English...');
+    fireEvent.change(input, { target: { value: 'Test' } });
+    fireEvent.click(screen.getByRole('button', { name: /send/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/too many requests/i)).toBeInTheDocument();
+    });
+  });
+
+  it('should show server error message when API returns 500', async () => {
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: false,
+      status: 500,
+      json: async () => ({})
+    });
+
+    render(<ChatInterface />);
+
+    const input = screen.getByPlaceholderText('Describe in plain English...');
+    fireEvent.change(input, { target: { value: 'Test' } });
+    fireEvent.click(screen.getByRole('button', { name: /send/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/server error/i)).toBeInTheDocument();
+    });
+  });
+
+  it('should have accessibility labels on input field', () => {
+    render(<ChatInterface />);
+
+    const input = screen.getByLabelText('Chat message input');
+    expect(input).toBeInTheDocument();
+  });
+
+  it('should have aria-live region for messages', () => {
+    const { container } = render(<ChatInterface />);
+
+    const liveRegion = container.querySelector('[aria-live="polite"]');
+    expect(liveRegion).toBeInTheDocument();
+  });
+
+  it('should update aria-busy during loading state', async () => {
+    (global.fetch as jest.Mock).mockImplementation(() =>
+      new Promise(resolve => setTimeout(() => resolve({
+        ok: true,
+        json: async () => ({ response: 'Response' })
+      }), 100))
+    );
+
+    const { container } = render(<ChatInterface />);
+
+    const input = screen.getByPlaceholderText('Describe in plain English...');
+    fireEvent.change(input, { target: { value: 'Test' } });
+    fireEvent.click(screen.getByRole('button', { name: /send/i }));
+
+    const liveRegion = container.querySelector('[aria-live="polite"]');
+    expect(liveRegion?.getAttribute('aria-busy')).toBe('true');
+  });
+
   it('should display multiple messages in conversation history', async () => {
     (global.fetch as jest.Mock)
       .mockResolvedValueOnce({

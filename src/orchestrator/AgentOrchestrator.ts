@@ -9,7 +9,8 @@ import { ProjectState, ProjectFeedback } from '@/types/orchestrator'
 import { CodebaseReview } from '@/types/events'
 import { createOrchestratorGraph } from './graph'
 import { EventBus, AgentEvent } from './EventBus'
-import { CostOptimizerClient } from '@/services/cost-optimizer/CostOptimizerClient'
+import { CostOptimizerClient as NewCostOptimizerClient } from '@/services/CostOptimizerClient'
+import { CostOptimizerClient as LegacyCostOptimizerClient } from '@/services/cost-optimizer/CostOptimizerClient'
 import { v4 as uuidv4 } from 'uuid'
 import { promises as fs } from 'fs'
 import path from 'path'
@@ -34,13 +35,24 @@ export interface ProjectStatus {
   errors: string[]
 }
 
+export interface OrchestratorConfig {
+  costOptimizerClient?: NewCostOptimizerClient
+}
+
+export interface BuildStats {
+  totalCost: number
+  requestCount: number
+}
+
 export class AgentOrchestrator {
   private static instance: AgentOrchestrator | null = null
 
   private graph: any
   private activeProjects: Map<string, ProjectState>
   private eventBus: EventBus
-  private costOptimizer: CostOptimizerClient
+  private legacyCostOptimizer: LegacyCostOptimizerClient
+  private newCostOptimizer: NewCostOptimizerClient | null
+  private buildCosts: number[]
 
   /**
    * Get the singleton orchestrator instance (static method)
@@ -52,16 +64,20 @@ export class AgentOrchestrator {
     return AgentOrchestrator.instance
   }
 
-  constructor() {
+  constructor(config: OrchestratorConfig = {}) {
     this.graph = createOrchestratorGraph()
     this.activeProjects = new Map()
     this.eventBus = EventBus.getInstance()
+    this.buildCosts = []
 
-    // Initialize cost optimizer client
+    // Store optional new cost optimizer client
+    this.newCostOptimizer = config.costOptimizerClient || null
+
+    // Initialize legacy cost optimizer client for backward compatibility
     const apiUrl = process.env.COST_OPTIMIZER_API_URL || 'http://localhost:3001'
     const apiKey = process.env.COST_OPTIMIZER_API_KEY || 'dev-key'
 
-    this.costOptimizer = new CostOptimizerClient({
+    this.legacyCostOptimizer = new LegacyCostOptimizerClient({
       apiUrl,
       apiKey
     })
@@ -297,17 +313,36 @@ Provide a brief analysis of:
 3. Code organization quality
 4. Recommendations for improvements or next steps`
 
-      const response = await this.costOptimizer.optimizeCompletion({
-        prompt,
-        complexity: 'medium',
-        agentType: 'AgentOrchestrator',
-        organizationId: 'default-org',
-        maxTokens: 1000
-      })
+      let responseContent: string
+      let cost: number
+
+      // Use new CostOptimizerClient if provided, otherwise use legacy
+      if (this.newCostOptimizer) {
+        const response = await this.newCostOptimizer.complete(prompt, {
+          task_type: 'code-generation',
+          complexity: 'medium',
+          max_tokens: 1000
+        })
+        responseContent = response.response
+        cost = response.cost
+
+        // Track costs
+        this.buildCosts.push(cost)
+      } else {
+        const response = await this.legacyCostOptimizer.optimizeCompletion({
+          prompt,
+          complexity: 'medium',
+          agentType: 'AgentOrchestrator',
+          organizationId: 'default-org',
+          maxTokens: 1000
+        })
+        responseContent = response.content
+        cost = response.cost
+      }
 
       // Parse the response into structured data
       const review: CodebaseReview = {
-        summary: response.content,
+        summary: responseContent,
         architecture: structure,
         existingAgents,
         patterns: {
@@ -433,6 +468,23 @@ Provide a brief analysis of:
     }
 
     return false
+  }
+
+  /**
+   * Get build stats (cost and request tracking)
+   */
+  getBuildStats(): BuildStats {
+    return {
+      totalCost: this.buildCosts.reduce((sum, cost) => sum + cost, 0),
+      requestCount: this.buildCosts.length
+    }
+  }
+
+  /**
+   * Reset build stats
+   */
+  resetBuildStats(): void {
+    this.buildCosts = []
   }
 }
 

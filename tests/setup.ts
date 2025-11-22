@@ -1,5 +1,12 @@
 import { jest } from '@jest/globals';
 import '@testing-library/jest-dom';
+import { TextEncoder, TextDecoder } from 'util';
+import { ReadableStream } from 'stream/web';
+
+// Polyfill TextEncoder/TextDecoder for LangChain
+global.TextEncoder = TextEncoder as any;
+global.TextDecoder = TextDecoder as any;
+global.ReadableStream = ReadableStream as any;
 
 // Mock console methods to reduce noise in tests
 global.console = {

@@ -2,15 +2,27 @@ import { NextRequest, NextResponse } from 'next/server'
 import HuggingFaceDiscoveryService from '@/services/huggingface/discovery.service'
 import RunPodDeploymentService from '@/services/runpod/deployment.service'
 
-// Initialize services
-let hfService: HuggingFaceDiscoveryService;
-let runpodService: RunPodDeploymentService;
+// Lazy initialize services - only create when needed, not at module load time
+let hfService: HuggingFaceDiscoveryService | null = null;
+let runpodService: RunPodDeploymentService | null = null;
 
-try {
-  hfService = new HuggingFaceDiscoveryService();
-  runpodService = new RunPodDeploymentService();
-} catch (error) {
-  console.error('Failed to initialize services:', error);
+function getHFService(): HuggingFaceDiscoveryService {
+  if (!hfService) {
+    hfService = new HuggingFaceDiscoveryService();
+  }
+  return hfService;
+}
+
+function getRunPodService(): RunPodDeploymentService | null {
+  try {
+    if (!runpodService && process.env.RUNPOD_API_KEY) {
+      runpodService = new RunPodDeploymentService();
+    }
+    return runpodService;
+  } catch (error) {
+    console.warn('RunPod service not available:', error instanceof Error ? error.message : 'Unknown error');
+    return null;
+  }
 }
 
 export async function GET(request: NextRequest) {
@@ -22,13 +34,9 @@ export async function GET(request: NextRequest) {
     const offset = parseInt(searchParams.get('offset') || '0')
     const sortBy = searchParams.get('sortBy') || 'downloads'
 
-    // Check if services are initialized
-    if (!hfService) {
-      throw new Error('HuggingFace service not initialized. Check HUGGINGFACE_TOKEN env variable.');
-    }
-
-    // Use real HuggingFace discovery service
-    const searchResult = await hfService.searchModels({
+    // Get services lazily
+    const hf = getHFService();
+    const searchResult = await hf.searchModels({
       search,
       task: task === 'all' ? 'text-generation' : task,
       sort: sortBy as 'downloads' | 'likes' | 'updated',

@@ -40,6 +40,28 @@ ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN npm run build
 
+# Bundle RunPod handler with all dependencies into a single JS file
+# This ensures all imports are resolved and included
+RUN npx esbuild src/runpod/handler.ts \
+    --bundle \
+    --platform=node \
+    --target=node20 \
+    --outfile=dist/runpod/handler.js \
+    --external:@anthropic-ai/sdk \
+    --external:@google/generative-ai \
+    --external:langchain \
+    --external:@langchain/* \
+    --external:socket.io \
+    --external:socket.io-client \
+    --external:winston \
+    --external:bottleneck \
+    --external:opossum \
+    --external:ioredis \
+    --external:bull \
+    --external:prom-client \
+    --external:@supabase/* \
+    --external:@octokit/*
+
 # ===================================
 # Stage 3: Runner (Production)
 # ===================================
@@ -64,8 +86,8 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Copy RunPod handler
-COPY --chown=nextjs:nodejs src/runpod ./src/runpod
+# Copy compiled RunPod handler (JavaScript)
+COPY --from=builder --chown=nextjs:nodejs /app/dist/runpod ./dist/runpod
 
 # Copy production dependencies
 COPY --from=deps --chown=nextjs:nodejs /app/node_modules ./node_modules
@@ -87,5 +109,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
 # Use dumb-init to handle signals properly
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 
-# Start the RunPod handler
-CMD ["node", "src/runpod/handler.js"]
+# Start the RunPod handler (compiled JavaScript)
+CMD ["node", "dist/runpod/handler.js"]

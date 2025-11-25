@@ -1,11 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
 import { GitHubClient } from '@/lib/github/client'
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 
 export async function GET(request: Request) {
-  const cookieStore = cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = await createClient()
 
   // Get current user session
   const { data: { session }, error: sessionError } = await supabase.auth.getSession()

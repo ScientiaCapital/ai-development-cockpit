@@ -40,7 +40,10 @@ export class CodeArchitect extends BaseAgent {
         fileStructure,
         estimatedComplexity: complexity.level,
         estimatedTime: complexity.time,
-        estimatedCost: complexity.cost
+        estimatedCost: complexity.cost,
+        summary: architecture.summary || '',
+        stack: architecture.stack || { frontend: [], backend: [], database: [] },
+        deploymentStrategy: architecture.deploymentStrategy || { platform: 'vercel', environment: 'serverless', cicd: true }
       }
 
       // Store in context (will be saved to state)

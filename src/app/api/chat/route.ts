@@ -29,7 +29,9 @@ export interface ChatResponse {
 // Allow dependency injection for testing
 let costOptimizerInstance: CostOptimizerClient | null = null;
 
-export function setCostOptimizer(client: CostOptimizerClient | null) {
+// Internal helper for testing - not exported from this route file
+// Tests should import from a separate utilities file if needed
+function setCostOptimizer(client: CostOptimizerClient | null) {
   costOptimizerInstance = client;
 }
 

@@ -43,7 +43,12 @@ export class TracingService {
   private isInitialized = false;
 
   private constructor() {
-    this.initializeSDK();
+    try {
+      this.initializeSDK();
+    } catch (error) {
+      console.warn('Failed to initialize OpenTelemetry SDK:', error instanceof Error ? error.message : 'Unknown error');
+      // Continue without tracing - not critical for runtime
+    }
   }
 
   public static getInstance(): TracingService {

@@ -143,7 +143,7 @@ export RUNPOD_API_KEY="your-key"
 
 ## Organization-Specific Configs
 
-### SwaggyStacks (Developer-focused)
+### AI Dev Cockpit (Developer-focused)
 ```typescript
 {
   gpuMemoryUtilization: 0.95,    // Aggressive
@@ -152,7 +152,7 @@ export RUNPOD_API_KEY="your-key"
 }
 ```
 
-### ScientiaCapital (Enterprise-focused)
+### Enterprise (Enterprise-focused)
 ```typescript
 {
   gpuMemoryUtilization: 0.85,    // Conservative
@@ -290,8 +290,8 @@ description: Deploy Chinese LLM models (Qwen, DeepSeek, ChatGLM, Baichuan, Yi) t
 - Advanced usage links to REFERENCE.md
 
 ### 4. **Organization-Specific**
-- SwaggyStacks config (aggressive)
-- ScientiaCapital config (conservative)
+- AI Dev Cockpit config (aggressive)
+- Enterprise config (conservative)
 - Aligns with dual-domain strategy
 
 ### 5. **Practical Troubleshooting**

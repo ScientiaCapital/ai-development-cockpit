@@ -41,7 +41,7 @@ export default function OfflinePage() {
   if (isOnline) {
     // If online, redirect to appropriate theme page
     useEffect(() => {
-      const redirectUrl = isTerminalTheme ? '/swaggystacks' : '/scientia'
+      const redirectUrl = isTerminalTheme ? '/arcade' : '/enterprise'
       window.location.href = redirectUrl
     }, [isTerminalTheme])
     
@@ -65,7 +65,7 @@ export default function OfflinePage() {
             <div className="flex flex-col items-center">
               <Terminal className="w-16 h-16 text-green-400 mb-4" />
               <h1 className="text-2xl font-bold text-green-400 mb-2">
-                SwaggyStacks
+                AI Dev Cockpit
               </h1>
               <div className="text-green-300 text-sm font-mono">
                 OFFLINE MODE ACTIVATED
@@ -75,7 +75,7 @@ export default function OfflinePage() {
             <div className="flex flex-col items-center">
               <TrendingUp className="w-16 h-16 text-purple-600 mb-4" />
               <h1 className="text-2xl font-bold text-gray-900 mb-2">
-                Scientia Capital
+                Enterprise
               </h1>
               <div className="text-gray-600 text-sm">
                 Offline Mode

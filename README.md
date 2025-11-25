@@ -274,7 +274,7 @@ Built with **LangGraph 1.0**, the orchestrator:
 
 ## 💰 Cost Optimization
 
-Powered by [ai-cost-optimizer](https://github.com/ScientiaCapital/ai-cost-optimizer) for **90% cost savings**:
+Powered by [ai-cost-optimizer](https://github.com/enterprise/ai-cost-optimizer) for **90% cost savings**:
 
 ### How It Works
 
@@ -325,7 +325,7 @@ Cost tracked: $0.002
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/ScientiaCapital/ai-development-cockpit.git
+git clone https://github.com/enterprise/ai-development-cockpit.git
 cd ai-development-cockpit
 
 # 2. Install dependencies
@@ -642,7 +642,7 @@ We welcome contributions that help democratize coding!
 
 ## 🔗 Related Projects
 
-- **[ai-cost-optimizer](https://github.com/ScientiaCapital/ai-cost-optimizer)** - 90% cost savings for AI requests
+- **[ai-cost-optimizer](https://github.com/enterprise/ai-cost-optimizer)** - 90% cost savings for AI requests
 
 ---
 
@@ -699,7 +699,7 @@ We welcome contributions that help democratize coding!
 **Transform from coding noob to software engineering manager in 30 minutes.**
 
 ```bash
-git clone https://github.com/ScientiaCapital/ai-development-cockpit.git
+git clone https://github.com/enterprise/ai-development-cockpit.git
 cd ai-development-cockpit
 npm install
 npm run dev

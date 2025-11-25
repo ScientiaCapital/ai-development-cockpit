@@ -117,7 +117,7 @@ export class MarketplacePage extends BasePage {
   }
 
   // Organization management
-  async selectOrganization(org: 'swaggystacks' | 'scientia'): Promise<void> {
+  async selectOrganization(org: 'arcade' | 'enterprise'): Promise<void> {
     await this.clickElement(this.organizationSwitcher);
     await this.waitForVisible(`[data-testid="org-option-${org}"]`);
     await this.clickElement(`[data-testid="org-option-${org}"]`);
@@ -138,12 +138,12 @@ export class MarketplacePage extends BasePage {
   }
 
   // Theme validation
-  async expectSwaggyStacksTheme(): Promise<void> {
+  async expectAI Dev CockpitTheme(): Promise<void> {
     // Verify terminal-like dark theme
     const body = this.page.locator('body');
     const classes = await body.getAttribute('class') || '';
     if (!classes.includes('terminal-theme') && !classes.includes('dark')) {
-      throw new Error('SwaggyStacks terminal theme not detected');
+      throw new Error('AI Dev Cockpit terminal theme not detected');
     }
 
     // Check for terminal-specific elements
@@ -165,9 +165,9 @@ export class MarketplacePage extends BasePage {
   async expectDualThemeSupport(): Promise<void> {
     const currentOrg = await this.getCurrentOrganization();
 
-    if (currentOrg.toLowerCase().includes('swaggystacks')) {
-      await this.expectSwaggyStacksTheme();
-    } else if (currentOrg.toLowerCase().includes('scientia')) {
+    if (currentOrg.toLowerCase().includes('arcade')) {
+      await this.expectAI Dev CockpitTheme();
+    } else if (currentOrg.toLowerCase().includes('enterprise')) {
       await this.expectScientiaCapitalTheme();
     } else {
       throw new Error(`Unknown organization theme: ${currentOrg}`);

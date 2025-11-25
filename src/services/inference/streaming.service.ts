@@ -54,7 +54,7 @@ export class StreamingInferenceService {
     this.io = new SocketIOServer(server, {
       cors: {
         origin: process.env.NODE_ENV === 'production'
-          ? ['https://swaggystacks.com', 'https://scientiacapital.com']
+          ? ['https://aidevco.com']
           : ['http://localhost:3000'],
         methods: ['GET', 'POST']
       },

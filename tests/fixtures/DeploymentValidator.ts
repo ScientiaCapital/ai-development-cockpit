@@ -134,7 +134,7 @@ export abstract class DeploymentValidationStrategy {
 }
 
 /**
- * Gaming-focused validation strategy for SwaggyStacks
+ * Gaming-focused validation strategy for AI Dev Cockpit
  */
 export class GamingValidationStrategy extends DeploymentValidationStrategy {
   async validate(config: DeploymentConfig, context: ValidationContext): Promise<ValidationResult> {
@@ -264,7 +264,7 @@ export class GamingValidationStrategy extends DeploymentValidationStrategy {
 }
 
 /**
- * Enterprise-focused validation strategy for ScientiaCapital
+ * Enterprise-focused validation strategy for Enterprise
  */
 export class EnterpriseValidationStrategy extends DeploymentValidationStrategy {
   async validate(config: DeploymentConfig, context: ValidationContext): Promise<ValidationResult> {
@@ -419,8 +419,8 @@ export class EnterpriseValidationStrategy extends DeploymentValidationStrategy {
  */
 export class DeploymentValidator {
   private static strategies: Map<string, DeploymentValidationStrategy> = new Map([
-    ['swaggystacks', new GamingValidationStrategy()],
-    ['scientia', new EnterpriseValidationStrategy()]
+    ['arcade', new GamingValidationStrategy()],
+    ['enterprise', new EnterpriseValidationStrategy()]
   ]);
 
   static async validateDeployment(
@@ -507,18 +507,18 @@ export class DeploymentValidator {
  */
 export function createValidationContext(
   environment: 'development' | 'staging' | 'production',
-  organization: 'swaggystacks' | 'scientia'
+  organization: 'arcade' | 'enterprise'
 ): ValidationContext {
   const basePolicy: OrganizationPolicy = {
     allowedGpuTypes: ['NVIDIA_RTX_A6000', 'NVIDIA_A40', 'NVIDIA_A100_SXM4_80GB'],
     maxInstanceCount: 10,
     maxCostPerHour: 50,
     requiresApproval: environment === 'production',
-    securityLevel: organization === 'scientia' ? 'enterprise' : 'standard',
-    dataRetention: organization === 'scientia' ? 90 : 30
+    securityLevel: organization === 'enterprise' ? 'enterprise' : 'standard',
+    dataRetention: organization === 'enterprise' ? 90 : 30
   };
 
-  if (organization === 'scientia') {
+  if (organization === 'enterprise') {
     basePolicy.allowedGpuTypes.push('NVIDIA_H100_SXM5_80GB');
     basePolicy.maxCostPerHour = 100;
     basePolicy.securityLevel = 'enterprise';
@@ -537,7 +537,7 @@ export function createValidationContext(
   };
 
   const compliance: ComplianceRequirement[] = [];
-  if (organization === 'scientia') {
+  if (organization === 'enterprise') {
     compliance.push(
       { type: 'sox', level: 'standard', validationRules: ['audit_logging', 'data_encryption'] },
       { type: 'gdpr', level: 'standard', validationRules: ['data_privacy', 'right_to_deletion'] }

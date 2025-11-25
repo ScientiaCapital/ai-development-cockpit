@@ -2,7 +2,7 @@
 
 /**
  * PWA Icon Generator for Dual-Theme Platform
- * Creates basic SVG icons for SwaggyStacks (terminal) and Scientia Capital (corporate) themes
+ * Creates basic SVG icons for AI Dev Cockpit (terminal) and Enterprise (corporate) themes
  */
 
 const fs = require('fs')
@@ -11,7 +11,7 @@ const path = require('path')
 // Icon sizes to generate
 const iconSizes = [192, 256, 384, 512]
 
-// Terminal theme SVG (SwaggyStacks)
+// Terminal theme SVG (AI Dev Cockpit)
 const createTerminalIcon = (size) => `
 <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
   <rect width="${size}" height="${size}" fill="#000000"/>
@@ -43,7 +43,7 @@ const createTerminalIcon = (size) => `
         fill="#00ff00">&lt;/&gt;</text>
 </svg>`
 
-// Corporate theme SVG (Scientia Capital)
+// Corporate theme SVG (Enterprise)
 const createCorporateIcon = (size) => `
 <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -81,15 +81,15 @@ function generateIcons() {
   const publicDir = path.join(__dirname, '..', 'public')
   
   // Create directories if they don't exist
-  const swaggyDir = path.join(publicDir, 'icons', 'swaggystacks')
-  const scientiaDir = path.join(publicDir, 'icons', 'scientia')
+  const swaggyDir = path.join(publicDir, 'icons', 'arcade')
+  const enterpriseDir = path.join(publicDir, 'icons', 'enterprise')
   
   if (!fs.existsSync(swaggyDir)) {
     fs.mkdirSync(swaggyDir, { recursive: true })
   }
   
-  if (!fs.existsSync(scientiaDir)) {
-    fs.mkdirSync(scientiaDir, { recursive: true })
+  if (!fs.existsSync(enterpriseDir)) {
+    fs.mkdirSync(enterpriseDir, { recursive: true })
   }
 
   // Generate icons for each size
@@ -104,7 +104,7 @@ function generateIcons() {
     // Corporate theme icons  
     const corporateSvg = createCorporateIcon(size)
     fs.writeFileSync(
-      path.join(scientiaDir, `icon-${size}x${size}.svg`),
+      path.join(enterpriseDir, `icon-${size}x${size}.svg`),
       corporateSvg
     )
     
@@ -120,8 +120,8 @@ function generateIcons() {
   fs.writeFileSync(path.join(publicDir, 'apple-touch-icon.svg'), appleTouchIcon)
   
   console.log('🎉 PWA icons generated successfully!')
-  console.log('📱 Terminal theme (SwaggyStacks): Black background with green terminal elements')
-  console.log('🏢 Corporate theme (Scientia Capital): Purple gradient with white chart elements')
+  console.log('📱 Terminal theme (AI Dev Cockpit): Black background with green terminal elements')
+  console.log('🏢 Corporate theme (Enterprise): Purple gradient with white chart elements')
   console.log('\n📋 Next steps:')
   console.log('1. Convert SVG icons to PNG format for better browser support')
   console.log('2. Optimize icons with tools like ImageOptim or TinyPNG')

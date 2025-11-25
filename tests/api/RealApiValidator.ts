@@ -605,7 +605,7 @@ export class RealApiValidator {
 export const DEFAULT_REAL_API_CONFIG: RealApiConfig = {
   huggingface: {
     enabled: false, // Disabled by default for safety
-    organizations: ['SwaggyStacks', 'ScientiaCapital'],
+    organizations: ['AI Dev Cockpit', 'Enterprise'],
     baseUrl: 'https://huggingface.co',
     timeout: 10000
   },

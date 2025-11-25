@@ -35,7 +35,7 @@ test.describe('Marketplace Model Discovery', () => {
                 description: 'A conversational AI model for dialogue generation',
                 parameters: '355M',
                 tags: ['conversational', 'dialogue', 'chatbot'],
-                organization: 'swaggystacks'
+                organization: 'arcade'
               },
               {
                 id: 'gpt2-large',
@@ -43,7 +43,7 @@ test.describe('Marketplace Model Discovery', () => {
                 description: 'Large-scale language model for text generation',
                 parameters: '774M',
                 tags: ['language-model', 'text-generation'],
-                organization: 'swaggystacks'
+                organization: 'arcade'
               },
               {
                 id: 'bert-base-uncased',
@@ -51,7 +51,7 @@ test.describe('Marketplace Model Discovery', () => {
                 description: 'Bidirectional transformer for language understanding',
                 parameters: '110M',
                 tags: ['bert', 'understanding', 'nlp'],
-                organization: 'swaggystacks'
+                organization: 'arcade'
               }
             ],
             total: 3,
@@ -99,7 +99,7 @@ test.describe('Marketplace Model Discovery', () => {
                 description: 'A conversational AI model for dialogue generation',
                 parameters: '355M',
                 tags: ['conversational', 'dialogue', 'chatbot'],
-                organization: 'swaggystacks'
+                organization: 'arcade'
               }
             ],
             total: 1,
@@ -121,7 +121,7 @@ test.describe('Marketplace Model Discovery', () => {
                 description: 'A conversational AI model for dialogue generation',
                 parameters: '355M',
                 tags: ['conversational', 'dialogue', 'chatbot'],
-                organization: 'swaggystacks'
+                organization: 'arcade'
               },
               {
                 id: 'gpt2-large',
@@ -129,7 +129,7 @@ test.describe('Marketplace Model Discovery', () => {
                 description: 'Large-scale language model for text generation',
                 parameters: '774M',
                 tags: ['language-model', 'text-generation'],
-                organization: 'swaggystacks'
+                organization: 'arcade'
               }
             ],
             total: 2,
@@ -185,7 +185,7 @@ test.describe('Marketplace Model Discovery', () => {
                 description: 'A conversational AI model for dialogue generation',
                 parameters: '355M',
                 tags: ['conversational', 'dialogue', 'chatbot'],
-                organization: 'swaggystacks'
+                organization: 'arcade'
               },
               {
                 id: 'gpt2-large',
@@ -193,7 +193,7 @@ test.describe('Marketplace Model Discovery', () => {
                 description: 'Large-scale language model for text generation',
                 parameters: '774M',
                 tags: ['language-model', 'text-generation'],
-                organization: 'swaggystacks'
+                organization: 'arcade'
               },
               {
                 id: 'bert-base-uncased',
@@ -201,7 +201,7 @@ test.describe('Marketplace Model Discovery', () => {
                 description: 'Bidirectional transformer for language understanding',
                 parameters: '110M',
                 tags: ['bert', 'understanding', 'nlp'],
-                organization: 'swaggystacks'
+                organization: 'arcade'
               }
             ],
             total: 3,
@@ -236,28 +236,28 @@ test.describe('Marketplace Model Discovery', () => {
 
   test.describe('Organization Switching', () => {
     test.beforeEach(async ({ page }) => {
-      // Mock SwaggyStacks models
-      await page.route('**/api/models*org=swaggystacks*', route => {
+      // Mock AI Dev Cockpit models
+      await page.route('**/api/models*org=arcade*', route => {
         route.fulfill({
           status: 200,
           contentType: 'application/json',
           body: JSON.stringify({
             models: [
               {
-                id: 'swaggystacks/gaming-chatbot',
+                id: 'arcade/gaming-chatbot',
                 title: 'Gaming Chatbot Pro',
                 description: 'Advanced gaming-focused conversational AI',
                 parameters: '1.5B',
                 tags: ['gaming', 'chatbot', 'entertainment'],
-                organization: 'swaggystacks'
+                organization: 'arcade'
               },
               {
-                id: 'swaggystacks/code-assistant',
+                id: 'arcade/code-assistant',
                 title: 'Code Assistant',
                 description: 'AI-powered coding assistant for developers',
                 parameters: '7B',
                 tags: ['coding', 'development', 'assistant'],
-                organization: 'swaggystacks'
+                organization: 'arcade'
               }
             ],
             total: 2,
@@ -280,7 +280,7 @@ test.describe('Marketplace Model Discovery', () => {
                 description: 'Enterprise-grade financial data analysis model',
                 parameters: '13B',
                 tags: ['finance', 'analysis', 'enterprise'],
-                organization: 'scientia'
+                organization: 'enterprise'
               },
               {
                 id: 'scientia/risk-assessment',
@@ -288,7 +288,7 @@ test.describe('Marketplace Model Discovery', () => {
                 description: 'Advanced risk evaluation and compliance model',
                 parameters: '30B',
                 tags: ['risk', 'compliance', 'enterprise'],
-                organization: 'scientia'
+                organization: 'enterprise'
               },
               {
                 id: 'scientia/market-intelligence',
@@ -296,7 +296,7 @@ test.describe('Marketplace Model Discovery', () => {
                 description: 'Comprehensive market analysis and forecasting',
                 parameters: '70B',
                 tags: ['market', 'intelligence', 'forecasting'],
-                organization: 'scientia'
+                organization: 'enterprise'
               }
             ],
             total: 3,
@@ -307,32 +307,32 @@ test.describe('Marketplace Model Discovery', () => {
       });
     });
 
-    test('should switch to SwaggyStacks organization', async () => {
-      await marketplacePage.selectOrganization('swaggystacks');
-      await marketplacePage.expectOrganization('swaggystacks');
+    test('should switch to AI Dev Cockpit organization', async () => {
+      await marketplacePage.selectOrganization('arcade');
+      await marketplacePage.expectOrganization('arcade');
       await marketplacePage.expectSearchResults(2);
     });
 
     test('should switch to ScientiaCapital organization', async () => {
-      await marketplacePage.selectOrganization('scientia');
-      await marketplacePage.expectOrganization('scientia');
+      await marketplacePage.selectOrganization('enterprise');
+      await marketplacePage.expectOrganization('enterprise');
       await marketplacePage.expectSearchResults(3);
     });
 
     test('should maintain search state during organization switch', async ({ page }) => {
       // Mock search results for both organizations
-      await page.route('**/api/models*org=swaggystacks*search=assistant*', route => {
+      await page.route('**/api/models*org=arcade*search=assistant*', route => {
         route.fulfill({
           status: 200,
           contentType: 'application/json',
           body: JSON.stringify({
             models: [{
-              id: 'swaggystacks/code-assistant',
+              id: 'arcade/code-assistant',
               title: 'Code Assistant',
               description: 'AI-powered coding assistant for developers',
               parameters: '7B',
               tags: ['coding', 'development', 'assistant'],
-              organization: 'swaggystacks'
+              organization: 'arcade'
             }],
             total: 1,
             page: 1,
@@ -360,7 +360,7 @@ test.describe('Marketplace Model Discovery', () => {
       expect(initialQuery).toBe('assistant');
 
       // Switch organization
-      await marketplacePage.selectOrganization('swaggystacks');
+      await marketplacePage.selectOrganization('arcade');
       await marketplacePage.expectSearchResults(1);
 
       // Verify search query is maintained
@@ -368,33 +368,33 @@ test.describe('Marketplace Model Discovery', () => {
       expect(maintainedQuery).toBe('assistant');
 
       // Switch to scientia (should show empty results for same search)
-      await marketplacePage.selectOrganization('scientia');
+      await marketplacePage.selectOrganization('enterprise');
       await marketplacePage.expectEmptyState();
     });
 
     test('should display correct models for each organization', async () => {
-      // Check SwaggyStacks models
-      await marketplacePage.selectOrganization('swaggystacks');
+      // Check AI Dev Cockpit models
+      await marketplacePage.selectOrganization('arcade');
       await marketplacePage.expectSearchResults(2);
 
       const firstModelId = await marketplacePage.selectFirstModel();
-      expect(firstModelId).toContain('swaggystacks');
+      expect(firstModelId).toContain('arcade');
 
       // Navigate back to marketplace
       await marketplacePage.goto();
 
       // Check ScientiaCapital models
-      await marketplacePage.selectOrganization('scientia');
+      await marketplacePage.selectOrganization('enterprise');
       await marketplacePage.expectSearchResults(3);
 
       const scientiaModelId = await marketplacePage.selectFirstModel();
-      expect(scientiaModelId).toContain('scientia');
+      expect(scientiaModelId).toContain('enterprise');
     });
   });
 
   test.describe('Dual Theme Support', () => {
-    test('should apply SwaggyStacks terminal theme', async ({ page }) => {
-      // Mock page with SwaggyStacks theme
+    test('should apply AI Dev Cockpit terminal theme', async ({ page }) => {
+      // Mock page with AI Dev Cockpit theme
       await page.addInitScript(() => {
         document.body.className = 'terminal-theme dark';
       });
@@ -406,13 +406,13 @@ test.describe('Marketplace Model Discovery', () => {
           body: JSON.stringify({
             models: [],
             total: 0,
-            organization: 'swaggystacks'
+            organization: 'arcade'
           })
         });
       });
 
-      await marketplacePage.selectOrganization('swaggystacks');
-      await marketplacePage.expectSwaggyStacksTheme();
+      await marketplacePage.selectOrganization('arcade');
+      await marketplacePage.expectAI Dev CockpitTheme();
     });
 
     test('should apply ScientiaCapital corporate theme', async ({ page }) => {
@@ -428,12 +428,12 @@ test.describe('Marketplace Model Discovery', () => {
           body: JSON.stringify({
             models: [],
             total: 0,
-            organization: 'scientia'
+            organization: 'enterprise'
           })
         });
       });
 
-      await marketplacePage.selectOrganization('scientia');
+      await marketplacePage.selectOrganization('enterprise');
       await marketplacePage.expectScientiaCapitalTheme();
     });
 
@@ -442,9 +442,9 @@ test.describe('Marketplace Model Discovery', () => {
       await page.addInitScript(() => {
         // Mock theme switching logic
         window.switchTheme = (org) => {
-          if (org === 'swaggystacks') {
+          if (org === 'arcade') {
             document.body.className = 'terminal-theme dark';
-          } else if (org === 'scientia') {
+          } else if (org === 'enterprise') {
             document.body.className = 'corporate-theme light';
           }
         };
@@ -468,7 +468,7 @@ test.describe('Marketplace Model Discovery', () => {
                 description: 'A comprehensive test model for validation',
                 parameters: '7B',
                 tags: ['test', 'validation', 'alpha'],
-                organization: 'swaggystacks'
+                organization: 'arcade'
               }
             ],
             total: 1,
@@ -541,7 +541,7 @@ test.describe('Marketplace Model Discovery', () => {
                 description: 'Large-scale language model',
                 parameters: '774M',
                 tags: ['language-model'],
-                organization: 'swaggystacks'
+                organization: 'arcade'
               }
             ],
             total: 1,
@@ -563,7 +563,7 @@ test.describe('Marketplace Model Discovery', () => {
                 description: 'The most downloaded model',
                 parameters: '1B',
                 tags: ['popular'],
-                organization: 'swaggystacks'
+                organization: 'arcade'
               }
             ],
             total: 1,
@@ -599,7 +599,7 @@ test.describe('Marketplace Model Discovery', () => {
               description: 'A model in the specified parameter range',
               parameters: '1.5B',
               tags: ['medium'],
-              organization: 'swaggystacks'
+              organization: 'arcade'
             }],
             total: 1,
             page: 1,
@@ -627,7 +627,7 @@ test.describe('Marketplace Model Discovery', () => {
               description: `Description for model ${i + 1}`,
               parameters: '1B',
               tags: ['page1'],
-              organization: 'swaggystacks'
+              organization: 'arcade'
             })),
             total: 25,
             page: 1,
@@ -647,7 +647,7 @@ test.describe('Marketplace Model Discovery', () => {
               description: `Description for model ${i + 11}`,
               parameters: '1B',
               tags: ['page2'],
-              organization: 'swaggystacks'
+              organization: 'arcade'
             })),
             total: 25,
             page: 2,
@@ -700,7 +700,7 @@ test.describe('Marketplace Model Discovery', () => {
               description: 'A model added after refresh',
               parameters: '3B',
               tags: ['new'],
-              organization: 'swaggystacks'
+              organization: 'arcade'
             }],
             total: 1,
             page: 1,
@@ -719,7 +719,7 @@ test.describe('Marketplace Model Discovery', () => {
     test('should handle concurrent operations', async () => {
       // Test multiple operations happening simultaneously
       const searchPromise = marketplacePage.searchModels('test');
-      const orgSwitchPromise = marketplacePage.selectOrganization('swaggystacks');
+      const orgSwitchPromise = marketplacePage.selectOrganization('arcade');
 
       await Promise.all([searchPromise, orgSwitchPromise]);
 

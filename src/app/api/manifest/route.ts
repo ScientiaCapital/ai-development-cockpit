@@ -36,36 +36,36 @@ interface PWAManifest {
   }>
 }
 
-const swaggystacksManifest: PWAManifest = {
-  name: 'SwaggyStacks - Developer AI Terminal',
-  short_name: 'SwaggyStacks',
+const arcadeManifest: PWAManifest = {
+  name: 'AI Dev Cockpit - Developer AI Terminal',
+  short_name: 'AI Dev Cockpit',
   description: 'Terminal-style AI development platform with 500K+ models and 97% cost savings',
-  start_url: '/swaggystacks',
+  start_url: '/arcade',
   display: 'standalone',
   background_color: '#000000',
   theme_color: '#00ff00',
   orientation: 'portrait-primary',
   icons: [
     {
-      src: '/icons/swaggystacks/icon-192x192.png',
+      src: '/icons/arcade/icon-192x192.png',
       sizes: '192x192',
       type: 'image/png',
       purpose: 'maskable any'
     },
     {
-      src: '/icons/swaggystacks/icon-256x256.png',
+      src: '/icons/arcade/icon-256x256.png',
       sizes: '256x256',
       type: 'image/png',
       purpose: 'maskable any'
     },
     {
-      src: '/icons/swaggystacks/icon-384x384.png',
+      src: '/icons/arcade/icon-384x384.png',
       sizes: '384x384',
       type: 'image/png',
       purpose: 'maskable any'
     },
     {
-      src: '/icons/swaggystacks/icon-512x512.png',
+      src: '/icons/arcade/icon-512x512.png',
       sizes: '512x512',
       type: 'image/png',
       purpose: 'maskable any'
@@ -73,13 +73,13 @@ const swaggystacksManifest: PWAManifest = {
   ],
   screenshots: [
     {
-      src: '/screenshots/swaggystacks/mobile.png',
+      src: '/screenshots/arcade/mobile.png',
       sizes: '390x844',
       type: 'image/png',
       form_factor: 'narrow'
     },
     {
-      src: '/screenshots/swaggystacks/desktop.png',
+      src: '/screenshots/arcade/desktop.png',
       sizes: '1280x720',
       type: 'image/png',
       form_factor: 'wide'
@@ -96,7 +96,7 @@ const swaggystacksManifest: PWAManifest = {
       url: '/chat?theme=terminal',
       icons: [
         {
-          src: '/icons/swaggystacks/icon-192x192.png',
+          src: '/icons/arcade/icon-192x192.png',
           sizes: '192x192'
         }
       ]
@@ -108,7 +108,7 @@ const swaggystacksManifest: PWAManifest = {
       url: '/marketplace?theme=terminal',
       icons: [
         {
-          src: '/icons/swaggystacks/icon-192x192.png',
+          src: '/icons/arcade/icon-192x192.png',
           sizes: '192x192'
         }
       ]
@@ -117,10 +117,10 @@ const swaggystacksManifest: PWAManifest = {
       name: 'Cost Calculator',
       short_name: 'Costs',
       description: 'Calculate deployment costs',
-      url: '/swaggystacks#cost-calculator',
+      url: '/arcade#cost-calculator',
       icons: [
         {
-          src: '/icons/swaggystacks/icon-192x192.png',
+          src: '/icons/arcade/icon-192x192.png',
           sizes: '192x192'
         }
       ]
@@ -128,36 +128,36 @@ const swaggystacksManifest: PWAManifest = {
   ]
 }
 
-const scientiaManifest: PWAManifest = {
-  name: 'Scientia Capital - Enterprise AI Platform',
-  short_name: 'Scientia',
+const enterpriseManifest: PWAManifest = {
+  name: 'Enterprise - Enterprise AI Platform',
+  short_name: 'Enterprise',
   description: 'Enterprise AI platform for C-suite decision making and ROI optimization',
-  start_url: '/scientia',
+  start_url: '/enterprise',
   display: 'standalone',
   background_color: '#ffffff',
   theme_color: '#8B5CF6',
   orientation: 'portrait-primary',
   icons: [
     {
-      src: '/icons/scientia/icon-192x192.png',
+      src: '/icons/enterprise/icon-192x192.png',
       sizes: '192x192',
       type: 'image/png',
       purpose: 'maskable any'
     },
     {
-      src: '/icons/scientia/icon-256x256.png',
+      src: '/icons/enterprise/icon-256x256.png',
       sizes: '256x256',
       type: 'image/png',
       purpose: 'maskable any'
     },
     {
-      src: '/icons/scientia/icon-384x384.png',
+      src: '/icons/enterprise/icon-384x384.png',
       sizes: '384x384',
       type: 'image/png',
       purpose: 'maskable any'
     },
     {
-      src: '/icons/scientia/icon-512x512.png',
+      src: '/icons/enterprise/icon-512x512.png',
       sizes: '512x512',
       type: 'image/png',
       purpose: 'maskable any'
@@ -165,13 +165,13 @@ const scientiaManifest: PWAManifest = {
   ],
   screenshots: [
     {
-      src: '/screenshots/scientia/mobile.png',
+      src: '/screenshots/enterprise/mobile.png',
       sizes: '390x844',
       type: 'image/png',
       form_factor: 'narrow'
     },
     {
-      src: '/screenshots/scientia/desktop.png',
+      src: '/screenshots/enterprise/desktop.png',
       sizes: '1280x720',
       type: 'image/png',
       form_factor: 'wide'
@@ -185,10 +185,10 @@ const scientiaManifest: PWAManifest = {
       name: 'AI Dashboard',
       short_name: 'Dashboard',
       description: 'View ROI analytics dashboard',
-      url: '/scientia#dashboard',
+      url: '/enterprise#dashboard',
       icons: [
         {
-          src: '/icons/scientia/icon-192x192.png',
+          src: '/icons/enterprise/icon-192x192.png',
           sizes: '192x192'
         }
       ]
@@ -200,7 +200,7 @@ const scientiaManifest: PWAManifest = {
       url: '/marketplace?theme=corporate',
       icons: [
         {
-          src: '/icons/scientia/icon-192x192.png',
+          src: '/icons/enterprise/icon-192x192.png',
           sizes: '192x192'
         }
       ]
@@ -209,10 +209,10 @@ const scientiaManifest: PWAManifest = {
       name: 'ROI Calculator',
       short_name: 'ROI',
       description: 'Calculate AI investment returns',
-      url: '/scientia#roi-calculator',
+      url: '/enterprise#roi-calculator',
       icons: [
         {
-          src: '/icons/scientia/icon-192x192.png',
+          src: '/icons/enterprise/icon-192x192.png',
           sizes: '192x192'
         }
       ]
@@ -228,13 +228,13 @@ export async function GET(request: NextRequest) {
   // Determine theme from URL or referer
   let manifest: PWAManifest
   
-  if (theme === 'terminal' || referer.includes('/swaggystacks') || referer.includes('swaggystacks.com')) {
-    manifest = swaggystacksManifest
-  } else if (theme === 'corporate' || referer.includes('/scientia') || referer.includes('scientiacapital.com')) {
-    manifest = scientiaManifest
+  if (theme === 'terminal' || referer.includes('/arcade')) {
+    manifest = arcadeManifest
+  } else if (theme === 'corporate' || referer.includes('/enterprise')) {
+    manifest = enterpriseManifest
   } else {
-    // Default to SwaggyStacks for developers
-    manifest = swaggystacksManifest
+    // Default to AI Dev Cockpit for developers
+    manifest = arcadeManifest
   }
 
   return NextResponse.json(manifest, {

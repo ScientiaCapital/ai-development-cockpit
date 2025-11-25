@@ -1,4 +1,4 @@
-/* Terminal Theme Module for SwaggyStacks */
+/* Terminal Theme Module for AI Dev Cockpit */
 
 /* Base Terminal Styles */
 .terminal {
@@ -382,7 +382,7 @@
 .mb6 { margin-bottom: 24px; }
 .mb8 { margin-bottom: 32px; }
 
-/* Enterprise Theme Extensions for ScientiaCapital */
+/* Enterprise Theme Extensions */
 .enterpriseHeader {
   background: linear-gradient(90deg, var(--terminal-bg), var(--terminal-bg-alt));
   border-bottom: 2px solid var(--terminal-accent);

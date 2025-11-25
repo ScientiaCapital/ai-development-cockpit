@@ -205,9 +205,9 @@ export class LoggingService {
    */
   private getOrganizationPrefix(organization?: Organization): string {
     switch (organization) {
-      case 'swaggystacks':
-        return '[🚀 SWAGGY] ';
-      case 'scientia_capital':
+      case 'arcade':
+        return '[🚀 COCKPIT] ';
+      case 'enterprise':
         return '[📊 SCIENTIA] ';
       default:
         return '[⚡ SHARED] ';

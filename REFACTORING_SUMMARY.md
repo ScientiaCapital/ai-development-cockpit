@@ -117,7 +117,7 @@ npm run dev
 # Test model search, deployment, inference
 
 # 3. Merge PR to main (30 minutes)
-# Create PR: https://github.com/ScientiaCapital/ai-development-cockpit/pull/new/claude/incomplete-description-011CUs2Y7w5sdMGyzTTVxhGn
+# Create PR: https://github.com/Enterprise/ai-development-cockpit/pull/new/claude/incomplete-description-011CUs2Y7w5sdMGyzTTVxhGn
 # Review changes: 8 commits, +2,500 lines docs
 # Merge to main
 
@@ -220,13 +220,13 @@ Total: 8-12 hours over 1-2 weeks
 **Option A: AI Development Cockpit**
 - Target: Developers
 - Focus: MCP integration, task management
-- Brand: SwaggyStacks only
+- Brand: AI Dev Cockpit only
 - Effort: Remove enterprise features
 
 **Option B: Dual-Domain LLM Platform** ⭐ Recommended
 - Target: Businesses + Developers
 - Focus: Model marketplace, inference
-- Brand: Both SwaggyStacks + ScientiaCapital
+- Brand: Both AI Dev Cockpit + Enterprise
 - Effort: Simplify/remove MCP features
 
 **Why B is recommended**: You've built 80% of infrastructure for this path, market is larger, and dual-brand strategy is unique.

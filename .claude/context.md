@@ -1,7 +1,7 @@
 # AI Development Cockpit - Project Context
 
 **Project**: AI Development Cockpit
-**Owner**: ScientiaCapital
+**Owner**: Enterprise
 **Last Updated**: 2025-11-22
 **Current Status**: Phase 3 Complete ✅ | Claude SDK Integration 70% 🚧
 
@@ -159,11 +159,11 @@ python -m app.main  # Port 8001
 
 ## 🔗 Important Links
 
-- **GitHub**: https://github.com/ScientiaCapital/ai-development-cockpit
+- **GitHub**: https://github.com/Enterprise/ai-development-cockpit
 - **Active Branch**: `feature/claude-sdk-cost-optimizer-integration`
 - **Worktree**: `~/.config/superpowers/worktrees/ai-development-cockpit/claude-sdk-integration`
 - **Supabase**: https://supabase.com/dashboard/project/xucngysrzjtwqzgcutqf
-- **Related Project**: [ai-cost-optimizer](https://github.com/ScientiaCapital/ai-cost-optimizer)
+- **Related Project**: [ai-cost-optimizer](https://github.com/Enterprise/ai-cost-optimizer)
 
 ---
 

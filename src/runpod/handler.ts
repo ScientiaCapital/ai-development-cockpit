@@ -27,10 +27,7 @@
  */
 
 import { AgentOrchestrator } from '../orchestrator/AgentOrchestrator'
-import { EventBus } from '../orchestrator/EventBus'
-import { ModelRouter } from '../providers/ModelRouter'
-import { ProviderRegistry } from '../providers/ProviderRegistry'
-import { LanguageRouter } from '../adapters/LanguageRouter'
+import { EventBus, AgentEvent } from '../orchestrator/EventBus'
 
 interface JobInput {
   description: string
@@ -64,25 +61,11 @@ async function initializeSystem(): Promise<{
   orchestrator: AgentOrchestrator
   eventBus: EventBus
 }> {
-  // Initialize event bus
-  const eventBus = new EventBus()
+  // Get event bus singleton
+  const eventBus = EventBus.getInstance()
 
-  // Initialize provider registry
-  const providerRegistry = new ProviderRegistry()
-  await providerRegistry.initialize()
-
-  // Initialize model router
-  const modelRouter = new ModelRouter(providerRegistry)
-
-  // Initialize language router
-  const languageRouter = new LanguageRouter()
-
-  // Initialize orchestrator
-  const orchestrator = new AgentOrchestrator({
-    modelRouter,
-    languageRouter,
-    eventBus,
-  })
+  // Get orchestrator singleton - it manages its own dependencies internally
+  const orchestrator = AgentOrchestrator.getInstance()
 
   return { orchestrator, eventBus }
 }
@@ -117,45 +100,44 @@ export async function handler(job: { input: JobInput }): Promise<JobOutput> {
     const { orchestrator, eventBus } = await initializeSystem()
 
     // Subscribe to orchestrator events for logging
-    eventBus.on('agent:started', (event) => {
+    eventBus.on(AgentEvent.AgentStarted, (event) => {
       console.log(`[Agent Started] ${event.agentType}`)
     })
 
-    eventBus.on('agent:completed', (event) => {
-      console.log(`[Agent Completed] ${event.agentType}`)
+    eventBus.on(AgentEvent.AgentProgress, (event) => {
+      console.log(`[Agent Progress] ${event.agentId}: ${event.status}`)
     })
 
-    eventBus.on('agent:failed', (event) => {
-      console.error(`[Agent Failed] ${event.agentType}:`, event.error)
+    eventBus.on(AgentEvent.Error, (event) => {
+      console.error(`[Error] ${event.projectId}:`, event.error)
     })
 
-    // Execute orchestration
+    // Execute orchestration using startProject
     console.log('[RunPod Handler] Executing orchestration...')
-    const result = await orchestrator.orchestrate({
-      description,
-      language,
-      framework: framework || getDefaultFramework(language),
-      githubRepo,
-      features,
+    const result = await orchestrator.startProject({
+      userRequest: description,
+      projectName: `${language}-${Date.now()}`,
+      userId: 'runpod-serverless',
+      organizationId: 'runpod-default',
     })
 
     // Calculate execution time
     const executionTime = Date.now() - startTime
     console.log('[RunPod Handler] Job completed successfully:', {
       executionTime: `${executionTime}ms`,
-      filesGenerated: result.files.length,
-      agentsUsed: result.agents.length,
+      projectId: result.projectId,
+      status: result.status,
     })
 
     // Return success response
     return {
       status: 'success',
       output: {
-        plan: result.plan,
-        agents: result.agents,
-        files: result.files,
-        summary: generateSummary(result),
-        costSavings: result.costSavings || {
+        plan: {},
+        agents: [],
+        files: [],
+        summary: `Project ${result.projectId} started with status: ${result.status}`,
+        costSavings: {
           totalTokens: 0,
           totalCost: 0,
           savingsVsClaude: 0,

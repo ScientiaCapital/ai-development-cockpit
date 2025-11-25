@@ -14,7 +14,7 @@ import { DiscoveryFilters } from '@/types/models'
 import styles from '@/styles/terminal.module.css'
 
 interface ModelMarketplaceProps {
-  defaultTheme?: 'swaggystacks' | 'scientiacapital'
+  defaultTheme?: 'arcade' | 'enterprise'
   showThemeSwitcher?: boolean
   onDeploy?: (modelId: string) => void
   onTest?: (modelId: string) => void
@@ -23,14 +23,14 @@ interface ModelMarketplaceProps {
 }
 
 export default function ModelMarketplace({
-  defaultTheme = 'swaggystacks',
+  defaultTheme = 'arcade',
   showThemeSwitcher = true,
   onDeploy,
   onTest,
   availableModels = [],
   inferenceState
 }: ModelMarketplaceProps) {
-  const [currentTheme, setCurrentTheme] = useState<'swaggystacks' | 'scientiacapital'>(defaultTheme)
+  const [currentTheme, setCurrentTheme] = useState<'arcade' | 'enterprise'>(defaultTheme)
   const [showFilters, setShowFilters] = useState(false)
 
   const { currentOrganization, isAuthenticated, switchOrganization } = useHuggingFaceAuth()
@@ -67,14 +67,15 @@ export default function ModelMarketplace({
 
   // Sync theme with current organization
   useEffect(() => {
-    if (currentOrganization !== currentTheme) {
-      setCurrentTheme(currentOrganization)
+    const orgTheme = currentOrganization === 'arcade' ? 'arcade' : 'enterprise'
+    if (orgTheme !== currentTheme) {
+      setCurrentTheme(orgTheme)
     }
   }, [currentOrganization])
 
   // Apply terminal theme based on current theme
   useEffect(() => {
-    if (currentTheme === 'swaggystacks') {
+    if (currentTheme === 'arcade') {
       applyTheme('classic') // Green terminal theme
     } else {
       applyTheme('cyan') // Blue terminal theme for enterprise
@@ -97,13 +98,15 @@ export default function ModelMarketplace({
     setFilters(newFilters)
   }
 
-  const handleThemeSwitch = async (theme: 'swaggystacks' | 'scientiacapital') => {
+  const handleThemeSwitch = async (theme: 'arcade' | 'enterprise') => {
     setCurrentTheme(theme)
-    await switchOrganization(theme)
+    // Map to legacy organization names for API compatibility
+    const orgSlug = theme === 'arcade' ? 'arcade' : 'enterprise'
+    await switchOrganization(orgSlug as any)
   }
 
   const getThemeClasses = () => {
-    if (currentTheme === 'swaggystacks') {
+    if (currentTheme === 'arcade') {
       return {
         primary: 'text-green-400',
         accent: 'text-amber-400',
@@ -124,19 +127,19 @@ export default function ModelMarketplace({
 
   const themeClasses = getThemeClasses()
 
-  const marketplaceBanner = currentTheme === 'swaggystacks' ? `
+  const marketplaceBanner = currentTheme === 'arcade' ? `
 ╔════════════════════════════════════════════════════════════╗
-║  🎮 SWAGGY STACKS MODEL ARCADE 🎮                         ║
+║  🎮 AI DEV COCKPIT - MODEL ARCADE 🎮                      ║
 ║                                                            ║
 ║  Level Up Your AI Game • Insert Models to Continue        ║
 ║  High Score: 500,000+ Models Available                    ║
 ╚════════════════════════════════════════════════════════════╝
   ` : `
 ╔════════════════════════════════════════════════════════════╗
-║  🏢 SCIENTIA CAPITAL MODEL EXCHANGE 🏢                    ║
+║  🏢 AI DEV COCKPIT - ENTERPRISE EXCHANGE 🏢               ║
 ║                                                            ║
-║  Enterprise AI Solutions • Fortune 500 Grade Models       ║
-║  Portfolio: 500,000+ Certified Models                     ║
+║  Enterprise AI Solutions • Production-Grade Models        ║
+║  Catalog: 500,000+ Certified Models                       ║
 ╚════════════════════════════════════════════════════════════╝
   `
 
@@ -147,7 +150,7 @@ export default function ModelMarketplace({
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <h1 className={`text-2xl font-bold ${themeClasses.primary} font-mono`}>
-              {currentTheme === 'swaggystacks' ? 'MODEL ARCADE' : 'MODEL EXCHANGE'}
+              {currentTheme === 'arcade' ? 'MODEL ARCADE' : 'MODEL EXCHANGE'}
             </h1>
             <Badge variant="outline" className={`${themeClasses.badge} animate-pulse`}>
               {totalCount} MODELS LOADED
@@ -159,16 +162,16 @@ export default function ModelMarketplace({
               <Button
                 variant="outline"
                 size="sm"
-                className={`${currentTheme === 'swaggystacks' ? themeClasses.button : 'border-gray-600 text-gray-400'} font-mono text-xs`}
-                onClick={() => handleThemeSwitch('swaggystacks')}
+                className={`${currentTheme === 'arcade' ? themeClasses.button : 'border-gray-600 text-gray-400'} font-mono text-xs`}
+                onClick={() => handleThemeSwitch('arcade')}
               >
                 🎮 ARCADE MODE
               </Button>
               <Button
                 variant="outline"
                 size="sm"
-                className={`${currentTheme === 'scientiacapital' ? themeClasses.button : 'border-gray-600 text-gray-400'} font-mono text-xs`}
-                onClick={() => handleThemeSwitch('scientiacapital')}
+                className={`${currentTheme === 'enterprise' ? themeClasses.button : 'border-gray-600 text-gray-400'} font-mono text-xs`}
+                onClick={() => handleThemeSwitch('enterprise')}
               >
                 🏢 ENTERPRISE MODE
               </Button>
@@ -197,7 +200,7 @@ export default function ModelMarketplace({
                   value={searchState.query}
                   onChange={(e) => setQuery(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && executeSearch()}
-                  placeholder={currentTheme === 'swaggystacks' ? 'Enter cheat code...' : 'Enter search query...'}
+                  placeholder={currentTheme === 'arcade' ? 'Enter cheat code...' : 'Enter search query...'}
                   className="flex-1 bg-transparent border-none outline-none text-terminal-primary font-mono placeholder-gray-500"
                 />
               </div>
@@ -227,18 +230,18 @@ export default function ModelMarketplace({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => filterByOrganization('swaggystacks')}
-                className={`${searchState.filters.organizations?.includes('swaggystacks') ? themeClasses.button : 'border-gray-600 text-gray-400'} font-mono text-xs`}
+                onClick={() => filterByOrganization('arcade')}
+                className={`${searchState.filters.organizations?.includes('arcade') ? themeClasses.button : 'border-gray-600 text-gray-400'} font-mono text-xs`}
               >
-                🎮 SWAGGY
+                🎮 ARCADE
               </Button>
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => filterByOrganization('scientiacapital')}
-                className={`${searchState.filters.organizations?.includes('scientiacapital') ? themeClasses.button : 'border-gray-600 text-gray-400'} font-mono text-xs`}
+                onClick={() => filterByOrganization('enterprise')}
+                className={`${searchState.filters.organizations?.includes('enterprise') ? themeClasses.button : 'border-gray-600 text-gray-400'} font-mono text-xs`}
               >
-                🏢 SCIENTIA
+                🏢 ENTERPRISE
               </Button>
 
               <div className="h-4 w-px bg-gray-600" />
@@ -386,7 +389,7 @@ export default function ModelMarketplace({
             )}
           </div>
           <div className="text-gray-400">
-            {currentTheme === 'swaggystacks' ? 'PRESS START TO DEPLOY' : 'SELECT MODEL TO PROCEED'}
+            {currentTheme === 'arcade' ? 'PRESS START TO DEPLOY' : 'SELECT MODEL TO PROCEED'}
           </div>
         </div>
         {/* Authentication Status */}
@@ -447,14 +450,14 @@ export default function ModelMarketplace({
         ) : (
           <div className="text-center py-16">
             <div className={`text-6xl ${themeClasses.primary} mb-4`}>
-              {currentTheme === 'swaggystacks' ? '🎮' : '🏢'}
+              {currentTheme === 'arcade' ? '🎮' : '🏢'}
             </div>
             <div className={`text-xl font-bold ${themeClasses.primary} font-mono mb-2`}>
               NO MODELS FOUND
             </div>
             <div className="text-gray-400 font-mono text-sm">
-              {currentTheme === 'swaggystacks' 
-                ? 'Try a different search code or check your filters' 
+              {currentTheme === 'arcade'
+                ? 'Try a different search code or check your filters'
                 : 'Modify search parameters or contact enterprise support'
               }
             </div>
@@ -487,8 +490,8 @@ export default function ModelMarketplace({
         </div>
         
         <div className={`mt-4 text-xs ${themeClasses.primary} font-mono`}>
-          {currentTheme === 'swaggystacks' 
-            ? '★ THANKS FOR PLAYING THE AI ARCADE ★' 
+          {currentTheme === 'arcade'
+            ? '★ THANKS FOR PLAYING THE AI ARCADE ★'
             : '★ POWERING ENTERPRISE AI TRANSFORMATION ★'
           }
         </div>

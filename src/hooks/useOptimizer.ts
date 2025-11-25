@@ -225,7 +225,7 @@ export function useOptimizer({
  * ```tsx
  * function MyComponent() {
  *   const { optimize, loading, response, totalSavings } = useOptimizer({
- *     organization: 'swaggystacks',
+ *     organization: 'arcade',
  *     onSuccess: (response) => {
  *       console.log('Optimization complete!', response)
  *     }

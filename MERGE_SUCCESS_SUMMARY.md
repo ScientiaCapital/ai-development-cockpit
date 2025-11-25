@@ -187,7 +187,7 @@ SERVICE_SPLITTING_GUIDE.md
 ## 🎯 What's Now in Main Branch
 
 ### Complete Platform Features
-✅ Dual-domain platform (SwaggyStacks + ScientiaCapital)  
+✅ Dual-domain platform (AI Dev Cockpit + Enterprise)  
 ✅ 500K+ AI models via HuggingFace integration  
 ✅ Complete authentication system  
 ✅ Chinese LLM support (Qwen, DeepSeek, ChatGLM)  
@@ -220,7 +220,7 @@ SERVICE_SPLITTING_GUIDE.md
 1. **Deploy to Vercel**: Connect GitHub repo
 2. **Configure Supabase**: Run migrations, set up RLS
 3. **Test Cost Optimizer**: Deploy Gemini client (free tier)
-4. **Add custom domains**: SwaggyStacks.com + ScientiaCapital.com
+4. **Add custom domains**: AI Dev Cockpit.com + Enterprise.com
 
 ### Long Term
 1. **Beta launch**: Get first users

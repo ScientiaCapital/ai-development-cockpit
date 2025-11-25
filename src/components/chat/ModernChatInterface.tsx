@@ -331,7 +331,7 @@ export function ModernChatInterface() {
               Welcome to AI Assistant
             </h2>
             <p className="text-gray-500 dark:text-gray-400 max-w-md">
-              Your gateway to MCP servers for SwaggyStacks and Scientia Capital.
+              Your gateway to MCP servers for AI Dev Cockpit and Enterprise.
               Choose from cost-effective models for different task complexities.
             </p>
           </div>

@@ -39,7 +39,7 @@ Phase 3 completes the Cost Optimizer implementation with production-ready UI com
 **Usage Example:**
 ```tsx
 const { optimize, loading, response, totalSavings } = useOptimizer({
-  organization: 'swaggystacks',
+  organization: 'arcade',
   onSuccess: (response) => console.log('Done!', response)
 })
 
@@ -95,7 +95,7 @@ interface UseOptimizerReturn {
 **Usage Example:**
 ```tsx
 <CostDashboard
-  organization="swaggystacks"
+  organization="arcade"
   period="daily"              // hourly/daily/weekly/monthly
   autoRefresh={true}          // Auto-refresh enabled
   refreshInterval={60000}     // Refresh every 60 seconds
@@ -414,13 +414,13 @@ npm run type-check
 
 The Cost Optimizer integrates seamlessly with the existing dual-domain platform:
 
-**SwaggyStacks Domain:**
+**AI Dev Cockpit Domain:**
 - Budget: $2/day, $50/month
 - Target users: Developers building AI apps
 - Focus: Cost savings and performance
 - Dashboard theme: Dark terminal style
 
-**ScientiaCapital Domain:**
+**Enterprise Domain:**
 - Budget: $5/day, $150/month
 - Target users: Enterprise/financial analysts
 - Focus: ROI and business metrics
@@ -435,18 +435,18 @@ The Cost Optimizer integrates seamlessly with the existing dual-domain platform:
 ### React Component Usage
 
 ```tsx
-// SwaggyStacks page
+// AI Dev Cockpit page
 import { CostDashboard } from '@/components/cost-optimizer/CostDashboard'
 import { useOptimizer } from '@/hooks/useOptimizer'
 
-function SwaggyStacksPage() {
+function AI Dev CockpitPage() {
   const { optimize, loading, response } = useOptimizer({
-    organization: 'swaggystacks'
+    organization: 'arcade'
   })
 
   return (
     <div className="terminal-theme">
-      <CostDashboard organization="swaggystacks" period="daily" />
+      <CostDashboard organization="arcade" period="daily" />
       {/* Chat interface using optimize() function */}
     </div>
   )
@@ -454,7 +454,7 @@ function SwaggyStacksPage() {
 ```
 
 ```tsx
-// ScientiaCapital page
+// Enterprise page
 import { CostDashboard } from '@/components/cost-optimizer/CostDashboard'
 import { useOptimizer } from '@/hooks/useOptimizer'
 
@@ -494,8 +494,8 @@ function ScientiaPage() {
 - 5% → Tier 3 (Premium)
 
 **Projected Monthly Costs:**
-- SwaggyStacks: $4.50/month (vs $45 without optimization)
-- ScientiaCapital: $13.50/month (vs $135 without optimization)
+- AI Dev Cockpit: $4.50/month (vs $45 without optimization)
+- Enterprise: $13.50/month (vs $135 without optimization)
 - **Total Savings: 90%**
 
 ### Dashboard Performance

@@ -369,19 +369,19 @@ export class TracingService {
     const userAgent = request.headers?.['user-agent'] || '';
 
     // Determine organization based on URL path or headers
-    if (url.includes('/swaggystacks') || url.includes('/dev')) {
-      return 'swaggystacks';
+    if (url.includes('/arcade') || url.includes('/dev')) {
+      return 'arcade';
     }
-    if (url.includes('/scientia') || url.includes('/corp')) {
-      return 'scientia_capital';
+    if (url.includes('/enterprise') || url.includes('/corp')) {
+      return 'enterprise';
     }
 
     // Check user agent for organization hints
-    if (userAgent.includes('SwaggyStacks')) {
-      return 'swaggystacks';
+    if (userAgent.includes('AICockpit') || userAgent.includes('Arcade')) {
+      return 'arcade';
     }
-    if (userAgent.includes('ScientiaCapital')) {
-      return 'scientia_capital';
+    if (userAgent.includes('Enterprise')) {
+      return 'enterprise';
     }
 
     return 'shared';

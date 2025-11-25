@@ -114,8 +114,8 @@ export interface JourneyStep {
 }
 
 export interface OrganizationCoverage {
-  swaggystacks: number; // percentage
-  scientia: number; // percentage
+  arcade: number; // percentage
+  enterprise: number; // percentage
 }
 
 export interface SuitePerformanceMetrics {
@@ -246,7 +246,7 @@ export class TestReporter {
           routes: [],
           features: [],
           userJourneys: [],
-          organizationCoverage: { swaggystacks: 0, scientia: 0 }
+          organizationCoverage: { arcade: 0, enterprise: 0 }
         }
       },
       suites: [],
@@ -272,7 +272,7 @@ export class TestReporter {
           routes: [],
           features: [],
           userJourneys: [],
-          organizationCoverage: { swaggystacks: 0, scientia: 0 }
+          organizationCoverage: { arcade: 0, enterprise: 0 }
         }
       },
       trends: {
@@ -294,7 +294,7 @@ export class TestReporter {
         reportVersion: '1.0.0',
         configuration: {
           browsers: ['chromium', 'firefox', 'webkit'],
-          organizations: ['swaggystacks', 'scientia'],
+          organizations: ['arcade', 'enterprise'],
           parallel: true,
           retries: 2,
           timeout: 30000
@@ -742,7 +742,7 @@ export class TestReporter {
     }
 
     // Coverage recommendations
-    recommendations.push('📊 Consider expanding test coverage for both SwaggyStacks and Scientia organizations');
+    recommendations.push('📊 Consider expanding test coverage for both AI Dev Cockpit and Enterprise organizations');
 
     // Error pattern recommendations
     for (const pattern of this.currentReport.quality?.errorPatterns || []) {

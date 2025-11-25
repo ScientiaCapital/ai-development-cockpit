@@ -423,7 +423,7 @@ export class MonitoringIntegrationService {
     };
 
     // Organization-specific adjustments
-    if (organization === 'scientia_capital') {
+    if (organization === 'enterprise') {
       baseMetrics.totalInferences *= 2; // Enterprise usage
       baseMetrics.activeUsers *= 3;
       baseMetrics.revenueToday *= 5;
@@ -436,11 +436,11 @@ export class MonitoringIntegrationService {
    * Determine organization from endpoint ID
    */
   private getOrganizationFromEndpoint(endpointId: string): Organization {
-    if (endpointId.includes('swaggystacks') || endpointId.includes('dev')) {
-      return 'swaggystacks';
+    if (endpointId.includes('arcade') || endpointId.includes('dev')) {
+      return 'arcade';
     }
-    if (endpointId.includes('scientia') || endpointId.includes('corp')) {
-      return 'scientia_capital';
+    if (endpointId.includes('enterprise') || endpointId.includes('corp')) {
+      return 'enterprise';
     }
     return 'shared';
   }

@@ -24,7 +24,7 @@ We have successfully replaced the mock API implementations with a **production-r
 - **HuggingFace Model Discovery**: Search and discover Chinese LLMs (Qwen, DeepSeek, ChatGLM, Baichuan)
 - **Automatic RunPod Deployment**: Deploy discovered models to RunPod serverless vLLM infrastructure
 - **Dual API Support**: Both RunPod Native API and OpenAI-compatible endpoints
-- **Organization-Specific Configuration**: SwaggyStacks (aggressive) vs ScientiaCapital (conservative) settings
+- **Organization-Specific Configuration**: AI Dev Cockpit (aggressive) vs Enterprise (conservative) settings
 
 ### ✅ 3. **Production-Grade Infrastructure**
 
@@ -122,8 +122,8 @@ RUNPOD_API_KEY=your_runpod_api_key_here
 
 # HuggingFace Configuration (Required)
 HUGGINGFACE_API_KEY=your_huggingface_api_key_here
-SWAGGYSTACKS_HF_TOKEN=your_swaggystacks_hf_token_here
-SCIENTIACAPITAL_HF_TOKEN=your_scientiacapital_hf_token_here
+SWAGGYSTACKS_HF_TOKEN=your_arcade_hf_token_here
+SCIENTIACAPITAL_HF_TOKEN=your_enterprise_hf_token_here
 ```
 
 **🔐 Security Note**: See `.env.example` for detailed configuration instructions. Never commit actual API keys to git.
@@ -137,7 +137,7 @@ const service = new UnifiedChineseLLMService();
 
 // 1. Discover Chinese models
 const searchResults = await service.searchChineseModels({
-  organization: 'swaggystacks',
+  organization: 'arcade',
   query: 'qwen',
   maxSize: '7B',
   limit: 5
@@ -145,7 +145,7 @@ const searchResults = await service.searchChineseModels({
 
 // 2. Deploy to RunPod
 const deploymentResult = await service.deployModelToRunPod({
-  organization: 'swaggystacks',
+  organization: 'arcade',
   hfModelId: 'Qwen/Qwen2.5-7B-Instruct',
   instanceConfig: {
     gpuTypeId: 'NVIDIA RTX A5000',
@@ -155,7 +155,7 @@ const deploymentResult = await service.deployModelToRunPod({
 
 // 3. Run inference
 const inferenceResult = await service.runInference({
-  organization: 'swaggystacks',
+  organization: 'arcade',
   modelId: 'Qwen/Qwen2.5-7B-Instruct',
   messages: [
     { role: 'user', content: '你好，请用中文回答' }

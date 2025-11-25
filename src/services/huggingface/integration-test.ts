@@ -19,7 +19,7 @@ export async function testUnifiedService() {
     // Test 2: Search Chinese Models
     console.log('\n🔍 Searching for Chinese models...');
     const searchResults = await service.searchChineseModels({
-      organization: 'swaggystacks',
+      organization: 'arcade',
       query: 'qwen',
       maxSize: '7B',
       limit: 5
@@ -32,7 +32,7 @@ export async function testUnifiedService() {
 
     // Test 3: Get Popular Models
     console.log('\n⭐ Getting popular Chinese models...');
-    const popularResults = await service.getPopularChineseModels('swaggystacks');
+    const popularResults = await service.getPopularChineseModels('arcade');
 
     if (popularResults.success) {
       console.log(`Found ${popularResults.models.length} popular models:`);
@@ -49,7 +49,7 @@ export async function testUnifiedService() {
 
       // Create deployment config without actually deploying
       const deploymentConfig = {
-        organization: 'swaggystacks',
+        organization: 'arcade',
         hfModelId: firstModel.id,
         instanceConfig: {
           gpuTypeId: 'NVIDIA RTX A5000',

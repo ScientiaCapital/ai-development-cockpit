@@ -97,7 +97,7 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             NODE_ENV=production
-            NEXT_PUBLIC_APP_URL=https://ai-development-cockpit-scientia-capital.vercel.app
+            NEXT_PUBLIC_APP_URL=https://ai-development-cockpit-enterprise.vercel.app
 
   deploy-vercel:
     name: Deploy to Vercel
@@ -107,7 +107,7 @@ jobs:
     timeout-minutes: 20
     environment:
       name: production
-      url: https://ai-development-cockpit-scientia-capital.vercel.app
+      url: https://ai-development-cockpit-enterprise.vercel.app
 
     steps:
       - name: Checkout code
@@ -159,8 +159,8 @@ jobs:
 
           VERCEL_INFO="Vercel Deployment:
           - Project: ai-development-cockpit
-          - Organization: scientia-capital
-          - URL: https://ai-development-cockpit-scientia-capital.vercel.app
+          - Organization: enterprise
+          - URL: https://ai-development-cockpit-enterprise.vercel.app
           - Branch: main (production)"
 
           RUNPOD_INSTRUCTIONS="RunPod Deployment Steps:
@@ -252,8 +252,8 @@ jobs:
             ### Deployed Environments
             Vercel Deployment:
             - Project: ai-development-cockpit
-            - Organization: scientia-capital
-            - URL: https://ai-development-cockpit-scientia-capital.vercel.app
+            - Organization: enterprise
+            - URL: https://ai-development-cockpit-enterprise.vercel.app
             - Branch: main (production)
 
             ### Next Steps: RunPod Deployment
@@ -264,8 +264,8 @@ jobs:
             5. Update RUNPOD_ENDPOINT in .env
 
             ### Monitoring
-            - **Vercel Dashboard**: https://vercel.com/scientia-capital/ai-development-cockpit
-            - **GitHub Container Registry**: https://github.com/ScientiaCapital/ai-development-cockpit/pkgs/container/ai-development-cockpit%2Fai-agents
+            - **Vercel Dashboard**: https://vercel.com/enterprise/ai-development-cockpit
+            - **GitHub Container Registry**: https://github.com/Enterprise/ai-development-cockpit/pkgs/container/ai-development-cockpit%2Fai-agents
             - **RunPod Dashboard**: https://www.runpod.io/console/pods
 
             This issue auto-closes when merged.`;

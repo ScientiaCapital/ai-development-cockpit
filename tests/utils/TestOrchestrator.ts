@@ -11,13 +11,13 @@ import { NetworkSimulator } from '../fixtures/NetworkSimulator';
 import { TestOrchestratorConfig } from './TestCoordinator';
 import { MockRunPodEnvironment } from '../fixtures/MockRunPodEnvironment';
 import { createTestEnvironment, TestSuiteFactory } from '../fixtures/index';
-import { swaggyStacksScenarios, scientiaCapitalScenarios, DeploymentScenario } from '../fixtures/deployment-scenarios';
+import { arcadeScenarios, enterpriseScenarios, DeploymentScenario } from '../fixtures/deployment-scenarios';
 import { TestResults } from './TestCoordinator';
 
 export interface OrchestrationConfig {
   browser: Browser;
   parallelSessions: number;
-  organizations: ('swaggystacks' | 'scientia')[];
+  organizations: ('arcade' | 'enterprise')[];
   environments: ('development' | 'staging' | 'production')[];
   testSuites: TestSuiteType[];
   enableChaosMode: boolean;
@@ -49,7 +49,7 @@ export interface OrchestrationResult {
 }
 
 export interface OrganizationTestResult {
-  organization: 'swaggystacks' | 'scientia';
+  organization: 'arcade' | 'enterprise';
   scenarios: Map<string, PipelineExecution>;
   validationResults: Map<string, any>;
   complianceResults: any;
@@ -173,7 +173,7 @@ export class TestOrchestrator {
   /**
    * Execute smoke tests only (quick validation)
    */
-  async executeSmokeTests(organization: 'swaggystacks' | 'scientia'): Promise<OrganizationTestResult> {
+  async executeSmokeTests(organization: 'arcade' | 'enterprise'): Promise<OrganizationTestResult> {
     const scenarios = this.getScenariosByComplexity(organization, 'simple').slice(0, 2); // Only simple scenarios
     const testEnvironment = createTestEnvironment(organization, 'development');
 
@@ -188,7 +188,7 @@ export class TestOrchestrator {
   /**
    * Execute performance tests (load, stress, endurance)
    */
-  async executePerformanceTests(organization: 'swaggystacks' | 'scientia'): Promise<OrganizationTestResult> {
+  async executePerformanceTests(organization: 'arcade' | 'enterprise'): Promise<OrganizationTestResult> {
     const scenarios = this.getScenariosByComplexity(organization, 'complex'); // Complex scenarios for performance testing
     const testEnvironment = createTestEnvironment(organization, 'production');
 
@@ -203,7 +203,7 @@ export class TestOrchestrator {
   /**
    * Execute chaos engineering tests
    */
-  async executeChaosTests(organization: 'swaggystacks' | 'scientia'): Promise<OrganizationTestResult> {
+  async executeChaosTests(organization: 'arcade' | 'enterprise'): Promise<OrganizationTestResult> {
     const scenarios = this.getScenariosByComplexity(organization, 'medium'); // Medium complexity for chaos testing
     const testEnvironment = createTestEnvironment(organization, 'staging');
 
@@ -226,7 +226,7 @@ export class TestOrchestrator {
       for (let i = 0; i < this.config.parallelSessions; i++) {
         const page = await this.config.browser.newPage();
         const baseUrl = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3001';
-        const orgPath = organization === 'swaggystacks' ? '/swaggystacks' : '/scientia';
+        const orgPath = organization === 'arcade' ? '/arcade' : '/enterprise';
 
         await page.goto(`${baseUrl}${orgPath}`);
         pages.push(page);
@@ -240,7 +240,7 @@ export class TestOrchestrator {
     }
   }
 
-  private async executeOrganizationTests(organization: 'swaggystacks' | 'scientia'): Promise<OrganizationTestResult> {
+  private async executeOrganizationTests(organization: 'arcade' | 'enterprise'): Promise<OrganizationTestResult> {
     const result: OrganizationTestResult = {
       organization,
       scenarios: new Map(),
@@ -297,7 +297,7 @@ export class TestOrchestrator {
   }
 
   private async executeScenarioSet(
-    organization: 'swaggystacks' | 'scientia',
+    organization: 'arcade' | 'enterprise',
     scenarios: DeploymentScenario[],
     testEnvironment: any,
     options: { enableChaos: boolean; enablePerformanceMonitoring: boolean }
@@ -402,7 +402,7 @@ export class TestOrchestrator {
     }
   }
 
-  private async executeSmokeTestSuite(organization: 'swaggystacks' | 'scientia', result: OrganizationTestResult): Promise<void> {
+  private async executeSmokeTestSuite(organization: 'arcade' | 'enterprise', result: OrganizationTestResult): Promise<void> {
     const scenarios = this.getScenariosByComplexity(organization, 'simple').slice(0, 1);
     const testEnvironment = createTestEnvironment(organization, 'development');
 
@@ -415,7 +415,7 @@ export class TestOrchestrator {
     this.mergeOrganizationResults(result, suiteResult);
   }
 
-  private async executeIntegrationTestSuite(organization: 'swaggystacks' | 'scientia', result: OrganizationTestResult): Promise<void> {
+  private async executeIntegrationTestSuite(organization: 'arcade' | 'enterprise', result: OrganizationTestResult): Promise<void> {
     const scenarios = this.getScenariosByComplexity(organization, 'medium');
     const testEnvironment = createTestEnvironment(organization, 'staging');
 
@@ -427,7 +427,7 @@ export class TestOrchestrator {
     this.mergeOrganizationResults(result, suiteResult);
   }
 
-  private async executePerformanceTestSuite(organization: 'swaggystacks' | 'scientia', result: OrganizationTestResult): Promise<void> {
+  private async executePerformanceTestSuite(organization: 'arcade' | 'enterprise', result: OrganizationTestResult): Promise<void> {
     const scenarios = this.getScenariosByComplexity(organization, 'complex');
     const testEnvironment = createTestEnvironment(organization, 'production');
 
@@ -439,7 +439,7 @@ export class TestOrchestrator {
     this.mergeOrganizationResults(result, suiteResult);
   }
 
-  private async executeChaosTestSuite(organization: 'swaggystacks' | 'scientia', result: OrganizationTestResult): Promise<void> {
+  private async executeChaosTestSuite(organization: 'arcade' | 'enterprise', result: OrganizationTestResult): Promise<void> {
     const scenarios = this.getScenariosByComplexity(organization, 'medium').slice(0, 2);
     const testEnvironment = createTestEnvironment(organization, 'staging');
 
@@ -455,7 +455,7 @@ export class TestOrchestrator {
     this.mergeOrganizationResults(result, suiteResult);
   }
 
-  private async executeComplianceTestSuite(organization: 'swaggystacks' | 'scientia', result: OrganizationTestResult): Promise<void> {
+  private async executeComplianceTestSuite(organization: 'arcade' | 'enterprise', result: OrganizationTestResult): Promise<void> {
     // Focus on compliance validation rather than deployment testing
     const validationUtilsList = this.validationUtils.get(organization) || [];
 
@@ -466,7 +466,7 @@ export class TestOrchestrator {
     }
   }
 
-  private async executeFullTestSuite(organization: 'swaggystacks' | 'scientia', result: OrganizationTestResult): Promise<void> {
+  private async executeFullTestSuite(organization: 'arcade' | 'enterprise', result: OrganizationTestResult): Promise<void> {
     // Execute all test types in sequence
     await this.executeSmokeTestSuite(organization, result);
     await this.executeIntegrationTestSuite(organization, result);
@@ -733,10 +733,10 @@ export class TestOrchestrator {
   }
 
   private getScenariosByComplexity(
-    organization: 'swaggystacks' | 'scientia',
+    organization: 'arcade' | 'enterprise',
     complexity: 'simple' | 'medium' | 'complex'
   ): DeploymentScenario[] {
-    const scenarios = organization === 'swaggystacks' ? swaggyStacksScenarios : scientiaCapitalScenarios;
+    const scenarios = organization === 'arcade' ? arcadeScenarios : enterpriseScenarios;
     return scenarios.filter(s => s.complexity === complexity);
   }
 
@@ -805,7 +805,7 @@ export class TestOrchestrator {
     this.config = {
       browser: config.browser,
       parallelSessions: config.parallelSessions || 3,
-      organizations: config.organizations || ['swaggystacks', 'scientia'],
+      organizations: config.organizations || ['arcade', 'enterprise'],
       environments: config.environments || ['development'],
       testSuites: (config.testSuites || ['smoke']) as TestSuiteType[],
       enableChaosMode: config.enableChaosMode || false,
@@ -899,7 +899,7 @@ export function createTestOrchestrator(
   const baseConfig: OrchestrationConfig = {
     browser,
     parallelSessions: 3,
-    organizations: ['swaggystacks', 'scientia'],
+    organizations: ['arcade', 'enterprise'],
     environments: ['development'],
     testSuites: ['smoke'],
     enableChaosMode: false,

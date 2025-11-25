@@ -26,7 +26,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     async () => {
       try {
         // Validate parameters
-        if (!['swaggystacks', 'scientia_capital', 'shared'].includes(organization)) {
+        if (!['arcade', 'enterprise', 'shared'].includes(organization)) {
           return NextResponse.json(
             { error: 'Invalid organization parameter' },
             { status: 400 }

@@ -30,8 +30,8 @@ const CONFIG = {
     deploymentId: process.env.DEPLOYMENT_ID || 'manual',
     commitSha: process.env.GITHUB_SHA || 'unknown',
     urls: {
-      swaggystacks: process.env.SWAGGYSTACKS_URL || 'http://localhost:3001/swaggystacks',
-      scientia: process.env.SCIENTIA_URL || 'http://localhost:3001/scientia',
+      arcade: process.env.COCKPIT_URL || 'http://localhost:3001/arcade',
+      enterprise: process.env.ENTERPRISE_URL || 'http://localhost:3001/enterprise',
       marketplace: process.env.MARKETPLACE_URL || 'http://localhost:3001/marketplace'
     }
   },
@@ -618,8 +618,8 @@ Environment Variables:
   DEPLOYMENT_ENVIRONMENT       - Deployment environment (staging/production)
   DEPLOYMENT_ID               - Unique deployment identifier
   GITHUB_SHA                  - Commit SHA being deployed
-  SWAGGYSTACKS_URL           - SwaggyStacks endpoint URL
-  SCIENTIA_URL               - ScientiaCapital endpoint URL
+  COCKPIT_URL           - SwaggyStacks endpoint URL
+  ENTERPRISE_URL               - ScientiaCapital endpoint URL
   MARKETPLACE_URL            - Marketplace endpoint URL
   DEBUG                      - Enable debug logging
 `);

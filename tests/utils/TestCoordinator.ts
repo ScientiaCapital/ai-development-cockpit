@@ -35,7 +35,7 @@ export interface ApiValidationConfig {
 export interface TestOrchestratorConfig {
   browser?: any;
   parallelSessions: number;
-  organizations: ('swaggystacks' | 'scientia')[];
+  organizations: ('arcade' | 'enterprise')[];
   environments: ('development' | 'staging' | 'production')[];
   testSuites: string[];
   enableChaosMode: boolean;
@@ -109,7 +109,7 @@ export class TestCoordinator {
     this.orchestrator = new TestOrchestrator({
       browser: null as any, // Will be set when browser is available
       parallelSessions: 1,
-      organizations: ['swaggystacks'],
+      organizations: ['arcade'],
       environments: ['development'],
       testSuites: ['smoke'],
       enableChaosMode: false,

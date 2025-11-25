@@ -185,18 +185,18 @@ describe('HuggingFaceCircuitBreaker', () => {
   });
 
   describe('organization-specific configurations', () => {
-    it('should use SwaggyStacks configuration', () => {
+    it('should use AI Dev Cockpit configuration', () => {
       const mockAction = jest.fn().mockResolvedValue('success');
 
       const breaker = circuitBreaker.createBreaker(
-        'swaggystacks-breaker',
+        'arcade-breaker',
         mockAction,
         undefined,
-        'swaggystacks'
+        'arcade'
       );
 
       expect(breaker).toBeDefined();
-      expect(breaker.name).toBe('swaggystacks-breaker');
+      expect(breaker.name).toBe('arcade-breaker');
     });
 
     it('should use ScientiaCapital configuration', () => {

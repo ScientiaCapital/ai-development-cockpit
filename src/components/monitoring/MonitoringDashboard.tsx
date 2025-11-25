@@ -38,15 +38,15 @@ export function MonitoringDashboard({ organization, className }: MonitoringDashb
   // Organization-specific styling
   const organizationTheme = useMemo(() => {
     switch (organization) {
-      case 'swaggystacks':
+      case 'arcade':
         return {
           primaryColor: 'text-green-400',
           accentColor: 'bg-green-500/10 border-green-500/20',
           cardStyle: 'bg-gray-900/50 border-green-500/20',
           badgeStyle: 'bg-green-500/20 text-green-400',
-          prefix: '🚀 SWAGGY',
+          prefix: '🚀 COCKPIT',
         };
-      case 'scientia_capital':
+      case 'enterprise':
         return {
           primaryColor: 'text-blue-600',
           accentColor: 'bg-blue-500/10 border-blue-500/20',

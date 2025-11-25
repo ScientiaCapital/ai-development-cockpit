@@ -35,11 +35,11 @@ export function PWAProvider({ children }: PWAProviderProps) {
   }, [pathname])
 
   const detectThemeFromPath = (path: string): 'terminal' | 'corporate' => {
-    if (path.includes('/swaggystacks') || 
+    if (path.includes('/arcade') || 
         path.includes('/chat?theme=terminal') || 
         path.includes('/marketplace?theme=terminal')) {
       return 'terminal'
-    } else if (path.includes('/scientia') || 
+    } else if (path.includes('/enterprise') || 
                path.includes('/chat?theme=corporate') || 
                path.includes('/marketplace?theme=corporate')) {
       return 'corporate'
@@ -87,7 +87,7 @@ export function PWAProvider({ children }: PWAProviderProps) {
     
     const appleTitleMeta = document.querySelector('meta[name="apple-mobile-web-app-title"]') as HTMLMetaElement
     if (appleTitleMeta) {
-      appleTitleMeta.content = currentTheme === 'terminal' ? 'SwaggyStacks' : 'Scientia Capital'
+      appleTitleMeta.content = currentTheme === 'terminal' ? 'AI Dev Cockpit' : 'Enterprise'
     }
   }
 

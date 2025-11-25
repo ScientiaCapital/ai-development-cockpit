@@ -189,7 +189,7 @@ test.describe('Throughput Testing - Request Processing Capacity', () => {
       const searchOperation = async (page: any) => {
         const marketplacePage = new MarketplacePage(page);
         await marketplacePage.goto();
-        await marketplacePage.selectOrganization('swaggystacks');
+        await marketplacePage.selectOrganization('arcade');
         await marketplacePage.searchModels('gaming');
         await marketplacePage.expectSearchResults();
       };
@@ -218,7 +218,7 @@ test.describe('Throughput Testing - Request Processing Capacity', () => {
         await marketplacePage.goto();
 
         // Alternate between organizations
-        const org = Math.random() > 0.5 ? 'swaggystacks' : 'scientia';
+        const org = Math.random() > 0.5 ? 'arcade' : 'enterprise';
         await marketplacePage.selectOrganization(org);
 
         // Vary search terms
@@ -251,12 +251,12 @@ test.describe('Throughput Testing - Request Processing Capacity', () => {
         await marketplacePage.goto();
 
         // Rapidly switch between organizations
-        await marketplacePage.selectOrganization('swaggystacks');
-        await marketplacePage.expectSwaggyStacksTheme();
-        await marketplacePage.selectOrganization('scientia');
+        await marketplacePage.selectOrganization('arcade');
+        await marketplacePage.expectAI Dev CockpitTheme();
+        await marketplacePage.selectOrganization('enterprise');
         await marketplacePage.expectScientiaCapitalTheme();
-        await marketplacePage.selectOrganization('swaggystacks');
-        await marketplacePage.expectSwaggyStacksTheme();
+        await marketplacePage.selectOrganization('arcade');
+        await marketplacePage.expectAI Dev CockpitTheme();
       };
 
       const metrics = await executeLoadPattern(browser, switchingPattern, switchingOperation);
@@ -284,7 +284,7 @@ test.describe('Throughput Testing - Request Processing Capacity', () => {
         const deploymentPage = new DeploymentPage(page);
 
         await marketplacePage.goto();
-        await marketplacePage.selectOrganization('swaggystacks');
+        await marketplacePage.selectOrganization('arcade');
 
         const modelId = await marketplacePage.selectFirstModel();
         await marketplacePage.deployModel(modelId);
@@ -439,7 +439,7 @@ test.describe('Throughput Testing - Request Processing Capacity', () => {
         const marketplacePage = new MarketplacePage(page);
         await marketplacePage.goto();
 
-        const org = Math.random() > 0.5 ? 'swaggystacks' : 'scientia';
+        const org = Math.random() > 0.5 ? 'arcade' : 'enterprise';
         await marketplacePage.selectOrganization(org);
         await marketplacePage.searchModels('stress-test');
       };
@@ -471,7 +471,7 @@ test.describe('Throughput Testing - Request Processing Capacity', () => {
       const loadSpikeOperation = async (page: any) => {
         const marketplacePage = new MarketplacePage(page);
         await marketplacePage.goto();
-        await marketplacePage.selectOrganization('swaggystacks');
+        await marketplacePage.selectOrganization('arcade');
         await marketplacePage.searchModels('spike-test');
       };
 
@@ -503,7 +503,7 @@ test.describe('Throughput Testing - Request Processing Capacity', () => {
   });
 
   test.describe('Organization-Specific Throughput', () => {
-    test('should handle SwaggyStacks gaming workload patterns', async ({ browser }) => {
+    test('should handle AI Dev Cockpit gaming workload patterns', async ({ browser }) => {
       const gamingPattern: LoadPattern = {
         name: 'gaming_workload',
         description: 'Gaming user behavior pattern',
@@ -518,8 +518,8 @@ test.describe('Throughput Testing - Request Processing Capacity', () => {
         const deploymentPage = new DeploymentPage(page);
 
         await marketplacePage.goto();
-        await marketplacePage.selectOrganization('swaggystacks');
-        await marketplacePage.expectSwaggyStacksTheme();
+        await marketplacePage.selectOrganization('arcade');
+        await marketplacePage.expectAI Dev CockpitTheme();
 
         // Gaming users browse quickly
         await marketplacePage.searchModels('gaming');
@@ -565,7 +565,7 @@ test.describe('Throughput Testing - Request Processing Capacity', () => {
         const deploymentPage = new DeploymentPage(page);
 
         await marketplacePage.goto();
-        await marketplacePage.selectOrganization('scientia');
+        await marketplacePage.selectOrganization('enterprise');
         await marketplacePage.expectScientiaCapitalTheme();
 
         // Enterprise users are more thorough

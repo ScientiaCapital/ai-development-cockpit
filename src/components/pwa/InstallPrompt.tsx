@@ -139,8 +139,8 @@ export function InstallPrompt({ theme = 'terminal' }: InstallPromptProps) {
         isTerminalTheme ? 'text-green-300' : 'text-gray-600'
       }`}>
         {isTerminalTheme 
-          ? 'Add SwaggyStacks to your home screen for a native terminal experience with offline access.'
-          : 'Install Scientia Capital for quick access to enterprise AI analytics and offline functionality.'
+          ? 'Add AI Dev Cockpit to your home screen for a native terminal experience with offline access.'
+          : 'Install Enterprise for quick access to enterprise AI analytics and offline functionality.'
         }
       </p>
 

@@ -14,8 +14,8 @@ The following credentials were exposed in `PHASE-5-INTEGRATION-SUMMARY.md` (comm
 
 1. **RunPod API Key**: `rpa_ATH56...` (40 characters - REDACTED)
 2. **HuggingFace API Key**: `hf_ABUMi...` (37 characters - REDACTED)
-3. **SwaggyStacks HF Token**: `hf_ABUMi...` (37 characters - REDACTED)
-4. **ScientiaCapital HF Token**: `hf_XsNlH...` (37 characters - REDACTED)
+3. **AI Dev Cockpit HF Token**: `hf_ABUMi...` (37 characters - REDACTED)
+4. **Enterprise HF Token**: `hf_XsNlH...` (37 characters - REDACTED)
 
 ## Required Actions
 

@@ -73,8 +73,8 @@ The AI Development Cockpit LLM Platform has been successfully validated and is p
 | **Hot Reload** | ✅ Working | Fast refresh operational |
 
 ### 6. Dual-Domain Architecture
-- **SwaggyStacks Route:** `/swaggystacks` - Configured ✅
-- **Scientia Capital Route:** `/scientia` - Configured ✅
+- **AI Dev Cockpit Route:** `/arcade` - Configured ✅
+- **Enterprise Route:** `/scientia` - Configured ✅
 - **Organization Headers:** `x-organization` - Working ✅
 - **Monitoring Headers:** `x-monitored` - Working ✅
 
@@ -128,7 +128,7 @@ OPENAI_API_KEY="sk-proj-..."
 - **Workaround:** Using fallback fonts (functional)
 
 ### 2. Page Routes Return 500 (Expected)
-- **Issue:** `/`, `/swaggystacks`, `/scientia` return 500 errors
+- **Issue:** `/`, `/arcade`, `/scientia` return 500 errors
 - **Cause:** Missing Supabase environment variables
 - **Impact:** High - Pages won't load until configured
 - **Solution:** Configure Supabase credentials in `.env.local`

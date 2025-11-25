@@ -192,7 +192,7 @@ test.describe('Chaos Testing - System Resilience', () => {
       page,
       `chaos-${Date.now()}`,
       'Chaos Testing',
-      'swaggystacks',
+      'arcade',
       'development'
     );
 

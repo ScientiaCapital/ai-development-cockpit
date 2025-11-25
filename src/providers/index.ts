@@ -8,7 +8,7 @@
  */
 
 // Core interface
-export { IProvider } from './IProvider'
+export type { IProvider } from './IProvider'
 
 // Registry and Router
 export { ProviderRegistry } from './ProviderRegistry'

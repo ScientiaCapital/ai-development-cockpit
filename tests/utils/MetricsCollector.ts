@@ -9,7 +9,7 @@ import { performance } from 'perf_hooks';
 export interface TestMetrics {
   testId: string;
   testName: string;
-  organization: 'swaggystacks' | 'scientia';
+  organization: 'arcade' | 'enterprise';
   environment: 'development' | 'staging' | 'production';
   startTime: number;
   endTime?: number;
@@ -186,7 +186,7 @@ export class MetricsCollector {
     page?: Page,
     testId?: string,
     testName?: string,
-    organization?: 'swaggystacks' | 'scientia',
+    organization?: 'arcade' | 'enterprise',
     environment: 'development' | 'staging' | 'production' = 'development'
   ) {
     this.page = page;
@@ -228,7 +228,7 @@ export class MetricsCollector {
       this.metrics = {
         testId: `test-${Date.now()}`,
         testName: 'Unknown Test',
-        organization: 'swaggystacks',
+        organization: 'arcade',
         environment: 'development',
         startTime: performance.now(),
         status: 'running',
@@ -249,7 +249,7 @@ export class MetricsCollector {
     page: Page,
     testId: string,
     testName: string,
-    organization: 'swaggystacks' | 'scientia',
+    organization: 'arcade' | 'enterprise',
     environment: 'development' | 'staging' | 'production' = 'development'
   ): void {
     this.page = page;

@@ -11,7 +11,7 @@ Production-ready dual-domain LLM platform with revolutionary 90% cost savings. C
 
 ### Website
 ```
-https://swaggystacks.com
+https://arcade.com
 ```
 (or your deployment URL)
 
@@ -39,7 +39,7 @@ progressive-web-app
 
 ## How to Update
 
-1. Go to: https://github.com/ScientiaCapital/ai-development-cockpit
+1. Go to: https://github.com/Enterprise/ai-development-cockpit
 2. Click the ⚙️ gear icon next to "About" (top right of the page)
 3. Update "Description" with the text above
 4. Add "Website" URL
@@ -107,7 +107,7 @@ Complete Auth | Chinese LLM Support
 Built on Mobile with Claude Code 📱
 ```
 
-**Colors**: Match SwaggyStacks dark theme or ScientiaCapital corporate theme
+**Colors**: Match AI Dev Cockpit dark theme or Enterprise corporate theme
 
 ---
 

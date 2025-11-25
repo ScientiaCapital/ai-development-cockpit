@@ -13,8 +13,8 @@ export {
 
 // Deployment Scenarios and Templates
 export {
-  swaggyStacksScenarios,
-  scientiaCapitalScenarios,
+  arcadeScenarios,
+  enterpriseScenarios,
   crossOrganizationalScenarios,
   testConfigurations,
   getScenariosByComplexity,
@@ -26,8 +26,8 @@ export {
 
 // Model Templates
 export {
-  swaggyStacksModels,
-  scientiaCapitalModels,
+  arcadeModels,
+  enterpriseModels,
   getModelsByOrganization,
   getModelsByCategory,
   getModelsByComplexity,
@@ -79,14 +79,14 @@ export {
  * Helper function to create a complete test environment
  */
 export function createTestEnvironment(
-  organization: 'swaggystacks' | 'scientia',
+  organization: 'arcade' | 'enterprise',
   environment: 'development' | 'staging' | 'production' = 'development'
 ) {
   const mockEnvironment = new MockRunPodEnvironment();
   const networkSimulator = createNetworkSimulatorForScenario(organization, environment);
 
   // Configure mock environment based on organization
-  if (organization === 'swaggystacks') {
+  if (organization === 'arcade') {
     mockEnvironment.setScenario('stable');
   } else {
     mockEnvironment.setScenario('enterprise');
@@ -95,8 +95,8 @@ export function createTestEnvironment(
   return {
     mockEnvironment,
     networkSimulator,
-    scenarios: organization === 'swaggystacks' ? swaggyStacksScenarios : scientiaCapitalScenarios,
-    models: organization === 'swaggystacks' ? swaggyStacksModels : scientiaCapitalModels
+    scenarios: organization === 'arcade' ? arcadeScenarios : enterpriseScenarios,
+    models: organization === 'arcade' ? arcadeModels : enterpriseModels
   };
 }
 
@@ -105,7 +105,7 @@ export function createTestEnvironment(
  */
 export function createPipelineConfig(
   browser: any,
-  organization: 'swaggystacks' | 'scientia',
+  organization: 'arcade' | 'enterprise',
   environment: 'development' | 'staging' | 'production' = 'development',
   options: Partial<PipelineConfig> = {}
 ): PipelineConfig {
@@ -177,7 +177,7 @@ export class TestSuiteFactory {
    * Create a full E2E test suite for an organization
    */
   static createE2ETestSuite(
-    organization: 'swaggystacks' | 'scientia',
+    organization: 'arcade' | 'enterprise',
     environment: 'development' | 'staging' | 'production' = 'development'
   ) {
     const testEnvironment = createTestEnvironment(organization, environment);
@@ -266,7 +266,7 @@ export class TestSuiteFactory {
   /**
    * Create performance-focused test suite
    */
-  static createPerformanceTestSuite(organization: 'swaggystacks' | 'scientia') {
+  static createPerformanceTestSuite(organization: 'arcade' | 'enterprise') {
     const testEnvironment = createTestEnvironment(organization, 'production');
     const performanceScenarios = testConfigurations.performance.scenarios.filter(
       s => s.organization === organization
@@ -301,7 +301,7 @@ export class TestSuiteFactory {
   /**
    * Create chaos testing suite
    */
-  static createChaosTestSuite(organization: 'swaggystacks' | 'scientia') {
+  static createChaosTestSuite(organization: 'arcade' | 'enterprise') {
     const testEnvironment = createTestEnvironment(organization, 'production');
     const chaosEvents = createChaosTestConfig();
 
@@ -320,7 +320,7 @@ export class TestSuiteFactory {
         );
 
         const results = [];
-        const chaosScenarios = [swaggyStacksScenarios[2], scientiaCapitalScenarios[2]]; // Complex scenarios
+        const chaosScenarios = [arcadeScenarios[2], enterpriseScenarios[2]]; // Complex scenarios
 
         for (const scenario of chaosScenarios) {
           if (scenario.organization === organization) {

@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     const period = (searchParams.get('period') || 'daily') as 'hourly' | 'daily' | 'weekly' | 'monthly'
 
     // Validate organization
-    if (!organization || !['swaggystacks', 'scientia-capital'].includes(organization)) {
+    if (!organization || !['arcade', 'enterprise'].includes(organization)) {
       return NextResponse.json(
         { error: 'Invalid or missing organization parameter' },
         { status: 400 }

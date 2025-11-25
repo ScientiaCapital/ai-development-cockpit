@@ -26,8 +26,8 @@ curl -s "$BASE_URL/api/mcp/health" | jq '.success' 2>/dev/null || echo "⚠️  
 
 echo ""
 echo "5. Testing Landing Pages..."
-curl -s -o /dev/null -w "SwaggyStacks: %{http_code}\n" "$BASE_URL/swaggystacks"
-curl -s -o /dev/null -w "ScientiaCapital: %{http_code}\n" "$BASE_URL/scientia"
+curl -s -o /dev/null -w "Arcade: %{http_code}\n" "$BASE_URL/arcade"
+curl -s -o /dev/null -w "Enterprise: %{http_code}\n" "$BASE_URL/enterprise"
 
 echo ""
 echo "6. Testing PWA Manifest..."
@@ -36,5 +36,5 @@ curl -s -o /dev/null -w "PWA Manifest: %{http_code}\n" "$BASE_URL/manifest.json"
 echo ""
 echo "✅ Basic endpoint testing complete!"
 echo "📱 Open http://localhost:3000 to see the platform"
-echo "🔧 SwaggyStacks (dev): http://localhost:3000/swaggystacks"
-echo "🏢 ScientiaCapital (enterprise): http://localhost:3000/scientia"
+echo "🔧 AI Dev Cockpit (dev): http://localhost:3000/arcade"
+echo "🏢 Enterprise (enterprise): http://localhost:3000/enterprise"

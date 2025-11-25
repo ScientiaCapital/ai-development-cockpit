@@ -106,8 +106,8 @@ export class ClaudeProvider implements IProvider {
    * ```
    */
   async generateCompletion(params: CompletionParams): Promise<CompletionResult> {
-    // Build messages array
-    const messages: Array<{ role: string; content: string }> = [
+    // Build messages array with properly typed roles for Anthropic SDK
+    const messages: Array<{ role: 'user' | 'assistant'; content: string }> = [
       {
         role: 'user',
         content: params.prompt

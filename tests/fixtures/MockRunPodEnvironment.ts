@@ -14,7 +14,7 @@ export interface DeploymentConfig {
   minInstances?: number;
   envVars?: Record<string, string>;
   templateId?: string;
-  organization?: 'swaggystacks' | 'scientia';
+  organization?: 'arcade' | 'enterprise';
 }
 
 export interface MockDeployment {

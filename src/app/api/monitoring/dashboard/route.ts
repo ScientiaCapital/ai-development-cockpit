@@ -25,7 +25,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     async () => {
       try {
         // Validate organization parameter
-        if (!['swaggystacks', 'scientia_capital', 'shared'].includes(organization)) {
+        if (!['arcade', 'enterprise', 'shared'].includes(organization)) {
           return NextResponse.json(
             { error: 'Invalid organization parameter' },
             { status: 400 }
@@ -117,7 +117,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         }
 
         // Validate organization
-        if (!['swaggystacks', 'scientia_capital', 'shared'].includes(organization)) {
+        if (!['arcade', 'enterprise', 'shared'].includes(organization)) {
           return NextResponse.json(
             { error: 'Invalid organization' },
             { status: 400 }

@@ -125,7 +125,7 @@ export class HuggingFaceCredentialsService {
 
   private loadCredentialsFromEnvironment(): void {
     const environmentCredentials = [
-      { org: 'swaggystacks', keyEnv: 'HUGGINGFACE_SWAGGYSTACKS_API_KEY' },
+      { org: 'arcade', keyEnv: 'HUGGINGFACE_COCKPITSTACKS_API_KEY' },
       { org: 'scientia', keyEnv: 'HUGGINGFACE_SCIENTIA_API_KEY' },
       { org: 'default', keyEnv: 'HUGGINGFACE_API_KEY' },
     ];

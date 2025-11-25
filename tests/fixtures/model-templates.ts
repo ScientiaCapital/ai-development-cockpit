@@ -6,7 +6,7 @@
 export interface ModelTemplate {
   id: string;
   name: string;
-  organization: 'swaggystacks' | 'scientia';
+  organization: 'arcade' | 'enterprise';
   description: string;
   category: string;
   tags: string[];
@@ -41,13 +41,13 @@ export interface ModelTemplate {
 }
 
 /**
- * SwaggyStacks Gaming Models
+ * AI Dev Cockpit Gaming Models
  */
-export const swaggyStacksModels: ModelTemplate[] = [
+export const arcadeModels: ModelTemplate[] = [
   {
-    id: 'swaggystacks/terminal-gaming-chat',
+    id: 'arcade/terminal-gaming-chat',
     name: 'Terminal Gaming Chat',
-    organization: 'swaggystacks',
+    organization: 'arcade',
     description: 'A specialized chatbot for terminal-based gaming communities with retro aesthetics',
     category: 'conversational',
     tags: ['gaming', 'chat', 'terminal', 'retro', 'community'],
@@ -81,9 +81,9 @@ export const swaggyStacksModels: ModelTemplate[] = [
   },
 
   {
-    id: 'swaggystacks/rpg-assistant',
+    id: 'arcade/rpg-assistant',
     name: 'RPG Game Master Assistant',
-    organization: 'swaggystacks',
+    organization: 'arcade',
     description: 'AI assistant for RPG game masters with world-building and story generation capabilities',
     category: 'creative',
     tags: ['rpg', 'storytelling', 'world-building', 'dm-assistant', 'creative'],
@@ -125,9 +125,9 @@ export const swaggyStacksModels: ModelTemplate[] = [
   },
 
   {
-    id: 'swaggystacks/fps-coach',
+    id: 'arcade/fps-coach',
     name: 'FPS Performance Coach',
-    organization: 'swaggystacks',
+    organization: 'arcade',
     description: 'AI coach for first-person shooter games with aim training and strategy advice',
     category: 'coaching',
     tags: ['fps', 'coaching', 'strategy', 'aim-training', 'competitive'],
@@ -162,9 +162,9 @@ export const swaggyStacksModels: ModelTemplate[] = [
   },
 
   {
-    id: 'swaggystacks/strategy-advisor',
+    id: 'arcade/strategy-advisor',
     name: 'Strategy Game Advisor',
-    organization: 'swaggystacks',
+    organization: 'arcade',
     description: 'Advanced AI for real-time strategy and turn-based strategy games',
     category: 'strategy',
     tags: ['strategy', 'rts', 'turn-based', 'tactical', 'analysis'],
@@ -206,9 +206,9 @@ export const swaggyStacksModels: ModelTemplate[] = [
   },
 
   {
-    id: 'swaggystacks/game-dev-assistant',
+    id: 'arcade/game-dev-assistant',
     name: 'Game Development Assistant',
-    organization: 'swaggystacks',
+    organization: 'arcade',
     description: 'Code generation and development assistance specialized for game development',
     category: 'development',
     tags: ['coding', 'game-dev', 'unity', 'unreal', 'programming'],
@@ -252,13 +252,13 @@ export const swaggyStacksModels: ModelTemplate[] = [
 ];
 
 /**
- * ScientiaCapital Enterprise Finance Models
+ * Enterprise Enterprise Finance Models
  */
-export const scientiaCapitalModels: ModelTemplate[] = [
+export const enterpriseModels: ModelTemplate[] = [
   {
-    id: 'scientia/financial-analyzer-pro',
+    id: 'enterprise/financial-analyzer-pro',
     name: 'Financial Analyzer Pro',
-    organization: 'scientia',
+    organization: 'enterprise',
     description: 'Professional-grade financial analysis with regulatory compliance',
     category: 'financial-analysis',
     tags: ['finance', 'analysis', 'compliance', 'sox', 'professional'],
@@ -294,9 +294,9 @@ export const scientiaCapitalModels: ModelTemplate[] = [
   },
 
   {
-    id: 'scientia/risk-analyzer',
+    id: 'enterprise/risk-analyzer',
     name: 'Enterprise Risk Analyzer',
-    organization: 'scientia',
+    organization: 'enterprise',
     description: 'Comprehensive risk assessment and stress testing for enterprise portfolios',
     category: 'risk-management',
     tags: ['risk', 'var', 'stress-testing', 'basel-iii', 'enterprise'],
@@ -340,9 +340,9 @@ export const scientiaCapitalModels: ModelTemplate[] = [
   },
 
   {
-    id: 'scientia/market-intelligence',
+    id: 'enterprise/market-intelligence',
     name: 'Market Intelligence Platform',
-    organization: 'scientia',
+    organization: 'enterprise',
     description: 'Real-time market analysis and intelligence gathering for C-suite decision making',
     category: 'market-analysis',
     tags: ['market', 'intelligence', 'real-time', 'bloomberg', 'c-suite'],
@@ -386,9 +386,9 @@ export const scientiaCapitalModels: ModelTemplate[] = [
   },
 
   {
-    id: 'scientia/portfolio-optimizer',
+    id: 'enterprise/portfolio-optimizer',
     name: 'Portfolio Optimization Engine',
-    organization: 'scientia',
+    organization: 'enterprise',
     description: 'Advanced portfolio optimization using modern portfolio theory and machine learning',
     category: 'portfolio-management',
     tags: ['portfolio', 'optimization', 'markowitz', 'black-litterman', 'machine-learning'],
@@ -432,9 +432,9 @@ export const scientiaCapitalModels: ModelTemplate[] = [
   },
 
   {
-    id: 'scientia/regulatory-compliance',
+    id: 'enterprise/regulatory-compliance',
     name: 'Regulatory Compliance Monitor',
-    organization: 'scientia',
+    organization: 'enterprise',
     description: 'Automated compliance monitoring and reporting for financial regulations',
     category: 'compliance',
     tags: ['compliance', 'regulation', 'mifid', 'dodd-frank', 'monitoring'],
@@ -472,9 +472,9 @@ export const scientiaCapitalModels: ModelTemplate[] = [
   },
 
   {
-    id: 'scientia/realtime-trader',
+    id: 'enterprise/realtime-trader',
     name: 'Real-time Trading Engine',
-    organization: 'scientia',
+    organization: 'enterprise',
     description: 'Ultra-low latency trading system with real-time market analysis',
     category: 'trading',
     tags: ['trading', 'real-time', 'low-latency', 'hft', 'algorithmic'],
@@ -522,12 +522,12 @@ export const scientiaCapitalModels: ModelTemplate[] = [
 /**
  * Combined model catalog
  */
-export const allModels = [...swaggyStacksModels, ...scientiaCapitalModels];
+export const allModels = [...arcadeModels, ...enterpriseModels];
 
 /**
  * Helper functions for model selection
  */
-export function getModelsByOrganization(organization: 'swaggystacks' | 'scientia'): ModelTemplate[] {
+export function getModelsByOrganization(organization: 'arcade' | 'enterprise'): ModelTemplate[] {
   return allModels.filter(model => model.organization === organization);
 }
 
@@ -548,7 +548,7 @@ export function getModelsByTag(tag: string): ModelTemplate[] {
 }
 
 export function getRandomModel(filters?: {
-  organization?: 'swaggystacks' | 'scientia';
+  organization?: 'arcade' | 'enterprise';
   complexity?: 'simple' | 'medium' | 'complex';
   tier?: 'budget' | 'standard' | 'premium' | 'enterprise';
 }): ModelTemplate {
@@ -619,7 +619,7 @@ export function validateModelCapabilities(modelId: string, requirements: {
     issues.push('Model may not meet low latency requirements');
   }
 
-  if (requirements.compliance && !model.tags.includes('compliance') && model.organization !== 'scientia') {
+  if (requirements.compliance && !model.tags.includes('compliance') && model.organization !== 'enterprise') {
     issues.push('Model may not meet compliance requirements');
   }
 
@@ -629,6 +629,6 @@ export function validateModelCapabilities(modelId: string, requirements: {
 /**
  * Get a specific model template by ID and organization
  */
-export function getModelTemplate(modelId: string, organization: 'swaggystacks' | 'scientia'): ModelTemplate | undefined {
+export function getModelTemplate(modelId: string, organization: 'arcade' | 'enterprise'): ModelTemplate | undefined {
   return allModels.find(model => model.id === modelId && model.organization === organization);
 }

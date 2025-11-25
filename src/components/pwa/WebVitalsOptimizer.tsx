@@ -127,7 +127,7 @@ export function WebVitalsOptimizer({
     // Preload critical resources
     const criticalResources = [
       '/api/manifest?theme=' + theme,
-      theme === 'terminal' ? '/swaggystacks' : '/scientia'
+      theme === 'terminal' ? '/arcade' : '/enterprise'
     ]
 
     criticalResources.forEach(href => {

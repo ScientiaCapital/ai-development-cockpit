@@ -101,7 +101,7 @@ const DEFAULT_CONFIG: IntegrationConfig = {
   enableCircuitBreaker: true,
   enableWebhooks: true,
   enableCredentialManagement: true,
-  defaultOrganization: 'swaggystacks',
+  defaultOrganization: 'arcade',
   enableMetrics: true,
   enableHealthChecks: true,
 };

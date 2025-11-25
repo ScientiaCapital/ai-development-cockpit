@@ -178,7 +178,7 @@ jobs:
       needs.pre-deployment.outputs.deploy-environment == 'staging'
     environment:
       name: staging
-      url: https://staging.swaggystacks.com
+      url: https://staging.arcade.com
 
     steps:
       - name: Checkout code
@@ -209,7 +209,7 @@ jobs:
           echo "✅ Successfully deployed to staging"
 
           # Store deployment metadata
-          echo "STAGING_DEPLOYMENT_URL=https://staging.swaggystacks.com" >> $GITHUB_ENV
+          echo "STAGING_DEPLOYMENT_URL=https://staging.arcade.com" >> $GITHUB_ENV
           echo "DEPLOYMENT_TIMESTAMP=$(date -Iseconds)" >> $GITHUB_ENV
 
   # Production deployment
@@ -224,7 +224,7 @@ jobs:
       needs.pre-deployment.outputs.deploy-environment == 'production'
     environment:
       name: production
-      url: https://swaggystacks.com
+      url: https://arcade.com
 
     steps:
       - name: Checkout code
@@ -260,7 +260,7 @@ jobs:
           echo "✅ Successfully deployed to production"
 
           # Store deployment metadata
-          echo "PRODUCTION_DEPLOYMENT_URL=https://swaggystacks.com" >> $GITHUB_ENV
+          echo "PRODUCTION_DEPLOYMENT_URL=https://arcade.com" >> $GITHUB_ENV
           echo "DEPLOYMENT_TIMESTAMP=$(date -Iseconds)" >> $GITHUB_ENV
 
   # Post-deployment E2E validation
@@ -291,10 +291,10 @@ jobs:
       - name: Determine deployment URL
         run: |
           if [[ "${{ needs.pre-deployment.outputs.deploy-environment }}" == "production" ]]; then
-            echo "DEPLOYMENT_URL=https://swaggystacks.com" >> $GITHUB_ENV
+            echo "DEPLOYMENT_URL=https://arcade.com" >> $GITHUB_ENV
             echo "TEST_ENVIRONMENT=production" >> $GITHUB_ENV
           else
-            echo "DEPLOYMENT_URL=https://staging.swaggystacks.com" >> $GITHUB_ENV
+            echo "DEPLOYMENT_URL=https://staging.arcade.com" >> $GITHUB_ENV
             echo "TEST_ENVIRONMENT=staging" >> $GITHUB_ENV
           fi
 
@@ -338,7 +338,7 @@ jobs:
         run: |
           # Test both organization routes
           npx playwright test \
-            --grep="swaggystacks|scientia" \
+            --grep="arcade|enterprise" \
             --reporter=html \
             --output-dir=test-results/organization-tests
 
@@ -359,8 +359,8 @@ jobs:
           fi
 
           # Test both domains
-          curl -f "$DEPLOYMENT_URL/swaggystacks" || exit 1
-          curl -f "$DEPLOYMENT_URL/scientia" || exit 1
+          curl -f "$DEPLOYMENT_URL/arcade" || exit 1
+          curl -f "$DEPLOYMENT_URL/enterprise" || exit 1
           curl -f "$DEPLOYMENT_URL/marketplace" || exit 1
 
           echo "✅ SLA validation passed"
@@ -413,9 +413,9 @@ jobs:
           ENVIRONMENT="${{ needs.pre-deployment.outputs.deploy-environment }}"
 
           if [[ "$ENVIRONMENT" == "production" ]]; then
-            ROLLBACK_URL="https://swaggystacks.com"
+            ROLLBACK_URL="https://arcade.com"
           else
-            ROLLBACK_URL="https://staging.swaggystacks.com"
+            ROLLBACK_URL="https://staging.arcade.com"
           fi
 
           echo "🔍 Validating rollback at $ROLLBACK_URL..."

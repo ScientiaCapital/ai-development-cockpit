@@ -71,15 +71,15 @@ export default function AuthTestPage() {
   }
 
   const orgInfo = {
-    swaggystacks: {
+    arcade: {
       emoji: '🎮',
-      name: 'SwaggyStacks',
+      name: 'AI Dev Cockpit',
       theme: 'Gaming Arcade',
       color: 'text-green-400'
     },
-    scientiacapital: {
+    enterprise: {
       emoji: '🏢',
-      name: 'ScientiaCapital',
+      name: 'Enterprise',
       theme: 'Enterprise Suite',
       color: 'text-amber-400'
     }
@@ -98,7 +98,7 @@ export default function AuthTestPage() {
 ║                  🔐 AUTHENTICATION TEST SUITE 🔐             ║
 ║                                                              ║
 ║  Testing HuggingFace Multi-Organization Authentication       ║
-║  SwaggyStacks + ScientiaCapital Integration Validation      ║
+║  AI Dev Cockpit + Enterprise Integration Validation      ║
 ╚══════════════════════════════════════════════════════════════╝
 `}
             </pre>
@@ -246,16 +246,16 @@ export default function AuthTestPage() {
           <h3 className="text-lg font-bold text-cyan-400 mb-4">🧪 Test Actions</h3>
           <div className="grid md:grid-cols-3 gap-4">
             <Button
-              onClick={() => switchOrganization('swaggystacks')}
-              disabled={currentOrganization === 'swaggystacks' || isLoading}
+              onClick={() => switchOrganization('arcade')}
+              disabled={currentOrganization === 'arcade' || isLoading}
               className={`${styles.terminalButton} text-xs`}
             >
-              🎮 SWITCH TO SWAGGY
+              🎮 SWITCH TO COCKPIT
             </Button>
 
             <Button
-              onClick={() => switchOrganization('scientiacapital')}
-              disabled={currentOrganization === 'scientiacapital' || isLoading}
+              onClick={() => switchOrganization('enterprise')}
+              disabled={currentOrganization === 'enterprise' || isLoading}
               className={`${styles.terminalButton} text-xs`}
             >
               🏢 SWITCH TO SCIENTIA
@@ -286,8 +286,8 @@ export default function AuthTestPage() {
               modelCount: models.length,
               tokenExists: !!getCurrentToken(),
               env: {
-                swaggyToken: !!process.env.NEXT_PUBLIC_SWAGGYSTACKS_HF_TOKEN,
-                scientiaToken: !!process.env.NEXT_PUBLIC_SCIENTIACAPITAL_HF_TOKEN
+                swaggyToken: !!process.env.NEXT_PUBLIC_COCKPITSTACKS_HF_TOKEN,
+                scientiaToken: !!process.env.NEXT_PUBLIC_ENTERPRISE_HF_TOKEN
               }
             }, null, 2)}
           </pre>

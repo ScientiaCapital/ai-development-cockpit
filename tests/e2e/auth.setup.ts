@@ -30,7 +30,7 @@ setup('authenticate', async ({ page }) => {
     console.log('📝 Filling login form...');
 
     // Fill login credentials
-    await page.fill('[data-testid="email-input"]', process.env.E2E_TEST_EMAIL || 'test@swaggystacks.com');
+    await page.fill('[data-testid="email-input"]', process.env.E2E_TEST_EMAIL || 'test@arcade.com');
     await page.fill('[data-testid="password-input"]', process.env.E2E_TEST_PASSWORD || 'testpassword123');
 
     // Click login button
@@ -40,7 +40,7 @@ setup('authenticate', async ({ page }) => {
     await Promise.race([
       page.waitForURL('**/dashboard'),
       page.waitForURL('**/profile/complete'),
-      page.waitForURL('**/swaggystacks'),
+      page.waitForURL('**/arcade'),
       page.waitForURL('**/scientia')
     ]);
 

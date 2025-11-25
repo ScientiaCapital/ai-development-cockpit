@@ -531,7 +531,7 @@ export class RunPodClient extends EventEmitter {
       headers: {
         'Authorization': `Bearer ${this.config.apiKey}`,
         'Content-Type': 'application/json',
-        'User-Agent': 'SwaggyStacks-LLM-Platform/1.0'
+        'User-Agent': 'AI-Development-Cockpit/1.0'
       },
       signal: AbortSignal.timeout(this.config.timeout)
     };

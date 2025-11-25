@@ -82,21 +82,21 @@
 }
 
 /* Custom styles for domain-specific themes */
-.theme-swaggystacks {
+.theme-arcade {
   --primary: 139 92% 67%; /* Purple */
   --primary-foreground: 0 0% 98%;
   --secondary: 16 185% 51%; /* Green */
   --accent: 45 100% 51%; /* Yellow */
 }
 
-.theme-scientia {
+.theme-enterprise {
   --primary: 213 94% 68%; /* Blue */
   --primary-foreground: 0 0% 98%;
   --secondary: 242 78% 65%; /* Indigo */
   --accent: 262 83% 58%; /* Purple */
 }
 
-/* Terminal-style animations for SwaggyStacks */
+/* Terminal-style animations */
 @keyframes terminal-glow {
   0%, 100% { text-shadow: 0 0 5px #10b981, 0 0 10px #10b981, 0 0 15px #10b981; }
   50% { text-shadow: 0 0 10px #10b981, 0 0 20px #10b981, 0 0 30px #10b981; }

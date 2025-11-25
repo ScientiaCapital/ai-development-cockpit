@@ -1,13 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createMFAChallenge, verifyMFAChallenge, getMFAFactors } from '../../../../lib/mfa'
 
 export default function MFAVerifyPage() {
   const router = useRouter()
-  const searchParams = useSearchParams()
   
   const [verificationCode, setVerificationCode] = useState<string>('')
   const [error, setError] = useState<string>('')

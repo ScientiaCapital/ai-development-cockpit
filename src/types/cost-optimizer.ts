@@ -8,6 +8,11 @@
 import { Organization } from '@/contexts/HuggingFaceAuth'
 
 /**
+ * Re-export Organization type for cost optimizer consumers
+ */
+export type { Organization }
+
+/**
  * Cost optimization tiers for model routing
  */
 export type CostTier = 'free' | 'mid' | 'premium'

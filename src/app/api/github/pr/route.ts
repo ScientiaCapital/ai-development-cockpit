@@ -1,12 +1,10 @@
 import { createClient } from '@/lib/supabase/server'
 import { GitHubPRService } from '@/services/github/pr.service'
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 
 export async function POST(request: NextRequest) {
   try {
-    const cookieStore = cookies()
-    const supabase = createClient(cookieStore)
+    const supabase = await createClient()
 
     // Get current user session
     const { data: { session }, error: sessionError } = await supabase.auth.getSession()

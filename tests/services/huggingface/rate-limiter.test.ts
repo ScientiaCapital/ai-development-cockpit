@@ -17,7 +17,7 @@ describe('HuggingFaceRateLimiter', () => {
       const mockTask = jest.fn().mockResolvedValue('result');
 
       const result = await rateLimiter.schedule(
-        'swaggystacks',
+        'arcade',
         mockTask,
         { priority: 'normal' }
       );
@@ -30,26 +30,26 @@ describe('HuggingFaceRateLimiter', () => {
       const mockTask = jest.fn().mockRejectedValue(new Error('Task failed'));
 
       await expect(
-        rateLimiter.schedule('swaggystacks', mockTask, { priority: 'normal' })
+        rateLimiter.schedule('arcade', mockTask, { priority: 'normal' })
       ).rejects.toThrow('Task failed');
     });
   });
 
   describe('organization-specific limits', () => {
-    it('should use SwaggyStacks configuration', async () => {
+    it('should use AI Dev Cockpit configuration', async () => {
       const mockTask = jest.fn().mockResolvedValue('result');
       const startTime = Date.now();
 
       // Execute multiple tasks quickly
       const promises = Array(3).fill(0).map(() =>
-        rateLimiter.schedule('swaggystacks', mockTask, { priority: 'normal' })
+        rateLimiter.schedule('arcade', mockTask, { priority: 'normal' })
       );
 
       await Promise.all(promises);
       const endTime = Date.now();
 
       expect(mockTask).toHaveBeenCalledTimes(3);
-      // SwaggyStacks has minTime of 100ms, so should be faster than ScientiaCapital
+      // AI Dev Cockpit has minTime of 100ms, so should be faster than ScientiaCapital
       expect(endTime - startTime).toBeLessThan(1000);
     });
 
@@ -91,14 +91,14 @@ describe('HuggingFaceRateLimiter', () => {
 
       // Schedule high priority task
       const highResult = await rateLimiter.schedule(
-        'swaggystacks',
+        'arcade',
         highPriorityTask,
         { priority: 'low' }
       );
 
       // Schedule normal priority task
       const normalResult = await rateLimiter.schedule(
-        'swaggystacks',
+        'arcade',
         normalTask,
         { priority: 'normal' }
       );
@@ -121,7 +121,7 @@ describe('HuggingFaceRateLimiter', () => {
 
       // Should not throw
       expect(() => {
-        rateLimiter.updateRateLimitFromResponse('swaggystacks', rateLimitInfo);
+        rateLimiter.updateRateLimitFromResponse('arcade', rateLimitInfo);
       }).not.toThrow();
     });
 
@@ -135,7 +135,7 @@ describe('HuggingFaceRateLimiter', () => {
 
       // Should not throw
       expect(() => {
-        rateLimiter.updateRateLimitFromResponse('swaggystacks', rateLimitInfo);
+        rateLimiter.updateRateLimitFromResponse('arcade', rateLimitInfo);
       }).not.toThrow();
     });
 
@@ -149,7 +149,7 @@ describe('HuggingFaceRateLimiter', () => {
 
       // Should not throw
       expect(() => {
-        rateLimiter.updateRateLimitFromResponse('swaggystacks', rateLimitInfo);
+        rateLimiter.updateRateLimitFromResponse('arcade', rateLimitInfo);
       }).not.toThrow();
     });
   });
@@ -159,42 +159,42 @@ describe('HuggingFaceRateLimiter', () => {
       const mockTask = jest.fn().mockResolvedValue('result');
 
       // Execute some tasks
-      await rateLimiter.schedule('swaggystacks', mockTask, { priority: 'normal' });
+      await rateLimiter.schedule('arcade', mockTask, { priority: 'normal' });
       await rateLimiter.schedule('scientia-capital', mockTask, { priority: 'normal' });
 
       const stats = rateLimiter.getStatistics();
 
-      expect(stats.has('swaggystacks')).toBe(true);
+      expect(stats.has('arcade')).toBe(true);
       expect(stats.has('scientia-capital')).toBe(true);
-      expect(stats.get('swaggystacks')?.done).toBe(1);
+      expect(stats.get('arcade')?.done).toBe(1);
       expect(stats.get('scientia-capital')?.done).toBe(1);
     });
 
     it('should return statistics for specific organization', async () => {
       const mockTask = jest.fn().mockResolvedValue('result');
 
-      // Only execute task for swaggystacks
-      await rateLimiter.schedule('swaggystacks', mockTask, { priority: 'normal' });
+      // Only execute task for arcade
+      await rateLimiter.schedule('arcade', mockTask, { priority: 'normal' });
 
       const stats = rateLimiter.getStatistics();
 
-      expect(stats.has('swaggystacks')).toBe(true);
+      expect(stats.has('arcade')).toBe(true);
       expect(stats.has('scientia-capital')).toBe(false);
-      expect(stats.get('swaggystacks')?.done).toBe(1);
+      expect(stats.get('arcade')?.done).toBe(1);
     });
   });
 
   describe('concurrent limits', () => {
-    it('should respect concurrent limits for SwaggyStacks', async () => {
+    it('should respect concurrent limits for AI Dev Cockpit', async () => {
       const mockTask = jest.fn().mockImplementation(() =>
         new Promise(resolve => setTimeout(() => resolve('result'), 200))
       );
 
       const startTime = Date.now();
 
-      // Schedule more tasks than concurrent limit (10 for SwaggyStacks)
+      // Schedule more tasks than concurrent limit (10 for AI Dev Cockpit)
       const promises = Array(15).fill(0).map(() =>
-        rateLimiter.schedule('swaggystacks', mockTask, { priority: 'normal' })
+        rateLimiter.schedule('arcade', mockTask, { priority: 'normal' })
       );
 
       await Promise.all(promises);
@@ -221,7 +221,7 @@ describe('HuggingFaceRateLimiter', () => {
       const endTime = Date.now();
 
       expect(mockTask).toHaveBeenCalledTimes(8);
-      // Should take longer than SwaggyStacks due to lower concurrent limit
+      // Should take longer than AI Dev Cockpit due to lower concurrent limit
       expect(endTime - startTime).toBeGreaterThan(400);
     });
   });
@@ -231,7 +231,7 @@ describe('HuggingFaceRateLimiter', () => {
       const mockTask = jest.fn().mockRejectedValue(new Error('Bottleneck error'));
 
       await expect(
-        rateLimiter.schedule('swaggystacks', mockTask, { priority: 'normal' })
+        rateLimiter.schedule('arcade', mockTask, { priority: 'normal' })
       ).rejects.toThrow('Bottleneck error');
     });
 
@@ -241,11 +241,11 @@ describe('HuggingFaceRateLimiter', () => {
 
       // First task fails
       await expect(
-        rateLimiter.schedule('swaggystacks', failingTask, { priority: 'normal' })
+        rateLimiter.schedule('arcade', failingTask, { priority: 'normal' })
       ).rejects.toThrow('Task failed');
 
       // Second task should still work
-      const result = await rateLimiter.schedule('swaggystacks', successTask, { priority: 'normal' });
+      const result = await rateLimiter.schedule('arcade', successTask, { priority: 'normal' });
       expect(result).toBe('success');
     });
   });

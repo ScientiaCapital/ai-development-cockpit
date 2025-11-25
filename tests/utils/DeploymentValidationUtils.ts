@@ -31,7 +31,7 @@ export interface DeploymentState {
     deployed?: string;
     lastHealthCheck: string;
   };
-  organization: 'swaggystacks' | 'scientia';
+  organization: 'arcade' | 'enterprise';
   theme: 'terminal' | 'corporate';
 }
 
@@ -73,10 +73,10 @@ export interface ComplianceCheckResult {
  */
 export class DeploymentValidationUtils {
   private page: Page;
-  private organization: 'swaggystacks' | 'scientia';
+  private organization: 'arcade' | 'enterprise';
   private validationTimeout: number = 30000; // 30 seconds
 
-  constructor(page: Page, organization: 'swaggystacks' | 'scientia') {
+  constructor(page: Page, organization: 'arcade' | 'enterprise') {
     this.page = page;
     this.organization = organization;
   }
@@ -91,7 +91,7 @@ export class DeploymentValidationUtils {
     await expect(this.page.locator('[data-testid="instance-count"]')).toContainText(config.instanceCount.toString());
 
     // Verify organization-specific UI elements
-    if (this.organization === 'swaggystacks') {
+    if (this.organization === 'arcade') {
       await expect(this.page.locator('[data-testid="theme-indicator"]')).toContainText('terminal');
       await expect(this.page.locator('body')).toHaveClass(/.*terminal-theme.*/);
     } else {
@@ -143,7 +143,7 @@ export class DeploymentValidationUtils {
       metrics,
       timestamps,
       organization: this.organization,
-      theme: this.organization === 'swaggystacks' ? 'terminal' : 'corporate'
+      theme: this.organization === 'arcade' ? 'terminal' : 'corporate'
     };
   }
 
@@ -206,7 +206,7 @@ export class DeploymentValidationUtils {
     const violations: ComplianceCheckResult['violations'] = [];
     const requirements: ComplianceCheckResult['requirements'] = [];
 
-    if (this.organization === 'swaggystacks') {
+    if (this.organization === 'arcade') {
       // Gaming-specific compliance checks
       const themeCompliance = await this.checkThemeCompliance('terminal');
       if (!themeCompliance.met) {
@@ -651,7 +651,7 @@ export class DeploymentValidationUtils {
   private async checkOrganizationCompliance(): Promise<HealthCheckResult['checks'][0]> {
     const startTime = Date.now();
     try {
-      const expectedTheme = this.organization === 'swaggystacks' ? 'terminal' : 'corporate';
+      const expectedTheme = this.organization === 'arcade' ? 'terminal' : 'corporate';
       const themeElement = await this.page.locator('[data-testid="theme-indicator"]');
       const currentTheme = await themeElement.textContent();
       const duration = Date.now() - startTime;
@@ -829,7 +829,7 @@ export const ValidationUtils = {
    */
   async assertOrganizationCompliance(
     validationUtils: DeploymentValidationUtils,
-    organization: 'swaggystacks' | 'scientia'
+    organization: 'arcade' | 'enterprise'
   ): Promise<void> {
     const complianceResult = await validationUtils.validateCompliance();
 
@@ -837,7 +837,7 @@ export const ValidationUtils = {
     expect(complianceResult.score).toBeGreaterThan(80);
 
     // Organization-specific assertions
-    if (organization === 'scientia') {
+    if (organization === 'enterprise') {
       // Enterprise should have no critical violations
       const criticalViolations = complianceResult.violations.filter(v => v.severity === 'critical');
       expect(criticalViolations.length).toBe(0);

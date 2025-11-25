@@ -147,12 +147,12 @@ describe('HuggingFaceCacheService', () => {
 
       await cacheService.set('models:1', testData1, {
         ttl: 300,
-        tags: ['models', 'swaggystacks']
+        tags: ['models', 'arcade']
       });
 
       await cacheService.set('deployments:1', testData2, {
         ttl: 300,
-        tags: ['deployments', 'swaggystacks']
+        tags: ['deployments', 'arcade']
       });
 
       // Both should exist initially
@@ -188,12 +188,12 @@ describe('HuggingFaceCacheService', () => {
 
   describe('organization-specific caching', () => {
     it('should handle organization-specific cache keys', async () => {
-      const swaggyData = { models: ['gaming-model'] };
+      const arcadeData = { models: ['gaming-model'] };
       const scientiaData = { models: ['enterprise-model'] };
 
-      await cacheService.set('models:swaggystacks', swaggyData, {
+      await cacheService.set('models:arcade', arcadeData, {
         ttl: 300,
-        tags: ['models', 'swaggystacks']
+        tags: ['models', 'arcade']
       });
 
       await cacheService.set('models:scientia', scientiaData, {
@@ -201,13 +201,13 @@ describe('HuggingFaceCacheService', () => {
         tags: ['models', 'scientia-capital']
       });
 
-      expect(await cacheService.get('models:swaggystacks')).toEqual(swaggyData);
+      expect(await cacheService.get('models:arcade')).toEqual(arcadeData);
       expect(await cacheService.get('models:scientia')).toEqual(scientiaData);
 
-      // Invalidate only SwaggyStacks
-      await cacheService.invalidateByTags(['swaggystacks']);
+      // Invalidate only AI Dev Cockpit
+      await cacheService.invalidateByTags(['arcade']);
 
-      expect(await cacheService.get('models:swaggystacks')).toBeNull();
+      expect(await cacheService.get('models:arcade')).toBeNull();
       expect(await cacheService.get('models:scientia')).toEqual(scientiaData);
     });
   });

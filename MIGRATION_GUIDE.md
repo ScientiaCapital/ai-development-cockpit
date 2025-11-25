@@ -16,7 +16,7 @@
 // ❌ CURRENT PROBLEM - Same name, different definitions
 
 // File: src/contexts/HuggingFaceAuth.tsx
-export type Organization = 'swaggystacks' | 'scientiacapital'  // String literal
+export type Organization = 'arcade' | 'enterprise'  // String literal
 
 // File: src/lib/organization.ts
 export interface Organization {  // Full entity
@@ -30,7 +30,7 @@ export interface Organization {  // Full entity
 export type Organization = Tables<'organizations'>  // Supabase type
 
 // File: src/services/monitoring/prometheus.service.ts
-export type Organization = 'swaggystacks' | 'scientia_capital' | 'shared'  // Different strings
+export type Organization = 'arcade' | 'enterprise' | 'shared'  // Different strings
 ```
 
 **Result**: TypeScript can't distinguish which `Organization` to use, causing 30+ compilation errors.
@@ -47,7 +47,7 @@ export type Organization = 'swaggystacks' | 'scientia_capital' | 'shared'  // Di
 // ✅ NEW SYSTEM - Clear, distinct names
 
 // 1. For identifiers/slugs (routing, API calls)
-export type OrganizationSlug = 'swaggystacks' | 'scientiacapital'
+export type OrganizationSlug = 'arcade' | 'enterprise'
 
 // 2. For full database entities (CRUD operations)
 export interface OrganizationEntity {
@@ -95,7 +95,7 @@ grep -r "export.*Organization" src/ --include="*.ts" --include="*.tsx"
 
 ```typescript
 // BEFORE
-export type Organization = 'swaggystacks' | 'scientiacapital'
+export type Organization = 'arcade' | 'enterprise'
 
 // AFTER
 import type { OrganizationSlug } from '@/types/organization'
@@ -357,7 +357,7 @@ function switchOrg(org: string) {
 
 ```typescript
 // ❌ WRONG - Changes API response shape
-// Before: { organization: 'swaggystacks' }
+// Before: { organization: 'arcade' }
 // After:  { organization: { id: '...', name: '...' } }
 
 // ✅ CORRECT - Maintain API compatibility
@@ -379,12 +379,12 @@ import { isOrganizationSlug, getOrganizationName } from '@/types/organization'
 
 describe('Organization Types', () => {
   it('validates organization slugs', () => {
-    expect(isOrganizationSlug('swaggystacks')).toBe(true)
+    expect(isOrganizationSlug('arcade')).toBe(true)
     expect(isOrganizationSlug('invalid')).toBe(false)
   })
 
   it('returns correct display names', () => {
-    expect(getOrganizationName('swaggystacks')).toBe('SwaggyStacks')
+    expect(getOrganizationName('arcade')).toBe('AI Dev Cockpit')
   })
 })
 ```
@@ -397,10 +397,10 @@ describe('Organization Switching', () => {
     const { result } = renderHook(() => useHuggingFaceAuth())
 
     act(() => {
-      result.current.switchOrganization('scientiacapital')
+      result.current.switchOrganization('enterprise')
     })
 
-    expect(result.current.currentOrganization).toBe('scientiacapital')
+    expect(result.current.currentOrganization).toBe('enterprise')
   })
 })
 ```

@@ -39,13 +39,13 @@ function convertIcons() {
   const placeholderPNG = createPlaceholderPNG()
   
   iconSizes.forEach(size => {
-    // SwaggyStacks theme
-    const swaggyPngPath = path.join(publicDir, 'icons', 'swaggystacks', `icon-${size}x${size}.png`)
+    // AI Dev Cockpit theme
+    const swaggyPngPath = path.join(publicDir, 'icons', 'arcade', `icon-${size}x${size}.png`)
     fs.writeFileSync(swaggyPngPath, placeholderPNG)
     
-    // Scientia theme
-    const scientiaPngPath = path.join(publicDir, 'icons', 'scientia', `icon-${size}x${size}.png`)
-    fs.writeFileSync(scientiaPngPath, placeholderPNG)
+    // Enterprise theme
+    const enterprisePngPath = path.join(publicDir, 'icons', 'enterprise', `icon-${size}x${size}.png`)
+    fs.writeFileSync(enterprisePngPath, placeholderPNG)
     
     console.log(`✅ Created placeholder PNG icons for ${size}x${size}`)
   })

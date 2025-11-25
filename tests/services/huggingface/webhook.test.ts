@@ -106,7 +106,7 @@ describe('HuggingFaceWebhookService', () => {
         id: 'event-1',
         type: 'model.created',
         timestamp: new Date().toISOString(),
-        organization: 'swaggystacks',
+        organization: 'arcade',
         data: { model: 'new-model' },
       });
 
@@ -121,12 +121,12 @@ describe('HuggingFaceWebhookService', () => {
         {
           id: 'event-1',
           type: 'model.created',
-          organization: 'swaggystacks',
+          organization: 'arcade',
         },
         {
           id: 'event-2',
           type: 'model.updated',
-          organization: 'swaggystacks',
+          organization: 'arcade',
         },
       ]);
 
@@ -324,7 +324,7 @@ describe('HuggingFaceWebhookService', () => {
       webhookService.registerHandler({
         eventType: 'model.updated',
         handler: swaggyHandler,
-        organization: 'swaggystacks',
+        organization: 'arcade',
       });
 
       webhookService.registerHandler({
@@ -341,7 +341,7 @@ describe('HuggingFaceWebhookService', () => {
 
       const payload = JSON.stringify({
         type: 'model.updated',
-        organization: 'swaggystacks',
+        organization: 'arcade',
       });
 
       await webhookService.processWebhook(payload);

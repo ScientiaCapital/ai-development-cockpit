@@ -560,13 +560,13 @@ export class NetworkSimulator {
  * Helper function to create network simulator for specific deployment scenarios
  */
 export function createNetworkSimulatorForScenario(
-  organization: 'swaggystacks' | 'scientia',
+  organization: 'arcade' | 'enterprise',
   environment: 'development' | 'staging' | 'production'
 ): NetworkSimulator {
   let conditionName: string;
 
   if (environment === 'production') {
-    conditionName = organization === 'scientia' ? 'enterprise_fiber' : 'business_broadband';
+    conditionName = organization === 'enterprise' ? 'enterprise_fiber' : 'business_broadband';
   } else if (environment === 'staging') {
     conditionName = 'business_broadband';
   } else {

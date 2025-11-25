@@ -68,11 +68,11 @@ jobs:
           
           # Set environment URLs
           if [[ "$ENVIRONMENT" == "production" ]]; then
-            echo "green_url=https://green.swaggystacks.com" >> $GITHUB_OUTPUT
-            echo "blue_url=https://swaggystacks.com" >> $GITHUB_OUTPUT
+            echo "green_url=https://green.arcade.com" >> $GITHUB_OUTPUT
+            echo "blue_url=https://arcade.com" >> $GITHUB_OUTPUT
           else
-            echo "green_url=https://green-staging.swaggystacks.com" >> $GITHUB_OUTPUT
-            echo "blue_url=https://staging.swaggystacks.com" >> $GITHUB_OUTPUT
+            echo "green_url=https://green-staging.arcade.com" >> $GITHUB_OUTPUT
+            echo "blue_url=https://staging.arcade.com" >> $GITHUB_OUTPUT
           fi
           
           echo "🚀 Deployment ID: $DEPLOYMENT_ID"
@@ -216,13 +216,13 @@ jobs:
           GREEN_URL="${{ needs.pre-deployment.outputs.green-url }}"
           
           # Test both organization routes
-          echo "🧪 Testing SwaggyStacks route..."
-          # curl -f "$GREEN_URL/swaggystacks" || exit 1
-          echo "✅ SwaggyStacks route OK"
+          echo "🧪 Testing AI Dev Cockpit route..."
+          # curl -f "$GREEN_URL/arcade" || exit 1
+          echo "✅ AI Dev Cockpit route OK"
           
-          echo "🧪 Testing ScientiaCapital route..."
-          # curl -f "$GREEN_URL/scientia" || exit 1
-          echo "✅ ScientiaCapital route OK"
+          echo "🧪 Testing Enterprise route..."
+          # curl -f "$GREEN_URL/enterprise" || exit 1
+          echo "✅ Enterprise route OK"
           
           echo "🧪 Testing marketplace route..."
           # curl -f "$GREEN_URL/marketplace" || exit 1
@@ -370,8 +370,8 @@ jobs:
           
           # Validate both domains are working
           echo "🧪 Testing primary domain routes..."
-          # curl -f "$BLUE_URL/swaggystacks" || exit 1
-          # curl -f "$BLUE_URL/scientia" || exit 1
+          # curl -f "$BLUE_URL/arcade" || exit 1
+          # curl -f "$BLUE_URL/enterprise" || exit 1
           # curl -f "$BLUE_URL/marketplace" || exit 1
           
           echo "✅ Post-switch validation completed"
@@ -432,7 +432,7 @@ jobs:
 
     strategy:
       matrix:
-        organization: [swaggystacks, scientia]
+        organization: [arcade, enterprise]
 
     steps:
       - name: Checkout code

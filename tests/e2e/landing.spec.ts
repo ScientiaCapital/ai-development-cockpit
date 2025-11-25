@@ -1,17 +1,17 @@
 /**
  * Landing Pages E2E Tests
- * Tests for both SwaggyStacks and ScientiaCapital landing pages
+ * Tests for both AI Dev Cockpit and ScientiaCapital landing pages
  */
 
 import { test, expect } from '@playwright/test';
 import { LandingPage } from './page-objects/LandingPage';
 
 test.describe('Landing Pages', () => {
-  test.describe('SwaggyStacks Landing Page', () => {
+  test.describe('AI Dev Cockpit Landing Page', () => {
     let landingPage: LandingPage;
 
     test.beforeEach(async ({ page }) => {
-      landingPage = new LandingPage(page, 'swaggystacks');
+      landingPage = new LandingPage(page, 'arcade');
       await landingPage.goto();
     });
 
@@ -19,7 +19,7 @@ test.describe('Landing Pages', () => {
       await landingPage.expectHeroVisible();
 
       const title = await landingPage.getHeroTitle();
-      expect(title).toContain('SwaggyStacks');
+      expect(title).toContain('AI Dev Cockpit');
 
       const description = await landingPage.getHeroDescription();
       expect(description.length).toBeGreaterThan(10);
@@ -62,7 +62,7 @@ test.describe('Landing Pages', () => {
 
     test('should allow navigation to ScientiaCapital', async () => {
       await landingPage.navigateToOtherDomain();
-      await landingPage.expectUrl('/scientia');
+      await landingPage.expectUrl('/enterprise');
     });
   });
 
@@ -70,7 +70,7 @@ test.describe('Landing Pages', () => {
     let landingPage: LandingPage;
 
     test.beforeEach(async ({ page }) => {
-      landingPage = new LandingPage(page, 'scientia');
+      landingPage = new LandingPage(page, 'enterprise');
       await landingPage.goto();
     });
 
@@ -129,41 +129,41 @@ test.describe('Landing Pages', () => {
       await landingPage.expectAccessibility();
     });
 
-    test('should allow navigation to SwaggyStacks', async () => {
+    test('should allow navigation to AI Dev Cockpit', async () => {
       await landingPage.navigateToOtherDomain();
-      await landingPage.expectUrl('/swaggystacks');
+      await landingPage.expectUrl('/arcade');
     });
   });
 
   test.describe('Cross-Domain Functionality', () => {
     test('should maintain state when switching domains', async ({ page }) => {
-      // Start on SwaggyStacks
-      const swaggyPage = new LandingPage(page, 'swaggystacks');
-      await swaggyPage.goto();
-      await swaggyPage.expectHeroVisible();
+      // Start on AI Dev Cockpit
+      const arcadePage = new LandingPage(page, 'arcade');
+      await arcadePage.goto();
+      await arcadePage.expectHeroVisible();
 
       // Navigate to ScientiaCapital
-      await swaggyPage.navigateToOtherDomain();
+      await arcadePage.navigateToOtherDomain();
 
-      const scientiaPage = new LandingPage(page, 'scientia');
-      await scientiaPage.expectHeroVisible();
-      await scientiaPage.expectUrl('/scientia');
+      const enterprisePage = new LandingPage(page, 'enterprise');
+      await enterprisePage.expectHeroVisible();
+      await enterprisePage.expectUrl('/enterprise');
 
-      // Navigate back to SwaggyStacks
-      await scientiaPage.navigateToOtherDomain();
-      await swaggyPage.expectUrl('/swaggystacks');
+      // Navigate back to AI Dev Cockpit
+      await enterprisePage.navigateToOtherDomain();
+      await arcadePage.expectUrl('/arcade');
     });
 
     test('should have different themes for each domain', async ({ page }) => {
-      // Check SwaggyStacks theme
-      const swaggyPage = new LandingPage(page, 'swaggystacks');
-      await swaggyPage.goto();
-      await swaggyPage.expectDarkTheme();
+      // Check AI Dev Cockpit theme
+      const arcadePage = new LandingPage(page, 'arcade');
+      await arcadePage.goto();
+      await arcadePage.expectDarkTheme();
 
       // Check ScientiaCapital theme
-      const scientiaPage = new LandingPage(page, 'scientia');
-      await scientiaPage.goto();
-      await scientiaPage.expectCorporateTheme();
+      const enterprisePage = new LandingPage(page, 'enterprise');
+      await enterprisePage.goto();
+      await enterprisePage.expectCorporateTheme();
     });
   });
 });

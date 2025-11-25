@@ -227,8 +227,8 @@ User: "yes"
 - **Platform**: linux/amd64 (Apple Silicon compatible via buildx)
 
 ### GitHub Container Registry
-- **Agents Image**: ghcr.io/scientiacapital/ai-development-cockpit/ai-agents:latest
-- **Validator Image**: ghcr.io/scientiacapital/ai-development-cockpit/json-validator:latest
+- **Agents Image**: ghcr.io/enterprise/ai-development-cockpit/ai-agents:latest
+- **Validator Image**: ghcr.io/enterprise/ai-development-cockpit/json-validator:latest
 - **Auto-Build**: GitHub Actions on push to main
 
 ---
@@ -314,7 +314,7 @@ pytest
 
 ## 🔗 Important Links
 
-- **GitHub**: https://github.com/ScientiaCapital/ai-development-cockpit
+- **GitHub**: https://github.com/enterprise/ai-development-cockpit
 - **Feature Branch**: `feature/multi-language-phase3-foundation`
 - **Worktree**: `~/.config/superpowers/worktrees/ai-development-cockpit/multi-language-phase3`
 - **Supabase**: https://supabase.com/dashboard/project/xucngysrzjtwqzgcutqf

@@ -94,12 +94,12 @@ class ModelDiscoveryService {
     try {
       const allModels: ModelMetadata[] = []
       const organizationStats: DiscoveryResults['organizationStats'] = {
-        swaggystacks: { totalModels: 0, averageRating: 0, totalDownloads: 0, featuredModels: [] },
-        scientiacapital: { totalModels: 0, averageRating: 0, totalDownloads: 0, featuredModels: [] }
+        arcade: { totalModels: 0, averageRating: 0, totalDownloads: 0, featuredModels: [] },
+        enterprise: { totalModels: 0, averageRating: 0, totalDownloads: 0, featuredModels: [] }
       }
 
       // Fetch models from specified organizations
-      const organizations: Organization[] = filters.organizations || ['swaggystacks', 'scientiacapital']
+      const organizations: Organization[] = filters.organizations || ['arcade', 'enterprise']
 
       for (const org of organizations) {
         try {

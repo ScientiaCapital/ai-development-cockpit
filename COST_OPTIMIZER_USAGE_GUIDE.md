@@ -71,7 +71,7 @@ function MyComponent() {
     totalSavings,
     savingsPercentage
   } = useOptimizer({
-    organization: 'swaggystacks',
+    organization: 'arcade',
     onSuccess: (response) => {
       console.log('Optimization complete!', response)
     },
@@ -123,7 +123,7 @@ const response = await fetch('/api/optimize/complete', {
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
     prompt: "What is machine learning?",
-    organizationId: "swaggystacks",
+    organizationId: "arcade",
     maxTokens: 1000,
     temperature: 0.7
   })
@@ -146,7 +146,7 @@ Main endpoint for cost-optimized LLM completions.
 ```typescript
 {
   prompt: string                    // Required: The user's prompt
-  organizationId: string           // Required: 'swaggystacks' or 'scientia-capital'
+  organizationId: string           // Required: 'arcade' or 'scientia-capital'
   userId?: string                  // Optional: User identifier
   maxTokens?: number              // Optional: Max completion tokens (default: 1000)
   temperature?: number            // Optional: 0.0-2.0 (default: 0.7)
@@ -305,7 +305,7 @@ import { CostDashboard } from '@/components/cost-optimizer/CostDashboard'
 function AnalyticsPage() {
   return (
     <CostDashboard
-      organization="swaggystacks"
+      organization="arcade"
       period="daily"              // hourly/daily/weekly/monthly
       autoRefresh={true}          // Auto-refresh every 60 seconds
       refreshInterval={60000}     // Custom refresh interval (ms)
@@ -435,11 +435,11 @@ The system checks budgets before each request:
 Set organization-specific budgets in `.env.local`:
 
 ```env
-# SwaggyStacks budgets
+# AI Dev Cockpit budgets
 DAILY_BUDGET_SWAGGYSTACKS="2.00"
 MONTHLY_BUDGET_SWAGGYSTACKS="50.00"
 
-# Scientia Capital budgets
+# Enterprise budgets
 DAILY_BUDGET_SCIENTIA_CAPITAL="5.00"
 MONTHLY_BUDGET_SCIENTIA_CAPITAL="150.00"
 ```
@@ -449,7 +449,7 @@ MONTHLY_BUDGET_SCIENTIA_CAPITAL="150.00"
 ```typescript
 import { useOptimizer } from '@/hooks/useOptimizer'
 
-const { fetchStats } = useOptimizer({ organization: 'swaggystacks' })
+const { fetchStats } = useOptimizer({ organization: 'arcade' })
 
 const stats = await fetchStats('daily')
 console.log('Daily budget:', stats.budgetStatus.dailyPercentage + '%')
@@ -550,7 +550,7 @@ await optimize({
 ```tsx
 import { CostDashboard } from '@/components/cost-optimizer/CostDashboard'
 
-<CostDashboard organization="swaggystacks" period="daily" />
+<CostDashboard organization="arcade" period="daily" />
 ```
 
 View live metrics:
@@ -589,15 +589,15 @@ curl -X POST http://localhost:3001/api/optimize/complete \
   -H "Content-Type: application/json" \
   -d '{
     "prompt": "What is AI?",
-    "organizationId": "swaggystacks",
+    "organizationId": "arcade",
     "maxTokens": 500
   }'
 
 # Test stats endpoint
-curl http://localhost:3001/api/optimize/stats?organization=swaggystacks&period=daily
+curl http://localhost:3001/api/optimize/stats?organization=arcade&period=daily
 
 # Test recommendation endpoint
-curl http://localhost:3001/api/optimize/recommendation?prompt=What+is+AI&organization=swaggystacks
+curl http://localhost:3001/api/optimize/recommendation?prompt=What+is+AI&organization=arcade
 ```
 
 ### Manual Testing Checklist
@@ -620,7 +620,7 @@ curl http://localhost:3001/api/optimize/recommendation?prompt=What+is+AI&organiz
 **Solution:**
 1. Check current budget usage:
    ```bash
-   curl http://localhost:3001/api/optimize/stats?organization=swaggystacks
+   curl http://localhost:3001/api/optimize/stats?organization=arcade
    ```
 2. Increase budget in `.env.local`:
    ```env

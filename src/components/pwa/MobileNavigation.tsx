@@ -45,7 +45,7 @@ export function MobileNavigation({ theme = 'terminal' }: MobileNavigationProps) 
     { 
       icon: Terminal, 
       label: 'Terminal', 
-      href: '/swaggystacks',
+      href: '/arcade',
       description: 'Main terminal interface'
     },
     { 
@@ -63,7 +63,7 @@ export function MobileNavigation({ theme = 'terminal' }: MobileNavigationProps) 
     { 
       icon: Calculator, 
       label: 'Costs', 
-      href: '/swaggystacks#cost-calculator',
+      href: '/arcade#cost-calculator',
       description: 'Calculate savings'
     }
   ]
@@ -158,7 +158,7 @@ export function MobileNavigation({ theme = 'terminal' }: MobileNavigationProps) 
               {/* Theme switch button */}
               <div className="mt-4 pt-4 border-t border-opacity-20 border-current">
                 <Link
-                  href={isTerminalTheme ? '/scientia' : '/swaggystacks'}
+                  href={isTerminalTheme ? '/enterprise' : '/arcade'}
                   className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${
                     isTerminalTheme
                       ? 'text-green-300 hover:bg-green-900/20'
@@ -177,7 +177,7 @@ export function MobileNavigation({ theme = 'terminal' }: MobileNavigationProps) 
                     <div className={`text-xs ${
                       isTerminalTheme ? 'text-green-600' : 'text-gray-500'
                     }`}>
-                      {isTerminalTheme ? 'Scientia Capital' : 'SwaggyStacks'}
+                      {isTerminalTheme ? 'Enterprise' : 'AI Dev Cockpit'}
                     </div>
                   </div>
                 </Link>

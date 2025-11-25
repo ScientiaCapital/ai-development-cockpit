@@ -2,7 +2,7 @@
 
 ## 🎯 Executive Summary
 
-Integrate the **ai-cost-optimizer** from ScientiaCapital into the AI Development Cockpit to provide intelligent multi-LLM routing and cost optimization capabilities.
+Integrate the **ai-cost-optimizer** from Enterprise into the AI Development Cockpit to provide intelligent multi-LLM routing and cost optimization capabilities.
 
 **Key Benefits:**
 - 💰 Automatic cost optimization through intelligent model routing
@@ -75,7 +75,7 @@ Integrate the **ai-cost-optimizer** from ScientiaCapital into the AI Development
 ```
 ┌─────────────────────────────────────────────────────────┐
 │           Next.js Frontend (React + TypeScript)         │
-│     (SwaggyStacks.com + ScientiaCapital.com)           │
+│     (AI Dev Cockpit.com + Enterprise.com)           │
 └────────────────────┬────────────────────────────────────┘
                      │
                      ▼
@@ -247,8 +247,8 @@ ENABLE_COST_ALERTS="true"                                 # Enable cost threshol
 # ----------------------------------------------------------------------------
 # ORGANIZATION CONFIGURATION
 # ----------------------------------------------------------------------------
-SWAGGYSTACKS_ORG_ID="swaggystacks"                       # SwaggyStacks organization
-SCIENTIA_ORG_ID="scientia-capital"                       # Scientia Capital organization
+SWAGGYSTACKS_ORG_ID="arcade"                       # AI Dev Cockpit organization
+SCIENTIA_ORG_ID="scientia-capital"                       # Enterprise organization
 
 # ----------------------------------------------------------------------------
 # OPTIONAL: DEVELOPMENT TOOLS
@@ -476,7 +476,7 @@ export interface CostStats {
 
 ## 📚 References
 
-- **ai-cost-optimizer repo:** https://github.com/ScientiaCapital/ai-cost-optimizer
+- **ai-cost-optimizer repo:** https://github.com/Enterprise/ai-cost-optimizer
 - **Current project:** /home/user/ai-development-cockpit
 - **CLAUDE.md context:** Phase 6 priorities include authentication and model management
 - **Task Master context:** `llm-platform` Task 10 (TypeScript type safety) nearly complete

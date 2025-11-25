@@ -270,11 +270,11 @@ export class CostTracker {
   ): Promise<CostStats['budget']> {
     // Default budgets (can be customized per organization)
     const budgets: Record<string, { daily: number; monthly: number }> = {
-      swaggystacks: { daily: 2.0, monthly: 50.0 },
-      'scientia-capital': { daily: 10.0, monthly: 200.0 }
+      arcade: { daily: 2.0, monthly: 50.0 },
+      enterprise: { daily: 10.0, monthly: 200.0 }
     }
 
-    const orgBudget = budgets[organizationId as string] || budgets['swaggystacks']
+    const orgBudget = budgets[organizationId as string] || budgets['arcade']
 
     // Get daily and monthly spend
     const dailyStats = await this.getStats(organizationId, 'daily')

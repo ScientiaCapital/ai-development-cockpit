@@ -1,7 +1,7 @@
 /**
  * End-to-End Pipeline Integration Tests
  * Validates complete flow: Model Discovery → Deployment Configuration → RunPod Infrastructure → Production Endpoints
- * Tests the entire deployment pipeline across both SwaggyStacks and ScientiaCapital organizations
+ * Tests the entire deployment pipeline across both AI Dev Cockpit and ScientiaCapital organizations
  */
 
 import { test, expect } from '@playwright/test';
@@ -28,12 +28,12 @@ test.describe('Complete E2E Pipeline Integration', () => {
     await apiClient.cleanup();
   });
 
-  test.describe('SwaggyStacks Developer Workflow', () => {
+  test.describe('AI Dev Cockpit Developer Workflow', () => {
     test('should complete full deployment pipeline for gaming model', async () => {
       // Step 1: Model Discovery
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('swaggystacks');
-      await marketplacePage.expectSwaggyStacksTheme();
+      await marketplacePage.selectOrganization('arcade');
+      await marketplacePage.expectAI Dev CockpitTheme();
 
       // Search for gaming model
       await marketplacePage.searchModels('gaming');
@@ -51,7 +51,7 @@ test.describe('Complete E2E Pipeline Integration', () => {
 
       // Should navigate to deployment configuration
       await deploymentPage.expectDeploymentPage();
-      await deploymentPage.expectTerminalTheme(); // Should maintain SwaggyStacks theme
+      await deploymentPage.expectTerminalTheme(); // Should maintain AI Dev Cockpit theme
 
       // Step 3: Configure Deployment
       await deploymentPage.selectGpuType('NVIDIA_RTX_A6000');
@@ -96,7 +96,7 @@ test.describe('Complete E2E Pipeline Integration', () => {
 
     test('should handle deployment failures gracefully in gaming environment', async () => {
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('swaggystacks');
+      await marketplacePage.selectOrganization('arcade');
 
       // Select a model for deployment
       await marketplacePage.searchModels('terminal-gpt');
@@ -123,10 +123,10 @@ test.describe('Complete E2E Pipeline Integration', () => {
 
     test('should validate terminal theme consistency throughout pipeline', async () => {
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('swaggystacks');
+      await marketplacePage.selectOrganization('arcade');
 
       // Verify terminal theme in marketplace
-      await marketplacePage.expectSwaggyStacksTheme();
+      await marketplacePage.expectAI Dev CockpitTheme();
 
       // Navigate to deployment
       const modelId = await marketplacePage.selectFirstModel();
@@ -149,7 +149,7 @@ test.describe('Complete E2E Pipeline Integration', () => {
     test('should complete enterprise deployment pipeline for financial model', async () => {
       // Step 1: Model Discovery with Corporate Theme
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('scientia');
+      await marketplacePage.selectOrganization('enterprise');
       await marketplacePage.expectScientiaCapitalTheme();
 
       // Search for financial analysis model
@@ -220,7 +220,7 @@ test.describe('Complete E2E Pipeline Integration', () => {
 
     test('should validate enterprise-grade rollback capabilities', async () => {
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('scientia');
+      await marketplacePage.selectOrganization('enterprise');
 
       // Deploy compliance monitor model
       await marketplacePage.searchModels('compliance');
@@ -258,7 +258,7 @@ test.describe('Complete E2E Pipeline Integration', () => {
 
     test('should maintain corporate theme throughout enterprise pipeline', async () => {
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('scientia');
+      await marketplacePage.selectOrganization('enterprise');
 
       // Verify corporate theme in marketplace
       await marketplacePage.expectScientiaCapitalTheme();
@@ -282,12 +282,12 @@ test.describe('Complete E2E Pipeline Integration', () => {
 
   test.describe('Cross-Organization Pipeline Validation', () => {
     test('should handle organization switching during active deployments', async () => {
-      // Start with SwaggyStacks deployment
+      // Start with AI Dev Cockpit deployment
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('swaggystacks');
+      await marketplacePage.selectOrganization('arcade');
 
-      const swaggyModelId = await marketplacePage.selectFirstModel();
-      await marketplacePage.deployModel(swaggyModelId);
+      const arcadeModelId = await marketplacePage.selectFirstModel();
+      await marketplacePage.deployModel(arcadeModelId);
       await deploymentPage.selectGpuType('NVIDIA_RTX_A6000');
       await deploymentPage.createDeployment();
       await deploymentPage.waitForDeploymentReady();
@@ -296,7 +296,7 @@ test.describe('Complete E2E Pipeline Integration', () => {
 
       // Switch to ScientiaCapital and create another deployment
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('scientia');
+      await marketplacePage.selectOrganization('enterprise');
 
       const scientiaModelId = await marketplacePage.selectFirstModel();
       await marketplacePage.deployModel(scientiaModelId);
@@ -309,26 +309,26 @@ test.describe('Complete E2E Pipeline Integration', () => {
       // Verify both deployments are independent
       expect(swaggyDeploymentId).not.toBe(scientiaDeploymentId);
 
-      // Switch back to SwaggyStacks and verify deployment is still running
+      // Switch back to AI Dev Cockpit and verify deployment is still running
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('swaggystacks');
+      await marketplacePage.selectOrganization('arcade');
       await deploymentPage.gotoDeployment(swaggyDeploymentId);
       await deploymentPage.expectDeploymentRunning();
 
       // Cleanup both deployments
       await deploymentPage.stopDeployment(swaggyDeploymentId);
-      await marketplacePage.selectOrganization('scientia');
+      await marketplacePage.selectOrganization('enterprise');
       await deploymentPage.gotoDeployment(scientiaDeploymentId);
       await deploymentPage.stopDeployment(scientiaDeploymentId);
     });
 
     test('should validate resource isolation between organizations', async () => {
-      // Deploy model in SwaggyStacks
+      // Deploy model in AI Dev Cockpit
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('swaggystacks');
+      await marketplacePage.selectOrganization('arcade');
 
-      const swaggyModelId = await marketplacePage.selectFirstModel();
-      await marketplacePage.deployModel(swaggyModelId);
+      const arcadeModelId = await marketplacePage.selectFirstModel();
+      await marketplacePage.deployModel(arcadeModelId);
       await deploymentPage.selectGpuType('NVIDIA_RTX_A6000');
       await deploymentPage.createDeployment();
       await deploymentPage.waitForDeploymentReady();
@@ -337,7 +337,7 @@ test.describe('Complete E2E Pipeline Integration', () => {
 
       // Deploy model in ScientiaCapital
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('scientia');
+      await marketplacePage.selectOrganization('enterprise');
 
       const scientiaModelId = await marketplacePage.selectFirstModel();
       await marketplacePage.deployModel(scientiaModelId);
@@ -348,14 +348,14 @@ test.describe('Complete E2E Pipeline Integration', () => {
       const scientiaResources = await deploymentPage.getResourceUsage();
 
       // Verify resource isolation
-      expect(swaggyResources.organizationId).toBe('swaggystacks');
-      expect(scientiaResources.organizationId).toBe('scientia');
+      expect(swaggyResources.organizationId).toBe('arcade');
+      expect(scientiaResources.organizationId).toBe('enterprise');
       expect(swaggyResources.gpuType).not.toBe(scientiaResources.gpuType);
 
       // Cleanup
       const scientiaDeploymentId = await deploymentPage.getDeploymentId();
       await deploymentPage.stopDeployment(scientiaDeploymentId);
-      await marketplacePage.selectOrganization('swaggystacks');
+      await marketplacePage.selectOrganization('arcade');
       const swaggyDeploymentId = await deploymentPage.getDeploymentId();
       await deploymentPage.stopDeployment(swaggyDeploymentId);
     });
@@ -364,7 +364,7 @@ test.describe('Complete E2E Pipeline Integration', () => {
   test.describe('Performance and Reliability Pipeline Tests', () => {
     test('should handle high-load deployment scenarios', async () => {
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('swaggystacks');
+      await marketplacePage.selectOrganization('arcade');
 
       // Select high-performance model
       await marketplacePage.searchModels('code-assistant');
@@ -396,7 +396,7 @@ test.describe('Complete E2E Pipeline Integration', () => {
 
     test('should validate deployment pipeline resilience', async () => {
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('scientia');
+      await marketplacePage.selectOrganization('enterprise');
 
       // Test deployment resilience with network interruptions
       const modelId = await marketplacePage.selectFirstModel();
@@ -424,7 +424,7 @@ test.describe('Complete E2E Pipeline Integration', () => {
 
     test('should validate complete monitoring and alerting pipeline', async () => {
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('swaggystacks');
+      await marketplacePage.selectOrganization('arcade');
 
       const modelId = await marketplacePage.selectFirstModel();
       await marketplacePage.deployModel(modelId);
@@ -469,13 +469,13 @@ test.describe('Complete E2E Pipeline Integration', () => {
       try {
         // Run abbreviated real API pipeline test
         await marketplacePage.goto();
-        await marketplacePage.selectOrganization('swaggystacks');
+        await marketplacePage.selectOrganization('arcade');
         await marketplacePage.waitForModelsLoaded();
 
         const modelCount = await marketplacePage.getModelCount();
         if (modelCount > 0) {
           const modelId = await marketplacePage.selectFirstModel();
-          expect(modelId).toMatch(/^swaggystacks\//);
+          expect(modelId).toMatch(/^arcade\//);
 
           // Note: Don't actually deploy with real API in tests
           // Just validate the deployment configuration flow

@@ -112,13 +112,13 @@ jobs:
           MATRIX+='{
             "suite": "marketplace",
             "browser": "chromium",
-            "organization": "swaggystacks",
+            "organization": "arcade",
             "timeout": 300000
           },'
           MATRIX+='{
             "suite": "marketplace",
             "browser": "chromium",
-            "organization": "scientia",
+            "organization": "enterprise",
             "timeout": 300000
           },'
 
@@ -127,7 +127,7 @@ jobs:
             MATRIX+='{
               "suite": "performance",
               "browser": "chromium",
-              "organization": "swaggystacks",
+              "organization": "arcade",
               "timeout": 600000
             },'
           fi
@@ -137,7 +137,7 @@ jobs:
             MATRIX+='{
               "suite": "chaos",
               "browser": "chromium",
-              "organization": "swaggystacks",
+              "organization": "arcade",
               "timeout": 900000
             },'
           fi
@@ -159,7 +159,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        organization: [swaggystacks, scientia]
+        organization: [arcade, enterprise]
         browser: [chromium, firefox, webkit]
 
     steps:
@@ -494,8 +494,8 @@ jobs:
           sleep 15
 
           # Test both organization routes
-          curl -f http://localhost:3000/swaggystacks || exit 1
-          curl -f http://localhost:3000/scientia || exit 1
+          curl -f http://localhost:3000/arcade || exit 1
+          curl -f http://localhost:3000/enterprise || exit 1
           curl -f http://localhost:3000/marketplace || exit 1
 
           kill $SERVER_PID

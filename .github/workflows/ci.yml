@@ -283,7 +283,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        organization: [swaggystacks, scientia]
+        organization: [arcade, enterprise]
 
     steps:
       - name: Checkout code

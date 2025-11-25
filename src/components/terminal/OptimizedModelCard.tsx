@@ -10,7 +10,7 @@ import styles from '@/styles/terminal.module.css'
 
 interface ModelCardProps {
   model: ModelData
-  theme: 'swaggystacks' | 'scientiacapital'
+  theme: 'arcade' | 'enterprise'
   onDeploy?: (modelId: string) => void
   onTest?: (modelId: string) => void
   isDeploying?: boolean
@@ -30,7 +30,7 @@ const ModelBadge = memo(function ModelBadge({
   return (
     <Badge 
       variant={variant}
-      className={theme === 'swaggystacks' ? styles.terminalBadge : ''}
+      className={theme === 'arcade' ? styles.terminalBadge : ''}
     >
       {label}
     </Badge>
@@ -54,7 +54,7 @@ const ModelStats = memo(function ModelStats({
     return num.toString()
   }, [])
 
-  const statsClass = theme === 'swaggystacks' 
+  const statsClass = theme === 'arcade' 
     ? 'text-green-400 text-sm' 
     : 'text-gray-600 text-sm'
 
@@ -94,7 +94,7 @@ const ActionButtons = memo(function ActionButtons({
     onTest?.(modelId)
   }, [modelId, onTest])
 
-  const buttonClass = theme === 'swaggystacks' 
+  const buttonClass = theme === 'arcade' 
     ? styles.terminalButton 
     : 'bg-blue-600 hover:bg-blue-700'
 
@@ -113,7 +113,7 @@ const ActionButtons = memo(function ActionButtons({
           onClick={handleTest}
           variant="outline"
           size="sm"
-          className={theme === 'swaggystacks' ? styles.terminalButtonOutline : ''}
+          className={theme === 'arcade' ? styles.terminalButtonOutline : ''}
         >
           Test
         </Button>
@@ -142,14 +142,14 @@ export default memo(function OptimizedModelCard({
   // Memoize card classes
   const cardClasses = useMemo(() => {
     const base = 'p-4 transition-all duration-200 hover:scale-105'
-    return theme === 'swaggystacks'
+    return theme === 'arcade'
       ? `${styles.terminalCard} ${base} bg-gray-800/50 border-green-400/20 hover:border-green-400/50`
       : `${base} bg-white hover:shadow-lg border border-gray-200`
   }, [theme])
 
   // Memoize title class
   const titleClass = useMemo(() => 
-    theme === 'swaggystacks' 
+    theme === 'arcade' 
       ? 'text-green-400 font-mono text-lg font-semibold mb-2 truncate' 
       : 'text-gray-900 text-lg font-semibold mb-2 truncate',
     [theme]
@@ -157,7 +157,7 @@ export default memo(function OptimizedModelCard({
 
   // Memoize description class
   const descriptionClass = useMemo(() => 
-    theme === 'swaggystacks' 
+    theme === 'arcade' 
       ? 'text-gray-300 text-sm mb-3 font-mono' 
       : 'text-gray-700 text-sm mb-3',
     [theme]
@@ -191,7 +191,7 @@ export default memo(function OptimizedModelCard({
           className={titleClass}
           title={model.name} // Tooltip for full name
         >
-          {theme === 'swaggystacks' && '>'} {model.name}
+          {theme === 'arcade' && '>'} {model.name}
         </h3>
 
         {/* Description */}
@@ -252,25 +252,25 @@ export default memo(function OptimizedModelCard({
 
 // Memoized skeleton component for loading states
 export const OptimizedModelCardSkeleton = memo(function OptimizedModelCardSkeleton({
-  theme = 'swaggystacks'
+  theme = 'arcade'
 }: {
-  theme?: 'swaggystacks' | 'scientiacapital'
+  theme?: 'arcade' | 'enterprise'
 }) {
-  const cardClass = theme === 'swaggystacks'
+  const cardClass = theme === 'arcade'
     ? `${styles.terminalCard} bg-gray-800/30`
     : 'bg-gray-100'
 
   return (
     <Card className={`p-4 ${cardClass}`}>
       <div className="animate-pulse">
-        <div className={`h-5 ${theme === 'swaggystacks' ? 'bg-green-400/20' : 'bg-gray-300'} rounded mb-3`}></div>
-        <div className={`h-4 ${theme === 'swaggystacks' ? 'bg-gray-600' : 'bg-gray-200'} rounded mb-2`}></div>
-        <div className={`h-4 ${theme === 'swaggystacks' ? 'bg-gray-600' : 'bg-gray-200'} rounded w-3/4 mb-4`}></div>
+        <div className={`h-5 ${theme === 'arcade' ? 'bg-green-400/20' : 'bg-gray-300'} rounded mb-3`}></div>
+        <div className={`h-4 ${theme === 'arcade' ? 'bg-gray-600' : 'bg-gray-200'} rounded mb-2`}></div>
+        <div className={`h-4 ${theme === 'arcade' ? 'bg-gray-600' : 'bg-gray-200'} rounded w-3/4 mb-4`}></div>
         <div className="flex space-x-2 mb-4">
-          <div className={`h-6 w-16 ${theme === 'swaggystacks' ? 'bg-gray-600' : 'bg-gray-200'} rounded`}></div>
-          <div className={`h-6 w-16 ${theme === 'swaggystacks' ? 'bg-gray-600' : 'bg-gray-200'} rounded`}></div>
+          <div className={`h-6 w-16 ${theme === 'arcade' ? 'bg-gray-600' : 'bg-gray-200'} rounded`}></div>
+          <div className={`h-6 w-16 ${theme === 'arcade' ? 'bg-gray-600' : 'bg-gray-200'} rounded`}></div>
         </div>
-        <div className={`h-8 ${theme === 'swaggystacks' ? 'bg-green-400/20' : 'bg-gray-300'} rounded`}></div>
+        <div className={`h-8 ${theme === 'arcade' ? 'bg-green-400/20' : 'bg-gray-300'} rounded`}></div>
       </div>
     </Card>
   )

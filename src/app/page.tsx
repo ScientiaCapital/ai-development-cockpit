@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 
 export default function HomePage() {
-  // This will be handled by middleware, but this serves as a fallback
-  redirect('/swaggystacks')
+  // Redirect to the AI chat interface - the main feature
+  redirect('/chat')
 }

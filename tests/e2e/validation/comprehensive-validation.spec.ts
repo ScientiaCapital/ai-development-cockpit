@@ -397,8 +397,8 @@ test.describe('Performance Benchmark Validation', () => {
     const testCases = [
       { name: 'Marketplace Load', url: '/marketplace', maxLCP: 2500 },
       { name: 'Model Search', url: '/marketplace?search=gpt', maxLCP: 3000 },
-      { name: 'SwaggyStacks Landing', url: '/swaggystacks', maxLCP: 2000 },
-      { name: 'ScientiaCapital Landing', url: '/scientia', maxLCP: 2000 }
+      { name: 'AI Dev Cockpit Landing', url: '/arcade', maxLCP: 2000 },
+      { name: 'ScientiaCapital Landing', url: '/enterprise', maxLCP: 2000 }
     ];
 
     for (const testCase of testCases) {

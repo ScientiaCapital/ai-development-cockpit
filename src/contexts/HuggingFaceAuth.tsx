@@ -2,11 +2,11 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 
-export type Organization = 'swaggystacks' | 'scientiacapital'
+export type Organization = 'arcade' | 'enterprise'
 
 export interface AuthTokens {
-  swaggystacks: string
-  scientiacapital: string
+  arcade: string
+  enterprise: string
 }
 
 export interface HuggingFaceAuthState {
@@ -32,10 +32,10 @@ interface HuggingFaceAuthProviderProps {
 }
 
 export function HuggingFaceAuthProvider({ children }: HuggingFaceAuthProviderProps) {
-  const [currentOrganization, setCurrentOrganization] = useState<Organization>('swaggystacks')
+  const [currentOrganization, setCurrentOrganization] = useState<Organization>('arcade')
   const [tokens, setTokens] = useState<AuthTokens>({
-    swaggystacks: '',
-    scientiacapital: ''
+    arcade: '',
+    enterprise: ''
   })
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -49,18 +49,18 @@ export function HuggingFaceAuthProvider({ children }: HuggingFaceAuthProviderPro
         setError(null)
 
         // Get tokens from environment
-        const swaggyToken = process.env.NEXT_PUBLIC_SWAGGYSTACKS_HF_TOKEN ||
-                           (typeof window !== 'undefined' ? localStorage.getItem('swaggystacks_token') : null)
-        const scientiaToken = process.env.NEXT_PUBLIC_SCIENTIACAPITAL_HF_TOKEN ||
-                             (typeof window !== 'undefined' ? localStorage.getItem('scientiacapital_token') : null)
+        const arcadeToken = process.env.NEXT_PUBLIC_ARCADE_HF_TOKEN ||
+                           (typeof window !== 'undefined' ? localStorage.getItem('arcade_token') : null)
+        const enterpriseToken = process.env.NEXT_PUBLIC_ENTERPRISE_HF_TOKEN ||
+                             (typeof window !== 'undefined' ? localStorage.getItem('enterprise_token') : null)
 
-        if (!swaggyToken || !scientiaToken) {
+        if (!arcadeToken || !enterpriseToken) {
           throw new Error('HuggingFace tokens not found. Please check environment configuration.')
         }
 
         const newTokens: AuthTokens = {
-          swaggystacks: swaggyToken,
-          scientiacapital: scientiaToken
+          arcade: arcadeToken,
+          enterprise: enterpriseToken
         }
 
         setTokens(newTokens)
@@ -148,10 +148,10 @@ export function HuggingFaceAuthProvider({ children }: HuggingFaceAuthProviderPro
       setError(null)
 
       // Validate both tokens
-      const swaggyValid = await validateTokenInternal('swaggystacks', tokens.swaggystacks)
-      const scientiaValid = await validateTokenInternal('scientiacapital', tokens.scientiacapital)
+      const arcadeValid = await validateTokenInternal('arcade', tokens.arcade)
+      const enterpriseValid = await validateTokenInternal('enterprise', tokens.enterprise)
 
-      if (!swaggyValid || !scientiaValid) {
+      if (!arcadeValid || !enterpriseValid) {
         throw new Error('One or more tokens are invalid')
       }
 

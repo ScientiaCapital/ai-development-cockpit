@@ -8,7 +8,7 @@ allowed-tools: Read, Write, Edit, Grep, Glob, Bash
 
 **Meta-skill for generating domain-specific Claude Skills for your team.**
 
-This skill helps you create production-ready skills tailored to the Dual-Domain LLM Platform (SwaggyStacks + ScientiaCapital).
+This skill helps you create production-ready skills tailored to the Dual-Domain LLM Platform (AI Dev Cockpit + Enterprise).
 
 ## How It Works
 
@@ -34,7 +34,7 @@ This factory knows about your platform:
 - **Services**: RunPod (deployment, vLLM), HuggingFace (model discovery)
 - **Auth**: Supabase with MFA, RBAC, organizations
 - **Testing**: Playwright E2E, chaos engineering, performance tests
-- **Themes**: Dual-domain (SwaggyStacks dark/terminal, ScientiaCapital light/corporate)
+- **Themes**: Dual-domain (AI Dev Cockpit dark/terminal, Enterprise light/corporate)
 
 ### **Key Service Areas**
 ```

@@ -70,7 +70,7 @@ grep -r "interface Organization" src/
 
 # Phase 2: Use centralized types (1 hour)
 # File: src/types/organization.ts (already created!)
-# - OrganizationSlug: 'swaggystacks' | 'scientiacapital'
+# - OrganizationSlug: 'arcade' | 'enterprise'
 # - OrganizationEntity: Full database entity
 # - OrganizationRecord: Supabase table
 

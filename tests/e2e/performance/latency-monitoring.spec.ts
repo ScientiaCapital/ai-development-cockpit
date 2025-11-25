@@ -116,23 +116,23 @@ test.describe('Latency Monitoring - Response Time Validation', () => {
       const marketplacePage = new MarketplacePage(page);
       await marketplacePage.goto();
 
-      // Measure SwaggyStacks switch
-      await measureLatency('switch_to_swaggystacks', async () => {
-        await marketplacePage.selectOrganization('swaggystacks');
-        await marketplacePage.expectSwaggyStacksTheme();
+      // Measure AI Dev Cockpit switch
+      await measureLatency('switch_to_arcade', async () => {
+        await marketplacePage.selectOrganization('arcade');
+        await marketplacePage.expectAI Dev CockpitTheme();
       });
 
       // Measure ScientiaCapital switch
       await measureLatency('switch_to_scientia', async () => {
-        await marketplacePage.selectOrganization('scientia');
+        await marketplacePage.selectOrganization('enterprise');
         await marketplacePage.expectScientiaCapitalTheme();
       });
 
       // Both switches should be fast
-      const swaggySwitch = latencyMetrics.find(m => m.operation === 'switch_to_swaggystacks');
+      const arcadeSwitch = latencyMetrics.find(m => m.operation === 'switch_to_arcade');
       const scientiaSwitch = latencyMetrics.find(m => m.operation === 'switch_to_scientia');
 
-      expect(swaggySwitch?.duration).toBeLessThan(1500); // Under 1.5 seconds
+      expect(arcadeSwitch?.duration).toBeLessThan(1500); // Under 1.5 seconds
       expect(scientiaSwitch?.duration).toBeLessThan(1500); // Under 1.5 seconds
     });
   });
@@ -141,7 +141,7 @@ test.describe('Latency Monitoring - Response Time Validation', () => {
     test('should search models within acceptable time', async ({ page }) => {
       const marketplacePage = new MarketplacePage(page);
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('swaggystacks');
+      await marketplacePage.selectOrganization('arcade');
 
       // Measure search latency
       await measureLatency('model_search', async () => {
@@ -166,7 +166,7 @@ test.describe('Latency Monitoring - Response Time Validation', () => {
     test('should load model details quickly', async ({ page }) => {
       const marketplacePage = new MarketplacePage(page);
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('scientia');
+      await marketplacePage.selectOrganization('enterprise');
 
       await marketplacePage.searchModels('financial');
       const modelId = await marketplacePage.selectFirstModel();
@@ -183,7 +183,7 @@ test.describe('Latency Monitoring - Response Time Validation', () => {
     test('should handle rapid successive searches efficiently', async ({ page }) => {
       const marketplacePage = new MarketplacePage(page);
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('swaggystacks');
+      await marketplacePage.selectOrganization('arcade');
 
       const searchTerms = ['gaming', 'chat', 'assistant', 'terminal', 'code'];
       const searchLatencies: number[] = [];
@@ -216,7 +216,7 @@ test.describe('Latency Monitoring - Response Time Validation', () => {
       const deploymentPage = new DeploymentPage(page);
 
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('swaggystacks');
+      await marketplacePage.selectOrganization('arcade');
 
       const modelId = await marketplacePage.selectFirstModel();
       await marketplacePage.deployModel(modelId);
@@ -369,12 +369,12 @@ test.describe('Latency Monitoring - Response Time Validation', () => {
   });
 
   test.describe('Organization-Specific Latency Requirements', () => {
-    test('should meet SwaggyStacks gaming performance requirements', async ({ page }) => {
+    test('should meet AI Dev Cockpit gaming performance requirements', async ({ page }) => {
       const marketplacePage = new MarketplacePage(page);
       const deploymentPage = new DeploymentPage(page);
 
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('swaggystacks');
+      await marketplacePage.selectOrganization('arcade');
 
       // Gaming users expect responsive interfaces
       await measureLatency('gaming_model_search', async () => {
@@ -403,7 +403,7 @@ test.describe('Latency Monitoring - Response Time Validation', () => {
       const deploymentPage = new DeploymentPage(page);
 
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('scientia');
+      await marketplacePage.selectOrganization('enterprise');
 
       // Enterprise users expect reliable, consistent performance
       await measureLatency('enterprise_model_search', async () => {
@@ -443,7 +443,7 @@ test.describe('Latency Monitoring - Response Time Validation', () => {
       // Baseline performance measurements
       const baselineOperations = [
         { name: 'page_load', fn: () => marketplacePage.goto() },
-        { name: 'org_switch', fn: () => marketplacePage.selectOrganization('swaggystacks') },
+        { name: 'org_switch', fn: () => marketplacePage.selectOrganization('arcade') },
         { name: 'model_search', fn: () => marketplacePage.searchModels('test') },
         { name: 'deployment_nav', fn: () => deploymentPage.goto() }
       ];

@@ -61,8 +61,8 @@ export function useModels(options: UseModelsOptions = {}): UseModelsReturn {
   const [searchTime, setSearchTime] = useState<number>()
   const [cacheHit, setCacheHit] = useState<boolean>()
   const [organizationStats, setOrganizationStats] = useState<DiscoveryResults['organizationStats']>({
-    swaggystacks: { totalModels: 0, averageRating: 0, totalDownloads: 0, featuredModels: [] },
-    scientiacapital: { totalModels: 0, averageRating: 0, totalDownloads: 0, featuredModels: [] }
+    arcade: { totalModels: 0, averageRating: 0, totalDownloads: 0, featuredModels: [] },
+    enterprise: { totalModels: 0, averageRating: 0, totalDownloads: 0, featuredModels: [] }
   })
 
   // Refs for debouncing

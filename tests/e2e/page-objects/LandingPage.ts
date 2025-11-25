@@ -1,6 +1,6 @@
 /**
  * Landing Page Object Model
- * Page object for both SwaggyStacks and ScientiaCapital landing pages
+ * Page object for both AI Dev Cockpit and ScientiaCapital landing pages
  */
 
 import { Page, Locator } from '@playwright/test';
@@ -17,7 +17,7 @@ export class LandingPage extends BasePage {
   private readonly themeToggle = '[data-testid="theme-toggle"]';
   private readonly navigationMenu = '[data-testid="navigation"]';
 
-  // SwaggyStacks specific
+  // AI Dev Cockpit specific
   private readonly terminalDemo = '[data-testid="terminal-demo"]';
   private readonly codingFeatures = '[data-testid="coding-features"]';
   private readonly developerCta = '[data-testid="developer-cta"]';
@@ -27,12 +27,12 @@ export class LandingPage extends BasePage {
   private readonly enterpriseFeatures = '[data-testid="enterprise-features"]';
   private readonly executiveCta = '[data-testid="executive-cta"]';
 
-  constructor(page: Page, private domain: 'swaggystacks' | 'scientia') {
+  constructor(page: Page, private domain: 'arcade' | 'enterprise') {
     super(page);
   }
 
   async goto(): Promise<void> {
-    const path = this.domain === 'swaggystacks' ? '/swaggystacks' : '/scientia';
+    const path = this.domain === 'arcade' ? '/arcade' : '/enterprise';
     await this.page.goto(path);
     await this.waitForLoad();
   }
@@ -82,27 +82,27 @@ export class LandingPage extends BasePage {
     return await feature.textContent() || '';
   }
 
-  // SwaggyStacks Specific Methods
+  // AI Dev Cockpit Specific Methods
   async expectTerminalDemo(): Promise<void> {
-    if (this.domain === 'swaggystacks') {
+    if (this.domain === 'arcade') {
       await this.waitForVisible(this.terminalDemo);
     }
   }
 
   async expectCodingFeatures(): Promise<void> {
-    if (this.domain === 'swaggystacks') {
+    if (this.domain === 'arcade') {
       await this.waitForVisible(this.codingFeatures);
     }
   }
 
   async clickDeveloperCTA(): Promise<void> {
-    if (this.domain === 'swaggystacks') {
+    if (this.domain === 'arcade') {
       await this.clickElement(this.developerCta);
     }
   }
 
   async expectDarkTheme(): Promise<void> {
-    if (this.domain === 'swaggystacks') {
+    if (this.domain === 'arcade') {
       const body = this.page.locator('body');
       const classes = await body.getAttribute('class') || '';
       expect(classes.includes('dark') || classes.includes('terminal')).toBe(true);
@@ -111,25 +111,25 @@ export class LandingPage extends BasePage {
 
   // ScientiaCapital Specific Methods
   async expectRoiCalculator(): Promise<void> {
-    if (this.domain === 'scientia') {
+    if (this.domain === 'enterprise') {
       await this.waitForVisible(this.roiCalculator);
     }
   }
 
   async expectEnterpriseFeatures(): Promise<void> {
-    if (this.domain === 'scientia') {
+    if (this.domain === 'enterprise') {
       await this.waitForVisible(this.enterpriseFeatures);
     }
   }
 
   async clickExecutiveCTA(): Promise<void> {
-    if (this.domain === 'scientia') {
+    if (this.domain === 'enterprise') {
       await this.clickElement(this.executiveCta);
     }
   }
 
   async expectCorporateTheme(): Promise<void> {
-    if (this.domain === 'scientia') {
+    if (this.domain === 'enterprise') {
       const body = this.page.locator('body');
       const classes = await body.getAttribute('class') || '';
       expect(classes.includes('corporate') || classes.includes('professional')).toBe(true);
@@ -138,28 +138,28 @@ export class LandingPage extends BasePage {
 
   // ROI Calculator (ScientiaCapital)
   async fillRoiInput(field: 'team-size' | 'hours-saved' | 'hourly-rate', value: string): Promise<void> {
-    if (this.domain === 'scientia') {
+    if (this.domain === 'enterprise') {
       const selector = `[data-testid="roi-${field}"]`;
       await this.fillField(selector, value);
     }
   }
 
   async calculateRoi(): Promise<void> {
-    if (this.domain === 'scientia') {
+    if (this.domain === 'enterprise') {
       await this.clickElement('[data-testid="calculate-roi"]');
     }
   }
 
   async getRoiResult(): Promise<string> {
-    if (this.domain === 'scientia') {
+    if (this.domain === 'enterprise') {
       return await this.getText('[data-testid="roi-result"]');
     }
     return '';
   }
 
-  // Terminal Demo (SwaggyStacks)
+  // Terminal Demo (AI Dev Cockpit)
   async expectTerminalAnimation(): Promise<void> {
-    if (this.domain === 'swaggystacks') {
+    if (this.domain === 'arcade') {
       const terminalText = this.page.locator('[data-testid="terminal-text"]');
       await this.waitForVisible('[data-testid="terminal-text"]');
 
@@ -172,7 +172,7 @@ export class LandingPage extends BasePage {
   }
 
   async clickTerminalCommand(command: string): Promise<void> {
-    if (this.domain === 'swaggystacks') {
+    if (this.domain === 'arcade') {
       const selector = `[data-testid="terminal-command-${command}"]`;
       await this.clickElement(selector);
     }
@@ -195,7 +195,7 @@ export class LandingPage extends BasePage {
       const element = this.page.locator(component);
       const classes = await element.getAttribute('class') || '';
 
-      if (this.domain === 'swaggystacks') {
+      if (this.domain === 'arcade') {
         // Should have terminal/dark theme classes
         expect(classes.includes('terminal') || classes.includes('dark')).toBe(true);
       } else {
@@ -227,7 +227,7 @@ export class LandingPage extends BasePage {
 
   // Cross-domain functionality
   async navigateToOtherDomain(): Promise<void> {
-    const targetPath = this.domain === 'swaggystacks' ? '/scientia' : '/swaggystacks';
+    const targetPath = this.domain === 'arcade' ? '/enterprise' : '/arcade';
     await this.page.goto(targetPath);
     await this.waitForLoad();
   }

@@ -10,7 +10,7 @@ import styles from '@/styles/terminal.module.css'
 
 interface ModelCardProps {
   model: ModelData
-  theme: 'swaggystacks' | 'scientiacapital'
+  theme: 'arcade' | 'enterprise'
   onDeploy?: (modelId: string) => void
   onTest?: (modelId: string) => void
   isDeploying?: boolean
@@ -45,7 +45,7 @@ export default function ModelCard({
   }
 
   const getOrganizationIcon = () => {
-    return model.organization === 'swaggystacks' ? '🎮' : '🏢'
+    return theme === 'arcade' ? '🎮' : '🏢'
   }
 
   const getStatusIndicator = () => {
@@ -60,7 +60,7 @@ export default function ModelCard({
   }
 
   const getThemeClasses = () => {
-    if (theme === 'swaggystacks') {
+    if (theme === 'arcade') {
       return {
         card: 'bg-gray-900/80 border-green-600 hover:border-green-400',
         header: 'text-green-400',
@@ -228,15 +228,15 @@ export default function ModelCard({
         </div>
       </div>
 
-      {/* ASCII Art Border for SwaggyStacks theme */}
-      {theme === 'swaggystacks' && (
+      {/* ASCII Art Border for arcade theme */}
+      {theme === 'arcade' && (
         <div className="mt-2 text-center text-xs text-green-600 opacity-50 font-mono">
           ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
         </div>
       )}
 
-      {/* Corporate Border for ScientiaCapital theme */}
-      {theme === 'scientiacapital' && (
+      {/* Corporate Border for enterprise theme */}
+      {theme === 'enterprise' && (
         <div className="mt-2 text-center text-xs text-blue-600 opacity-50 font-mono">
           ═══════════════════════════════
         </div>
@@ -246,8 +246,8 @@ export default function ModelCard({
 }
 
 // Loading skeleton component
-export function ModelCardSkeleton({ theme }: { theme: 'swaggystacks' | 'scientiacapital' }) {
-  const borderColor = theme === 'swaggystacks' ? 'border-green-600' : 'border-blue-600'
+export function ModelCardSkeleton({ theme }: { theme: 'arcade' | 'enterprise' }) {
+  const borderColor = theme === 'arcade' ? 'border-green-600' : 'border-blue-600'
   
   return (
     <Card className={`${styles.terminalCard} bg-gray-900/80 ${borderColor} p-4 animate-pulse`}>

@@ -24,35 +24,35 @@ import type { Tables } from '@/lib/supabase'
  * Organization identifier used throughout the application.
  * Use this for routing, API calls, and organization switching.
  */
-export type OrganizationSlug = 'swaggystacks' | 'scientiacapital'
+export type OrganizationSlug = 'arcade' | 'enterprise'
 
 /**
  * Extended organization slug with shared/system organization.
  * Used for monitoring and system-wide operations.
  */
-export type OrganizationSlugExtended = OrganizationSlug | 'shared' | 'scientia_capital'
+export type OrganizationSlugExtended = OrganizationSlug | 'shared'
 
 /**
  * Type guard to check if a string is a valid organization slug
  */
 export function isOrganizationSlug(value: string): value is OrganizationSlug {
-  return value === 'swaggystacks' || value === 'scientiacapital'
+  return value === 'arcade' || value === 'enterprise'
 }
 
 /**
  * Organization display names for UI
  */
 export const ORGANIZATION_NAMES: Record<OrganizationSlug, string> = {
-  swaggystacks: 'SwaggyStacks',
-  scientiacapital: 'Scientia Capital',
+  arcade: 'AI Dev Cockpit',
+  enterprise: 'Enterprise',
 }
 
 /**
  * Organization themes
  */
 export const ORGANIZATION_THEMES: Record<OrganizationSlug, 'dark' | 'light'> = {
-  swaggystacks: 'dark',
-  scientiacapital: 'light',
+  arcade: 'dark',
+  enterprise: 'light',
 }
 
 // ============================================================================
@@ -223,8 +223,8 @@ export interface OrganizationInviteData {
  * Authentication tokens for each organization
  */
 export interface OrganizationAuthTokens {
-  swaggystacks: string
-  scientiacapital: string
+  arcade: string
+  enterprise: string
 }
 
 /**

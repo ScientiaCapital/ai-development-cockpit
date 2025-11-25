@@ -116,7 +116,7 @@ test.describe('Resource Utilization Monitoring', () => {
       await new Promise(resolve => setTimeout(resolve, 2000));
 
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('swaggystacks');
+      await marketplacePage.selectOrganization('arcade');
 
       // Allow monitoring during page operations
       await new Promise(resolve => setTimeout(resolve, 3000));
@@ -142,7 +142,7 @@ test.describe('Resource Utilization Monitoring', () => {
 
       // Perform multiple operations that could cause leaks
       for (let i = 0; i < 10; i++) {
-        await marketplacePage.selectOrganization(i % 2 === 0 ? 'swaggystacks' : 'scientia');
+        await marketplacePage.selectOrganization(i % 2 === 0 ? 'arcade' : 'enterprise');
         await marketplacePage.searchModels(`test-${i}`);
         await new Promise(resolve => setTimeout(resolve, 500));
       }
@@ -160,12 +160,12 @@ test.describe('Resource Utilization Monitoring', () => {
   });
 
   test.describe('Deployment Resource Usage', () => {
-    test('should monitor resources during SwaggyStacks deployment', async ({ page }) => {
+    test('should monitor resources during AI Dev Cockpit deployment', async ({ page }) => {
       const marketplacePage = new MarketplacePage(page);
       const deploymentPage = new DeploymentPage(page);
 
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('swaggystacks');
+      await marketplacePage.selectOrganization('arcade');
 
       const modelId = await marketplacePage.selectFirstModel();
       await marketplacePage.deployModel(modelId);
@@ -212,7 +212,7 @@ test.describe('Resource Utilization Monitoring', () => {
       const deploymentPage = new DeploymentPage(page);
 
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('scientia');
+      await marketplacePage.selectOrganization('enterprise');
 
       const modelId = await marketplacePage.selectFirstModel();
       await marketplacePage.deployModel(modelId);
@@ -311,7 +311,7 @@ test.describe('Resource Utilization Monitoring', () => {
           (async () => {
             try {
               await marketplacePage.goto();
-              await marketplacePage.selectOrganization(i % 2 === 0 ? 'swaggystacks' : 'scientia');
+              await marketplacePage.selectOrganization(i % 2 === 0 ? 'arcade' : 'enterprise');
 
               // Simulate sustained activity
               for (let j = 0; j < 5; j++) {
@@ -392,7 +392,7 @@ test.describe('Resource Utilization Monitoring', () => {
       // Perform network-intensive operations
       for (let i = 0; i < 5; i++) {
         await marketplacePage.searchModels(`network-test-${i}`);
-        await marketplacePage.selectOrganization(i % 2 === 0 ? 'swaggystacks' : 'scientia');
+        await marketplacePage.selectOrganization(i % 2 === 0 ? 'arcade' : 'enterprise');
       }
 
       await new Promise(resolve => setTimeout(resolve, 3000));

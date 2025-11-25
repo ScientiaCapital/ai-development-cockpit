@@ -103,11 +103,11 @@ RUNPOD_API_KEY="your_production_runpod_api_key_here"
 
 COST_OPTIMIZER_ENABLED="true"
 
-# SwaggyStacks Budget Limits
+# AI Dev Cockpit Budget Limits
 DAILY_BUDGET_SWAGGYSTACKS="2.00"
 MONTHLY_BUDGET_SWAGGYSTACKS="50.00"
 
-# Scientia Capital Budget Limits
+# Enterprise Budget Limits
 DAILY_BUDGET_SCIENTIA_CAPITAL="5.00"
 MONTHLY_BUDGET_SCIENTIA_CAPITAL="150.00"
 
@@ -145,7 +145,7 @@ ENABLE_PERFORMANCE_MONITORING="true"
 # ============================================
 
 # CORS allowed origins (comma-separated)
-CORS_ALLOWED_ORIGINS="https://swaggystacks.com,https://www.swaggystacks.com,https://scientiacapital.com,https://www.scientiacapital.com"
+CORS_ALLOWED_ORIGINS="https://arcade.com,https://www.arcade.com,https://enterprise.com,https://www.enterprise.com"
 
 # Rate limiting (requests per minute)
 RATE_LIMIT_PER_MINUTE="60"
@@ -155,7 +155,7 @@ RATE_LIMIT_PER_MINUTE="60"
 # ============================================
 
 NODE_ENV="production"
-NEXT_PUBLIC_APP_URL="https://swaggystacks.com"
+NEXT_PUBLIC_APP_URL="https://arcade.com"
 ```
 
 ### 2. Validate API Keys
@@ -259,7 +259,7 @@ If you want to seed with test data:
 -- Insert test organization mappings
 INSERT INTO user_organizations (user_id, org_id)
 VALUES
-  ('00000000-0000-0000-0000-000000000000', 'swaggystacks'),
+  ('00000000-0000-0000-0000-000000000000', 'arcade'),
   ('00000000-0000-0000-0000-000000000000', 'scientia-capital')
 ON CONFLICT DO NOTHING;
 
@@ -468,7 +468,7 @@ curl -X POST https://your-domain.com/api/optimize/complete \
   -H "Content-Type: application/json" \
   -d '{
     "prompt": "What is artificial intelligence?",
-    "organizationId": "swaggystacks",
+    "organizationId": "arcade",
     "maxTokens": 500
   }'
 
@@ -486,11 +486,11 @@ curl -X POST https://your-domain.com/api/optimize/complete \
 #### Test Stats Endpoint
 
 ```bash
-curl https://your-domain.com/api/optimize/stats?organization=swaggystacks&period=daily
+curl https://your-domain.com/api/optimize/stats?organization=arcade&period=daily
 
 # Expected response:
 # {
-#   "organization": "swaggystacks",
+#   "organization": "arcade",
 #   "period": "daily",
 #   "totalRequests": 0,
 #   "totalCost": 0,
@@ -502,7 +502,7 @@ curl https://your-domain.com/api/optimize/stats?organization=swaggystacks&period
 #### Test Recommendation Endpoint
 
 ```bash
-curl "https://your-domain.com/api/optimize/recommendation?prompt=Explain%20quantum%20computing&organization=swaggystacks"
+curl "https://your-domain.com/api/optimize/recommendation?prompt=Explain%20quantum%20computing&organization=arcade"
 
 # Expected response:
 # {
@@ -520,19 +520,19 @@ curl "https://your-domain.com/api/optimize/recommendation?prompt=Explain%20quant
 # Tier 1 (Free) - Simple query
 curl -X POST https://your-domain.com/api/optimize/complete \
   -H "Content-Type: application/json" \
-  -d '{"prompt": "What is 2+2?", "organizationId": "swaggystacks"}'
+  -d '{"prompt": "What is 2+2?", "organizationId": "arcade"}'
 # Should use Gemini (tier: "free")
 
 # Tier 2 (Mid) - Complex query
 curl -X POST https://your-domain.com/api/optimize/complete \
   -H "Content-Type: application/json" \
-  -d '{"prompt": "Explain the architectural differences between REST and GraphQL", "organizationId": "swaggystacks"}'
+  -d '{"prompt": "Explain the architectural differences between REST and GraphQL", "organizationId": "arcade"}'
 # Should use Claude (tier: "mid")
 
 # Tier 3 (Premium) - Chinese query
 curl -X POST https://your-domain.com/api/optimize/complete \
   -H "Content-Type: application/json" \
-  -d '{"prompt": "解释什么是机器学习", "organizationId": "swaggystacks"}'
+  -d '{"prompt": "解释什么是机器学习", "organizationId": "arcade"}'
 # Should use RunPod (tier: "premium")
 ```
 
@@ -547,7 +547,7 @@ curl -X POST https://your-domain.com/api/optimize/complete \
 for i in {1..100}; do
   curl -X POST https://your-domain.com/api/optimize/complete \
     -H "Content-Type: application/json" \
-    -d '{"prompt": "Test budget", "organizationId": "swaggystacks"}'
+    -d '{"prompt": "Test budget", "organizationId": "arcade"}'
   sleep 0.1
 done
 
@@ -565,7 +565,7 @@ done
 Visit your deployed application and test:
 
 - [ ] **Dashboard Loads**
-  - Navigate to `/swaggystacks` or `/scientia`
+  - Navigate to `/arcade` or `/scientia`
   - Verify dashboard renders
   - Check for console errors
 
@@ -704,13 +704,13 @@ BEGIN
 
     -- Get limits from environment (hard-coded for example)
     daily_limit := CASE
-      WHEN org.organization_id = 'swaggystacks' THEN 2.00
+      WHEN org.organization_id = 'arcade' THEN 2.00
       WHEN org.organization_id = 'scientia-capital' THEN 5.00
       ELSE 1.00
     END;
 
     monthly_limit := CASE
-      WHEN org.organization_id = 'swaggystacks' THEN 50.00
+      WHEN org.organization_id = 'arcade' THEN 50.00
       WHEN org.organization_id = 'scientia-capital' THEN 150.00
       ELSE 30.00
     END;
@@ -908,7 +908,7 @@ INSERT INTO cost_optimizer_requests (
   model_used, provider, tier,
   complexity_score, cost_usd, latency_ms
 ) VALUES (
-  'swaggystacks', 'test-001', 'test prompt',
+  'arcade', 'test-001', 'test prompt',
   10, 20, 'test-model', 'gemini', 'free',
   25, 0, 100
 );
@@ -951,7 +951,7 @@ echo $DAILY_BUDGET_SWAGGYSTACKS
 echo $COST_OPTIMIZER_ENABLED
 
 # Verify budget calculation
-curl "https://your-domain.com/api/optimize/stats?organization=swaggystacks&period=daily"
+curl "https://your-domain.com/api/optimize/stats?organization=arcade&period=daily"
 ```
 
 **Solution:**

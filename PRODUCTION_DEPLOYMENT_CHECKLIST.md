@@ -23,8 +23,8 @@
   - [ ] Go to https://huggingface.co/settings/tokens
   - [ ] Revoke exposed tokens (`hf_ABUMi...`, `hf_XsNlH...`)
   - [ ] Generate new tokens for each organization:
-    - [ ] SwaggyStacks token
-    - [ ] ScientiaCapital token
+    - [ ] AI Dev Cockpit token
+    - [ ] Enterprise token
   - [ ] Add to production environment variables
 
 - [ ] **Supabase Credentials**
@@ -147,8 +147,8 @@
 
 - [ ] **Domain Configuration**
   - [ ] Add custom domains:
-    - [ ] swaggystacks.com
-    - [ ] scientiacapital.com
+    - [ ] arcade.com
+    - [ ] enterprise.com
   - [ ] Configure DNS records (A/CNAME)
   - [ ] Enable HTTPS (automatic with Vercel)
   - [ ] Test both domains
@@ -356,8 +356,8 @@
   ```bash
   # Run production health checks
   curl https://yourdomain.com/api/health
-  curl https://swaggystacks.com/api/health
-  curl https://scientiacapital.com/api/health
+  curl https://arcade.com/api/health
+  curl https://enterprise.com/api/health
   ```
 
 - [ ] **Performance Baseline**

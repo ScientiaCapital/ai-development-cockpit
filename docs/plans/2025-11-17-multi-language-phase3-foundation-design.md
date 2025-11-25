@@ -3,7 +3,7 @@
 **Date**: 2025-11-17
 **Status**: Approved for Implementation
 **Timeline**: 12 hours
-**Owner**: ScientiaCapital
+**Owner**: Enterprise
 
 ---
 
@@ -296,7 +296,7 @@ jobs:
           file: ./Dockerfile.serverless
           push: true
           platforms: linux/amd64
-          tags: ghcr.io/scientiacapital/ai-dev-cockpit:agent-workers
+          tags: ghcr.io/enterprise/ai-dev-cockpit:agent-workers
           cache-from: type=gha
           cache-to: type=gha,mode=max
 ```

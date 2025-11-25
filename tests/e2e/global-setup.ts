@@ -69,7 +69,7 @@ async function setupAuthentication() {
 
     if (needsAuth) {
       // Fill in test credentials
-      await page.fill('[data-testid="email-input"]', process.env.E2E_TEST_EMAIL || 'test@swaggystacks.com');
+      await page.fill('[data-testid="email-input"]', process.env.E2E_TEST_EMAIL || 'test@arcade.com');
       await page.fill('[data-testid="password-input"]', process.env.E2E_TEST_PASSWORD || 'testpassword123');
       await page.click('[data-testid="login-button"]');
 

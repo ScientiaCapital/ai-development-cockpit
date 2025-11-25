@@ -1646,7 +1646,7 @@ export class GitHubPRService {
       owner,
       repo,
       title,
-      body: `${body}\n\n---\n🤖 Generated with [AI Development Cockpit](https://github.com/ScientiaCapital/ai-development-cockpit)`,
+      body: `${body}\n\n---\n🤖 Generated with [AI Development Cockpit](https://github.com/Enterprise/ai-development-cockpit)`,
       head: branchName,
       base: baseBranch
     })

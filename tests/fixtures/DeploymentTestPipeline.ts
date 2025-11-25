@@ -12,7 +12,7 @@ import { ModelTemplate, getModelTemplate } from './model-templates';
 export interface PipelineConfig {
   browser: Browser;
   environment: 'development' | 'staging' | 'production';
-  organization: 'swaggystacks' | 'scientia';
+  organization: 'arcade' | 'enterprise';
   parallelDeployments: number;
   timeoutMs: number;
   retryAttempts: number;
@@ -213,7 +213,7 @@ export class DeploymentTestPipeline {
 
     // Navigate pages to appropriate organization landing page
     const baseUrl = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3001';
-    const orgPath = this.config.organization === 'swaggystacks' ? '/swaggystacks' : '/scientia';
+    const orgPath = this.config.organization === 'arcade' ? '/arcade' : '/enterprise';
 
     await Promise.all(this.pages.map(page => page.goto(`${baseUrl}${orgPath}`)));
   }

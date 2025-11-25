@@ -193,7 +193,7 @@ test.describe('Resilience Testing - Fault Tolerance', () => {
       page,
       `resilience-${Date.now()}`,
       'Resilience Testing',
-      'swaggystacks',
+      'arcade',
       'development'
     );
 
@@ -429,7 +429,7 @@ test.describe('Recovery Time Objectives (RTO) Validation', () => {
       page,
       'rto-validation',
       'RTO Validation',
-      'swaggystacks',
+      'arcade',
       'development'
     );
     await metricsCollector.startCollection();

@@ -1,7 +1,7 @@
 /**
  * Load Testing E2E Specifications
  * Tests deployment system under concurrent load conditions
- * Validates performance under stress for both SwaggyStacks and ScientiaCapital
+ * Validates performance under stress for both AI Dev Cockpit and ScientiaCapital
  */
 
 import { test, expect } from '@playwright/test';
@@ -49,7 +49,7 @@ test.describe('Load Testing - Deployment System Performance', () => {
             await marketplacePage.goto();
 
             // Alternate between organizations for load distribution
-            const org = i % 2 === 0 ? 'swaggystacks' : 'scientia';
+            const org = i % 2 === 0 ? 'arcade' : 'enterprise';
             await marketplacePage.selectOrganization(org);
 
             // Select model for deployment
@@ -86,7 +86,7 @@ test.describe('Load Testing - Deployment System Performance', () => {
             return {
               deploymentIndex: i,
               deploymentId: null,
-              organization: i % 2 === 0 ? 'swaggystacks' : 'scientia',
+              organization: i % 2 === 0 ? 'arcade' : 'enterprise',
               duration,
               success: false,
               error: error instanceof Error ? error.message : 'Unknown error'
@@ -215,7 +215,7 @@ test.describe('Load Testing - Deployment System Performance', () => {
   });
 
   test.describe('Organization-Specific Load Tests', () => {
-    test('should handle SwaggyStacks terminal theme under load', async ({ browser }) => {
+    test('should handle AI Dev Cockpit terminal theme under load', async ({ browser }) => {
       const concurrentUsers = 8;
       const userPromises: Promise<any>[] = [];
 
@@ -231,8 +231,8 @@ test.describe('Load Testing - Deployment System Performance', () => {
 
           try {
             await marketplacePage.goto();
-            await marketplacePage.selectOrganization('swaggystacks');
-            await marketplacePage.expectSwaggyStacksTheme();
+            await marketplacePage.selectOrganization('arcade');
+            await marketplacePage.expectAI Dev CockpitTheme();
 
             // Simulate user browsing and deployment
             await marketplacePage.searchModels('gaming');
@@ -296,7 +296,7 @@ test.describe('Load Testing - Deployment System Performance', () => {
 
           try {
             await marketplacePage.goto();
-            await marketplacePage.selectOrganization('scientia');
+            await marketplacePage.selectOrganization('enterprise');
             await marketplacePage.expectScientiaCapitalTheme();
 
             // Enterprise workflow with larger deployments

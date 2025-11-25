@@ -46,7 +46,7 @@ The codebase demonstrates **impressive breadth** of features but suffers from:
 **Problem**: Multiple conflicting `Organization` type definitions:
 ```typescript
 // src/contexts/HuggingFaceAuth.tsx
-export type Organization = 'swaggystacks' | 'scientiacapital'
+export type Organization = 'arcade' | 'enterprise'
 
 // src/lib/organization.ts
 export interface Organization { id: string; name: string; ... }
@@ -55,7 +55,7 @@ export interface Organization { id: string; name: string; ... }
 export type Organization = Tables<'organizations'>
 
 // src/services/monitoring/prometheus.service.ts
-export type Organization = 'swaggystacks' | 'scientia_capital' | 'shared'
+export type Organization = 'arcade' | 'enterprise' | 'shared'
 ```
 
 **Impact**: Type confusion, compiler errors, runtime bugs

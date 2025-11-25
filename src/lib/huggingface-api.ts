@@ -52,7 +52,7 @@ class HuggingFaceApiClient {
     return {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
-      'User-Agent': 'SwaggyStacks-ScientiaCapital/1.0.0'
+      'User-Agent': 'AI Dev Cockpit-Enterprise/1.0.0'
     }
   }
 
@@ -113,8 +113,8 @@ class HuggingFaceApiClient {
       if (params.organization) {
         // Map organization names to HuggingFace organization names
         const orgMap = {
-          'swaggystacks': 'SwaggyStacks',
-          'scientiacapital': 'ScientiaCapital'
+          'arcade': 'AI Dev Cockpit',
+          'enterprise': 'Enterprise'
         }
         queryParams.append('author', orgMap[params.organization])
       }
@@ -201,8 +201,8 @@ class HuggingFaceApiClient {
   async validateOrganizationAccess(organization: Organization, token: string): Promise<boolean> {
     try {
       const orgMap = {
-        'swaggystacks': 'SwaggyStacks',
-        'scientiacapital': 'ScientiaCapital'
+        'arcade': 'AI Dev Cockpit',
+        'enterprise': 'Enterprise'
       }
 
       const response = await this.searchModels({
@@ -218,14 +218,14 @@ class HuggingFaceApiClient {
   }
 
   private getOrganizationFromModelId(modelId: string): Organization {
-    if (modelId.toLowerCase().includes('swaggy') || modelId.startsWith('SwaggyStacks/')) {
-      return 'swaggystacks'
+    if (modelId.toLowerCase().includes('swaggy') || modelId.startsWith('AI Dev Cockpit/')) {
+      return 'arcade'
     }
-    if (modelId.toLowerCase().includes('scientia') || modelId.startsWith('ScientiaCapital/')) {
-      return 'scientiacapital'
+    if (modelId.toLowerCase().includes('scientia') || modelId.startsWith('Enterprise/')) {
+      return 'enterprise'
     }
     // Default fallback based on some heuristic
-    return 'swaggystacks'
+    return 'arcade'
   }
 
   private generatePricingInfo(model: any) {
@@ -256,15 +256,15 @@ export function formatModelSize(model: ModelInfo): string {
 }
 
 export function getModelThemeClass(organization: Organization): string {
-  return organization === 'swaggystacks'
+  return organization === 'arcade'
     ? 'border-green-500 bg-green-500/10'
     : 'border-amber-500 bg-amber-500/10'
 }
 
 export function getOrganizationDisplayName(org: Organization): string {
   const names = {
-    'swaggystacks': '🎮 SwaggyStacks',
-    'scientiacapital': '🏢 ScientiaCapital'
+    'arcade': '🎮 AI Dev Cockpit',
+    'enterprise': '🏢 Enterprise'
   }
   return names[org]
 }

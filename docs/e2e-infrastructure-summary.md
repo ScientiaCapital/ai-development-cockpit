@@ -53,7 +53,7 @@
 - **Core Functionality**: Basic marketplace operations validation
 - **Model Discovery**: Search, filtering, and discovery workflows
 - **API Integration**: Real HuggingFace API integration with fallback mocks
-- **Dual-Domain**: SwaggyStacks and ScientiaCapital routing validation
+- **Dual-Domain**: AI Dev Cockpit and Enterprise routing validation
 
 #### Performance Testing (`tests/e2e/performance/`)
 - **Load Testing**: Concurrent user simulation
@@ -126,8 +126,8 @@
 - ✅ CI/CD pipeline integration with quality gates
 
 ### 3. **Dual-Domain Architecture Support**
-- ✅ SwaggyStacks domain testing (developer-focused)
-- ✅ ScientiaCapital domain testing (enterprise-focused)
+- ✅ AI Dev Cockpit domain testing (developer-focused)
+- ✅ Enterprise domain testing (enterprise-focused)
 - ✅ Cross-domain routing validation
 - ✅ Theme-specific functionality testing
 - ✅ Organization-specific workflow validation

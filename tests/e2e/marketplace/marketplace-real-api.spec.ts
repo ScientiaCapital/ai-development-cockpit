@@ -31,17 +31,17 @@ test.describe('Real HuggingFace API Integration', () => {
     await apiClient.cleanup();
   });
 
-  test.describe('SwaggyStacks Organization', () => {
-    test('should fetch real SwaggyStacks models from HuggingFace', async () => {
+  test.describe('AI Dev Cockpit Organization', () => {
+    test('should fetch real AI Dev Cockpit models from HuggingFace', async () => {
       await marketplacePage.goto();
       await marketplacePage.expectMarketplaceVisible();
 
-      // Switch to SwaggyStacks organization
-      await marketplacePage.selectOrganization('swaggystacks');
-      await marketplacePage.expectOrganization('swaggystacks');
+      // Switch to AI Dev Cockpit organization
+      await marketplacePage.selectOrganization('arcade');
+      await marketplacePage.expectOrganization('arcade');
 
       // Verify terminal theme is applied
-      await marketplacePage.expectSwaggyStacksTheme();
+      await marketplacePage.expectAI Dev CockpitTheme();
 
       // Wait for real API response
       await marketplacePage.waitForModelsLoaded();
@@ -53,7 +53,7 @@ test.describe('Real HuggingFace API Integration', () => {
       // Validate that we have real model data (not mock)
       if (modelCount > 0) {
         const firstModelId = await marketplacePage.selectFirstModel();
-        expect(firstModelId).toMatch(/^swaggystacks\//);
+        expect(firstModelId).toMatch(/^arcade\//);
 
         const modelDetails = await marketplacePage.getModelDetails(firstModelId);
         expect(modelDetails.title).toBeTruthy();
@@ -63,9 +63,9 @@ test.describe('Real HuggingFace API Integration', () => {
       }
     });
 
-    test('should search SwaggyStacks models with real API', async () => {
+    test('should search AI Dev Cockpit models with real API', async () => {
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('swaggystacks');
+      await marketplacePage.selectOrganization('arcade');
 
       // Search for gaming-related models
       await marketplacePage.searchModels('gaming');
@@ -94,7 +94,7 @@ test.describe('Real HuggingFace API Integration', () => {
 
     test('should handle real API rate limiting gracefully', async () => {
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('swaggystacks');
+      await marketplacePage.selectOrganization('arcade');
 
       // Perform multiple rapid searches to test rate limiting
       const searches = ['gaming', 'chatbot', 'code', 'terminal'];
@@ -122,8 +122,8 @@ test.describe('Real HuggingFace API Integration', () => {
       await marketplacePage.expectMarketplaceVisible();
 
       // Switch to ScientiaCapital organization
-      await marketplacePage.selectOrganization('scientia');
-      await marketplacePage.expectOrganization('scientia');
+      await marketplacePage.selectOrganization('enterprise');
+      await marketplacePage.expectOrganization('enterprise');
 
       // Verify corporate theme is applied
       await marketplacePage.expectScientiaCapitalTheme();
@@ -143,13 +143,13 @@ test.describe('Real HuggingFace API Integration', () => {
         const modelDetails = await marketplacePage.getModelDetails(firstModelId);
         expect(modelDetails.title).toBeTruthy();
         expect(modelDetails.description).toBeTruthy();
-        expect(modelDetails.organization).toBe('scientia');
+        expect(modelDetails.organization).toBe('enterprise');
       }
     });
 
     test('should search ScientiaCapital financial models with real API', async () => {
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('scientia');
+      await marketplacePage.selectOrganization('enterprise');
 
       // Search for financial analysis models
       await marketplacePage.searchModels('financial');
@@ -179,7 +179,7 @@ test.describe('Real HuggingFace API Integration', () => {
 
     test('should validate enterprise model metadata from real API', async () => {
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('scientia');
+      await marketplacePage.selectOrganization('enterprise');
       await marketplacePage.waitForModelsLoaded();
 
       const modelCount = await marketplacePage.getModelCount();
@@ -203,16 +203,16 @@ test.describe('Real HuggingFace API Integration', () => {
     test('should switch between organizations and maintain real API connectivity', async () => {
       await marketplacePage.goto();
 
-      // Test SwaggyStacks first
-      await marketplacePage.selectOrganization('swaggystacks');
-      await marketplacePage.expectSwaggyStacksTheme();
+      // Test AI Dev Cockpit first
+      await marketplacePage.selectOrganization('arcade');
+      await marketplacePage.expectAI Dev CockpitTheme();
       await marketplacePage.waitForModelsLoaded();
 
       const swaggyModelCount = await marketplacePage.getModelCount();
       expect(swaggyModelCount).toBeGreaterThan(0);
 
       // Switch to ScientiaCapital
-      await marketplacePage.selectOrganization('scientia');
+      await marketplacePage.selectOrganization('enterprise');
       await marketplacePage.expectScientiaCapitalTheme();
       await marketplacePage.waitForModelsLoaded();
 
@@ -222,12 +222,12 @@ test.describe('Real HuggingFace API Integration', () => {
       // Verify different model sets (organizations should have different models)
       if (swaggyModelCount > 0 && scientiaModelCount > 0) {
         // Models should be organization-specific
-        await marketplacePage.selectOrganization('swaggystacks');
+        await marketplacePage.selectOrganization('arcade');
         await marketplacePage.waitForModelsLoaded();
 
         if (swaggyModelCount > 0) {
-          const swaggyModelId = await marketplacePage.selectFirstModel();
-          expect(swaggyModelId).toMatch(/^swaggystacks\//);
+          const arcadeModelId = await marketplacePage.selectFirstModel();
+          expect(arcadeModelId).toMatch(/^arcade\//);
         }
       }
     });
@@ -243,7 +243,7 @@ test.describe('Real HuggingFace API Integration', () => {
       await marketplacePage.goto();
 
       // Attempt to load models with invalid authentication
-      await marketplacePage.selectOrganization('swaggystacks');
+      await marketplacePage.selectOrganization('arcade');
 
       // Should handle auth error gracefully
       try {
@@ -258,7 +258,7 @@ test.describe('Real HuggingFace API Integration', () => {
 
     test('should measure real API response times', async () => {
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('swaggystacks');
+      await marketplacePage.selectOrganization('arcade');
 
       // Measure API response time
       const responseTime = await apiClient.measureApiResponseTime('/api/models*');
@@ -282,7 +282,7 @@ test.describe('Real HuggingFace API Integration', () => {
       });
 
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('swaggystacks');
+      await marketplacePage.selectOrganization('arcade');
 
       // Should either load or show appropriate loading state
       try {
@@ -301,7 +301,7 @@ test.describe('Real HuggingFace API Integration', () => {
       await marketplacePage.goto();
 
       // Test with both organizations to ensure error handling is consistent
-      const orgs: ('swaggystacks' | 'scientia')[] = ['swaggystacks', 'scientia'];
+      const orgs: ('arcade' | 'enterprise')[] = ['arcade', 'enterprise'];
 
       for (const org of orgs) {
         await marketplacePage.selectOrganization(org);
@@ -324,9 +324,9 @@ test.describe('Real HuggingFace API Integration', () => {
 
       // Simulate multiple concurrent operations
       const operations = [
-        () => marketplacePage.selectOrganization('swaggystacks'),
+        () => marketplacePage.selectOrganization('arcade'),
         () => marketplacePage.searchModels('gaming'),
-        () => marketplacePage.selectOrganization('scientia'),
+        () => marketplacePage.selectOrganization('enterprise'),
         () => marketplacePage.searchModels('financial')
       ];
 
@@ -351,7 +351,7 @@ test.describe('Real HuggingFace API Integration', () => {
 
     test('should validate real API data consistency', async () => {
       await marketplacePage.goto();
-      await marketplacePage.selectOrganization('swaggystacks');
+      await marketplacePage.selectOrganization('arcade');
       await marketplacePage.waitForModelsLoaded();
 
       // Get initial model count

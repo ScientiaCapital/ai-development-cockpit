@@ -11,7 +11,7 @@ interface TerminalWindowProps {
 
 export default function TerminalWindow({
   children,
-  title = "SwaggyStacks Terminal v2.1.0",
+  title = "AI Dev Cockpit Terminal v2.1.0",
   className = ""
 }: TerminalWindowProps) {
   return (

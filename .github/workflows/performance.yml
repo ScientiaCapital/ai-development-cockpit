@@ -190,7 +190,7 @@ jobs:
 
     strategy:
       matrix:
-        organization: [swaggystacks, scientia]
+        organization: [arcade, enterprise]
         page: [home, marketplace, chat]
 
     steps:
@@ -357,7 +357,7 @@ jobs:
             --connections 10 \
             --duration 30 \
             --json \
-            http://localhost:3000/swaggystacks > load-test-light.json
+            http://localhost:3000/arcade > load-test-light.json
           
           # Analyze results
           REQUESTS_PER_SEC=$(jq -r '.requests.average' load-test-light.json)
@@ -375,7 +375,7 @@ jobs:
             --connections 50 \
             --duration 60 \
             --json \
-            http://localhost:3000/scientia > load-test-medium.json
+            http://localhost:3000/enterprise > load-test-medium.json
           
           REQUESTS_PER_SEC=$(jq -r '.requests.average' load-test-medium.json)
           AVG_LATENCY=$(jq -r '.latency.average' load-test-medium.json)
@@ -466,8 +466,8 @@ jobs:
           
           # Simulate some load
           for i in {1..10}; do
-            curl -s http://localhost:3000/swaggystacks > /dev/null
-            curl -s http://localhost:3000/scientia > /dev/null
+            curl -s http://localhost:3000/arcade > /dev/null
+            curl -s http://localhost:3000/enterprise > /dev/null
             curl -s http://localhost:3000/marketplace > /dev/null
             sleep 2
           done

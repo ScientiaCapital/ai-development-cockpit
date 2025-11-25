@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the comprehensive monitoring system implemented for the dual-domain LLM platform (SwaggyStacks + ScientiaCapital). The system provides real-time observability, metrics collection, distributed tracing, and centralized logging with organization-specific insights.
+This document describes the comprehensive monitoring system implemented for the dual-domain LLM platform (AI Dev Cockpit + Enterprise). The system provides real-time observability, metrics collection, distributed tracing, and centralized logging with organization-specific insights.
 
 ## Architecture
 
@@ -39,8 +39,8 @@ This document describes the comprehensive monitoring system implemented for the 
 
 The system supports dual-domain monitoring for:
 
-- **SwaggyStacks**: Developer-focused metrics with detailed technical insights
-- **ScientiaCapital**: Executive-focused metrics with business-oriented dashboards
+- **AI Dev Cockpit**: Developer-focused metrics with detailed technical insights
+- **Enterprise**: Executive-focused metrics with business-oriented dashboards
 
 ### Metrics Collection
 
@@ -147,7 +147,7 @@ prometheusService.recordHttpRequest(
   '/api/models/deploy',
   200,
   150,
-  'swaggystacks'
+  'arcade'
 );
 
 // Record business metric
@@ -155,7 +155,7 @@ prometheusService.recordModelInference(
   'qwen2.5:7b',
   120,
   0.001,
-  'swaggystacks'
+  'arcade'
 );
 ```
 
@@ -176,7 +176,7 @@ loggingService.logPerformance('model_inference', {
 loggingService.logSecurity('authentication_failure', {
   ip: '192.168.1.100',
   userAgent: 'Mozilla/5.0...',
-  organization: 'swaggystacks',
+  organization: 'arcade',
   reason: 'invalid_token'
 });
 ```
@@ -194,7 +194,7 @@ const result = await tracingService.traceOperation(
     return await deployModel(modelConfig);
   },
   {
-    organization: 'swaggystacks',
+    organization: 'arcade',
     modelName: 'qwen2.5:7b'
   }
 );
@@ -208,14 +208,14 @@ import { MonitoringDashboard } from '@/components/monitoring/MonitoringDashboard
 
 function AppMonitoring() {
   const monitoring = useMonitoring({
-    organization: 'swaggystacks',
+    organization: 'arcade',
     refreshInterval: 30000,
     enableRealTime: true
   });
 
   return (
     <MonitoringDashboard
-      organization="swaggystacks"
+      organization="arcade"
       className="w-full h-full"
     />
   );

@@ -231,7 +231,7 @@ export interface ModelConfiguration {
     codeGeneration: boolean
     multiModal: boolean
   }
-  organization: 'swaggystacks' | 'scientiacapital'
+  organization: 'arcade' | 'enterprise'
   status: 'active' | 'inactive' | 'deploying' | 'error'
 }
 

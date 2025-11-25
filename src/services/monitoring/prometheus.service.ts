@@ -8,7 +8,7 @@ import client from 'prom-client';
 import { DeploymentMonitoring } from '../runpod/monitoring.service';
 
 // Organization types for metric labeling
-export type Organization = 'swaggystacks' | 'scientia_capital' | 'shared';
+export type Organization = 'arcade' | 'enterprise' | 'shared';
 
 // Custom metric interfaces
 export interface ApiMetrics {
@@ -367,11 +367,11 @@ export class PrometheusService {
    */
   private getOrganizationFromEndpoint(endpointId: string): Organization {
     // Logic to determine organization based on endpoint ID or other context
-    if (endpointId.includes('swaggystacks') || endpointId.includes('dev')) {
-      return 'swaggystacks';
+    if (endpointId.includes('arcade') || endpointId.includes('dev')) {
+      return 'arcade';
     }
-    if (endpointId.includes('scientia') || endpointId.includes('corp')) {
-      return 'scientia_capital';
+    if (endpointId.includes('enterprise') || endpointId.includes('corp')) {
+      return 'enterprise';
     }
     return 'shared';
   }

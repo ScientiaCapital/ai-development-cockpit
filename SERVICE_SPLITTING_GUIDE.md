@@ -530,7 +530,7 @@ describe('ModelDiscoveryService', () => {
     mockFetch = jest.fn()
     global.fetch = mockFetch
     service = new ModelDiscoveryService(new Map([
-      ['swaggystacks', 'mock-token']
+      ['arcade', 'mock-token']
     ]))
   })
 
@@ -539,7 +539,7 @@ describe('ModelDiscoveryService', () => {
       json: async () => [{ id: 'Qwen/Qwen2.5-7B' }]
     })
 
-    const results = await service.searchChineseModels('swaggystacks', {
+    const results = await service.searchChineseModels('arcade', {
       maxSize: '7B'
     })
 
@@ -556,18 +556,18 @@ describe('ModelDiscoveryService', () => {
 describe('UnifiedChineseLLMService Integration', () => {
   it('completes full deployment flow', async () => {
     const service = new UnifiedChineseLLMService({
-      hfTokens: new Map([['swaggystacks', 'token']]),
+      hfTokens: new Map([['arcade', 'token']]),
       runpodApiKey: 'key'
     })
 
     // Search models
-    const models = await service.searchChineseModels('swaggystacks')
+    const models = await service.searchChineseModels('arcade')
     expect(models.length).toBeGreaterThan(0)
 
     // Deploy first model
     const deployment = await service.deployModelToRunPod({
       hfModelId: models[0].id,
-      organization: 'swaggystacks',
+      organization: 'arcade',
       instanceConfig: { gpuTypeId: 'A100', gpuCount: 1 }
     })
 

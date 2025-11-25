@@ -28,7 +28,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     async () => {
       try {
         // Validate organization parameter
-        if (organization && !['swaggystacks', 'scientia_capital', 'shared'].includes(organization)) {
+        if (organization && !['arcade', 'enterprise', 'shared'].includes(organization)) {
           loggingService.warn('Invalid organization parameter in metrics request', {
             organization,
             ip: getClientIP(request),

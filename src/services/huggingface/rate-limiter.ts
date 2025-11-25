@@ -34,8 +34,8 @@ export interface RateLimitStats {
 
 // Default rate limit configurations
 const DEFAULT_CONFIGS: OrganizationLimits = {
-  // SwaggyStacks - Gaming/Developer focused (more aggressive)
-  swaggystacks: {
+  // AI Dev Cockpit - Gaming/Developer focused (more aggressive)
+  arcade: {
     maxConcurrent: 10,
     minTime: 100, // 10 requests per second
     reservoir: 1000, // Burst capacity
@@ -45,7 +45,7 @@ const DEFAULT_CONFIGS: OrganizationLimits = {
     strategy: Bottleneck.strategy.OVERFLOW,
   },
 
-  // ScientiaCapital - Enterprise focused (more conservative)
+  // Enterprise - Enterprise focused (more conservative)
   scientia: {
     maxConcurrent: 5,
     minTime: 200, // 5 requests per second

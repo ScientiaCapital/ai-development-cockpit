@@ -35,7 +35,7 @@ describe('HuggingFaceCredentialsService', () => {
       mockInsert.mockResolvedValueOnce({ data: null, error: null });
 
       const credentials = {
-        organization: 'swaggystacks',
+        organization: 'arcade',
         apiKey: 'hf_test_key_123',
         organizationId: 'org_123',
         permissions: ['read', 'write'],
@@ -48,7 +48,7 @@ describe('HuggingFaceCredentialsService', () => {
       expect(mockSupabaseClient.from).toHaveBeenCalledWith('huggingface_credentials');
       expect(mockInsert).toHaveBeenCalledWith(
         expect.objectContaining({
-          organization: 'swaggystacks',
+          organization: 'arcade',
           organization_id: 'org_123',
           encrypted_api_key: expect.any(String),
           permissions: ['read', 'write'],
@@ -66,7 +66,7 @@ describe('HuggingFaceCredentialsService', () => {
       });
 
       const credentials = {
-        organization: 'swaggystacks',
+        organization: 'arcade',
         apiKey: 'hf_test_key_123',
         organizationId: 'org_123',
         permissions: ['read'],
@@ -85,7 +85,7 @@ describe('HuggingFaceCredentialsService', () => {
       });
 
       const credentials = {
-        organization: 'swaggystacks',
+        organization: 'arcade',
         apiKey: 'hf_test_key_123',
         organizationId: 'org_123',
         permissions: ['read'],
@@ -108,7 +108,7 @@ describe('HuggingFaceCredentialsService', () => {
 
       // First store credentials to get proper encryption
       const testCredentials = {
-        organization: 'swaggystacks',
+        organization: 'arcade',
         apiKey: 'hf_test_key_123',
         organizationId: 'org_123',
         permissions: ['read', 'write'],
@@ -120,7 +120,7 @@ describe('HuggingFaceCredentialsService', () => {
       mockSingle.mockResolvedValueOnce({
         data: {
           id: 1,
-          organization: 'swaggystacks',
+          organization: 'arcade',
           organization_id: 'org_123',
           encrypted_api_key: 'encrypted_data_here',
           iv: 'iv_data_here',
@@ -133,10 +133,10 @@ describe('HuggingFaceCredentialsService', () => {
         error: null,
       });
 
-      const result = await credentialsService.getCredentials('swaggystacks');
+      const result = await credentialsService.getCredentials('arcade');
 
       expect(mockSupabaseClient.from).toHaveBeenCalledWith('huggingface_credentials');
-      expect(mockEq).toHaveBeenCalledWith('organization', 'swaggystacks');
+      expect(mockEq).toHaveBeenCalledWith('organization', 'arcade');
       expect(mockEq).toHaveBeenCalledWith('is_active', true);
     });
 
@@ -183,15 +183,15 @@ describe('HuggingFaceCredentialsService', () => {
         data: {
           encrypted_api_key: 'encrypted_key',
           iv: 'test_iv',
-          organization: 'swaggystacks',
+          organization: 'arcade',
         },
         error: null,
       });
 
-      const result = await credentialsService.validateCredentials('swaggystacks');
+      const result = await credentialsService.validateCredentials('arcade');
 
       expect(result.valid).toBe(true);
-      expect(result.organization).toBe('swaggystacks');
+      expect(result.organization).toBe('arcade');
     });
 
     it('should handle invalid credentials', async () => {
@@ -206,12 +206,12 @@ describe('HuggingFaceCredentialsService', () => {
         data: {
           encrypted_api_key: 'encrypted_key',
           iv: 'test_iv',
-          organization: 'swaggystacks',
+          organization: 'arcade',
         },
         error: null,
       });
 
-      const result = await credentialsService.validateCredentials('swaggystacks');
+      const result = await credentialsService.validateCredentials('arcade');
 
       expect(result.valid).toBe(false);
       expect(result.error).toContain('API validation failed');
@@ -226,12 +226,12 @@ describe('HuggingFaceCredentialsService', () => {
         data: {
           encrypted_api_key: 'encrypted_key',
           iv: 'test_iv',
-          organization: 'swaggystacks',
+          organization: 'arcade',
         },
         error: null,
       });
 
-      const result = await credentialsService.validateCredentials('swaggystacks');
+      const result = await credentialsService.validateCredentials('arcade');
 
       expect(result.valid).toBe(false);
       expect(result.error).toContain('Network error');
@@ -247,7 +247,7 @@ describe('HuggingFaceCredentialsService', () => {
       mockSingle.mockResolvedValueOnce({
         data: {
           id: 1,
-          organization: 'swaggystacks',
+          organization: 'arcade',
           encrypted_api_key: 'old_encrypted_key',
           iv: 'old_iv',
         },
@@ -261,12 +261,12 @@ describe('HuggingFaceCredentialsService', () => {
       });
 
       const result = await credentialsService.rotateCredentials(
-        'swaggystacks',
+        'arcade',
         'hf_new_key_456'
       );
 
       expect(result.success).toBe(true);
-      expect(result.organization).toBe('swaggystacks');
+      expect(result.organization).toBe('arcade');
       expect(mockUpdate).toHaveBeenCalled();
     });
 
@@ -295,7 +295,7 @@ describe('HuggingFaceCredentialsService', () => {
       mockSingle.mockResolvedValueOnce({
         data: {
           id: 1,
-          organization: 'swaggystacks',
+          organization: 'arcade',
           encrypted_api_key: 'old_encrypted_key',
           iv: 'old_iv',
           permissions: ['read'],
@@ -308,7 +308,7 @@ describe('HuggingFaceCredentialsService', () => {
       mockUpdate.mockResolvedValueOnce({ data: { id: 1 }, error: null });
 
       const result = await credentialsService.rotateCredentials(
-        'swaggystacks',
+        'arcade',
         'hf_new_key_456',
         { createBackup: true }
       );
@@ -316,7 +316,7 @@ describe('HuggingFaceCredentialsService', () => {
       expect(result.success).toBe(true);
       expect(mockInsert).toHaveBeenCalledWith(
         expect.objectContaining({
-          organization: 'swaggystacks_backup',
+          organization: 'arcade_backup',
           is_active: false,
         })
       );
@@ -329,7 +329,7 @@ describe('HuggingFaceCredentialsService', () => {
       mockSelect.mockResolvedValueOnce({
         data: [
           {
-            organization: 'swaggystacks',
+            organization: 'arcade',
             permissions: ['read', 'write'],
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
@@ -347,7 +347,7 @@ describe('HuggingFaceCredentialsService', () => {
       const result = await credentialsService.listCredentials();
 
       expect(result).toHaveLength(2);
-      expect(result[0].organization).toBe('swaggystacks');
+      expect(result[0].organization).toBe('arcade');
       expect(result[1].organization).toBe('scientia-capital');
     });
 
@@ -372,7 +372,7 @@ describe('HuggingFaceCredentialsService', () => {
         error: null,
       });
 
-      const result = await credentialsService.deleteCredentials('swaggystacks');
+      const result = await credentialsService.deleteCredentials('arcade');
 
       expect(result).toBe(true);
       expect(mockUpdate).toHaveBeenCalledWith(
@@ -390,7 +390,7 @@ describe('HuggingFaceCredentialsService', () => {
         error: { message: 'Update failed' },
       });
 
-      const result = await credentialsService.deleteCredentials('swaggystacks');
+      const result = await credentialsService.deleteCredentials('arcade');
 
       expect(result).toBe(false);
     });
@@ -401,7 +401,7 @@ describe('HuggingFaceCredentialsService', () => {
       const mockSelect = mockSupabaseClient.from().select;
       mockSelect.mockResolvedValueOnce({
         data: [
-          { organization: 'swaggystacks' },
+          { organization: 'arcade' },
           { organization: 'scientia-capital' },
         ],
         error: null,
@@ -409,7 +409,7 @@ describe('HuggingFaceCredentialsService', () => {
 
       // Mock validation calls
       jest.spyOn(credentialsService, 'validateCredentials')
-        .mockResolvedValueOnce({ valid: true, organization: 'swaggystacks' })
+        .mockResolvedValueOnce({ valid: true, organization: 'arcade' })
         .mockResolvedValueOnce({ valid: false, organization: 'scientia-capital', error: 'Invalid key' });
 
       const result = await credentialsService.healthCheck();
@@ -463,14 +463,14 @@ describe('HuggingFaceCredentialsService', () => {
       const mockInsert = mockSupabaseClient.from().insert;
       mockInsert.mockResolvedValueOnce({ data: null, error: null });
 
-      await credentialsService['createAuditTrail']('swaggystacks', 'CREATED', {
+      await credentialsService['createAuditTrail']('arcade', 'CREATED', {
         permissions: ['read', 'write'],
       });
 
       expect(mockSupabaseClient.from).toHaveBeenCalledWith('huggingface_audit_trail');
       expect(mockInsert).toHaveBeenCalledWith(
         expect.objectContaining({
-          organization: 'swaggystacks',
+          organization: 'arcade',
           action: 'CREATED',
           metadata: { permissions: ['read', 'write'] },
         })
@@ -483,7 +483,7 @@ describe('HuggingFaceCredentialsService', () => {
 
       // Should not throw
       await expect(
-        credentialsService['createAuditTrail']('swaggystacks', 'CREATED')
+        credentialsService['createAuditTrail']('arcade', 'CREATED')
       ).resolves.not.toThrow();
     });
   });

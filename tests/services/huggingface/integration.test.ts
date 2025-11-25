@@ -139,7 +139,7 @@ describe('HuggingFaceIntegrationService', () => {
       });
 
       const result = await integrationService.searchModels({
-        organization: 'swaggystacks',
+        organization: 'arcade',
         query: 'test',
         limit: 10,
       });
@@ -157,7 +157,7 @@ describe('HuggingFaceIntegrationService', () => {
         }),
         expect.objectContaining({
           ttl: 300,
-          tags: ['models', 'swaggystacks'],
+          tags: ['models', 'arcade'],
         })
       );
     });
@@ -173,7 +173,7 @@ describe('HuggingFaceIntegrationService', () => {
       mockCacheService.get.mockResolvedValue(cachedData);
 
       const result = await integrationService.searchModels({
-        organization: 'swaggystacks',
+        organization: 'arcade',
         query: 'test',
         limit: 10,
       });
@@ -189,7 +189,7 @@ describe('HuggingFaceIntegrationService', () => {
       mockRateLimiter.schedule.mockRejectedValue(new Error('API Error'));
 
       const result = await integrationService.searchModels({
-        organization: 'swaggystacks',
+        organization: 'arcade',
         query: 'test',
         limit: 10,
       });
@@ -200,7 +200,7 @@ describe('HuggingFaceIntegrationService', () => {
 
     it('should use credentials from credentials service', async () => {
       mockCredentialsService.getCredentials.mockResolvedValue({
-        organization: 'swaggystacks',
+        organization: 'arcade',
         apiKey: 'hf_test_key',
         metadata: {},
         isActive: true,
@@ -216,18 +216,18 @@ describe('HuggingFaceIntegrationService', () => {
       });
 
       await integrationService.searchModels({
-        organization: 'swaggystacks',
+        organization: 'arcade',
         query: 'test',
       });
 
-      expect(mockCredentialsService.getCredentials).toHaveBeenCalledWith('swaggystacks');
+      expect(mockCredentialsService.getCredentials).toHaveBeenCalledWith('arcade');
     });
   });
 
   describe('model deployment', () => {
     it('should deploy model successfully', async () => {
       const deploymentRequest = {
-        organization: 'swaggystacks',
+        organization: 'arcade',
         modelId: 'test-model',
         instanceType: 'cpu-medium',
         minReplicas: 1,
@@ -253,7 +253,7 @@ describe('HuggingFaceIntegrationService', () => {
 
       expect(result).toBe('deploying');
       expect(mockRateLimiter.schedule).toHaveBeenCalledWith(
-        'swaggystacks',
+        'arcade',
         expect.any(Function),
         { priority: 'low' }
       );
@@ -261,7 +261,7 @@ describe('HuggingFaceIntegrationService', () => {
 
     it('should handle deployment errors', async () => {
       const deploymentRequest = {
-        organization: 'swaggystacks',
+        organization: 'arcade',
         modelId: 'test-model',
         instanceType: 'cpu-medium',
         minReplicas: 1,
@@ -278,7 +278,7 @@ describe('HuggingFaceIntegrationService', () => {
 
     it('should invalidate cache after deployment', async () => {
       const deploymentRequest = {
-        organization: 'swaggystacks',
+        organization: 'arcade',
         modelId: 'test-model',
         instanceType: 'cpu-medium',
         minReplicas: 1,
@@ -296,7 +296,7 @@ describe('HuggingFaceIntegrationService', () => {
 
       expect(mockCacheService.invalidateByTags).toHaveBeenCalledWith([
         'deployments',
-        'swaggystacks',
+        'arcade',
       ]);
     });
   });
@@ -305,7 +305,7 @@ describe('HuggingFaceIntegrationService', () => {
     it('should process webhooks', async () => {
       const webhookPayload = JSON.stringify({
         type: 'model.updated',
-        organization: 'swaggystacks',
+        organization: 'arcade',
         data: { model: 'test-model' },
       });
 
@@ -373,8 +373,8 @@ describe('HuggingFaceIntegrationService', () => {
       });
 
       mockRateLimiter.getStatistics.mockReturnValue(new Map([
-        ['swaggystacks', {
-          organization: 'swaggystacks',
+        ['arcade', {
+          organization: 'arcade',
           pending: 0,
           running: 0,
           done: 100,
@@ -430,8 +430,8 @@ describe('HuggingFaceIntegrationService', () => {
       });
 
       mockRateLimiter.getStatistics.mockReturnValue(new Map([
-        ['swaggystacks', {
-          organization: 'swaggystacks',
+        ['arcade', {
+          organization: 'arcade',
           pending: 0,
           running: 0,
           done: 50,
@@ -489,7 +489,7 @@ describe('HuggingFaceIntegrationService', () => {
           'rate_limit.exceeded': 1,
           'error.occurred': 0,
         },
-        eventsByOrganization: { 'swaggystacks': 15, 'scientia': 10 },
+        eventsByOrganization: { 'arcade': 15, 'enterprise': 10 },
         successfulDeliveries: 24,
         failedDeliveries: 1,
         averageProcessingTime: 50,

@@ -8,7 +8,7 @@ import { DeploymentConfig } from './MockRunPodEnvironment';
 export interface DeploymentScenario {
   name: string;
   description: string;
-  organization: 'swaggystacks' | 'scientia';
+  organization: 'arcade' | 'enterprise';
   configs: DeploymentConfig[];
   expectedBehavior: {
     deploymentTime: { min: number; max: number }; // seconds
@@ -25,19 +25,19 @@ export interface DeploymentScenario {
 }
 
 /**
- * SwaggyStacks Gaming-focused deployment scenarios
+ * AI Dev Cockpit Gaming-focused deployment scenarios
  */
-export const swaggyStacksScenarios: DeploymentScenario[] = [
+export const arcadeScenarios: DeploymentScenario[] = [
   {
     name: 'Gaming Chatbot - Single Instance',
     description: 'Basic gaming chatbot deployment for terminal enthusiasts',
-    organization: 'swaggystacks',
+    organization: 'arcade',
     configs: [
       {
-        modelId: 'swaggystacks/terminal-gaming-chat',
+        modelId: 'arcade/terminal-gaming-chat',
         gpuType: 'NVIDIA_RTX_A6000',
         instanceCount: 1,
-        organization: 'swaggystacks',
+        organization: 'arcade',
         envVars: {
           'MODEL_PRECISION': 'fp16',
           'MAX_BATCH_SIZE': '4',
@@ -62,16 +62,16 @@ export const swaggyStacksScenarios: DeploymentScenario[] = [
   {
     name: 'Gaming Chatbot - Auto-scaling',
     description: 'Gaming chatbot with auto-scaling for peak hours',
-    organization: 'swaggystacks',
+    organization: 'arcade',
     configs: [
       {
-        modelId: 'swaggystacks/terminal-gaming-chat',
+        modelId: 'arcade/terminal-gaming-chat',
         gpuType: 'NVIDIA_RTX_A6000',
         instanceCount: 2,
         autoScaling: true,
         minInstances: 1,
         maxInstances: 5,
-        organization: 'swaggystacks',
+        organization: 'arcade',
         envVars: {
           'MODEL_PRECISION': 'fp16',
           'MAX_BATCH_SIZE': '8',
@@ -97,29 +97,29 @@ export const swaggyStacksScenarios: DeploymentScenario[] = [
   {
     name: 'Multi-Model Gaming Suite',
     description: 'Multiple gaming models for different game types',
-    organization: 'swaggystacks',
+    organization: 'arcade',
     configs: [
       {
-        modelId: 'swaggystacks/rpg-assistant',
+        modelId: 'arcade/rpg-assistant',
         gpuType: 'NVIDIA_RTX_A6000',
         instanceCount: 2,
-        organization: 'swaggystacks',
+        organization: 'arcade',
         envVars: { 'GAME_TYPE': 'rpg', 'THEME': 'terminal' }
       },
       {
-        modelId: 'swaggystacks/fps-coach',
+        modelId: 'arcade/fps-coach',
         gpuType: 'NVIDIA_A40',
         instanceCount: 1,
-        organization: 'swaggystacks',
+        organization: 'arcade',
         envVars: { 'GAME_TYPE': 'fps', 'THEME': 'terminal' }
       },
       {
-        modelId: 'swaggystacks/strategy-advisor',
+        modelId: 'arcade/strategy-advisor',
         gpuType: 'NVIDIA_RTX_A6000',
         instanceCount: 3,
         autoScaling: true,
         maxInstances: 6,
-        organization: 'swaggystacks',
+        organization: 'arcade',
         envVars: { 'GAME_TYPE': 'strategy', 'THEME': 'terminal' }
       }
     ],
@@ -140,15 +140,15 @@ export const swaggyStacksScenarios: DeploymentScenario[] = [
   {
     name: 'Code Assistant for Gamers',
     description: 'Development assistant specialized for game development',
-    organization: 'swaggystacks',
+    organization: 'arcade',
     configs: [
       {
-        modelId: 'swaggystacks/game-dev-assistant',
+        modelId: 'arcade/game-dev-assistant',
         gpuType: 'NVIDIA_A40',
         instanceCount: 2,
         autoScaling: true,
         maxInstances: 4,
-        organization: 'swaggystacks',
+        organization: 'arcade',
         envVars: {
           'SPECIALIZATION': 'game_development',
           'LANGUAGES': 'cpp,csharp,python',
@@ -173,19 +173,19 @@ export const swaggyStacksScenarios: DeploymentScenario[] = [
 ];
 
 /**
- * ScientiaCapital Enterprise-focused deployment scenarios
+ * Enterprise Enterprise-focused deployment scenarios
  */
-export const scientiaCapitalScenarios: DeploymentScenario[] = [
+export const enterpriseScenarios: DeploymentScenario[] = [
   {
     name: 'Financial Analysis - Single Model',
     description: 'Basic financial analysis model for market research',
-    organization: 'scientia',
+    organization: 'enterprise',
     configs: [
       {
-        modelId: 'scientia/financial-analyzer-pro',
+        modelId: 'enterprise/financial-analyzer-pro',
         gpuType: 'NVIDIA_A100_SXM4_80GB',
         instanceCount: 2,
-        organization: 'scientia',
+        organization: 'enterprise',
         envVars: {
           'ANALYSIS_TYPE': 'market_research',
           'PRECISION': 'high',
@@ -211,16 +211,16 @@ export const scientiaCapitalScenarios: DeploymentScenario[] = [
   {
     name: 'Risk Assessment Suite',
     description: 'Comprehensive risk assessment for enterprise clients',
-    organization: 'scientia',
+    organization: 'enterprise',
     configs: [
       {
-        modelId: 'scientia/risk-analyzer',
+        modelId: 'enterprise/risk-analyzer',
         gpuType: 'NVIDIA_A100_SXM4_80GB',
         instanceCount: 4,
         autoScaling: true,
         minInstances: 2,
         maxInstances: 8,
-        organization: 'scientia',
+        organization: 'enterprise',
         envVars: {
           'RISK_MODELS': 'var,stress_test,scenario',
           'COMPLIANCE': 'basel_iii',
@@ -246,15 +246,15 @@ export const scientiaCapitalScenarios: DeploymentScenario[] = [
   {
     name: 'Enterprise AI Analytics Platform',
     description: 'Full-scale AI analytics platform for C-suite insights',
-    organization: 'scientia',
+    organization: 'enterprise',
     configs: [
       {
-        modelId: 'scientia/market-intelligence',
+        modelId: 'enterprise/market-intelligence',
         gpuType: 'NVIDIA_A100_SXM4_80GB',
         instanceCount: 6,
         autoScaling: true,
         maxInstances: 12,
-        organization: 'scientia',
+        organization: 'enterprise',
         envVars: {
           'MODULE': 'market_intelligence',
           'DATA_SOURCES': 'bloomberg,reuters,internal',
@@ -262,12 +262,12 @@ export const scientiaCapitalScenarios: DeploymentScenario[] = [
         }
       },
       {
-        modelId: 'scientia/portfolio-optimizer',
+        modelId: 'enterprise/portfolio-optimizer',
         gpuType: 'NVIDIA_H100_SXM5_80GB',
         instanceCount: 4,
         autoScaling: true,
         maxInstances: 8,
-        organization: 'scientia',
+        organization: 'enterprise',
         envVars: {
           'MODULE': 'portfolio_optimization',
           'ALGORITHMS': 'markowitz,black_litterman,risk_parity',
@@ -275,10 +275,10 @@ export const scientiaCapitalScenarios: DeploymentScenario[] = [
         }
       },
       {
-        modelId: 'scientia/regulatory-compliance',
+        modelId: 'enterprise/regulatory-compliance',
         gpuType: 'NVIDIA_A100_SXM4_80GB',
         instanceCount: 2,
-        organization: 'scientia',
+        organization: 'enterprise',
         envVars: {
           'MODULE': 'compliance',
           'REGULATIONS': 'mifid,dodd_frank,basel_iii',
@@ -304,16 +304,16 @@ export const scientiaCapitalScenarios: DeploymentScenario[] = [
   {
     name: 'Real-time Trading Analytics',
     description: 'High-frequency trading support with real-time analytics',
-    organization: 'scientia',
+    organization: 'enterprise',
     configs: [
       {
-        modelId: 'scientia/realtime-trader',
+        modelId: 'enterprise/realtime-trader',
         gpuType: 'NVIDIA_H100_SXM5_80GB',
         instanceCount: 8,
         autoScaling: true,
         minInstances: 4,
         maxInstances: 16,
-        organization: 'scientia',
+        organization: 'enterprise',
         envVars: {
           'LATENCY_MODE': 'ultra_low',
           'TRADING_HOURS': '24_7',
@@ -345,20 +345,20 @@ export const crossOrganizationalScenarios: DeploymentScenario[] = [
   {
     name: 'Mixed Workload - Gaming + Finance',
     description: 'Simultaneous deployments across both organizations',
-    organization: 'swaggystacks', // Primary, but includes both
+    organization: 'arcade', // Primary, but includes both
     configs: [
       {
-        modelId: 'swaggystacks/terminal-chat',
+        modelId: 'arcade/terminal-chat',
         gpuType: 'NVIDIA_RTX_A6000',
         instanceCount: 2,
-        organization: 'swaggystacks',
+        organization: 'arcade',
         envVars: { 'THEME': 'terminal' }
       },
       {
         modelId: 'scientia/quick-analysis',
         gpuType: 'NVIDIA_A100_SXM4_80GB',
         instanceCount: 1,
-        organization: 'scientia',
+        organization: 'enterprise',
         envVars: { 'THEME': 'corporate' }
       }
     ],
@@ -384,28 +384,28 @@ export const testConfigurations = {
   development: {
     maxConcurrentDeployments: 3,
     timeoutMultiplier: 2.0,
-    scenarios: [...swaggyStacksScenarios.slice(0, 2), ...scientiaCapitalScenarios.slice(0, 2)]
+    scenarios: [...arcadeScenarios.slice(0, 2), ...enterpriseScenarios.slice(0, 2)]
   },
 
   staging: {
     maxConcurrentDeployments: 8,
     timeoutMultiplier: 1.5,
-    scenarios: [...swaggyStacksScenarios, ...scientiaCapitalScenarios.slice(0, 3)]
+    scenarios: [...arcadeScenarios, ...enterpriseScenarios.slice(0, 3)]
   },
 
   production: {
     maxConcurrentDeployments: 20,
     timeoutMultiplier: 1.0,
-    scenarios: [...swaggyStacksScenarios, ...scientiaCapitalScenarios, ...crossOrganizationalScenarios]
+    scenarios: [...arcadeScenarios, ...enterpriseScenarios, ...crossOrganizationalScenarios]
   },
 
   performance: {
     maxConcurrentDeployments: 50,
     timeoutMultiplier: 0.8,
     scenarios: [
-      swaggyStacksScenarios[2], // Multi-model gaming
-      scientiaCapitalScenarios[2], // Enterprise platform
-      scientiaCapitalScenarios[3], // Real-time trading
+      arcadeScenarios[2], // Multi-model gaming
+      enterpriseScenarios[2], // Enterprise platform
+      enterpriseScenarios[3], // Real-time trading
       crossOrganizationalScenarios[0] // Mixed workload
     ]
   }
@@ -415,15 +415,15 @@ export const testConfigurations = {
  * Helper function to get scenarios by complexity
  */
 export function getScenariosByComplexity(complexity: 'simple' | 'medium' | 'complex'): DeploymentScenario[] {
-  const allScenarios = [...swaggyStacksScenarios, ...scientiaCapitalScenarios, ...crossOrganizationalScenarios];
+  const allScenarios = [...arcadeScenarios, ...enterpriseScenarios, ...crossOrganizationalScenarios];
   return allScenarios.filter(scenario => scenario.complexity === complexity);
 }
 
 /**
  * Helper function to get scenarios by organization
  */
-export function getScenariosByOrganization(organization: 'swaggystacks' | 'scientia'): DeploymentScenario[] {
-  const allScenarios = [...swaggyStacksScenarios, ...scientiaCapitalScenarios];
+export function getScenariosByOrganization(organization: 'arcade' | 'enterprise'): DeploymentScenario[] {
+  const allScenarios = [...arcadeScenarios, ...enterpriseScenarios];
   return allScenarios.filter(scenario => scenario.organization === organization);
 }
 
@@ -431,7 +431,7 @@ export function getScenariosByOrganization(organization: 'swaggystacks' | 'scien
  * Helper function to get scenarios by test purpose
  */
 export function getScenariosByPurpose(purpose: string): DeploymentScenario[] {
-  const allScenarios = [...swaggyStacksScenarios, ...scientiaCapitalScenarios, ...crossOrganizationalScenarios];
+  const allScenarios = [...arcadeScenarios, ...enterpriseScenarios, ...crossOrganizationalScenarios];
   return allScenarios.filter(scenario => scenario.testPurpose.some(p => p.includes(purpose)));
 }
 
@@ -439,6 +439,6 @@ export function getScenariosByPurpose(purpose: string): DeploymentScenario[] {
  * Get a random scenario for chaos testing
  */
 export function getRandomScenario(): DeploymentScenario {
-  const allScenarios = [...swaggyStacksScenarios, ...scientiaCapitalScenarios, ...crossOrganizationalScenarios];
+  const allScenarios = [...arcadeScenarios, ...enterpriseScenarios, ...crossOrganizationalScenarios];
   return allScenarios[Math.floor(Math.random() * allScenarios.length)];
 }

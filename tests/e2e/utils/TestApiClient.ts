@@ -129,7 +129,7 @@ export class TestApiClient {
       const url = new URL(route.request().url());
       const searchParams = url.searchParams;
 
-      const org = searchParams.get('org') || 'swaggystacks';
+      const org = searchParams.get('org') || 'arcade';
       const search = searchParams.get('search') || '';
       const page = parseInt(searchParams.get('page') || '1', 10);
       const limit = parseInt(searchParams.get('limit') || '10', 10);
@@ -244,46 +244,46 @@ export class TestApiClient {
     totalPages: number;
   } {
     const orgModels = {
-      swaggystacks: [
+      arcade: [
         {
-          id: 'swaggystacks/gaming-chatbot',
+          id: 'arcade/gaming-chatbot',
           title: 'Gaming Chatbot Pro',
           description: 'Advanced gaming-focused conversational AI for immersive experiences',
           parameters: '1.5B',
           tags: ['gaming', 'chatbot', 'entertainment', 'conversational'],
-          organization: 'swaggystacks',
+          organization: 'arcade',
           downloads: 15420,
           likes: 234
         },
         {
-          id: 'swaggystacks/code-assistant',
+          id: 'arcade/code-assistant',
           title: 'Developer Code Assistant',
           description: 'AI-powered coding assistant optimized for modern development workflows',
           parameters: '7B',
           tags: ['coding', 'development', 'assistant', 'programming'],
-          organization: 'swaggystacks',
+          organization: 'arcade',
           downloads: 8932,
           likes: 187
         },
         {
-          id: 'swaggystacks/terminal-gpt',
+          id: 'arcade/terminal-gpt',
           title: 'Terminal GPT',
           description: 'Command-line optimized language model for terminal enthusiasts',
           parameters: '3B',
           tags: ['terminal', 'cli', 'developer-tools', 'bash'],
-          organization: 'swaggystacks',
+          organization: 'arcade',
           downloads: 5643,
           likes: 145
         }
       ],
-      scientia: [
+      enterprise: [
         {
           id: 'scientia/financial-analyzer',
           title: 'Financial Analyzer Pro',
           description: 'Enterprise-grade financial data analysis and risk assessment model',
           parameters: '13B',
           tags: ['finance', 'analysis', 'enterprise', 'risk-assessment'],
-          organization: 'scientia',
+          organization: 'enterprise',
           downloads: 3245,
           likes: 89
         },
@@ -293,7 +293,7 @@ export class TestApiClient {
           description: 'Comprehensive market analysis and forecasting for strategic decisions',
           parameters: '30B',
           tags: ['market', 'intelligence', 'forecasting', 'analytics'],
-          organization: 'scientia',
+          organization: 'enterprise',
           downloads: 1876,
           likes: 67
         },
@@ -303,14 +303,14 @@ export class TestApiClient {
           description: 'Automated compliance monitoring and regulatory analysis system',
           parameters: '70B',
           tags: ['compliance', 'regulatory', 'monitoring', 'governance'],
-          organization: 'scientia',
+          organization: 'enterprise',
           downloads: 945,
           likes: 34
         }
       ]
     };
 
-    let models = orgModels[org as keyof typeof orgModels] || orgModels.swaggystacks;
+    let models = orgModels[org as keyof typeof orgModels] || orgModels.arcade;
 
     // Apply search filter
     if (search) {
@@ -341,7 +341,7 @@ export class TestApiClient {
       description: `Detailed description for ${modelId}`,
       parameters: '7B',
       tags: ['test', 'mock', 'model'],
-      organization: modelId.includes('scientia') ? 'scientia' : 'swaggystacks',
+      organization: modelId.includes('enterprise') ? 'enterprise' : 'arcade',
       downloads: Math.floor(Math.random() * 10000),
       likes: Math.floor(Math.random() * 500),
       createdAt: '2024-01-01T00:00:00Z',

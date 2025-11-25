@@ -18,7 +18,7 @@ interface ModelOption {
   id: string
   name: string
   displayName: string
-  organization: 'swaggystacks' | 'scientiacapital'
+  organization: 'arcade' | 'enterprise'
   costPerToken: number
   description: string
   capabilities: string[]
@@ -70,12 +70,12 @@ interface UseInferenceReturn {
 }
 
 // Model configurations optimized for different use cases
-const SWAGGY_STACKS_MODELS: ModelOption[] = [
+const COCKPIT_STACKS_MODELS: ModelOption[] = [
   {
     id: 'meta-llama/Llama-3.2-3B-Instruct',
     name: 'llama-3.2-3b-swaggy',
     displayName: 'Llama 3.2 3B (Dev Mode)',
-    organization: 'swaggystacks',
+    organization: 'arcade',
     costPerToken: 0.0001,
     description: 'Fast coding assistant for rapid development',
     capabilities: ['code', 'debugging', 'quick-tasks'],
@@ -87,7 +87,7 @@ const SWAGGY_STACKS_MODELS: ModelOption[] = [
     id: 'microsoft/DialoGPT-medium',
     name: 'dialogpt-medium-swaggy',
     displayName: 'DialoGPT Medium (Terminal Chat)',
-    organization: 'swaggystacks',
+    organization: 'arcade',
     costPerToken: 0.0002,
     description: 'Terminal-style conversational AI for developers',
     capabilities: ['chat', 'multi-turn', 'context-aware'],
@@ -99,7 +99,7 @@ const SWAGGY_STACKS_MODELS: ModelOption[] = [
     id: 'mistralai/Mistral-7B-Instruct-v0.3',
     name: 'mistral-7b-swaggy',
     displayName: 'Mistral 7B (Full Stack)',
-    organization: 'swaggystacks',
+    organization: 'arcade',
     costPerToken: 0.0003,
     description: 'Advanced reasoning and complex code generation',
     capabilities: ['code', 'reasoning', 'architecture', 'debugging'],
@@ -114,7 +114,7 @@ const SCIENTIA_CAPITAL_MODELS: ModelOption[] = [
     id: 'meta-llama/Llama-3.2-3B-Instruct',
     name: 'llama-3.2-3b-scientia',
     displayName: 'Llama 3.2 3B (Analytics)',
-    organization: 'scientiacapital',
+    organization: 'enterprise',
     costPerToken: 0.0001,
     description: 'Quick financial data analysis and reporting',
     capabilities: ['analysis', 'data-processing', 'simple-queries'],
@@ -126,7 +126,7 @@ const SCIENTIA_CAPITAL_MODELS: ModelOption[] = [
     id: 'microsoft/DialoGPT-medium',
     name: 'dialogpt-medium-scientia',
     displayName: 'DialoGPT Medium (Client Consultation)',
-    organization: 'scientiacapital',
+    organization: 'enterprise',
     costPerToken: 0.0002,
     description: 'Professional client interaction and advisory',
     capabilities: ['consultation', 'explanation', 'professional-communication'],
@@ -138,7 +138,7 @@ const SCIENTIA_CAPITAL_MODELS: ModelOption[] = [
     id: 'mistralai/Mistral-7B-Instruct-v0.3',
     name: 'mistral-7b-scientia',
     displayName: 'Mistral 7B (Strategic Analysis)',
-    organization: 'scientiacapital',
+    organization: 'enterprise',
     costPerToken: 0.0003,
     description: 'Deep financial analysis and strategic planning',
     capabilities: ['strategic-analysis', 'complex-reasoning', 'market-analysis'],
@@ -173,8 +173,8 @@ export function useInference(options: UseInferenceOptions = {}): UseInferenceRet
   const metricsBuffer = useRef<InferenceMetrics[]>([])
 
   // Get models based on current organization
-  const models = currentOrganization?.slug === 'swaggystacks'
-    ? SWAGGY_STACKS_MODELS
+  const models = currentOrganization?.slug === 'arcade'
+    ? COCKPIT_STACKS_MODELS
     : SCIENTIA_CAPITAL_MODELS
 
   // Initialize default model based on organization and cost preference
@@ -211,10 +211,10 @@ export function useInference(options: UseInferenceOptions = {}): UseInferenceRet
       }
 
       // Use organization-specific tokens if available
-      if (model.organization === 'swaggystacks') {
-        config.apiKey = process.env.SWAGGYSTACKS_HF_TOKEN || config.apiKey
-      } else if (model.organization === 'scientiacapital') {
-        config.apiKey = process.env.SCIENTIACAPITAL_HF_TOKEN || config.apiKey
+      if (model.organization === 'arcade') {
+        config.apiKey = process.env.COCKPITSTACKS_HF_TOKEN || config.apiKey
+      } else if (model.organization === 'enterprise') {
+        config.apiKey = process.env.ENTERPRISE_HF_TOKEN || config.apiKey
       }
 
       vllmServices.current.set(serviceKey, new VLLMService(config))

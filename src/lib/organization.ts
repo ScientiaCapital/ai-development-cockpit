@@ -113,8 +113,8 @@ export const getUserOrganizations = async (): Promise<{
     const mockOrganizations: Organization[] = [
       {
         id: '1',
-        name: 'SwaggyStacks',
-        slug: 'swaggystacks',
+        name: 'AI Dev Cockpit',
+        slug: 'arcade',
         description: 'Developer-focused AI platform',
         plan: 'pro',
         max_members: 10,
@@ -135,8 +135,8 @@ export const getUserOrganizations = async (): Promise<{
       },
       {
         id: '2',
-        name: 'Scientia Capital',
-        slug: 'scientia-capital',
+        name: 'Enterprise',
+        slug: 'enterprise',
         description: 'Enterprise AI analytics',
         plan: 'enterprise',
         max_members: 50,
@@ -151,7 +151,7 @@ export const getUserOrganizations = async (): Promise<{
           default_member_role: 'viewer',
           mfa_required: true,
           session_timeout_hours: 8,
-          allowed_domains: ['scientiacapital.com'],
+          allowed_domains: ['enterprise.local'],
           api_rate_limit: 5000,
           api_quota_per_month: 1000000
         }

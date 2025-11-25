@@ -1,0 +1,296 @@
+name: Deploy Dual-Platform (Vercel + RunPod)
+
+on:
+  push:
+    branches:
+      - main
+      - 'feature/claude-sdk-*'
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}/ai-agents
+
+jobs:
+  test:
+    name: Run Tests and Type Checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Run type-check
+        run: npm run type-check
+
+      - name: Run tests
+        run: npm test -- --coverage --passWithNoTests
+        env:
+          NODE_ENV: test
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/coverage-final.json
+          flags: unittests
+          fail_ci_if_error: false
+
+  build-and-push-docker:
+    name: Build and Push Docker Image
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          platforms: linux/amd64
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=sha,prefix={{branch}}-
+            type=sha,prefix=
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.runpod
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            NODE_ENV=production
+            NEXT_PUBLIC_APP_URL=https://ai-development-cockpit-scientia-capital.vercel.app
+
+  deploy-vercel:
+    name: Deploy to Vercel
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    timeout-minutes: 20
+    environment:
+      name: production
+      url: https://ai-development-cockpit-scientia-capital.vercel.app
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Vercel
+        uses: vercel/action@master
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          production: true
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
+          GITHUB_CLIENT_ID: ${{ secrets.GITHUB_CLIENT_ID }}
+          GITHUB_CLIENT_SECRET: ${{ secrets.GITHUB_CLIENT_SECRET }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          COST_OPTIMIZER_URL: ${{ secrets.COST_OPTIMIZER_URL }}
+          COST_OPTIMIZER_API_URL: ${{ secrets.COST_OPTIMIZER_API_URL }}
+          COST_OPTIMIZER_API_KEY: ${{ secrets.COST_OPTIMIZER_API_KEY }}
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          RUNPOD_API_KEY: ${{ secrets.RUNPOD_API_KEY }}
+          PYTHON_VALIDATOR_URL: ${{ secrets.PYTHON_VALIDATOR_URL }}
+
+  deploy-notification:
+    name: Deployment Notification
+    needs: [build-and-push-docker, deploy-vercel]
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Generate deployment info
+        id: deployment-info
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_REPO: ${{ github.repository }}
+          GITHUB_ACTOR: ${{ github.actor }}
+        run: |
+          DOCKER_IMAGES="Docker Images Built:
+          - AI Agents: ghcr.io/${GITHUB_REPO}/ai-agents:${GITHUB_SHA}
+          - Registry: ghcr.io (GitHub Container Registry)
+          - Platform: linux/amd64 (RunPod compatible)"
+
+          VERCEL_INFO="Vercel Deployment:
+          - Project: ai-development-cockpit
+          - Organization: scientia-capital
+          - URL: https://ai-development-cockpit-scientia-capital.vercel.app
+          - Branch: main (production)"
+
+          RUNPOD_INSTRUCTIONS="RunPod Deployment Steps:
+          1. Push Docker image to RunPod:
+             runpod-cli image push ghcr.io/${GITHUB_REPO}/ai-agents:${GITHUB_SHA}
+
+          2. Create RunPod serverless endpoint:
+             - Image: ghcr.io/${GITHUB_REPO}/ai-agents:latest
+             - GPU: NVIDIA A100 (recommended)
+             - vCPU: 4 or more
+             - Memory: 16GB minimum
+             - Max Workers: 10 (for auto-scaling)
+             - FlashBoot: Enabled (<5s cold starts)
+
+          3. Configure environment variables in RunPod:
+             - RUNPOD_API_KEY
+             - COST_OPTIMIZER_URL
+             - ANTHROPIC_API_KEY
+             - All NEXT_PUBLIC_* variables
+
+          4. Test endpoint:
+             curl -X POST https://api.runpod.io/v2/{ENDPOINT_ID}/run \
+               -H \"Content-Type: application/json\" \
+               -d '{\"input\": {\"action\": \"health-check\"}}'
+
+          5. Update RUNPOD_ENDPOINT in .env once deployed"
+
+          echo "docker_images<<EOF" >> $GITHUB_OUTPUT
+          echo "$DOCKER_IMAGES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+          echo "vercel_info<<EOF" >> $GITHUB_OUTPUT
+          echo "$VERCEL_INFO" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+          echo "runpod_instructions<<EOF" >> $GITHUB_OUTPUT
+          echo "$RUNPOD_INSTRUCTIONS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Print deployment summary
+        env:
+          DOCKER_IMAGES: ${{ steps.deployment-info.outputs.docker_images }}
+          VERCEL_INFO: ${{ steps.deployment-info.outputs.vercel_info }}
+          RUNPOD_INSTRUCTIONS: ${{ steps.deployment-info.outputs.runpod_instructions }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_ACTOR: ${{ github.actor }}
+        run: |
+          echo "========================================="
+          echo "DEPLOYMENT SUMMARY"
+          echo "========================================="
+          echo ""
+          echo "$DOCKER_IMAGES"
+          echo ""
+          echo "$VERCEL_INFO"
+          echo ""
+          echo "$RUNPOD_INSTRUCTIONS"
+          echo ""
+          echo "========================================="
+          echo "Commit: $GITHUB_SHA"
+          echo "Branch: $GITHUB_REF"
+          echo "Author: $GITHUB_ACTOR"
+          echo "========================================="
+
+      - name: Create deployment issue
+        if: github.ref == 'refs/heads/main'
+        uses: actions/github-script@v7
+        env:
+          COMMIT_SHA: ${{ github.sha }}
+          ACTOR: ${{ github.actor }}
+        with:
+          script: |
+            const commitSha = process.env.COMMIT_SHA;
+            const actor = process.env.ACTOR;
+
+            const title = `Deployment Complete: ${commitSha.substring(0, 8)}`;
+            const body = `## Dual-Platform Deployment Summary
+
+            ### Commit Information
+            - SHA: ${commitSha}
+            - Author: ${actor}
+
+            ### Artifacts
+            Docker Images Built:
+            - AI Agents: ghcr.io/${{ github.repository }}/ai-agents:${commitSha}
+            - Registry: ghcr.io (GitHub Container Registry)
+            - Platform: linux/amd64 (RunPod compatible)
+
+            ### Deployed Environments
+            Vercel Deployment:
+            - Project: ai-development-cockpit
+            - Organization: scientia-capital
+            - URL: https://ai-development-cockpit-scientia-capital.vercel.app
+            - Branch: main (production)
+
+            ### Next Steps: RunPod Deployment
+            1. Push Docker image to RunPod
+            2. Create RunPod serverless endpoint
+            3. Configure environment variables
+            4. Test endpoint health check
+            5. Update RUNPOD_ENDPOINT in .env
+
+            ### Monitoring
+            - **Vercel Dashboard**: https://vercel.com/scientia-capital/ai-development-cockpit
+            - **GitHub Container Registry**: https://github.com/ScientiaCapital/ai-development-cockpit/pkgs/container/ai-development-cockpit%2Fai-agents
+            - **RunPod Dashboard**: https://www.runpod.io/console/pods
+
+            This issue auto-closes when merged.`;
+
+            // Check if issue already exists
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: ['deployment'],
+            });
+
+            const existingIssue = issues.data.find(
+              (issue) => issue.title.includes('Deployment Complete')
+            );
+
+            if (!existingIssue) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: body,
+                labels: ['deployment', 'automated'],
+              });
+              console.log('Created deployment issue');
+            } else {
+              console.log('Deployment issue already exists');
+            }

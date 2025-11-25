@@ -1,63 +1,9 @@
 {
-  "projectSettings": {
-    "framework": "nextjs",
-    "buildCommand": "npm run build",
-    "outputDirectory": ".next",
-    "devCommand": "npm run dev",
-    "installCommand": "npm install"
-  },
-  "env": {
-    "NEXT_PUBLIC_SUPABASE_URL": {
-      "description": "Supabase project URL"
-    },
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": {
-      "description": "Supabase anonymous key for client-side authentication"
-    },
-    "NEXT_PUBLIC_SITE_URL": {
-      "description": "Public site URL for OAuth redirects"
-    },
-    "NEXT_PUBLIC_APP_URL": {
-      "description": "Public application URL"
-    },
-    "GITHUB_CLIENT_ID": {
-      "description": "GitHub OAuth application client ID"
-    },
-    "GITHUB_CLIENT_SECRET": {
-      "description": "GitHub OAuth application client secret"
-    },
-    "ANTHROPIC_API_KEY": {
-      "description": "Anthropic Claude API key for cost-optimized routing"
-    },
-    "COST_OPTIMIZER_URL": {
-      "description": "Cost optimizer service URL (chat endpoint)"
-    },
-    "COST_OPTIMIZER_API_URL": {
-      "description": "Cost optimizer service URL (agent orchestration endpoint)"
-    },
-    "COST_OPTIMIZER_API_KEY": {
-      "description": "API key for cost optimizer service"
-    },
-    "GOOGLE_API_KEY": {
-      "description": "Google Gemini API key"
-    },
-    "SUPABASE_SERVICE_ROLE_KEY": {
-      "description": "Supabase service role key for admin operations"
-    },
-    "RUNPOD_API_KEY": {
-      "description": "RunPod API key for serverless deployments"
-    },
-    "PYTHON_VALIDATOR_URL": {
-      "description": "JSON validation service URL"
-    },
-    "LOG_LEVEL": {
-      "description": "Logging level (DEBUG | INFO | WARN | ERROR)",
-      "value": "INFO"
-    },
-    "NODE_ENV": {
-      "description": "Environment (development | production)",
-      "value": "production"
-    }
-  },
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "installCommand": "npm install",
   "headers": [
     {
       "source": "/api/:path*",
@@ -88,38 +34,14 @@
           "value": "public, max-age=31536000, immutable"
         }
       ]
-    },
-    {
-      "source": "/:path*\\.(woff|woff2|eot|ttf|otf)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
-    },
-    {
-      "source": "/:path*\\.(jpg|jpeg|png|gif|ico|svg|webp|avif)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=86400, s-maxage=31536000"
-        }
-      ]
     }
   ],
   "regions": ["iad1"],
   "functions": {
-    "src/app/api/**": {
+    "src/app/api/**/*.ts": {
       "maxDuration": 60,
       "memory": 512
     }
-  },
-  "buildCache": {
-    "paths": [
-      "node_modules/.cache/**",
-      ".next/cache/**"
-    ]
   },
   "git": {
     "deploymentEnabled": {

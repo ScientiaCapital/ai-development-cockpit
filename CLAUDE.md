@@ -1,8 +1,37 @@
 # AI Development Cockpit
 
 **Updated**: 2025-11-25
-**Status**: Phase 3 Complete ✅ | Claude SDK Integration Complete ✅
+**Status**: Phase 3 Complete ✅ | Claude SDK Integration Complete ✅ | RunPod Deployment In Progress 🚧
 **Branch**: `main`
+
+---
+
+## Session Progress (2025-11-25)
+
+### ✅ Completed Today
+- Fixed health check endpoint mismatch (`/api/health` → `/health`)
+- Rebuilt Docker image with correct health check
+- **Resolved GHCR visibility issue** by pushing to Docker Hub (public by default)
+- Tagged and pushed image to `tmk74/ai-development-cockpit:latest`
+- Updated RunPod template to use Docker Hub image
+- Workers now initializing (can successfully pull image!)
+
+### ⏳ Remaining (Next Session)
+- Test RunPod endpoint once workers become "ready"
+- Verify health check returns `{"status": "healthy"}`
+- Submit test job and confirm end-to-end flow
+- Monitor costs on first few builds
+
+### 🐛 Issue Resolved
+**Problem**: GHCR package not publicly accessible despite repo being public
+- `docker pull` without auth returned "unauthorized"
+- RunPod workers got "denied" when pulling
+
+**Solution**: Pushed to Docker Hub instead (images public by default)
+```bash
+docker tag ghcr.io/.../ai-agents:latest tmk74/ai-development-cockpit:latest
+docker push tmk74/ai-development-cockpit:latest
+```
 
 ---
 
@@ -75,9 +104,23 @@ GITHUB_CLIENT_SECRET=...
 
 ---
 
+## Deployment
+
+### Docker Hub
+- **Username**: `tmk74`
+- **Image**: `tmk74/ai-development-cockpit:latest`
+
+### RunPod Serverless
+- **Template ID**: `t5tolm6jo7`
+- **Endpoint ID**: `xb46cmloysnzro`
+- **Image**: `tmk74/ai-development-cockpit:latest`
+
+---
+
 ## Links
 
 - **GitHub**: https://github.com/ScientiaCapital/ai-development-cockpit
+- **Docker Hub**: https://hub.docker.com/r/tmk74/ai-development-cockpit
 - **Supabase**: https://supabase.com/dashboard/project/xucngysrzjtwqzgcutqf
 
 ---

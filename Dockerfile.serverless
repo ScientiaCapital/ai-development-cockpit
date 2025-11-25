@@ -36,6 +36,13 @@ RUN npm ci
 # Copy source code
 COPY . .
 
+# Build-time environment variables for Next.js static generation
+# These are required for pages that use Supabase during build
+ARG NEXT_PUBLIC_SUPABASE_URL
+ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
+ENV NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
+ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+
 # Build Next.js app
 # Disable telemetry during build
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -103,9 +110,9 @@ USER nextjs
 # Expose port
 EXPOSE 8080
 
-# Health check
+# Health check - matches /health endpoint in handler.ts
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD curl -f http://localhost:8080/api/health || exit 1
+    CMD curl -f http://localhost:8080/health || exit 1
 
 # RunPod serverless entry point
 # Use dumb-init to handle signals properly

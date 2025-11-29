@@ -3,10 +3,15 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 
+const path = require('path')
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Docker/standalone output for RunPod deployment
-  output: 'standalone',
+  // Use standalone only for Docker/RunPod, not Vercel
+  output: process.env.VERCEL ? undefined : 'standalone',
+
+  // Fix Vercel output tracing for route groups with parentheses
+  outputFileTracingRoot: path.join(__dirname, './'),
 
   // Performance optimizations
   compress: true,

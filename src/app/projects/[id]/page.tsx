@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { SidebarLayout } from '@/components/layout/SidebarLayout'
 import { ProjectsService } from '@/services/projects/ProjectsService'
 import type { Project, ProjectBuild } from '@/types/projects'
 
@@ -84,24 +85,29 @@ export default function ProjectDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex h-full items-center justify-center">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
-      </div>
+      <SidebarLayout>
+        <div className="flex h-full items-center justify-center">
+          <div className="animate-pulse text-muted-foreground">Loading...</div>
+        </div>
+      </SidebarLayout>
     )
   }
 
   if (error || !project) {
     return (
-      <div className="flex h-full flex-col items-center justify-center">
-        <p className="text-destructive">{error || 'Project not found'}</p>
-        <Link href="/" className="mt-4 text-primary hover:underline">
-          Go back to dashboard
-        </Link>
-      </div>
+      <SidebarLayout>
+        <div className="flex h-full flex-col items-center justify-center">
+          <p className="text-destructive">{error || 'Project not found'}</p>
+          <Link href="/" className="mt-4 text-primary hover:underline">
+            Go back to dashboard
+          </Link>
+        </div>
+      </SidebarLayout>
     )
   }
 
   return (
+    <SidebarLayout>
     <div className="p-6">
       {/* Header */}
       <div className="mb-6 flex items-start justify-between">
@@ -247,5 +253,6 @@ export default function ProjectDetailPage() {
         )}
       </div>
     </div>
+    </SidebarLayout>
   )
 }

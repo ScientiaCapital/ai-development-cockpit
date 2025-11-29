@@ -81,19 +81,67 @@
   }
 }
 
-/* Custom styles for domain-specific themes */
+/* Arcade Theme - Terminal green aesthetic */
 .theme-arcade {
-  --primary: 139 92% 67%; /* Purple */
-  --primary-foreground: 0 0% 98%;
-  --secondary: 16 185% 51%; /* Green */
-  --accent: 45 100% 51%; /* Yellow */
+  --background: 0 0% 4%;        /* Near black */
+  --foreground: 120 100% 50%;   /* Bright green */
+  --card: 0 0% 10%;             /* Dark gray */
+  --card-foreground: 120 100% 50%;
+  --popover: 0 0% 10%;
+  --popover-foreground: 120 100% 50%;
+  --primary: 120 100% 50%;      /* Bright green #00ff00 */
+  --primary-foreground: 0 0% 0%;
+  --secondary: 0 0% 15%;
+  --secondary-foreground: 120 100% 50%;
+  --muted: 0 0% 15%;
+  --muted-foreground: 120 60% 40%;
+  --accent: 120 80% 30%;
+  --accent-foreground: 120 100% 50%;
+  --border: 120 40% 20%;
+  --input: 0 0% 15%;
+  --ring: 120 100% 50%;
 }
 
+/* Enterprise Theme - Professional blue (light mode) */
 .theme-enterprise {
-  --primary: 213 94% 68%; /* Blue */
-  --primary-foreground: 0 0% 98%;
-  --secondary: 242 78% 65%; /* Indigo */
-  --accent: 262 83% 58%; /* Purple */
+  --background: 0 0% 100%;      /* White */
+  --foreground: 222 47% 15%;    /* Dark blue-gray */
+  --card: 210 40% 98%;          /* Very light gray */
+  --card-foreground: 222 47% 15%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 15%;
+  --primary: 217 91% 60%;       /* Blue #3b82f6 */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222 47% 15%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222 47% 15%;
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 217 91% 60%;
+}
+
+/* Enterprise Theme - Dark variant */
+.dark.theme-enterprise {
+  --background: 222 47% 11%;    /* Dark blue-gray */
+  --foreground: 210 40% 98%;    /* Off-white */
+  --card: 222 47% 15%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222 47% 15%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 213 94% 68%;       /* Lighter blue #60a5fa */
+  --primary-foreground: 222 47% 11%;
+  --secondary: 222 47% 15%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 222 47% 15%;
+  --muted-foreground: 215 20% 65%;
+  --accent: 222 47% 15%;
+  --accent-foreground: 210 40% 98%;
+  --border: 222 47% 20%;
+  --input: 222 47% 20%;
+  --ring: 213 94% 68%;
 }
 
 /* Terminal-style animations */

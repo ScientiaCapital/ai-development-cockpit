@@ -115,3 +115,4 @@ python-validator/.env
 # Task files
 # tasks.json
 # tasks/ 
+.playwright-mcp/

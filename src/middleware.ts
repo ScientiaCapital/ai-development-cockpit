@@ -8,22 +8,13 @@ export function middleware(request: NextRequest) {
   const requestHeaders = new Headers(request.headers)
   requestHeaders.set('x-request-start', startTime.toString())
 
-  // Handle routing
-  const url = request.nextUrl.clone()
-  let response: NextResponse;
-
-  // Root path redirects to chat interface
-  if (url.pathname === '/') {
-    url.pathname = '/chat'
-    response = NextResponse.redirect(url)
-  } else {
-    // For all other requests, pass through
-    response = NextResponse.next({
-      request: {
-        headers: requestHeaders,
-      },
-    })
-  }
+  // Handle routing - pass through all requests
+  // (Root path now shows the dashboard with sidebar layout)
+  const response = NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  })
 
   // Add monitoring headers to response
   response.headers.set('x-monitored', 'true');

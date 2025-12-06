@@ -1,37 +1,19 @@
 # AI Development Cockpit
 
-**Updated**: 2025-11-29
-**Status**: Phase 3 Complete ✅ | Agent Team Integration Complete ✅ | RunPod Deployment In Progress 🚧
+**Updated**: 2025-12-06
+**Status**: Phase 3 Complete | RunPod Deployment In Progress
 **Branch**: `main`
 
 ---
 
-## Session Progress (2025-11-29)
+## Quick Start
 
-### ✅ Completed Today - Agent Team Integration
-Full TDD implementation of LangGraph orchestrator with all agents wired in:
-
-**Tests Written (98 new tests)**:
-- `FrontendDeveloper.test.ts` - 17 tests
-- `Tester.test.ts` - 24 tests
-- `DevOpsEngineer.test.ts` - 30 tests
-- `graph.integration.test.ts` - 27 tests
-
-**Graph Nodes Implemented**:
-- `buildNode` - Spawns BackendDeveloper + FrontendDeveloper
-- `testNode` - Spawns Tester (unit + e2e)
-- `deployNode` - Spawns DevOpsEngineer (vercel/docker/github-actions)
-- `feedbackNode` - Aggregates costs, time, success/failure patterns
-
-**Verification**:
-- TypeScript compiles cleanly (`npx tsc --noEmit`)
-- All tests pass (`npm test`)
-- Smoke test: Dev server starts, `/chat` loads correctly
-
-### Previous Session (2025-11-25)
-- Fixed health check endpoint mismatch (`/api/health` → `/health`)
-- Resolved GHCR visibility issue by pushing to Docker Hub
-- Workers now initializing successfully
+```bash
+npm run dev          # Start dev server
+npm run build        # Production build
+npm test             # Run tests
+npx tsc --noEmit     # Type check
+```
 
 ---
 
@@ -39,26 +21,25 @@ Full TDD implementation of LangGraph orchestrator with all agents wired in:
 
 Multi-agent orchestration system enabling non-coders to build software in any language using plain English.
 
-**Stack**: Next.js 15, TypeScript, FastAPI, RunPod Serverless
+**Stack**: Next.js 15, TypeScript, LangGraph, FastAPI
 **Languages**: Python, Go, Rust, TypeScript
 **Cost Savings**: 89% via multi-provider routing (Claude, DeepSeek, Qwen)
 
 ---
 
-## Current State
+## What's Built
 
-### Completed Features
-- **Chat Interface**: `/chat` - Plain English to code
-- **Multi-Language Adapters**: Python/FastAPI, Go/Gin, Rust/Actix-web, TypeScript
-- **Multi-Model Providers**: Claude Sonnet 4.5, DeepSeek Chat, Qwen VL Plus
-- **Cost Optimizer**: Circuit breaker, retry logic, 89% savings
-- **GitHub OAuth**: Login, repo browsing
-- **RunPod Config**: Serverless deployment ready
-- **Agent Team Integration**: LangGraph orchestrator with BackendDeveloper, FrontendDeveloper, Tester, DevOpsEngineer
+| Feature | Status |
+|---------|--------|
+| Chat Interface (`/chat`) | Complete |
+| Multi-Language Adapters | Complete (Python, Go, Rust, TS) |
+| Multi-Model Providers | Complete (Claude, DeepSeek, Qwen) |
+| Cost Optimizer | Complete (89% savings) |
+| GitHub OAuth | Complete |
+| LangGraph Orchestrator | Complete |
+| Agent Team Integration | Complete (98 tests) |
 
-### Theme System
-- `'arcade'` - Green terminal aesthetic
-- `'enterprise'` - Blue professional look
+**Active Agents**: BackendDeveloper, FrontendDeveloper, Tester, DevOpsEngineer
 
 ---
 
@@ -67,24 +48,17 @@ Multi-agent orchestration system enabling non-coders to build software in any la
 ```
 src/
 ├── app/chat/           # Chat interface
-├── orchestrator/       # Agent orchestration
+├── orchestrator/       # LangGraph state machine
+├── agents/             # AI agent implementations
+├── adapters/           # Language adapters (Python/Go/Rust/TS)
 ├── providers/          # AI model providers
-├── adapters/           # Language adapters
-├── services/           # Cost optimizer, requirements extractor
-└── runpod/            # Serverless handler
+└── services/           # Cost optimizer, requirements extractor
 ```
 
 ---
 
-## Development
+## Required Environment Variables
 
-```bash
-npm run dev          # Start dev server
-npm run build        # Production build
-npm test             # Run tests
-```
-
-### Required Environment Variables
 ```bash
 ANTHROPIC_API_KEY=sk-ant-...
 DEEPSEEK_API_KEY=sk-...
@@ -105,16 +79,21 @@ GITHUB_CLIENT_SECRET=...
 
 ---
 
+## Documentation
+
+| File | Purpose |
+|------|---------|
+| `PLAN.md` | Master plan, roadmap, active work |
+| `README.md` | Public project description |
+| `docs/archive/` | Historical summaries and guides |
+
+---
+
 ## Deployment
 
-### Docker Hub
-- **Username**: `tmk74`
-- **Image**: `tmk74/ai-development-cockpit:latest`
-
-### RunPod Serverless
-- **Template ID**: `t5tolm6jo7`
-- **Endpoint ID**: `xb46cmloysnzro`
-- **Image**: `tmk74/ai-development-cockpit:latest`
+- **Docker Hub**: `tmk74/ai-development-cockpit:latest`
+- **RunPod Template**: `t5tolm6jo7`
+- **RunPod Endpoint**: `xb46cmloysnzro`
 
 ---
 
@@ -123,12 +102,3 @@ GITHUB_CLIENT_SECRET=...
 - **GitHub**: https://github.com/ScientiaCapital/ai-development-cockpit
 - **Docker Hub**: https://hub.docker.com/r/tmk74/ai-development-cockpit
 - **Supabase**: https://supabase.com/dashboard/project/xucngysrzjtwqzgcutqf
-
----
-
-## Next Steps
-
-1. Deploy to RunPod (serverless endpoint)
-2. E2E testing on production
-3. Real-time progress dashboard
-4. Feedback loop for continuous improvement

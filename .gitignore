@@ -117,3 +117,4 @@ python-validator/.env
 # tasks/ 
 .playwright-mcp/
 CLAUDE.md
+LICENSE.md

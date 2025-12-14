@@ -18,6 +18,9 @@ httpx==0.28.1
 # Logging (Production observability)
 structlog==24.1.0
 
+# Scientia Capital core infrastructure
+lang-core @ git+https://github.com/ScientiaCapital/lang-core.git
+
 # ============================================================================
 # REMOVED from serverless (kept in requirements.txt for development):
 # - pytest==8.3.4              # Testing only

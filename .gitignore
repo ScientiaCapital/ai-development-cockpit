@@ -116,3 +116,4 @@ python-validator/.env
 # tasks.json
 # tasks/ 
 .playwright-mcp/
+CLAUDE.md

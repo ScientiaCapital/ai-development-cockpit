@@ -27,6 +27,8 @@ from coperniq_mock import CoperniqMock
 class AgentState(TypedDict):
     """State shared between agents in the graph"""
     contractor_type: str
+    vertical: Optional[str]  # GTM vertical (solar_epc, hvac_mep, om_service, multi_trade)
+    vertical_config: Optional[Dict]  # Loaded vertical configuration
     templates_built: List[Dict]
     validation_results: List[Dict]
     test_results: List[Dict]
@@ -68,6 +70,8 @@ class CoperniqAgentOrchestrator:
     # State
     state: AgentState = field(default_factory=lambda: {
         "contractor_type": "",
+        "vertical": None,
+        "vertical_config": None,
         "templates_built": [],
         "validation_results": [],
         "test_results": [],
@@ -609,6 +613,279 @@ class CoperniqAgentOrchestrator:
         self._log(f"   Missing: {missing}")
 
         return report
+
+    # =========================================================================
+    # GTM VERTICAL CONFIGURATION (E2B Sandbox Integration)
+    # =========================================================================
+
+    AVAILABLE_VERTICALS = ["solar_epc", "hvac_mep", "om_service", "multi_trade"]
+
+    def load_vertical(self, vertical_name: str) -> Dict:
+        """
+        Load a GTM vertical configuration for E2B sandbox onboarding
+
+        Args:
+            vertical_name: One of solar_epc, hvac_mep, om_service, multi_trade
+
+        Returns:
+            Loaded vertical configuration with schema, phases, agents, csv_requirements
+        """
+        if vertical_name not in self.AVAILABLE_VERTICALS:
+            raise ValueError(
+                f"Unknown vertical: {vertical_name}. "
+                f"Available: {self.AVAILABLE_VERTICALS}"
+            )
+
+        vertical_path = (
+            Path(__file__).parent.parent.parent /
+            "config" / "gtm_verticals" / f"{vertical_name}.json"
+        )
+
+        if not vertical_path.exists():
+            raise FileNotFoundError(f"Vertical config not found: {vertical_path}")
+
+        with open(vertical_path, 'r') as f:
+            config = json.load(f)
+
+        # Store in state
+        self.state["vertical"] = vertical_name
+        self.state["vertical_config"] = config
+
+        # Update contractor type based on vertical
+        vertical_to_contractor = {
+            "solar_epc": "solar",
+            "hvac_mep": "hvac",
+            "om_service": "hvac",  # O&M can be any trade
+            "multi_trade": "general_contractor"
+        }
+        self.contractor_type = vertical_to_contractor.get(vertical_name, "hvac")
+        self.state["contractor_type"] = self.contractor_type
+
+        self._log(f"📦 Loaded GTM Vertical: {config.get('display_name', vertical_name)}")
+        self._log(f"   Workflow: {config.get('workflow_type', 'unknown')}")
+        self._log(f"   Tables: {', '.join(config.get('schema', {}).get('tables', []))}")
+        self._log(f"   Agents: {', '.join(config.get('agents', {}).keys())}")
+
+        return config
+
+    def get_vertical_schema(self) -> Dict:
+        """Get the Coperniq schema for the loaded vertical"""
+        if not self.state.get("vertical_config"):
+            raise ValueError("No vertical loaded. Call load_vertical() first.")
+        return self.state["vertical_config"].get("schema", {})
+
+    def get_vertical_csv_requirements(self) -> Dict:
+        """Get CSV import requirements with exact Coperniq field names"""
+        if not self.state.get("vertical_config"):
+            raise ValueError("No vertical loaded. Call load_vertical() first.")
+        return self.state["vertical_config"].get("csv_requirements", {})
+
+    def get_vertical_agents(self) -> Dict[str, str]:
+        """Get available agents for the loaded vertical"""
+        if not self.state.get("vertical_config"):
+            raise ValueError("No vertical loaded. Call load_vertical() first.")
+        return self.state["vertical_config"].get("agents", {})
+
+    def get_sample_queries(self) -> List[str]:
+        """Get sample queries for the loaded vertical"""
+        if not self.state.get("vertical_config"):
+            raise ValueError("No vertical loaded. Call load_vertical() first.")
+        return self.state["vertical_config"].get("sample_queries", [])
+
+    def import_coperniq_csv(self, csv_path: str, coperniq_type: str) -> Dict:
+        """
+        Import CSV using exact Coperniq type schema
+
+        Args:
+            csv_path: Path to CSV file
+            coperniq_type: Coperniq GraphQL type (Contact, Site, Asset, Task, etc.)
+
+        Returns:
+            Import result with validation status
+        """
+        import csv as csv_module
+
+        if not self.state.get("vertical_config"):
+            raise ValueError("No vertical loaded. Call load_vertical() first.")
+
+        csv_requirements = self.get_vertical_csv_requirements()
+        expected_file = f"{coperniq_type}.csv"
+
+        if expected_file not in csv_requirements:
+            available = list(csv_requirements.keys())
+            raise ValueError(
+                f"Unknown Coperniq type: {coperniq_type}. "
+                f"Available for this vertical: {available}"
+            )
+
+        schema = csv_requirements[expected_file]
+        required_fields = schema.get("required", [])
+        expected_columns = schema.get("columns", {})
+
+        self._log(f"📥 Importing {coperniq_type} from {csv_path}...")
+
+        try:
+            with open(csv_path, 'r', encoding='utf-8-sig') as f:
+                reader = csv_module.DictReader(f)
+                rows = list(reader)
+
+            if not rows:
+                return {"status": "error", "message": "Empty CSV file"}
+
+            headers = list(rows[0].keys())
+
+            # Validate required fields
+            missing_required = [
+                field for field in required_fields
+                if field not in headers
+            ]
+
+            if missing_required:
+                self._log(f"⚠️ Missing required fields: {missing_required}")
+
+            # Map and validate data
+            validated_records = []
+            validation_errors = []
+
+            for i, row in enumerate(rows):
+                record = {"_coperniq_type": coperniq_type, "_row": i + 1}
+
+                for field, field_type in expected_columns.items():
+                    if field in row:
+                        value = row[field]
+
+                        # Type validation
+                        if field_type == "int" and value:
+                            try:
+                                record[field] = int(value)
+                            except ValueError:
+                                validation_errors.append(
+                                    f"Row {i+1}: {field} should be int, got '{value}'"
+                                )
+                                record[field] = None
+                        elif field_type == "decimal" and value:
+                            try:
+                                record[field] = float(value)
+                            except ValueError:
+                                validation_errors.append(
+                                    f"Row {i+1}: {field} should be decimal, got '{value}'"
+                                )
+                                record[field] = None
+                        elif field_type == "boolean" and value:
+                            record[field] = value.lower() in ("true", "1", "yes")
+                        elif field_type == "string[]" and value:
+                            # Handle array fields (comma-separated)
+                            record[field] = [v.strip() for v in value.split(",")]
+                        else:
+                            record[field] = value if value else None
+
+                validated_records.append(record)
+
+            import_result = {
+                "status": "success",
+                "coperniq_type": coperniq_type,
+                "records_imported": len(validated_records),
+                "columns_detected": headers,
+                "columns_expected": list(expected_columns.keys()),
+                "missing_required": missing_required,
+                "validation_errors": validation_errors[:10],  # First 10 errors
+                "total_validation_errors": len(validation_errors),
+                "sample_record": validated_records[0] if validated_records else None
+            }
+
+            self.state["csv_imports"].append(import_result)
+
+            if validation_errors:
+                self._log(f"⚠️ Imported {len(validated_records)} records with {len(validation_errors)} warnings")
+            else:
+                self._log(f"✅ Imported {len(validated_records)} {coperniq_type} records")
+
+            return import_result
+
+        except Exception as e:
+            error_result = {
+                "status": "error",
+                "coperniq_type": coperniq_type,
+                "error": str(e)
+            }
+            self.state["csv_imports"].append(error_result)
+            self._log(f"❌ CSV import failed: {e}")
+            return error_result
+
+    def print_vertical_info(self):
+        """Print information about the loaded vertical"""
+        if not self.state.get("vertical_config"):
+            print("❌ No vertical loaded. Call load_vertical() first.")
+            return
+
+        config = self.state["vertical_config"]
+
+        print("\n" + "="*60)
+        print(f"📦 GTM VERTICAL: {config.get('display_name', 'Unknown')}")
+        print("="*60)
+
+        print(f"\n📝 Description: {config.get('description', 'N/A')}")
+        print(f"🔄 Workflow Type: {config.get('workflow_type', 'N/A')}")
+
+        # Phases
+        phases = config.get("phases")
+        if phases:
+            if isinstance(phases, list):
+                print(f"\n📊 Phases: {' → '.join(phases)}")
+            elif isinstance(phases, dict):
+                for phase_type, phase_list in phases.items():
+                    if phase_list:
+                        print(f"\n📊 {phase_type.title()} Phases: {' → '.join(phase_list)}")
+
+        # Schema
+        schema = config.get("schema", {})
+        print(f"\n🗄️ Coperniq Tables: {', '.join(schema.get('tables', []))}")
+        print(f"📊 Views: {', '.join(schema.get('views', []))}")
+
+        # Agents
+        agents = config.get("agents", {})
+        if agents:
+            print("\n🤖 Available Agents:")
+            for agent_name, description in agents.items():
+                print(f"   • {agent_name}: {description}")
+
+        # Sample Queries
+        queries = config.get("sample_queries", [])
+        if queries:
+            print("\n💬 Sample Queries:")
+            for query in queries[:4]:
+                print(f"   • \"{query}\"")
+
+        # CSV Requirements
+        csv_reqs = config.get("csv_requirements", {})
+        if csv_reqs:
+            print("\n📥 CSV Import Files:")
+            for filename, schema in csv_reqs.items():
+                coperniq_type = schema.get("coperniq_type", "Unknown")
+                required = schema.get("required", [])
+                print(f"   • {filename} → {coperniq_type}")
+                print(f"     Required: {', '.join(required)}")
+
+        print("\n" + "="*60 + "\n")
+
+    @classmethod
+    def from_vertical(cls, vertical_name: str) -> "CoperniqAgentOrchestrator":
+        """
+        Create orchestrator configured for a specific GTM vertical
+
+        Args:
+            vertical_name: One of solar_epc, hvac_mep, om_service, multi_trade
+
+        Returns:
+            Configured CoperniqAgentOrchestrator instance
+        """
+        instance = cls(contractor_type="hvac", level="professional")
+        instance.load_vertical(vertical_name)
+        return instance
+
+    # =========================================================================
+    # WIZARD CONFIGURATION (Legacy - still supported)
+    # =========================================================================
 
     def print_wizard_checklist(self):
         """Print a user-friendly checklist of wizard options"""

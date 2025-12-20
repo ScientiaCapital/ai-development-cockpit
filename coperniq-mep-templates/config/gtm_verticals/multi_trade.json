@@ -1,0 +1,150 @@
+{
+  "vertical": "multi_trade",
+  "display_name": "Multi-Trade Contractor",
+  "description": "Full MEP services across multiple trades",
+  "schema": {
+    "tables": ["Contact", "Site", "Project", "Asset", "Task", "System", "ServicePlanInstance", "FinancialDocument"],
+    "views": ["cross_trade_profitability", "resource_utilization", "unified_schedule"],
+    "coperniq_mapping": {
+      "Contact": "Contact",
+      "Site": "Site",
+      "Project": "Project",
+      "Asset": "Asset",
+      "Task": "Task",
+      "System": "System",
+      "ServicePlanInstance": "ServicePlanInstance",
+      "FinancialDocument": "FinancialDocument",
+      "Form": "Form"
+    }
+  },
+  "phases": {
+    "project": ["Bid", "Award", "Submittal", "Install", "Commission", "Closeout"],
+    "service": null
+  },
+  "workflow_type": "hybrid",
+  "properties": {
+    "inherits": ["solar_epc", "hvac_mep", "om_service"]
+  },
+  "agents": {
+    "cross_trade_profitability": "Compare profitability across trades",
+    "resource_optimizer": "Optimize crew allocation across trades",
+    "unified_scheduler": "Single view of all scheduled work"
+  },
+  "sample_queries": [
+    "Compare profitability: Solar vs HVAC",
+    "Optimize crew across trades for next week",
+    "What's my total revenue by trade this quarter?",
+    "Show all open work across all trades"
+  ],
+  "templates_included": "all",
+  "csv_requirements": {
+    "Contact.csv": {
+      "coperniq_type": "Contact",
+      "required": ["name"],
+      "columns": {
+        "name": "string",
+        "emails": "string[]",
+        "phones": "string[]",
+        "title": "string",
+        "status": "string",
+        "source": "string"
+      }
+    },
+    "Site.csv": {
+      "coperniq_type": "Site",
+      "required": ["fullAddress"],
+      "columns": {
+        "fullAddress": "string",
+        "street": "string",
+        "city": "string",
+        "state": "string",
+        "zipcode": "string",
+        "clientId": "int",
+        "jurisdictionId": "int",
+        "utilityId": "int",
+        "timezone": "string"
+      }
+    },
+    "Asset.csv": {
+      "coperniq_type": "Asset",
+      "required": ["name", "type"],
+      "columns": {
+        "name": "string",
+        "type": "string",
+        "status": "string",
+        "manufacturer": "string",
+        "model": "string",
+        "serialNumber": "string",
+        "size": "string",
+        "installDate": "datetime",
+        "manufacturingDate": "datetime",
+        "expectedLifetime": "int",
+        "siteId": "int"
+      }
+    },
+    "Task.csv": {
+      "coperniq_type": "Task",
+      "required": ["title"],
+      "columns": {
+        "title": "string",
+        "description": "string",
+        "status": "string",
+        "priority": "int",
+        "startDate": "datetime",
+        "endDate": "datetime",
+        "isField": "boolean",
+        "assigneeId": "int",
+        "projectId": "int",
+        "assetId": "int",
+        "siteId": "int",
+        "servicePlanInstanceId": "int"
+      }
+    },
+    "System.csv": {
+      "coperniq_type": "System",
+      "required": ["name"],
+      "columns": {
+        "name": "string",
+        "size": "string",
+        "status": "string",
+        "providerStatus": "string",
+        "operationStatus": "string",
+        "installedAt": "datetime",
+        "operationalAt": "datetime",
+        "monitored": "boolean",
+        "projectId": "int",
+        "siteId": "int"
+      }
+    },
+    "ServicePlanInstance.csv": {
+      "coperniq_type": "ServicePlanInstance",
+      "required": ["servicePlanId", "clientId"],
+      "columns": {
+        "servicePlanId": "int",
+        "clientId": "int",
+        "startDate": "datetime",
+        "endDate": "datetime",
+        "durationMonths": "int",
+        "autoRenew": "boolean",
+        "totalPrice": "decimal",
+        "status": "string",
+        "invoicingFrequency": "string"
+      }
+    },
+    "FinancialDocument.csv": {
+      "coperniq_type": "FinancialDocument",
+      "required": ["title", "type"],
+      "columns": {
+        "title": "string",
+        "type": "string",
+        "status": "string",
+        "amount": "decimal",
+        "issueDate": "datetime",
+        "dueDate": "datetime",
+        "recordId": "int",
+        "clientId": "int"
+      }
+    }
+  },
+  "inherits": ["solar_epc", "hvac_mep", "om_service"]
+}

@@ -73,18 +73,34 @@ We've already done the work:
 ## Development Status
 
 ### Phase 1: Research & Specs (COMPLETE)
-- [x] GraphQL schema discovery
-- [x] Form builder analysis
-- [x] Template specifications
+- [x] GraphQL schema discovery (4,037 types mapped)
+- [x] Form builder analysis (6 field types)
+- [x] Template specifications (30+ templates)
 - [x] Pricing model
 
-### Phase 2: Template Creation (NEXT)
-- [ ] Create pilot templates in Coperniq (free beta)
-- [ ] Export to portable format (JSON)
-- [ ] Build database schemas
-- [ ] Create demo videos
+### Phase 2: GTM Vertical Configs (COMPLETE - 2025-12-20)
+- [x] 4 GTM vertical JSON configs created
+- [x] Exact Coperniq GraphQL type alignment
+- [x] CSV import schemas with exact field names
+- [x] Agent prompts and sample queries
 
-### Phase 3: Productize
+**GTM Verticals:**
+| Vertical | Workflow | Key Tables |
+|----------|----------|------------|
+| `solar_epc` | Phase-based | Contact, Site, Project, System |
+| `hvac_mep` | Phase-based | Contact, Site, Project, Asset, Task |
+| `om_service` | Ticket-based | Contact, Site, Asset, Task, ServicePlanInstance |
+| `multi_trade` | Hybrid | All types combined |
+
+**Location:** `config/gtm_verticals/*.json`
+
+### Phase 3: E2B Sandbox Integration (IN PROGRESS)
+- [ ] Create E2B runtime wrapper
+- [ ] Wire agents to sandbox
+- [ ] Test with real CSV imports
+- [ ] Trial management system
+
+### Phase 4: Productize
 - [ ] Landing page
 - [ ] Stripe payments
 - [ ] Customer portal

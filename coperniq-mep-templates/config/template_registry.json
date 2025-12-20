@@ -1,0 +1,437 @@
+{
+  "version": "1.0",
+  "description": "Coperniq MEP Template Registry - Machine-readable catalog for AI agents",
+  "trades": {
+    "hvac": {
+      "name": "HVAC",
+      "emoji": "🌡️",
+      "certifications": ["EPA 608", "NATE", "ACCA"],
+      "market_segments": ["residential", "commercial", "c_and_i"],
+      "templates": {
+        "sales": {
+          "lead_intake_form": {
+            "file": "templates/hvac/lead_intake_form.yaml",
+            "name": "Lead Intake Form",
+            "description": "Capture new leads - contact info, property, pain points",
+            "required": true,
+            "segments": ["residential", "commercial", "c_and_i"],
+            "fields_count": 32
+          },
+          "site_survey_residential": {
+            "file": "templates/hvac/site_survey_residential.yaml",
+            "name": "Site Survey - Residential",
+            "description": "Home comfort assessment for Manual J preparation",
+            "required": true,
+            "segments": ["residential"],
+            "fields_count": 60
+          },
+          "equipment_proposal": {
+            "file": "templates/hvac/equipment_proposal.yaml",
+            "name": "Equipment Proposal (Good-Better-Best)",
+            "description": "Tiered pricing with efficiency ratings and rebates",
+            "required": true,
+            "segments": ["residential", "commercial"],
+            "fields_count": 63
+          },
+          "manual_j_input": {
+            "file": "templates/hvac/manual_j_input.yaml",
+            "name": "Manual J Load Calculation Input",
+            "description": "ACCA Manual J data collection for proper sizing",
+            "required": false,
+            "segments": ["residential", "commercial"],
+            "fields_count": 72
+          }
+        },
+        "pre_job": {
+          "job_planning_worksheet": {
+            "file": "templates/hvac/job_planning_worksheet.yaml",
+            "name": "Job Planning Worksheet",
+            "description": "Pre-install planning - equipment, crew, materials",
+            "required": true,
+            "segments": ["residential", "commercial", "c_and_i"],
+            "fields_count": 61
+          }
+        },
+        "installation": {
+          "furnace_installation": {
+            "file": "templates/hvac/furnace_installation.yaml",
+            "name": "Furnace Installation Checklist",
+            "description": "Step-by-step furnace install verification",
+            "required": true,
+            "segments": ["residential", "commercial"],
+            "fields_count": 45
+          },
+          "condenser_installation": {
+            "file": "templates/hvac/condenser_installation.yaml",
+            "name": "Condenser Installation Checklist",
+            "description": "AC/heat pump outdoor unit installation",
+            "required": true,
+            "segments": ["residential", "commercial", "c_and_i"],
+            "fields_count": 40
+          }
+        },
+        "commissioning": {
+          "ac_system_inspection": {
+            "file": "templates/hvac/ac_system_inspection.yaml",
+            "name": "AC System Inspection",
+            "description": "Startup and commissioning verification",
+            "required": true,
+            "segments": ["residential", "commercial", "c_and_i"],
+            "fields_count": 50
+          },
+          "furnace_safety_inspection": {
+            "file": "templates/hvac/furnace_safety_inspection.yaml",
+            "name": "Furnace Safety Inspection",
+            "description": "Gas furnace safety and combustion check",
+            "required": true,
+            "segments": ["residential", "commercial"],
+            "fields_count": 45
+          }
+        },
+        "service": {
+          "refrigerant_tracking_log": {
+            "file": "templates/hvac/refrigerant_tracking_log.yaml",
+            "name": "Refrigerant Tracking Log",
+            "description": "EPA 608 compliant refrigerant tracking",
+            "required": true,
+            "segments": ["residential", "commercial", "c_and_i"],
+            "fields_count": 35,
+            "compliance": ["EPA 608"]
+          },
+          "hvac_service_call": {
+            "file": "templates/work_orders/hvac_service_call.yaml",
+            "name": "HVAC Service Call Work Order",
+            "description": "Service call dispatch and completion",
+            "required": true,
+            "segments": ["residential", "commercial", "c_and_i"],
+            "fields_count": 40
+          },
+          "hvac_pm_visit": {
+            "file": "templates/work_orders/hvac_pm_visit.yaml",
+            "name": "HVAC PM Visit Work Order",
+            "description": "Preventive maintenance visit tracking",
+            "required": false,
+            "segments": ["residential", "commercial", "c_and_i"],
+            "fields_count": 35
+          }
+        },
+        "service_plans": {
+          "hvac_bronze": {
+            "file": "templates/service_plans/hvac_bronze.yaml",
+            "name": "HVAC Bronze Service Plan",
+            "description": "Basic maintenance agreement - 1 visit/year",
+            "required": false,
+            "segments": ["residential"],
+            "fields_count": 25
+          },
+          "hvac_silver": {
+            "file": "templates/service_plans/hvac_silver.yaml",
+            "name": "HVAC Silver Service Plan",
+            "description": "Standard agreement - 2 visits/year + priority",
+            "required": false,
+            "segments": ["residential", "commercial"],
+            "fields_count": 30
+          },
+          "hvac_gold": {
+            "file": "templates/service_plans/hvac_gold.yaml",
+            "name": "HVAC Gold Service Plan",
+            "description": "Premium agreement - priority + parts coverage",
+            "required": false,
+            "segments": ["residential", "commercial"],
+            "fields_count": 35
+          }
+        }
+      }
+    },
+    "solar": {
+      "name": "Solar",
+      "emoji": "☀️",
+      "certifications": ["NABCEP PV", "OSHA 10", "NEC 690"],
+      "market_segments": ["residential", "commercial", "utility"],
+      "templates": {
+        "sales": {
+          "solar_site_assessment": {
+            "file": "templates/solar/solar_site_assessment.yaml",
+            "name": "Solar Site Assessment",
+            "description": "Residential roof/shading/electrical evaluation",
+            "required": true,
+            "segments": ["residential"],
+            "fields_count": 71
+          },
+          "solar_commercial_audit": {
+            "file": "templates/solar/solar_commercial_audit.yaml",
+            "name": "Commercial Solar Audit",
+            "description": "C&I feasibility with demand analysis",
+            "required": true,
+            "segments": ["commercial", "utility"],
+            "fields_count": 80
+          },
+          "solar_proposal_builder": {
+            "file": "templates/solar/solar_proposal_builder.yaml",
+            "name": "Solar Proposal Builder",
+            "description": "Good-Better-Best solar system proposals",
+            "required": true,
+            "segments": ["residential", "commercial"],
+            "fields_count": 93
+          },
+          "solar_shade_analysis": {
+            "file": "templates/solar/solar_shade_analysis.yaml",
+            "name": "Shade Analysis Report",
+            "description": "Detailed shading study with production impact",
+            "required": false,
+            "segments": ["residential", "commercial"],
+            "fields_count": 67
+          },
+          "solar_financing_application": {
+            "file": "templates/solar/solar_financing_application.yaml",
+            "name": "Solar Financing Pre-Qualification",
+            "description": "Loan/lease financing application",
+            "required": false,
+            "segments": ["residential", "commercial"],
+            "fields_count": 82
+          }
+        },
+        "installation": {
+          "solar_roof_installation": {
+            "file": "templates/solar/solar_roof_installation.yaml",
+            "name": "Roof Mount Installation Checklist",
+            "description": "Panel mounting and racking verification",
+            "required": true,
+            "segments": ["residential", "commercial"],
+            "fields_count": 55
+          },
+          "solar_electrical_installation": {
+            "file": "templates/solar/solar_electrical_installation.yaml",
+            "name": "Solar Electrical Installation",
+            "description": "Inverter, disconnect, interconnection",
+            "required": true,
+            "segments": ["residential", "commercial", "utility"],
+            "fields_count": 50
+          }
+        },
+        "commissioning": {
+          "solar_commissioning_report": {
+            "file": "templates/solar/solar_commissioning_report.yaml",
+            "name": "Solar System Commissioning",
+            "description": "Startup, testing, utility interconnection",
+            "required": true,
+            "segments": ["residential", "commercial", "utility"],
+            "fields_count": 45
+          }
+        }
+      }
+    },
+    "electrical": {
+      "name": "Electrical",
+      "emoji": "⚡",
+      "certifications": ["NEC 2023", "OSHA 10", "State License"],
+      "market_segments": ["residential", "commercial", "c_and_i"],
+      "templates": {
+        "service": {
+          "panel_inspection": {
+            "file": "templates/electrical/panel_inspection.yaml",
+            "name": "Panel Inspection Report",
+            "description": "Electrical panel safety inspection",
+            "required": true,
+            "segments": ["residential", "commercial", "c_and_i"],
+            "fields_count": 45
+          },
+          "circuit_load_analysis": {
+            "file": "templates/electrical/circuit_load_analysis.yaml",
+            "name": "Circuit Load Analysis",
+            "description": "Load calculation and capacity assessment",
+            "required": true,
+            "segments": ["residential", "commercial", "c_and_i"],
+            "fields_count": 40
+          },
+          "service_upgrade_assessment": {
+            "file": "templates/electrical/service_upgrade_assessment.yaml",
+            "name": "Service Upgrade Assessment",
+            "description": "Panel upgrade evaluation",
+            "required": false,
+            "segments": ["residential", "commercial"],
+            "fields_count": 50
+          },
+          "ev_charger_installation": {
+            "file": "templates/electrical/ev_charger_installation.yaml",
+            "name": "EV Charger Installation",
+            "description": "NEC 625 compliant EV charger install",
+            "required": false,
+            "segments": ["residential", "commercial"],
+            "fields_count": 45
+          },
+          "generator_installation": {
+            "file": "templates/electrical/generator_installation.yaml",
+            "name": "Generator Installation",
+            "description": "Standby generator and transfer switch",
+            "required": false,
+            "segments": ["residential", "commercial", "c_and_i"],
+            "fields_count": 50
+          }
+        }
+      }
+    },
+    "plumbing": {
+      "name": "Plumbing",
+      "emoji": "🔧",
+      "certifications": ["State License", "ASSE 5110", "OSHA 10"],
+      "market_segments": ["residential", "commercial", "c_and_i"],
+      "templates": {
+        "service": {
+          "backflow_test_report": {
+            "file": "templates/plumbing/backflow_test_report.yaml",
+            "name": "Backflow Test Report",
+            "description": "ASSE 5110 compliant backflow testing",
+            "required": true,
+            "segments": ["commercial", "c_and_i"],
+            "fields_count": 40,
+            "compliance": ["ASSE 5110"]
+          },
+          "camera_inspection": {
+            "file": "templates/plumbing/camera_inspection.yaml",
+            "name": "Camera Inspection Report",
+            "description": "Sewer/drain camera inspection",
+            "required": false,
+            "segments": ["residential", "commercial"],
+            "fields_count": 35
+          },
+          "water_heater_inspection": {
+            "file": "templates/plumbing/water_heater_inspection.yaml",
+            "name": "Water Heater Inspection",
+            "description": "Tank/tankless water heater service",
+            "required": true,
+            "segments": ["residential", "commercial"],
+            "fields_count": 40
+          }
+        },
+        "service_plans": {
+          "plumbing_protect": {
+            "file": "templates/service_plans/plumbing_protect.yaml",
+            "name": "Plumbing Protection Plan",
+            "description": "Annual plumbing maintenance agreement",
+            "required": false,
+            "segments": ["residential"],
+            "fields_count": 25
+          }
+        }
+      }
+    },
+    "fire_protection": {
+      "name": "Fire Protection",
+      "emoji": "🔥",
+      "certifications": ["NICET", "NFPA 25", "NFPA 72", "State License"],
+      "market_segments": ["commercial", "c_and_i"],
+      "templates": {
+        "inspection": {
+          "sprinkler_inspection": {
+            "file": "templates/fire_protection/sprinkler_inspection.yaml",
+            "name": "Sprinkler System Inspection",
+            "description": "NFPA 25 compliant sprinkler inspection",
+            "required": true,
+            "segments": ["commercial", "c_and_i"],
+            "fields_count": 55,
+            "compliance": ["NFPA 25"]
+          },
+          "fire_extinguisher_inspection": {
+            "file": "templates/fire_protection/fire_extinguisher_inspection.yaml",
+            "name": "Fire Extinguisher Inspection",
+            "description": "NFPA 10 compliant extinguisher service",
+            "required": true,
+            "segments": ["commercial", "c_and_i"],
+            "fields_count": 35,
+            "compliance": ["NFPA 10"]
+          }
+        }
+      }
+    },
+    "low_voltage": {
+      "name": "Low Voltage",
+      "emoji": "📡",
+      "certifications": ["BICSI", "TIA-568", "State License"],
+      "market_segments": ["residential", "commercial", "c_and_i"],
+      "templates": {
+        "installation": {
+          "network_cable_test": {
+            "file": "templates/low_voltage/network_cable_test.yaml",
+            "name": "Network Cable Test Report",
+            "description": "TIA-568 cable certification testing",
+            "required": true,
+            "segments": ["commercial", "c_and_i"],
+            "fields_count": 45,
+            "compliance": ["TIA-568", "BICSI"]
+          },
+          "security_system_inspection": {
+            "file": "templates/low_voltage/security_system_inspection.yaml",
+            "name": "Security System Inspection",
+            "description": "Alarm and access control testing",
+            "required": true,
+            "segments": ["residential", "commercial", "c_and_i"],
+            "fields_count": 50
+          }
+        }
+      }
+    },
+    "roofing": {
+      "name": "Roofing",
+      "emoji": "🏠",
+      "certifications": ["GAF Certified", "CertainTeed SELECT", "OSHA 10"],
+      "market_segments": ["residential", "commercial"],
+      "templates": {
+        "inspection": {
+          "roof_inspection": {
+            "file": "templates/roofing/roof_inspection.yaml",
+            "name": "Roof Inspection Report",
+            "description": "Comprehensive roof condition assessment",
+            "required": true,
+            "segments": ["residential", "commercial"],
+            "fields_count": 60
+          }
+        }
+      }
+    },
+    "general_contractor": {
+      "name": "General Contractor",
+      "emoji": "📋",
+      "certifications": ["State GC License", "OSHA 30"],
+      "market_segments": ["residential", "commercial", "c_and_i"],
+      "templates": {
+        "daily_operations": {
+          "daily_report": {
+            "file": "templates/general_contractor/daily_report.yaml",
+            "name": "Daily Construction Report",
+            "description": "Daily site documentation and progress",
+            "required": true,
+            "segments": ["commercial", "c_and_i"],
+            "fields_count": 55
+          }
+        }
+      }
+    }
+  },
+  "business_phases": {
+    "sales": {
+      "name": "Sales & Estimating",
+      "description": "Lead capture, site surveys, proposals, financing"
+    },
+    "pre_job": {
+      "name": "Pre-Job / Project Setup",
+      "description": "Job planning, permits, material ordering"
+    },
+    "installation": {
+      "name": "Installation / Construction",
+      "description": "Equipment install checklists, daily logs"
+    },
+    "commissioning": {
+      "name": "Commissioning & Startup",
+      "description": "System testing, verification, handoff"
+    },
+    "service": {
+      "name": "Service & Maintenance",
+      "description": "Service calls, inspections, repairs"
+    },
+    "service_plans": {
+      "name": "Service Plans / PM Agreements",
+      "description": "Recurring maintenance contracts"
+    }
+  }
+}

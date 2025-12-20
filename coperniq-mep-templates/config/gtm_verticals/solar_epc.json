@@ -1,0 +1,105 @@
+{
+  "vertical": "solar_epc",
+  "display_name": "Solar EPC Contractor",
+  "description": "Solar installation and project management",
+  "schema": {
+    "tables": ["Contact", "Site", "Project", "System", "FinancialDocument"],
+    "views": ["project_pipeline", "permit_status", "production_vs_design"],
+    "coperniq_mapping": {
+      "Contact": "Contact",
+      "Site": "Site",
+      "Project": "Project",
+      "System": "System",
+      "Task": "Task",
+      "Form": "Form",
+      "FinancialDocument": "FinancialDocument"
+    }
+  },
+  "phases": ["Sales", "Design", "Permit", "Install", "PTO", "Interconnect"],
+  "workflow_type": "phases",
+  "properties": {
+    "system_size_kw": {"type": "numeric", "unit": "kW"},
+    "panel_count": {"type": "integer"},
+    "inverter_type": {"type": "select", "options": ["String", "Microinverter", "Optimizer"]},
+    "utility_provider": {"type": "text"},
+    "ahj": {"type": "text", "label": "Authority Having Jurisdiction"}
+  },
+  "agents": {
+    "fleet_performance": "Compare production vs design across all systems",
+    "permit_tracker": "Track permit status and flag overdue items",
+    "install_scheduler": "Optimize crew scheduling for installations",
+    "interconnection_status": "Monitor utility interconnection progress"
+  },
+  "sample_queries": [
+    "Show me production vs design for all systems installed this year",
+    "Which permits are overdue?",
+    "Calculate crew scheduling for next week's installs",
+    "What's my average cost per watt across projects?"
+  ],
+  "templates_included": [
+    "templates/solar/solar_site_assessment.yaml",
+    "templates/solar/solar_proposal_builder.yaml",
+    "templates/solar/solar_commercial_audit.yaml"
+  ],
+  "csv_requirements": {
+    "Contact.csv": {
+      "coperniq_type": "Contact",
+      "required": ["name"],
+      "columns": {
+        "name": "string",
+        "emails": "string[]",
+        "phones": "string[]",
+        "title": "string",
+        "status": "string",
+        "source": "string"
+      }
+    },
+    "Site.csv": {
+      "coperniq_type": "Site",
+      "required": ["fullAddress"],
+      "columns": {
+        "fullAddress": "string",
+        "street": "string",
+        "city": "string",
+        "state": "string",
+        "zipcode": "string",
+        "clientId": "int",
+        "jurisdictionId": "int",
+        "utilityId": "int",
+        "timezone": "string"
+      }
+    },
+    "System.csv": {
+      "coperniq_type": "System",
+      "required": ["name"],
+      "columns": {
+        "name": "string",
+        "size": "string",
+        "status": "string",
+        "providerStatus": "string",
+        "operationStatus": "string",
+        "address": "string",
+        "timezone": "string",
+        "installedAt": "datetime",
+        "operationalAt": "datetime",
+        "monitored": "boolean",
+        "projectId": "int",
+        "siteId": "int"
+      }
+    },
+    "FinancialDocument.csv": {
+      "coperniq_type": "FinancialDocument",
+      "required": ["title", "type"],
+      "columns": {
+        "title": "string",
+        "type": "string",
+        "status": "string",
+        "amount": "decimal",
+        "issueDate": "datetime",
+        "dueDate": "datetime",
+        "recordId": "int",
+        "clientId": "int"
+      }
+    }
+  }
+}

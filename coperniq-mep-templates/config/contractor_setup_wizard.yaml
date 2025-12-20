@@ -1,0 +1,301 @@
+# Coperniq Contractor Setup Wizard
+# AI-Agent Readable Configuration
+# Check boxes to configure your MEP business templates
+
+# Instructions for AI Agents:
+# 1. Load this config to understand contractor needs
+# 2. Use checked items to filter template_registry.json
+# 3. Generate only the templates the contractor needs
+# 4. Auto-populate company info across all templates
+
+wizard:
+  version: "1.0"
+  name: "Contractor Setup Wizard"
+  description: "Select your trades, market segments, and business needs to auto-generate your template library"
+
+# ═══════════════════════════════════════════════════════════════════
+# SECTION 1: COMPANY INFORMATION
+# ═══════════════════════════════════════════════════════════════════
+company:
+  name: ""                          # e.g., "ABC HVAC Services"
+  legal_name: ""                    # e.g., "ABC HVAC Services LLC"
+  address: ""
+  city: ""
+  state: ""
+  zip: ""
+  phone: ""
+  email: ""
+  website: ""
+  license_number: ""
+  logo_url: ""                      # URL to company logo for templates
+
+# ═══════════════════════════════════════════════════════════════════
+# SECTION 2: TRADES (Check all that apply)
+# ═══════════════════════════════════════════════════════════════════
+trades:
+  hvac:
+    enabled: false                  # ☐ HVAC (Heating, Ventilation, Air Conditioning)
+    certifications:
+      epa_608: false               # ☐ EPA Section 608 Certified
+      nate: false                  # ☐ NATE Certified Technicians
+      acca: false                  # ☐ ACCA Manual J/D/S Trained
+
+  solar:
+    enabled: false                  # ☐ Solar PV Installation
+    certifications:
+      nabcep_pv: false             # ☐ NABCEP PV Installation Professional
+      nabcep_sales: false          # ☐ NABCEP PV Technical Sales
+
+  electrical:
+    enabled: false                  # ☐ Electrical Services
+    certifications:
+      journeyman: false            # ☐ Journeyman Electrician
+      master: false                # ☐ Master Electrician
+
+  plumbing:
+    enabled: false                  # ☐ Plumbing Services
+    certifications:
+      journeyman: false            # ☐ Journeyman Plumber
+      master: false                # ☐ Master Plumber
+      backflow: false              # ☐ Backflow Tester (ASSE 5110)
+
+  fire_protection:
+    enabled: false                  # ☐ Fire Protection/Sprinkler
+    certifications:
+      nicet_1: false               # ☐ NICET Level I
+      nicet_2: false               # ☐ NICET Level II
+      nicet_3: false               # ☐ NICET Level III/IV
+
+  low_voltage:
+    enabled: false                  # ☐ Low Voltage/Data/Security
+    certifications:
+      bicsi: false                 # ☐ BICSI Certified
+
+  roofing:
+    enabled: false                  # ☐ Roofing Services
+    certifications:
+      gaf_certified: false         # ☐ GAF Certified Installer
+      certainteed: false           # ☐ CertainTeed SELECT
+
+  general_contractor:
+    enabled: false                  # ☐ General Contracting
+    certifications:
+      gc_license: false            # ☐ State GC License
+
+# ═══════════════════════════════════════════════════════════════════
+# SECTION 3: MARKET SEGMENTS (Check all that apply)
+# ═══════════════════════════════════════════════════════════════════
+market_segments:
+  residential:
+    enabled: false                  # ☐ Residential (Single Family, Townhomes)
+    types:
+      single_family: false         # ☐ Single Family Homes
+      multi_family: false          # ☐ Multi-Family (2-4 units)
+      new_construction: false      # ☐ New Construction
+      retrofit: false              # ☐ Retrofit/Replacement
+
+  commercial:
+    enabled: false                  # ☐ Commercial Buildings
+    types:
+      office: false                # ☐ Office Buildings
+      retail: false                # ☐ Retail/Restaurants
+      medical: false               # ☐ Medical Facilities
+      schools: false               # ☐ Schools/Education
+      hospitality: false           # ☐ Hotels/Hospitality
+
+  c_and_i:
+    enabled: false                  # ☐ Commercial & Industrial
+    types:
+      industrial: false            # ☐ Industrial/Manufacturing
+      warehouse: false             # ☐ Warehouse/Distribution
+      data_center: false           # ☐ Data Centers
+
+  utility:
+    enabled: false                  # ☐ Utility-Scale (Solar only)
+
+# ═══════════════════════════════════════════════════════════════════
+# SECTION 4: BUSINESS PHASES (Check all that apply)
+# ═══════════════════════════════════════════════════════════════════
+business_phases:
+  sales:
+    enabled: false                  # ☐ Sales & Estimating
+    features:
+      lead_intake: false           # ☐ Lead Intake/Capture
+      site_surveys: false          # ☐ Site Surveys
+      proposals: false             # ☐ Proposals (Good-Better-Best)
+      load_calculations: false     # ☐ Load Calculations (Manual J)
+      financing: false             # ☐ Financing Applications
+
+  pre_job:
+    enabled: false                  # ☐ Pre-Job / Project Setup
+    features:
+      job_planning: false          # ☐ Job Planning Worksheets
+      permits: false               # ☐ Permit Applications
+      material_ordering: false     # ☐ Material Takeoffs
+      scheduling: false            # ☐ Crew Scheduling
+
+  installation:
+    enabled: false                  # ☐ Installation / Construction
+    features:
+      install_checklists: false    # ☐ Installation Checklists
+      daily_logs: false            # ☐ Daily Progress Logs
+      quality_control: false       # ☐ QC Inspections
+      change_orders: false         # ☐ Change Orders
+
+  commissioning:
+    enabled: false                  # ☐ Commissioning & Startup
+    features:
+      startup_procedures: false    # ☐ Startup Checklists
+      performance_testing: false   # ☐ Performance Testing
+      balancing: false             # ☐ TAB (Test & Balance)
+      customer_training: false     # ☐ Customer Orientation
+
+  service:
+    enabled: false                  # ☐ Service & Maintenance
+    features:
+      service_calls: false         # ☐ Service Call Work Orders
+      pm_visits: false             # ☐ Preventive Maintenance
+      inspections: false           # ☐ Inspection Reports
+      diagnostics: false           # ☐ Diagnostic Forms
+
+  service_plans:
+    enabled: false                  # ☐ Service Plans / PM Agreements
+    features:
+      bronze_basic: false          # ☐ Basic Plans (1x/year)
+      silver_standard: false       # ☐ Standard Plans (2x/year)
+      gold_premium: false          # ☐ Premium Plans (priority + parts)
+
+  closeout:
+    enabled: false                  # ☐ Post-Job / Closeout
+    features:
+      final_inspection: false      # ☐ Final Inspections
+      warranty_registration: false # ☐ Warranty Registration
+      customer_signoff: false      # ☐ Customer Sign-Off
+
+# ═══════════════════════════════════════════════════════════════════
+# SECTION 5: COMPLIANCE REQUIREMENTS (Auto-selected based on trades)
+# ═══════════════════════════════════════════════════════════════════
+compliance:
+  epa_608:
+    enabled: false                  # Auto-enabled if HVAC selected
+    description: "EPA Section 608 refrigerant tracking and certification"
+
+  nfpa_25:
+    enabled: false                  # Auto-enabled if Fire Protection selected
+    description: "NFPA 25 sprinkler inspection requirements"
+
+  nfpa_72:
+    enabled: false                  # Auto-enabled if Fire Protection selected
+    description: "NFPA 72 fire alarm requirements"
+
+  nec_2023:
+    enabled: false                  # Auto-enabled if Electrical/Solar selected
+    description: "National Electrical Code 2023"
+
+  tia_568:
+    enabled: false                  # Auto-enabled if Low Voltage selected
+    description: "TIA-568 cabling standards"
+
+  osha:
+    enabled: true                   # Always enabled for safety
+    level: "osha_10"               # osha_10 or osha_30
+    description: "OSHA safety compliance"
+
+# ═══════════════════════════════════════════════════════════════════
+# SECTION 6: QUICK SETUP PRESETS (One-click configurations)
+# ═══════════════════════════════════════════════════════════════════
+presets:
+  hvac_residential:
+    name: "HVAC - Residential Focus"
+    description: "Full residential HVAC service and replacement"
+    auto_select:
+      trades: ["hvac"]
+      segments: ["residential"]
+      phases: ["sales", "pre_job", "installation", "commissioning", "service", "service_plans"]
+
+  hvac_commercial:
+    name: "HVAC - Commercial Focus"
+    description: "Commercial HVAC service and installation"
+    auto_select:
+      trades: ["hvac"]
+      segments: ["commercial", "c_and_i"]
+      phases: ["sales", "pre_job", "installation", "commissioning", "service"]
+
+  solar_residential:
+    name: "Solar - Residential"
+    description: "Residential solar installation and service"
+    auto_select:
+      trades: ["solar"]
+      segments: ["residential"]
+      phases: ["sales", "installation", "commissioning"]
+
+  solar_commercial:
+    name: "Solar - Commercial/Industrial"
+    description: "Commercial and utility-scale solar"
+    auto_select:
+      trades: ["solar"]
+      segments: ["commercial", "utility"]
+      phases: ["sales", "pre_job", "installation", "commissioning"]
+
+  full_mep:
+    name: "Full MEP Contractor"
+    description: "Multi-trade MEP contractor (HVAC + Electrical + Plumbing)"
+    auto_select:
+      trades: ["hvac", "electrical", "plumbing"]
+      segments: ["residential", "commercial"]
+      phases: ["sales", "pre_job", "installation", "commissioning", "service", "service_plans"]
+
+  fire_life_safety:
+    name: "Fire & Life Safety"
+    description: "Fire protection, sprinklers, alarms"
+    auto_select:
+      trades: ["fire_protection", "low_voltage"]
+      segments: ["commercial", "c_and_i"]
+      phases: ["installation", "service"]
+
+  energy_efficiency:
+    name: "Energy Efficiency Specialist"
+    description: "HVAC + Solar for energy-focused contractors"
+    auto_select:
+      trades: ["hvac", "solar"]
+      segments: ["residential", "commercial"]
+      phases: ["sales", "installation", "commissioning", "service"]
+
+# ═══════════════════════════════════════════════════════════════════
+# SECTION 7: OUTPUT CONFIGURATION
+# ═══════════════════════════════════════════════════════════════════
+output:
+  format: "coperniq"               # coperniq | yaml | json | csv
+  include_optional: false          # Include optional templates?
+  brand_templates: true            # Apply company branding to templates?
+  generate_work_orders: true       # Auto-generate work order types?
+
+# ═══════════════════════════════════════════════════════════════════
+# AI AGENT INSTRUCTIONS
+# ═══════════════════════════════════════════════════════════════════
+#
+# To process this wizard:
+#
+# 1. LOAD: Parse this YAML file
+# 2. IDENTIFY: Find all enabled trades, segments, phases
+# 3. FILTER: Match against template_registry.json
+# 4. GENERATE: Create only the matching templates
+# 5. BRAND: Apply company info to all templates
+# 6. VALIDATE: Check compliance requirements are met
+#
+# Example agent code:
+#
+# ```python
+# from sandbox.agents.orchestrator import CoperniqAgentOrchestrator
+#
+# # Load wizard config
+# orchestrator = CoperniqAgentOrchestrator.from_wizard("contractor_setup_wizard.yaml")
+#
+# # Generate templates based on selections
+# templates = orchestrator.generate_templates()
+#
+# # Seed to Coperniq
+# orchestrator.seed_to_coperniq(templates)
+# ```
+#
+# ═══════════════════════════════════════════════════════════════════

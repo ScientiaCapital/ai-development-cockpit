@@ -1,0 +1,120 @@
+{
+  "vertical": "om_service",
+  "display_name": "O&M Service Provider",
+  "description": "Ticket-based service and maintenance",
+  "schema": {
+    "tables": ["Contact", "Site", "Asset", "Task", "ServicePlanInstance"],
+    "views": ["maintenance_due", "warranty_expirations", "asset_health"],
+    "coperniq_mapping": {
+      "Contact": "Contact",
+      "Site": "Site",
+      "Asset": "Asset",
+      "Task": "Task",
+      "ServicePlanInstance": "ServicePlanInstance",
+      "Form": "Form"
+    }
+  },
+  "phases": null,
+  "workflow_type": "tickets",
+  "properties": {
+    "asset_type": {"type": "select", "options": ["HVAC", "Solar PV", "Electrical", "Plumbing", "Fire Protection"]},
+    "warranty_status": {"type": "select", "options": ["In Warranty", "Expired", "Extended"]},
+    "service_interval": {"type": "select", "options": ["Monthly", "Quarterly", "Semi-Annual", "Annual"]},
+    "last_service_date": {"type": "date"}
+  },
+  "agents": {
+    "maintenance_scheduler": "Generate upcoming service schedule",
+    "warranty_tracker": "Track warranty expirations and claims",
+    "asset_health": "Analyze asset performance and predict failures"
+  },
+  "sample_queries": [
+    "Which systems need service this month?",
+    "Show warranty expirations in the next 90 days",
+    "What's our average response time by ticket type?",
+    "List all assets without a service agreement"
+  ],
+  "templates_included": [
+    "templates/hvac/refrigerant_tracking_log.yaml",
+    "templates/service_plans/hvac_bronze.yaml",
+    "templates/service_plans/hvac_silver.yaml",
+    "templates/service_plans/hvac_gold.yaml",
+    "templates/fire_protection/sprinkler_inspection.yaml",
+    "templates/fire_protection/fire_extinguisher_inspection.yaml"
+  ],
+  "csv_requirements": {
+    "Contact.csv": {
+      "coperniq_type": "Contact",
+      "required": ["name"],
+      "columns": {
+        "name": "string",
+        "emails": "string[]",
+        "phones": "string[]",
+        "title": "string",
+        "status": "string",
+        "source": "string"
+      }
+    },
+    "Site.csv": {
+      "coperniq_type": "Site",
+      "required": ["fullAddress"],
+      "columns": {
+        "fullAddress": "string",
+        "street": "string",
+        "city": "string",
+        "state": "string",
+        "zipcode": "string",
+        "clientId": "int",
+        "timezone": "string"
+      }
+    },
+    "Asset.csv": {
+      "coperniq_type": "Asset",
+      "required": ["name", "type"],
+      "columns": {
+        "name": "string",
+        "type": "string",
+        "status": "string",
+        "manufacturer": "string",
+        "model": "string",
+        "serialNumber": "string",
+        "size": "string",
+        "installDate": "datetime",
+        "manufacturingDate": "datetime",
+        "expectedLifetime": "int",
+        "siteId": "int"
+      }
+    },
+    "Task.csv": {
+      "coperniq_type": "Task",
+      "required": ["title"],
+      "columns": {
+        "title": "string",
+        "description": "string",
+        "status": "string",
+        "priority": "int",
+        "startDate": "datetime",
+        "endDate": "datetime",
+        "isField": "boolean",
+        "assigneeId": "int",
+        "assetId": "int",
+        "siteId": "int",
+        "servicePlanInstanceId": "int"
+      }
+    },
+    "ServicePlanInstance.csv": {
+      "coperniq_type": "ServicePlanInstance",
+      "required": ["servicePlanId", "clientId"],
+      "columns": {
+        "servicePlanId": "int",
+        "clientId": "int",
+        "startDate": "datetime",
+        "endDate": "datetime",
+        "durationMonths": "int",
+        "autoRenew": "boolean",
+        "totalPrice": "decimal",
+        "status": "string",
+        "invoicingFrequency": "string"
+      }
+    }
+  }
+}

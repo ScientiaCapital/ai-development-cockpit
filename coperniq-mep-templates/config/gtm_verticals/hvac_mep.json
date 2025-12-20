@@ -1,0 +1,119 @@
+{
+  "vertical": "hvac_mep",
+  "display_name": "HVAC & MEP Contractor",
+  "description": "HVAC installation, service, and commercial MEP work",
+  "schema": {
+    "tables": ["Contact", "Site", "Project", "Asset", "Task", "FinancialDocument"],
+    "views": ["job_profitability", "crew_schedule", "equipment_inventory"],
+    "coperniq_mapping": {
+      "Contact": "Contact",
+      "Site": "Site",
+      "Project": "Project",
+      "Asset": "Asset",
+      "Task": "Task",
+      "Form": "Form",
+      "FinancialDocument": "FinancialDocument"
+    }
+  },
+  "phases": ["Bid", "Award", "Submittal", "Install", "Commission", "Closeout"],
+  "workflow_type": "phases",
+  "properties": {
+    "tonnage": {"type": "numeric", "unit": "tons"},
+    "equipment_type": {"type": "select", "options": ["Split System", "Packaged", "VRF", "RTU", "Boiler", "Chiller"]},
+    "permit_type": {"type": "select", "options": ["Mechanical", "Electrical", "Plumbing"]},
+    "inspection_status": {"type": "select", "options": ["Pending", "Scheduled", "Passed", "Failed"]}
+  },
+  "agents": {
+    "job_profitability": "Analyze margin by job type and crew",
+    "crew_scheduler": "Optimize technician dispatch",
+    "equipment_tracker": "Track equipment installation and warranties"
+  },
+  "sample_queries": [
+    "What's my margin by job type?",
+    "Schedule next week's installs",
+    "Which jobs are over budget?",
+    "Show equipment warranty expirations"
+  ],
+  "templates_included": [
+    "templates/hvac/lead_intake_form.yaml",
+    "templates/hvac/site_survey_residential.yaml",
+    "templates/hvac/equipment_proposal.yaml",
+    "templates/hvac/job_planning_worksheet.yaml",
+    "templates/hvac/ac_system_inspection.yaml",
+    "templates/hvac/furnace_safety_inspection.yaml",
+    "templates/hvac/refrigerant_tracking_log.yaml"
+  ],
+  "csv_requirements": {
+    "Contact.csv": {
+      "coperniq_type": "Contact",
+      "required": ["name"],
+      "columns": {
+        "name": "string",
+        "emails": "string[]",
+        "phones": "string[]",
+        "title": "string",
+        "status": "string",
+        "source": "string"
+      }
+    },
+    "Site.csv": {
+      "coperniq_type": "Site",
+      "required": ["fullAddress"],
+      "columns": {
+        "fullAddress": "string",
+        "street": "string",
+        "city": "string",
+        "state": "string",
+        "zipcode": "string",
+        "clientId": "int",
+        "timezone": "string"
+      }
+    },
+    "Asset.csv": {
+      "coperniq_type": "Asset",
+      "required": ["name", "type"],
+      "columns": {
+        "name": "string",
+        "type": "string",
+        "status": "string",
+        "manufacturer": "string",
+        "model": "string",
+        "serialNumber": "string",
+        "size": "string",
+        "installDate": "datetime",
+        "siteId": "int"
+      }
+    },
+    "Task.csv": {
+      "coperniq_type": "Task",
+      "required": ["title"],
+      "columns": {
+        "title": "string",
+        "description": "string",
+        "status": "string",
+        "priority": "int",
+        "startDate": "datetime",
+        "endDate": "datetime",
+        "isField": "boolean",
+        "assigneeId": "int",
+        "projectId": "int",
+        "assetId": "int",
+        "siteId": "int"
+      }
+    },
+    "FinancialDocument.csv": {
+      "coperniq_type": "FinancialDocument",
+      "required": ["title", "type"],
+      "columns": {
+        "title": "string",
+        "type": "string",
+        "status": "string",
+        "amount": "decimal",
+        "issueDate": "datetime",
+        "dueDate": "datetime",
+        "recordId": "int",
+        "clientId": "int"
+      }
+    }
+  }
+}

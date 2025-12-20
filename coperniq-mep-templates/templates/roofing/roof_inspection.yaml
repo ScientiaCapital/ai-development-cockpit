@@ -1,0 +1,307 @@
+# Roof Inspection Report
+# Coperniq Form Template for Roofing Contractors
+# Compliance: IRC, IBC, Manufacturer specs
+
+template:
+  name: "[MEP] Roof Inspection Report"
+  emoji: "🏠"
+  description: "Comprehensive roof condition assessment"
+  category: "Roofing"
+  compliance: "IRC, IBC"
+
+  work_order:
+    type: "Roofing Service"
+    name: "Roof Inspection"
+
+groups:
+  - name: "Property Information"
+    order: 1
+    critical: true
+    fields:
+      - name: "Customer Name"
+        type: "Text"
+        required: true
+
+      - name: "Property Address"
+        type: "Text"
+        required: true
+
+      - name: "Property Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Single Family Residential"
+          - "Multi-Family Residential"
+          - "Commercial"
+          - "Industrial"
+
+      - name: "Inspection Date"
+        type: "Text"
+        required: true
+
+      - name: "Inspector"
+        type: "Text"
+        required: true
+        placeholder: "Name and certification"
+
+      - name: "Weather Conditions"
+        type: "Single select"
+        options:
+          - "Clear/Sunny"
+          - "Cloudy"
+          - "Light Rain"
+          - "After Rain (wet)"
+
+  - name: "Roof System Overview"
+    order: 2
+    fields:
+      - name: "Roof Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Asphalt Shingles"
+          - "Metal Standing Seam"
+          - "Metal Corrugated"
+          - "Tile (Clay/Concrete)"
+          - "Slate"
+          - "Wood Shake"
+          - "TPO"
+          - "EPDM"
+          - "Modified Bitumen"
+          - "Built-Up Roofing"
+          - "PVC"
+
+      - name: "Manufacturer"
+        type: "Text"
+        placeholder: "GAF, CertainTeed, Owens Corning, etc."
+
+      - name: "Estimated Age (years)"
+        type: "Numeric"
+
+      - name: "Total Square Footage"
+        type: "Numeric"
+
+      - name: "Number of Layers"
+        type: "Single select"
+        options:
+          - "1 layer"
+          - "2 layers"
+          - "3+ layers (over limit)"
+
+      - name: "Roof Pitch"
+        type: "Single select"
+        options:
+          - "Flat (0-2:12)"
+          - "Low Slope (2-4:12)"
+          - "Moderate (4-7:12)"
+          - "Steep (7-12:12)"
+          - "Very Steep (12:12+)"
+
+  - name: "Shingle/Surface Condition"
+    order: 3
+    critical: true
+    fields:
+      - name: "Overall Condition"
+        type: "Single select"
+        required: true
+        options:
+          - "Excellent (0-5 years remaining)"
+          - "Good (5-10 years remaining)"
+          - "Fair (3-5 years remaining)"
+          - "Poor (1-3 years remaining)"
+          - "Failed (replace now)"
+
+      - name: "Granule Loss"
+        type: "Single select"
+        options:
+          - "None/Minimal"
+          - "Moderate"
+          - "Severe"
+          - "N/A (non-shingle)"
+
+      - name: "Curling/Cupping"
+        type: "Single select"
+        options:
+          - "None"
+          - "Minor (edges only)"
+          - "Moderate"
+          - "Severe"
+          - "N/A"
+
+      - name: "Missing/Damaged Shingles"
+        type: "Single select"
+        options:
+          - "None"
+          - "1-5 shingles"
+          - "6-10 shingles"
+          - "11+ shingles"
+
+      - name: "Algae/Moss Growth"
+        type: "Single select"
+        options:
+          - "None"
+          - "Light"
+          - "Moderate"
+          - "Heavy"
+
+      - name: "Storm Damage"
+        type: "Single select"
+        options:
+          - "None observed"
+          - "Possible hail damage"
+          - "Wind damage present"
+          - "Impact damage"
+
+  - name: "Flashings & Penetrations"
+    order: 4
+    fields:
+      - name: "Chimney Flashing"
+        type: "Single select"
+        options:
+          - "Good condition"
+          - "Needs caulk/seal"
+          - "Needs replacement"
+          - "N/A"
+
+      - name: "Pipe Boot Condition"
+        type: "Single select"
+        options:
+          - "All good"
+          - "Some cracked"
+          - "Replacement needed"
+
+      - name: "Vent Flashings"
+        type: "Single select"
+        options:
+          - "Good condition"
+          - "Issues found"
+          - "N/A"
+
+      - name: "Skylight Condition"
+        type: "Single select"
+        options:
+          - "Good - no leaks"
+          - "Seal needs attention"
+          - "Replacement recommended"
+          - "N/A"
+
+      - name: "Wall-to-Roof Transition"
+        type: "Single select"
+        options:
+          - "Properly flashed"
+          - "Needs attention"
+          - "Major issue"
+          - "N/A"
+
+  - name: "Drainage & Ventilation"
+    order: 5
+    fields:
+      - name: "Gutter Condition"
+        type: "Single select"
+        options:
+          - "Good - flowing properly"
+          - "Needs cleaning"
+          - "Damaged sections"
+          - "No gutters"
+
+      - name: "Downspout Condition"
+        type: "Single select"
+        options:
+          - "Good - proper discharge"
+          - "Needs extension"
+          - "Damaged/missing"
+          - "N/A"
+
+      - name: "Ridge Vent"
+        type: "Single select"
+        options:
+          - "Present and functional"
+          - "Blocked/damaged"
+          - "Not present"
+
+      - name: "Soffit Vents"
+        type: "Single select"
+        options:
+          - "Adequate ventilation"
+          - "Blocked/insufficient"
+          - "Not present"
+
+      - name: "Attic Ventilation Adequate"
+        type: "Single select"
+        options:
+          - "Yes (1:150 or 1:300 ratio)"
+          - "No - needs improvement"
+          - "Could not verify"
+
+  - name: "Decking & Structure"
+    order: 6
+    fields:
+      - name: "Decking Condition (if visible)"
+        type: "Single select"
+        options:
+          - "Solid - no issues"
+          - "Soft spots detected"
+          - "Water damage visible"
+          - "Could not inspect"
+
+      - name: "Signs of Leaks"
+        type: "Single select"
+        required: true
+        options:
+          - "None observed"
+          - "Staining present"
+          - "Active leak"
+
+      - name: "Sagging/Structural Issues"
+        type: "Single select"
+        options:
+          - "None"
+          - "Minor sagging"
+          - "Structural concern"
+
+  - name: "Recommendations & Photos"
+    order: 7
+    fields:
+      - name: "Immediate Repairs Needed"
+        type: "Multiple select"
+        options:
+          - "None"
+          - "Replace missing shingles"
+          - "Reseal flashings"
+          - "Replace pipe boots"
+          - "Repair gutters"
+          - "Address leak"
+          - "Full replacement recommended"
+
+      - name: "Estimated Remaining Life"
+        type: "Single select"
+        options:
+          - "10+ years"
+          - "5-10 years"
+          - "3-5 years"
+          - "1-3 years"
+          - "Immediate replacement"
+
+      - name: "Repair Estimate Range"
+        type: "Single select"
+        options:
+          - "Minor repairs ($0-500)"
+          - "Moderate repairs ($500-2,000)"
+          - "Major repairs ($2,000-5,000)"
+          - "Partial replacement needed"
+          - "Full replacement recommended"
+
+      - name: "Inspector Notes"
+        type: "Text"
+        placeholder: "Additional observations and recommendations"
+
+      - name: "Photos"
+        type: "File"
+        description: "Upload inspection photos"
+
+metadata:
+  trade: "Roofing"
+  certifications: ["GAF Certified", "CertainTeed SELECT", "NRCA PROCertification"]
+  safety: ["Fall protection required", "OSHA 10 minimum"]
+  created_by: "ai-development-cockpit"
+  version: "1.0"

@@ -1,0 +1,180 @@
+# Network Cable Test Report
+# Coperniq Form Template for Low Voltage Contractors
+# Compliance: TIA-568, BICSI ITSIMM
+
+template:
+  name: "[MEP] Network Cable Test Report"
+  emoji: "🔌"
+  description: "Structured cabling certification and test documentation"
+  category: "Low Voltage"
+  compliance: "TIA-568, BICSI"
+
+  work_order:
+    type: "Low Voltage Service"
+    name: "Cable Testing"
+
+groups:
+  - name: "Project Information"
+    order: 1
+    critical: true
+    fields:
+      - name: "Project Name"
+        type: "Text"
+        required: true
+        placeholder: "Enter project name"
+
+      - name: "Building/Floor"
+        type: "Text"
+        required: true
+        placeholder: "Building A, Floor 3"
+
+      - name: "Test Date"
+        type: "Text"
+        required: true
+        description: "Date testing performed"
+
+      - name: "Technician"
+        type: "Text"
+        required: true
+        placeholder: "Name and BICSI certification #"
+
+  - name: "Equipment Used"
+    order: 2
+    fields:
+      - name: "Cable Tester Model"
+        type: "Single select"
+        options:
+          - "Fluke DSX-8000"
+          - "Fluke DSX-5000"
+          - "Fluke DTX-1800"
+          - "IDEAL LanTEK IV"
+          - "Other"
+
+      - name: "Tester Serial Number"
+        type: "Text"
+        required: true
+
+      - name: "Last Calibration Date"
+        type: "Text"
+        required: true
+        description: "Must be within 12 months"
+
+      - name: "Test Standard"
+        type: "Single select"
+        required: true
+        options:
+          - "TIA-568.2-D Cat 5e Channel"
+          - "TIA-568.2-D Cat 6 Channel"
+          - "TIA-568.2-D Cat 6A Channel"
+          - "ISO 11801 Class D"
+          - "ISO 11801 Class EA"
+
+  - name: "Cable Run Details"
+    order: 3
+    fields:
+      - name: "Cable ID/Label"
+        type: "Text"
+        required: true
+        placeholder: "e.g., A-3-001"
+
+      - name: "Cable Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Cat 5e UTP"
+          - "Cat 6 UTP"
+          - "Cat 6A UTP"
+          - "Cat 6A STP"
+          - "Cat 6 STP"
+
+      - name: "Length (feet)"
+        type: "Numeric"
+        required: true
+
+      - name: "From Location"
+        type: "Text"
+        required: true
+        placeholder: "MDF/IDF and port #"
+
+      - name: "To Location"
+        type: "Text"
+        required: true
+        placeholder: "Workstation outlet #"
+
+  - name: "Test Results"
+    order: 4
+    critical: true
+    fields:
+      - name: "Wire Map"
+        type: "Single select"
+        required: true
+        options:
+          - "PASS"
+          - "FAIL - Split Pair"
+          - "FAIL - Reversed"
+          - "FAIL - Open"
+          - "FAIL - Short"
+
+      - name: "Length Test"
+        type: "Single select"
+        required: true
+        options:
+          - "PASS (within channel limit)"
+          - "FAIL (exceeds limit)"
+
+      - name: "Insertion Loss (dB)"
+        type: "Numeric"
+        description: "Maximum attenuation reading"
+
+      - name: "NEXT (dB)"
+        type: "Numeric"
+        description: "Near End Crosstalk - worst pair"
+
+      - name: "ACR-F (dB)"
+        type: "Numeric"
+        description: "Attenuation to Crosstalk Ratio - Far End"
+
+      - name: "Return Loss (dB)"
+        type: "Numeric"
+
+      - name: "Overall Result"
+        type: "Single select"
+        required: true
+        options:
+          - "PASS*"
+          - "PASS"
+          - "FAIL"
+
+  - name: "Deficiencies & Notes"
+    order: 5
+    fields:
+      - name: "Issues Found"
+        type: "Multiple select"
+        options:
+          - "None"
+          - "Exceeded bend radius"
+          - "Cable damaged"
+          - "Poor termination"
+          - "Wrong cable type"
+          - "Label missing"
+          - "Jacket damage"
+
+      - name: "Corrective Action Required"
+        type: "Text"
+        placeholder: "Describe repairs needed"
+
+      - name: "Technician Notes"
+        type: "Text"
+        placeholder: "Additional observations"
+
+      - name: "Test Report File"
+        type: "File"
+        description: "Upload PDF from cable tester"
+
+metadata:
+  trade: "Low Voltage"
+  certifications: ["BICSI Installer", "BICSI Technician"]
+  equipment_needed: ["Cable certifier", "Test leads"]
+  estimated_time: "5-10 min per cable"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

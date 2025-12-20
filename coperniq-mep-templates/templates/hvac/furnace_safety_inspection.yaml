@@ -1,0 +1,215 @@
+# [MEP] Furnace Safety Inspection
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Status: GATE 1 - Ready for Review
+
+template:
+  name: "[MEP] Furnace Safety Inspection"
+  emoji: "🔥"
+  description: "Gas furnace safety inspection with combustion analysis for HVAC technicians"
+  category: "HVAC"
+
+  work_order:
+    type: "Field Work Order"
+    name: "[MEP] HVAC Service Call"
+
+groups:
+  - name: "Equipment Information"
+    order: 1
+    fields:
+      - name: "Unit Make/Model"
+        type: "Text"
+        required: true
+        placeholder: "e.g., Lennox SL280UHV070P48A"
+
+      - name: "Serial Number"
+        type: "Text"
+        required: true
+        placeholder: "Enter unit serial number"
+
+      - name: "BTU Input"
+        type: "Numeric"
+        required: false
+        placeholder: "e.g., 80000"
+
+      - name: "Fuel Type"
+        type: "Single select"
+        required: false
+        options:
+          - "Natural Gas"
+          - "Propane"
+          - "Oil"
+          - "Electric"
+
+      - name: "Age (Years)"
+        type: "Numeric"
+        required: false
+        placeholder: "Estimated age of unit"
+
+  - name: "Safety Checks"
+    order: 2
+    critical: true
+    fields:
+      - name: "CO Reading (PPM)"
+        type: "Numeric"
+        required: true
+        placeholder: "Carbon monoxide in flue (0-9 PPM normal)"
+        alert_threshold: 9
+
+      - name: "Gas Leak Test"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail - Repaired"
+          - "Fail - Condemned"
+
+      - name: "Heat Exchanger Visual"
+        type: "Single select"
+        required: true
+        options:
+          - "Good"
+          - "Crack Suspected"
+          - "Crack Confirmed"
+
+      - name: "Flame Rollout Check"
+        type: "Single select"
+        required: false
+        options:
+          - "Pass"
+          - "Fail"
+
+      - name: "Limit Switch Test"
+        type: "Single select"
+        required: false
+        options:
+          - "Pass"
+          - "Fail"
+          - "Replaced"
+
+  - name: "Ignition System"
+    order: 3
+    fields:
+      - name: "Ignition Type"
+        type: "Single select"
+        required: false
+        options:
+          - "Hot Surface"
+          - "Spark"
+          - "Pilot"
+
+      - name: "Ignitor Condition"
+        type: "Single select"
+        required: false
+        options:
+          - "Good"
+          - "Cracked"
+          - "Replaced"
+
+      - name: "Flame Sensor Reading (μA)"
+        type: "Numeric"
+        required: false
+        placeholder: "Microamps (2-6 μA normal)"
+
+      - name: "Flame Sensor Status"
+        type: "Single select"
+        required: false
+        options:
+          - "Good"
+          - "Cleaned"
+          - "Replaced"
+
+  - name: "Combustion Analysis"
+    order: 4
+    fields:
+      - name: "Stack Temp (°F)"
+        type: "Numeric"
+        required: false
+        placeholder: "Flue gas temperature"
+
+      - name: "O2 (%)"
+        type: "Numeric"
+        required: false
+        placeholder: "Oxygen percentage (3-8% typical)"
+
+      - name: "CO2 (%)"
+        type: "Numeric"
+        required: false
+        placeholder: "Carbon dioxide percentage (8-11% typical)"
+
+      - name: "Efficiency (%)"
+        type: "Numeric"
+        required: false
+        placeholder: "Combustion efficiency"
+
+      - name: "Draft Reading"
+        type: "Numeric"
+        required: false
+        placeholder: "Draft in inches WC (-0.02 to -0.05 typical)"
+
+  - name: "Blower & Electrical"
+    order: 5
+    fields:
+      - name: "Blower Motor Amps"
+        type: "Numeric"
+        required: false
+        placeholder: "Running amps"
+
+      - name: "Blower Wheel Clean"
+        type: "Single select"
+        required: false
+        options:
+          - "Yes"
+          - "No - Cleaned"
+          - "No - Needs Cleaning"
+
+      - name: "Capacitor Test"
+        type: "Single select"
+        required: false
+        options:
+          - "Good"
+          - "Weak"
+          - "Replaced"
+
+      - name: "All Wiring Secure"
+        type: "Single select"
+        required: false
+        options:
+          - "Yes"
+          - "No - Repaired"
+
+  - name: "Documentation"
+    order: 6
+    fields:
+      - name: "Photos"
+        type: "File"
+        required: false
+        description: "Equipment and condition photos"
+
+      - name: "Combustion Analyzer Reading Photo"
+        type: "File"
+        required: false
+        description: "Photo of analyzer display showing readings"
+
+      - name: "Recommendations"
+        type: "Text"
+        required: false
+        placeholder: "Safety recommendations and follow-up items"
+
+      - name: "Customer Signature"
+        type: "File"
+        required: false
+        description: "Customer signature acknowledging inspection results"
+
+# Metadata
+metadata:
+  total_fields: 25
+  total_groups: 6
+  compliance: "Standard gas furnace safety inspection"
+  safety_critical: true
+  created_by: "ai-development-cockpit"
+  version: "1.0"
+  notes: |
+    - CO readings above 9 PPM require immediate attention
+    - Heat exchanger cracks are immediate safety hazards
+    - Gas leak failures must be documented for liability

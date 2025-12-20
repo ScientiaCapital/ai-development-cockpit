@@ -1,0 +1,84 @@
+# Coperniq MEP Templates - Requirements
+# E2B Sandbox + Autonomous Agents + OCR + Data Analysis
+
+# =============================================================================
+# E2B SANDBOX - Code Execution
+# =============================================================================
+e2b>=1.0.0
+e2b-code-interpreter>=1.0.0
+
+# =============================================================================
+# LLM PROVIDERS (NO OpenAI!)
+# =============================================================================
+anthropic>=0.40.0              # Claude API
+openai>=1.50.0                 # OpenRouter uses OpenAI-compatible API
+
+# =============================================================================
+# LANGGRAPH / LANGCHAIN - Agent Orchestration
+# =============================================================================
+langgraph>=0.2.0
+langchain>=0.3.0
+langchain-anthropic>=0.2.0
+langsmith>=0.1.0               # Observability
+
+# =============================================================================
+# OCR - Optical Character Recognition
+# =============================================================================
+pytesseract>=0.3.10            # Tesseract OCR wrapper
+pdf2image>=1.17.0              # PDF to image conversion
+PyPDF2>=3.0.0                  # PDF manipulation
+python-docx>=1.0.0             # Word document processing
+openpyxl>=3.1.0                # Excel file processing
+
+# =============================================================================
+# IMAGE PROCESSING
+# =============================================================================
+Pillow>=10.0.0                 # Image manipulation
+opencv-python>=4.8.0           # Computer vision
+numpy>=1.24.0                  # Numerical computing
+
+# =============================================================================
+# DATA ANALYSIS
+# =============================================================================
+pandas>=2.0.0                  # Data manipulation
+matplotlib>=3.7.0              # Visualization
+plotly>=5.18.0                 # Interactive charts
+seaborn>=0.13.0                # Statistical visualization
+
+# =============================================================================
+# DATABASE
+# =============================================================================
+supabase>=2.0.0                # Supabase Python client
+asyncpg>=0.29.0                # Async PostgreSQL
+
+# =============================================================================
+# WEB / API
+# =============================================================================
+fastapi>=0.110.0               # API framework
+uvicorn>=0.27.0                # ASGI server
+httpx>=0.27.0                  # Async HTTP client
+aiohttp>=3.9.0                 # Async HTTP
+
+# =============================================================================
+# UTILITIES
+# =============================================================================
+python-dotenv>=1.0.0           # Environment variables
+pyyaml>=6.0.0                  # YAML parsing
+pydantic>=2.5.0                # Data validation
+fuzzywuzzy>=0.18.0             # Fuzzy string matching
+python-Levenshtein>=0.25.0     # Fast string matching (for fuzzywuzzy)
+tenacity>=8.2.0                # Retry logic
+structlog>=24.1.0              # Structured logging
+
+# =============================================================================
+# TESTING
+# =============================================================================
+pytest>=8.0.0
+pytest-asyncio>=0.23.0
+pytest-cov>=4.1.0
+
+# =============================================================================
+# SYSTEM REQUIREMENTS (install separately)
+# =============================================================================
+# Tesseract OCR: brew install tesseract (macOS) or apt install tesseract-ocr (Linux)
+# Poppler: brew install poppler (macOS) or apt install poppler-utils (Linux)

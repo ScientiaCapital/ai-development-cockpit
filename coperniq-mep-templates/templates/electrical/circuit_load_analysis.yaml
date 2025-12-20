@@ -1,0 +1,116 @@
+# [MEP] Circuit Load Analysis
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Status: GATE 1 - Ready for Review
+
+template:
+  name: "[MEP] Circuit Load Analysis"
+  emoji: "🔌"
+  description: "Electrical circuit load calculation and capacity analysis"
+  category: "Electrical"
+
+  work_order:
+    type: "Field Work Order"
+    name: "[MEP] Electrical Service Call"
+
+groups:
+  - name: "Service Information"
+    order: 1
+    fields:
+      - name: "Service Size (Amps)"
+        type: "Numeric"
+        required: true
+        placeholder: "e.g., 200"
+
+      - name: "Panel Amperage"
+        type: "Numeric"
+        required: false
+        placeholder: "Main panel rating"
+
+      - name: "Voltage System"
+        type: "Single select"
+        required: true
+        options:
+          - "120/240V"
+          - "120/208V"
+          - "277/480V"
+
+  - name: "Load Calculation"
+    order: 2
+    fields:
+      - name: "General Lighting Load (VA)"
+        type: "Numeric"
+        required: false
+        placeholder: "Square footage x 3 VA/sq ft"
+
+      - name: "Small Appliance Circuits (VA)"
+        type: "Numeric"
+        required: false
+        placeholder: "Minimum 2 circuits @ 1500 VA each"
+
+      - name: "Laundry Circuit (VA)"
+        type: "Numeric"
+        required: false
+        placeholder: "1500 VA minimum"
+
+      - name: "Fixed Appliances (VA)"
+        type: "Numeric"
+        required: false
+        placeholder: "Range, dryer, dishwasher, etc."
+
+      - name: "HVAC Load (VA)"
+        type: "Numeric"
+        required: false
+        placeholder: "Total HVAC nameplate VA"
+
+      - name: "Electric Heat (VA)"
+        type: "Numeric"
+        required: false
+        placeholder: "Total electric heating load"
+
+      - name: "Other Loads (VA)"
+        type: "Numeric"
+        required: false
+        placeholder: "EV charger, pool, spa, etc."
+
+      - name: "Total Connected Load (VA)"
+        type: "Numeric"
+        required: false
+        placeholder: "Sum of all loads"
+
+      - name: "Demand Load (VA)"
+        type: "Numeric"
+        required: false
+        placeholder: "Calculated demand per NEC 220"
+
+      - name: "Available Capacity (Amps)"
+        type: "Numeric"
+        required: false
+        placeholder: "Service size - demand load"
+
+  - name: "Analysis"
+    order: 3
+    fields:
+      - name: "Current Utilization (%)"
+        type: "Numeric"
+        required: false
+        placeholder: "Demand load / service size x 100"
+
+      - name: "Adequate for Proposed Load"
+        type: "Single select"
+        required: false
+        options:
+          - "Yes"
+          - "No - Upgrade Required"
+
+      - name: "Recommendations"
+        type: "Text"
+        required: false
+        placeholder: "Service upgrade recommendations"
+
+metadata:
+  total_fields: 16
+  total_groups: 3
+  compliance: "NEC Article 220 load calculation requirements"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

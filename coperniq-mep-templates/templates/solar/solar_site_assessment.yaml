@@ -1,0 +1,371 @@
+# [MEP] Solar Site Assessment - Residential
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Compliance: NEC 2023 Article 690, NABCEP Standards
+
+template:
+  name: "[MEP] Solar Site Assessment - Residential"
+  emoji: "☀️"
+  description: "Comprehensive residential solar site assessment for roof orientation, shading analysis, and electrical panel capacity evaluation"
+  category: "Solar"
+
+  work_order:
+    type: "Field Work Order"
+    name: "[MEP] Solar Sales Assessment"
+
+groups:
+  - name: "Property Information"
+    order: 1
+    fields:
+      - name: "Property Address"
+        type: "Text"
+        required: true
+        placeholder: "Full street address"
+
+      - name: "Property Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Single Family"
+          - "Multi-Family (2-4 units)"
+          - "Townhouse"
+          - "Condominium"
+
+      - name: "Year Built"
+        type: "Numeric"
+        placeholder: "e.g., 1995"
+
+      - name: "Stories"
+        type: "Single select"
+        options:
+          - "1 Story"
+          - "2 Story"
+          - "3+ Story"
+
+      - name: "Homeowner Name"
+        type: "Text"
+        required: true
+        placeholder: "Primary contact"
+
+      - name: "Homeowner Phone"
+        type: "Text"
+        required: true
+        placeholder: "(555) 123-4567"
+
+      - name: "Homeowner Email"
+        type: "Text"
+        placeholder: "email@example.com"
+
+  - name: "Roof Assessment"
+    order: 2
+    critical: true
+    fields:
+      - name: "Roof Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Composition Shingle"
+          - "Metal Standing Seam"
+          - "Metal Corrugated"
+          - "Tile (Clay/Concrete)"
+          - "Flat/TPO"
+          - "Flat/EPDM"
+          - "Wood Shake"
+          - "Other"
+
+      - name: "Roof Condition"
+        type: "Single select"
+        required: true
+        options:
+          - "Excellent (New/Like New)"
+          - "Good (5-10 years old)"
+          - "Fair (10-15 years old)"
+          - "Poor (Replacement Needed)"
+
+      - name: "Estimated Roof Age (years)"
+        type: "Numeric"
+        placeholder: "Years since installation"
+
+      - name: "Primary Roof Orientation"
+        type: "Single select"
+        required: true
+        options:
+          - "South (Optimal)"
+          - "Southwest (Very Good)"
+          - "Southeast (Very Good)"
+          - "West (Good)"
+          - "East (Good)"
+          - "North (Poor)"
+
+      - name: "Roof Pitch"
+        type: "Single select"
+        required: true
+        options:
+          - "Flat (0-2/12)"
+          - "Low Slope (3-4/12)"
+          - "Medium (5-7/12)"
+          - "Steep (8-12/12)"
+          - "Very Steep (12+/12)"
+
+      - name: "Usable Roof Area (sq ft)"
+        type: "Numeric"
+        placeholder: "Estimated solar-suitable area"
+
+      - name: "Roof Obstructions"
+        type: "Multiple select"
+        options:
+          - "None"
+          - "Skylights"
+          - "Vents"
+          - "Chimney"
+          - "Satellite Dish"
+          - "HVAC Equipment"
+          - "Trees Overhanging"
+
+  - name: "Shading Analysis"
+    order: 3
+    fields:
+      - name: "Shading Assessment Method"
+        type: "Single select"
+        options:
+          - "Suneye Tool"
+          - "Solmetric SunEye"
+          - "Aurora Solar (Digital)"
+          - "Visual Inspection Only"
+          - "Drone Survey"
+
+      - name: "Annual Shade Factor"
+        type: "Single select"
+        options:
+          - "Excellent (0-5% shading)"
+          - "Very Good (5-10% shading)"
+          - "Good (10-20% shading)"
+          - "Fair (20-30% shading)"
+          - "Poor (30%+ shading)"
+
+      - name: "Primary Shade Sources"
+        type: "Multiple select"
+        options:
+          - "None"
+          - "Trees (Deciduous)"
+          - "Trees (Evergreen)"
+          - "Adjacent Buildings"
+          - "Chimney"
+          - "Hills/Terrain"
+
+      - name: "Morning Shade (6am-10am)"
+        type: "Single select"
+        options:
+          - "None"
+          - "Minimal (<25%)"
+          - "Moderate (25-50%)"
+          - "Heavy (>50%)"
+
+      - name: "Midday Shade (10am-2pm)"
+        type: "Single select"
+        options:
+          - "None"
+          - "Minimal (<25%)"
+          - "Moderate (25-50%)"
+          - "Heavy (>50%)"
+
+      - name: "Afternoon Shade (2pm-6pm)"
+        type: "Single select"
+        options:
+          - "None"
+          - "Minimal (<25%)"
+          - "Moderate (25-50%)"
+          - "Heavy (>50%)"
+
+      - name: "Tree Trimming Required"
+        type: "Single select"
+        options:
+          - "No"
+          - "Yes - Minor Trimming"
+          - "Yes - Major Trimming"
+          - "Yes - Tree Removal"
+
+  - name: "Electrical System"
+    order: 4
+    critical: true
+    fields:
+      - name: "Main Panel Location"
+        type: "Text"
+        required: true
+        placeholder: "e.g., Garage, Basement, Exterior"
+
+      - name: "Main Panel Manufacturer"
+        type: "Single select"
+        options:
+          - "Square D"
+          - "Siemens"
+          - "General Electric (GE)"
+          - "Eaton/Cutler-Hammer"
+          - "Murray"
+          - "Federal Pacific (FPE)"
+          - "Zinsco"
+          - "Other"
+
+      - name: "Main Panel Rating (Amps)"
+        type: "Single select"
+        required: true
+        options:
+          - "100A"
+          - "125A"
+          - "150A"
+          - "200A"
+          - "225A"
+          - "400A"
+
+      - name: "Available Breaker Spaces"
+        type: "Numeric"
+        required: true
+        placeholder: "Number of open spaces"
+
+      - name: "Panel Upgrade Required"
+        type: "Single select"
+        options:
+          - "No - Panel Adequate"
+          - "Yes - Service Upgrade Needed"
+          - "Yes - Panel Replacement"
+          - "Yes - Add Sub-Panel"
+
+      - name: "Main Service Entrance"
+        type: "Single select"
+        options:
+          - "Overhead (Aerial)"
+          - "Underground (Buried)"
+
+      - name: "Meter Type"
+        type: "Single select"
+        options:
+          - "Analog"
+          - "Digital"
+          - "Smart Meter (AMI)"
+
+      - name: "Distance Panel to Roof (ft)"
+        type: "Numeric"
+        placeholder: "Wire run distance"
+
+      - name: "Electrical Panel Photo"
+        type: "File"
+        description: "Photo of main panel interior"
+
+  - name: "Energy Usage Analysis"
+    order: 5
+    fields:
+      - name: "Utility Company"
+        type: "Text"
+        required: true
+        placeholder: "e.g., PG&E, SDG&E, SCE"
+
+      - name: "Average Monthly Bill ($)"
+        type: "Numeric"
+        placeholder: "Average over 12 months"
+
+      - name: "Annual kWh Usage"
+        type: "Numeric"
+        placeholder: "Total kWh from past 12 months"
+
+      - name: "Current Rate Plan"
+        type: "Text"
+        placeholder: "e.g., Time-of-Use, Tiered"
+
+      - name: "Future Electric Load Changes"
+        type: "Multiple select"
+        options:
+          - "None Planned"
+          - "EV Purchase Planned"
+          - "EV Charger Install"
+          - "Pool/Spa Addition"
+          - "Home Addition"
+          - "HVAC Upgrade"
+
+      - name: "Battery Storage Interest"
+        type: "Single select"
+        options:
+          - "Not Interested"
+          - "Maybe in Future"
+          - "Yes - Quote with System"
+
+  - name: "Site Conditions & Compliance"
+    order: 6
+    fields:
+      - name: "HOA Restrictions"
+        type: "Single select"
+        options:
+          - "No HOA"
+          - "HOA - Approval Required"
+          - "HOA - Solar Pre-Approved"
+          - "Unknown"
+
+      - name: "Fire Setbacks Required (NEC 690.12)"
+        type: "Single select"
+        options:
+          - "Yes - Compliant"
+          - "Yes - Limits System Size"
+          - "No Setbacks Required"
+
+      - name: "Rapid Shutdown Required"
+        type: "Single select"
+        options:
+          - "Yes - Module Level (NEC 2017+)"
+          - "Yes - String Level Acceptable"
+          - "Not Required"
+
+      - name: "AHJ (Authority Having Jurisdiction)"
+        type: "Text"
+        placeholder: "City/County building department"
+
+  - name: "Documentation & Recommendations"
+    order: 7
+    fields:
+      - name: "Roof Photos - Front"
+        type: "File"
+        description: "Front view of roof"
+
+      - name: "Roof Photos - Rear"
+        type: "File"
+        description: "Rear view of roof"
+
+      - name: "Roof Photos - Aerial/Drone"
+        type: "File"
+        description: "Overhead view (if available)"
+
+      - name: "Utility Bill Photo"
+        type: "File"
+        description: "Recent utility bill"
+
+      - name: "Site Assessment Notes"
+        type: "Text"
+        placeholder: "Additional observations, concerns, opportunities"
+
+      - name: "Recommended System Size (kW)"
+        type: "Numeric"
+        placeholder: "Preliminary sizing estimate"
+
+      - name: "Estimated Production (kWh/year)"
+        type: "Numeric"
+        placeholder: "Annual generation estimate"
+
+      - name: "Site Viability Rating"
+        type: "Single select"
+        required: true
+        options:
+          - "Excellent - Ideal Site"
+          - "Good - Proceed with Proposal"
+          - "Fair - Conditional Approval"
+          - "Poor - Not Recommended"
+
+      - name: "Assessor Signature"
+        type: "File"
+        description: "Solar assessor signature"
+
+metadata:
+  total_fields: 55
+  total_groups: 7
+  trade: "Solar"
+  compliance: "NEC 2023 Article 690, NABCEP PV Installation Professional Standards"
+  certifications: ["NABCEP PV Installation Professional", "OSHA 10", "Fall Protection"]
+  created_by: "ai-development-cockpit"
+  version: "1.0"

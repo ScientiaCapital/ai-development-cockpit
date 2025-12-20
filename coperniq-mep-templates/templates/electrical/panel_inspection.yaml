@@ -1,0 +1,266 @@
+# [MEP] Panel Inspection Report
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Status: GATE 1 - Ready for Review
+
+template:
+  name: "[MEP] Panel Inspection Report"
+  emoji: "⚡"
+  description: "Comprehensive electrical panel inspection checklist"
+  category: "Electrical"
+
+  work_order:
+    type: "Field Work Order"
+    name: "[MEP] Electrical Service Call"
+
+groups:
+  - name: "Panel Information"
+    order: 1
+    fields:
+      - name: "Panel Location"
+        type: "Text"
+        required: true
+        placeholder: "e.g., Main floor utility room"
+
+      - name: "Manufacturer"
+        type: "Text"
+        required: false
+        placeholder: "e.g., Square D, Siemens, GE"
+
+      - name: "Panel Type"
+        type: "Single select"
+        required: false
+        options:
+          - "Main"
+          - "Sub-Panel"
+          - "Load Center"
+          - "Distribution"
+
+      - name: "Amperage Rating"
+        type: "Single select"
+        required: true
+        options:
+          - "100A"
+          - "125A"
+          - "150A"
+          - "200A"
+          - "225A"
+          - "400A"
+          - "600A"
+          - "Other"
+
+      - name: "Voltage"
+        type: "Single select"
+        required: true
+        options:
+          - "120/240V Single Phase"
+          - "120/208V Three Phase"
+          - "277/480V Three Phase"
+
+      - name: "Number of Spaces"
+        type: "Numeric"
+        required: false
+        placeholder: "Total breaker spaces"
+
+      - name: "Spaces Used"
+        type: "Numeric"
+        required: false
+        placeholder: "Occupied breaker spaces"
+
+  - name: "Visual Inspection"
+    order: 2
+    fields:
+      - name: "Panel Cover Condition"
+        type: "Single select"
+        required: false
+        options:
+          - "Good"
+          - "Damaged"
+          - "Missing Knockouts"
+          - "Rust"
+
+      - name: "Wiring Condition"
+        type: "Single select"
+        required: false
+        options:
+          - "Good"
+          - "Overcrowded"
+          - "Damaged Insulation"
+          - "Improper Splices"
+
+      - name: "Labeling"
+        type: "Single select"
+        required: false
+        options:
+          - "Complete"
+          - "Partial"
+          - "None/Incorrect"
+
+      - name: "Signs of Overheating"
+        type: "Single select"
+        required: false
+        options:
+          - "None"
+          - "Discoloration"
+          - "Melted Components"
+
+      - name: "Evidence of Moisture"
+        type: "Single select"
+        required: false
+        options:
+          - "None"
+          - "Condensation"
+          - "Water Intrusion"
+
+  - name: "Electrical Measurements"
+    order: 3
+    fields:
+      - name: "Voltage L1-N"
+        type: "Numeric"
+        required: false
+        placeholder: "Line 1 to Neutral voltage"
+
+      - name: "Voltage L2-N"
+        type: "Numeric"
+        required: false
+        placeholder: "Line 2 to Neutral voltage"
+
+      - name: "Voltage L1-L2"
+        type: "Numeric"
+        required: false
+        placeholder: "Line to Line voltage"
+
+      - name: "Main Breaker Amps (L1)"
+        type: "Numeric"
+        required: false
+        placeholder: "Line 1 amperage draw"
+
+      - name: "Main Breaker Amps (L2)"
+        type: "Numeric"
+        required: false
+        placeholder: "Line 2 amperage draw"
+
+      - name: "Neutral-Ground Bond"
+        type: "Single select"
+        required: false
+        options:
+          - "Present (Main Panel)"
+          - "Absent (Sub-Panel)"
+          - "Incorrect"
+
+  - name: "Grounding & Bonding"
+    order: 4
+    fields:
+      - name: "Grounding Electrode Conductor"
+        type: "Single select"
+        required: false
+        options:
+          - "Present & Proper"
+          - "Undersized"
+          - "Missing"
+
+      - name: "Bonding Jumpers"
+        type: "Single select"
+        required: false
+        options:
+          - "Proper"
+          - "Missing"
+          - "N/A"
+
+      - name: "Ground Rod/UFER Present"
+        type: "Single select"
+        required: false
+        options:
+          - "Yes"
+          - "No"
+          - "Unknown"
+
+  - name: "Thermal Scan"
+    order: 5
+    fields:
+      - name: "Thermal Scan Performed"
+        type: "Single select"
+        required: false
+        options:
+          - "Yes"
+          - "No"
+
+      - name: "Hot Spots Found"
+        type: "Single select"
+        required: false
+        options:
+          - "None"
+          - "Minor (<10F rise)"
+          - "Moderate (10-25F)"
+          - "Severe (>25F)"
+
+      - name: "Thermal Image"
+        type: "File"
+        required: false
+        description: "Thermal camera images"
+
+  - name: "Code Violations"
+    order: 6
+    fields:
+      - name: "Double-Tapped Breakers"
+        type: "Single select"
+        required: false
+        options:
+          - "None"
+          - "Found - List Below"
+
+      - name: "Improper Breaker Types"
+        type: "Single select"
+        required: false
+        options:
+          - "None"
+          - "Found - List Below"
+
+      - name: "Missing AFCIs (where req'd)"
+        type: "Single select"
+        required: false
+        options:
+          - "Compliant"
+          - "Non-Compliant"
+          - "N/A"
+
+      - name: "Missing GFCIs (where req'd)"
+        type: "Single select"
+        required: false
+        options:
+          - "Compliant"
+          - "Non-Compliant"
+
+      - name: "Violation Details"
+        type: "Text"
+        required: false
+        placeholder: "Describe any violations found"
+
+  - name: "Documentation"
+    order: 7
+    fields:
+      - name: "Panel Photos"
+        type: "File"
+        required: false
+        description: "Photos of panel"
+
+      - name: "Recommendations"
+        type: "Text"
+        required: false
+        placeholder: "Recommended repairs or upgrades"
+
+      - name: "Priority Level"
+        type: "Single select"
+        required: false
+        options:
+          - "Routine"
+          - "Soon"
+          - "Urgent"
+          - "Immediate"
+
+metadata:
+  total_fields: 32
+  total_groups: 7
+  compliance: "NEC electrical panel inspection checklist"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

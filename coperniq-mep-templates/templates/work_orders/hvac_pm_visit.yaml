@@ -1,0 +1,180 @@
+# [MEP] HVAC PM Visit Work Order
+# Coperniq Work Order Template Specification
+# Generated: 2025-12-20
+# Status: GATE 1 - Ready for Review
+
+template:
+  name: "[MEP] HVAC PM Visit"
+  emoji: "📋"
+  description: "Preventive maintenance visit work order for HVAC systems"
+  category: "Work Orders"
+  isField: true
+
+  linkedForms:
+    - "[MEP] AC System Inspection"
+    - "[MEP] Furnace Safety Inspection"
+
+groups:
+  - name: "Visit Information"
+    order: 1
+    fields:
+      - name: "Customer Name"
+        type: "Text"
+        required: true
+        placeholder: "Full customer name"
+
+      - name: "Service Address"
+        type: "Text"
+        required: true
+        placeholder: "Complete service address"
+
+      - name: "Service Plan Type"
+        type: "Single select"
+        required: false
+        options:
+          - "Bronze Plan"
+          - "Silver Plan"
+          - "Gold Plan"
+          - "Custom Plan"
+          - "One-time PM"
+
+      - name: "Season"
+        type: "Single select"
+        required: true
+        options:
+          - "Spring (Cooling Prep)"
+          - "Fall (Heating Prep)"
+          - "Mid-Season"
+
+      - name: "Arrival Time"
+        type: "Text"
+        required: true
+        placeholder: "HH:MM AM/PM"
+
+  - name: "Equipment List"
+    order: 2
+    fields:
+      - name: "Number of Systems"
+        type: "Numeric"
+        required: true
+        placeholder: "Total HVAC systems to service"
+
+      - name: "System 1 Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Air Conditioner"
+          - "Furnace"
+          - "Heat Pump"
+          - "Package Unit"
+          - "Mini-Split"
+
+      - name: "System 1 Make/Model"
+        type: "Text"
+        required: false
+        placeholder: "Equipment details"
+
+      - name: "System 2 Type"
+        type: "Single select"
+        required: false
+        options:
+          - "Air Conditioner"
+          - "Furnace"
+          - "Heat Pump"
+          - "Package Unit"
+          - "Mini-Split"
+          - "N/A"
+
+  - name: "Maintenance Performed"
+    order: 3
+    fields:
+      - name: "Cooling System Checklist"
+        type: "Single select"
+        required: false
+        options:
+          - "Complete"
+          - "Not Applicable"
+          - "Needs Follow-up"
+
+      - name: "Heating System Checklist"
+        type: "Single select"
+        required: false
+        options:
+          - "Complete"
+          - "Not Applicable"
+          - "Needs Follow-up"
+
+      - name: "Filter Size"
+        type: "Text"
+        required: false
+        placeholder: "e.g., 20x25x1"
+
+      - name: "Filter Replacement"
+        type: "Single select"
+        required: false
+        options:
+          - "Replaced"
+          - "Cleaned"
+          - "Not Needed"
+          - "Customer Declined"
+
+      - name: "Coil Cleaning"
+        type: "Single select"
+        required: false
+        options:
+          - "Evaporator Cleaned"
+          - "Condenser Cleaned"
+          - "Both Cleaned"
+          - "Not Needed"
+
+      - name: "Drain Line Treatment"
+        type: "Single select"
+        required: false
+        options:
+          - "Treated"
+          - "Cleared"
+          - "Not Needed"
+
+  - name: "Follow-up & Documentation"
+    order: 4
+    fields:
+      - name: "Issues Found"
+        type: "Text"
+        required: false
+        placeholder: "List any issues discovered"
+
+      - name: "Recommendations"
+        type: "Text"
+        required: false
+        placeholder: "Recommended repairs or upgrades"
+
+      - name: "Priority Level"
+        type: "Single select"
+        required: false
+        options:
+          - "Immediate"
+          - "Within 30 Days"
+          - "Within 6 Months"
+          - "None"
+
+      - name: "PM Photos"
+        type: "File"
+        required: false
+        description: "Equipment photos"
+
+      - name: "Customer Signature"
+        type: "File"
+        required: true
+        description: "Customer signature"
+
+      - name: "Next Visit Scheduled"
+        type: "Text"
+        required: false
+        placeholder: "MM/DD/YYYY"
+
+metadata:
+  total_fields: 21
+  total_groups: 4
+  compliance: "Standard HVAC preventive maintenance documentation"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

@@ -1,69 +1,82 @@
 # ai-development-cockpit
 
 **Branch**: main | **Updated**: 2025-12-21
+**Sprint**: 10-12 Hour Process Studio Execution
 
 ## Status
-Phase 4 Active: Coperniq MEP Templates webapp deployed to Vercel. 60 MEP templates complete. Service Plan templates rebuilt as enterprise-grade enrollment forms. Next: Build all templates directly in Coperniq's Form Builder.
+Phase 4 Active: Coperniq MEP Templates. 22 outdated docs archived. 60 YAML specs ready, ~1 built in Coperniq (98% gap). Sprint plan ready for 76-item execution.
 
-## Tomorrow's Focus
-1. [ ] Build 60 templates directly in Coperniq Form Builder
-   - **URL**: https://app.coperniq.io/112/company/studio/templates/form-templates
-2. [ ] Configure Project Workflows in Coperniq
-   - **URL**: https://app.coperniq.io/112/company/studio/workflows/project-workflows
-3. [ ] Fix test paths (webapp directory structure)
+## Current Sprint (10-12 Hours)
+
+### Hour 1-3: Field Work Orders (10)
+- [ ] Electrical Panel Upgrade
+- [ ] Generator Installation
+- [ ] EV Charger Install
+- [ ] Ductless Mini-Split Install
+- [ ] Water Heater Replacement
+- [ ] Backflow Test & Cert
+- [ ] Fire Sprinkler Inspection
+- [ ] Grease Trap Service
+- [ ] Roof Leak Repair
+- [ ] Emergency Plumbing
+
+### Hour 3-4: Emergency Forms (3)
+- [ ] Outage Impact Assessment
+- [ ] Generator Rental Agreement
+- [ ] Post-Outage Safety Checklist
+
+### Hour 4-6: Automations (10)
+- [ ] Lead Assignment
+- [ ] Quote to Job
+- [ ] Job to Invoice
+- [ ] Payment Update
+- [ ] Permit to Install
+- [ ] Emergency WO
+- [ ] PM Ticket
+- [ ] Portal Welcome
+- [ ] Review Alert
+- [ ] Renewal Reminder
+
+### Hour 6-11: Templates by Trade (59)
+- HVAC (9), Solar (10), Plumbing (6), Electrical (6)
+- Fire Protection (5), Controls (5)
+- Service Plans (4), TUD Market (8)
+
+See `coperniq-mep-templates/TEMPLATE_INVENTORY.md` for full checklist.
 
 ## Done (This Session - Dec 21)
-- OpenRouter migration completed for all 3 AI agents (FormFiller, JobHelper, DocGen)
-- Rebuilt Service Plan templates as enterprise enrollment forms:
-  - `hvac_bronze.yaml` - 24 fields, 5 groups
-  - `hvac_silver.yaml` - 22 fields, 5 groups
-  - `hvac_gold.yaml` - 24 fields, 5 groups
-  - `plumbing_protect.yaml` - 23 fields, 5 groups
-- Created form submissions backend:
-  - `supabase/migrations/004_simple_form_submissions.sql`
-  - `app/api/submissions/route.ts`
-- Security audit passed:
-  - No hardcoded secrets
-  - No .env files tracked
-  - Next.js 14.2.35 (latest patch)
-- Verified enterprise template requirements documented
-
-## Done (Previous Sessions - Dec 20)
-- Contractor Command Center webapp deployed to Vercel
-- 60 MEP templates created across 12 trades
-- 3 AI agents (FormFiller, JobHelper, DocGen) integrated
-- GTM vertical configs created (solar_epc, hvac_mep, om_service, multi_trade)
-- Schema aligned to Coperniq GraphQL types
+- ULTRATHINK: Full project audit completed
+- Archived 22 outdated Nov 2025 docs to `docs/archive/`
+- Closed `claude-sdk-integration` worktree
+- Created `TEMPLATE_INVENTORY.md` tracking doc
+- Added journal entry to coperniq-forge
+- Mapped 5 Coperniq differentiators:
+  1. Incentive Maximization Engine
+  2. SREC Compliance Autopilot (7 states)
+  3. Multi-Trade Cross-Sell
+  4. Permitting Intelligence
+  5. O&M as 20-Year Revenue
 
 ## Blockers
-- Playwright browser lock prevents Coperniq automation (need manual build)
+- Playwright browser lock prevents Coperniq automation (manual build required)
 
-## Active Worktrees
-| Path | Branch | Purpose |
-|------|--------|---------|
-| `main` | main | Current work |
-| `claude-sdk-integration` | feature/claude-sdk-cost-optimizer-integration | Claude SDK |
-
-## Enterprise Template Requirements (Future)
-- Asset linking (equipment → form)
-- Compliance validation (EPA 608, NFPA 25)
-- History/trending (measurements over time)
-- Calculated fields (auto-totals, efficiency ratings)
-- Conditional logic (show/hide based on selections)
-- Approval workflows (tech → supervisor → customer)
+## Monthly Roadmap (Dec 21 - Jan 21)
+- **Week 1**: Process Studio Sprint (76 templates)
+- **Week 2**: Automations + Workflows (10 core)
+- **Week 3**: Analytics Dashboard MVP
+- **Week 4**: Contractor-Specific Dashboards
+- **Week 5**: Polish + Documentation
 
 ## Critical URLs
-- **Coperniq Form Builder**: https://app.coperniq.io/112/company/studio/templates/form-templates
-- **Coperniq Workflows**: https://app.coperniq.io/112/company/studio/workflows/project-workflows
+- **Coperniq Process Studio**: https://app.coperniq.io/112/company/studio/templates
 - **Vercel Webapp**: https://webapp-scientia-capital.vercel.app
+- **Template Inventory**: `coperniq-mep-templates/TEMPLATE_INVENTORY.md`
 
-## Quick Commands
-```bash
-npm run dev      # Start dev server (webapp)
-npm run build    # Production build
-npm test         # Run tests (needs path fixes)
-git push         # Push changes to origin
-```
+## Research Archive
+- `bug-hive/MEP_TEMPLATE_SPEC.md` - 31KB template specs
+- `bug-hive/COPERNIQ_SCHEMA.md` - GraphQL types
+- `coperniq-mep-templates/docs/compliance/*.md` - State compliance (CA, FL, SREC states)
+- `coperniq-mep-templates/docs/incentives/*.md` - Federal + state incentives
 
 ## Tech Stack
 Next.js 14 | TypeScript | OpenRouter (Claude) | Supabase | Tailwind | shadcn/ui

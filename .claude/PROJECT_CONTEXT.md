@@ -1,86 +1,70 @@
 # ai-development-cockpit
 
-**Branch**: main | **Updated**: 2025-12-21
-**Sprint**: 10-12 Hour Process Studio Execution
+**Branch**: main | **Updated**: 2025-12-21 (End of Day)
+**Sprint**: MEP Automations Build - Manual Coperniq Process Studio
 
 ## Status
-Phase 4 Active: Coperniq MEP Templates. 22 outdated docs archived. **52+ templates built**, ~20 remaining. Major progress Dec 21 with 14 Field Work Orders complete.
+Phase 4 Active: Coperniq MEP Templates. Building 10 MEP automations in Process Studio. **61 templates built**, 20 remaining. 2 automations fully complete, 1 in progress (Job to Invoice needs email fields configured).
 
-## Current Sprint (Remaining Work)
+## Tomorrow Start: [MEP] Job to Invoice Email Config
+**URL**: https://app.coperniq.io/112/company/studio/automations/5734
 
-### Field Work Orders (7 remaining)
-- [x] Electrical Panel Upgrade (DONE)
-- [x] Generator Installation (DONE)
-- [ ] EV Charger Install
-- [ ] Ductless Mini-Split Install
-- [x] Water Heater Replacement (DONE)
-- [ ] Backflow Test & Cert
-- [ ] Fire Sprinkler Inspection
-- [ ] Grease Trap Service
-- [ ] Roof Leak Repair
-- [ ] Emergency Plumbing
+**What's Done**:
+- Automation created with name "[MEP] Job to Invoice"
+- Trigger configured: "Work Order marked complete"
+- Action type selected: "Send email"
+- From address set: "No Reply - coperniqenergy@coperniq.io"
 
-### Hour 3-4: Emergency Forms (3)
-- [ ] Outage Impact Assessment
-- [ ] Generator Rental Agreement
-- [ ] Post-Outage Safety Checklist
+**What's Needed** (continue here):
+1. Configure "To" field - use Coperniq token for customer email
+2. Configure "Subject" - instructional example like "Work Complete - Invoice Ready for /Project name"
+3. Configure "Body" - instructional email showing token usage
+4. Click Save on Action section
+5. Then continue with remaining 7 automations
 
-### Hour 4-6: Automations (10)
-- [ ] Lead Assignment
-- [ ] Quote to Job
-- [ ] Job to Invoice
-- [ ] Payment Update
-- [ ] Permit to Install
-- [ ] Emergency WO
-- [ ] PM Ticket
-- [ ] Portal Welcome
-- [ ] Review Alert
-- [ ] Renewal Reminder
+## Automations Progress
+- [x] [MEP] HVAC Lead Assignment (COMPLETE - "Update property" action)
+- [x] [MEP] Quote to Job (COMPLETE - "Create project" action)
+- [ ] [MEP] Job to Invoice (IN PROGRESS - email fields needed)
+- [ ] [MEP] Payment Update
+- [ ] [MEP] Permit to Install
+- [ ] [MEP] Emergency WO
+- [ ] [MEP] PM Ticket
+- [ ] [MEP] Portal Welcome
+- [ ] [MEP] Review Alert
+- [ ] [MEP] Renewal Reminder
 
-### Hour 6-11: Templates by Trade (59)
-- HVAC (9), Solar (10), Plumbing (6), Electrical (6)
-- Fire Protection (5), Controls (5)
-- Service Plans (4), TUD Market (8)
-
-See `coperniq-mep-templates/TEMPLATE_INVENTORY.md` for full checklist.
+## User Guidance (from today)
+"The demo environment should be instructional - show examples by calling out what is built and how it should be updated/edited, just like in coding"
 
 ## Done (This Session - Dec 21)
-- ULTRATHINK: Full project audit completed
-- Archived 22 outdated Nov 2025 docs to `docs/archive/`
-- Closed `claude-sdk-integration` worktree
-- Created `TEMPLATE_INVENTORY.md` tracking doc
-- Added journal entry to coperniq-forge
-- Mapped 5 Coperniq differentiators:
-  1. Incentive Maximization Engine
-  2. SREC Compliance Autopilot (7 states)
-  3. Multi-Trade Cross-Sell
-  4. Permitting Intelligence
-  5. O&M as 20-Year Revenue
+- Built [MEP] HVAC Lead Assignment automation (Request created → Update property)
+- Built [MEP] Quote to Job automation (Request phase started → Create project)
+- Started [MEP] Job to Invoice (Work Order completed → Send email)
+- Created COPERNIQ_CAPABILITIES.md (Coperniq feature reference)
+- Created AUTOMATION_RESEARCH.md (25+ automation patterns)
+- Updated TEMPLATE_INVENTORY.md counts (61 built, 20 remaining)
+- Security scan passed: No secrets exposed
+- Dependency audit: @types/next-pwa has stale Next 13 dep (low priority)
 
 ## Blockers
-- Playwright browser lock prevents Coperniq automation (manual build required)
+- Playwright browser unlocked but email field configuration requires understanding Coperniq's token system (use "/" to insert dynamic tokens)
 
-## Monthly Roadmap (Dec 21 - Jan 21)
-- **Week 1**: Process Studio Sprint (76 templates)
-- **Week 2**: Automations + Workflows (10 core)
-- **Week 3**: Analytics Dashboard MVP
-- **Week 4**: Contractor-Specific Dashboards
-- **Week 5**: Polish + Documentation
+## Security Status
+- Secrets scan: PASS (0 exposed)
+- .env audit: PASS (17 keys, all in .env only)
+- CVE audit: 1 low-priority issue (@types/next-pwa dev dep)
+- Git history: CLEAN
+
+## Key Reference Files
+- `coperniq-mep-templates/docs/COPERNIQ_CAPABILITIES.md` - 10 automation patterns with triggers/actions
+- `coperniq-mep-templates/QUICK_BUILD_REFERENCE.md` - Automation specs and compliance requirements
+- `coperniq-mep-templates/TEMPLATE_INVENTORY.md` - Sprint progress tracker
 
 ## Critical URLs
-- **Coperniq Process Studio**: https://app.coperniq.io/112/company/studio/templates
-- **Vercel Webapp**: https://webapp-scientia-capital.vercel.app
-- **Template Inventory**: `coperniq-mep-templates/TEMPLATE_INVENTORY.md`
-
-## Research Archive
-- `bug-hive/MEP_TEMPLATE_SPEC.md` - 31KB template specs
-- `bug-hive/COPERNIQ_SCHEMA.md` - GraphQL types
-- `coperniq-mep-templates/docs/compliance/*.md` - State compliance (CA, FL, SREC states)
-- `coperniq-mep-templates/docs/incentives/*.md` - Federal + state incentives
+- **Coperniq Automations**: https://app.coperniq.io/112/company/studio/automations
+- **Job to Invoice Edit**: https://app.coperniq.io/112/company/studio/automations/5734
+- **Process Studio**: https://app.coperniq.io/112/company/studio/templates
 
 ## Tech Stack
-Next.js 14 | TypeScript | OpenRouter (Claude) | Supabase | Tailwind | shadcn/ui
-
-## Links
-- GitHub: https://github.com/ScientiaCapital/ai-development-cockpit
-- Coperniq: https://app.coperniq.io/112
+Next.js 15.5.3 | TypeScript | OpenRouter (Claude) | Supabase | Tailwind | shadcn/ui

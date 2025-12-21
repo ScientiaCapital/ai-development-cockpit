@@ -10,9 +10,11 @@
 | Metric | Count |
 |--------|-------|
 | YAML Specs Ready | 60 |
-| Built in Coperniq | ~1 |
-| Gap | 59 (98%) |
+| Built in Coperniq | 52+ |
+| Gap | ~24 |
 | Target (Sprint) | 76 |
+
+**Last Audit**: Dec 21, 2025 - Major progress made on Field Work Orders, Office Work Orders complete
 
 ---
 
@@ -40,25 +42,41 @@
 
 | Type | Built | Target | Remaining |
 |------|-------|--------|-----------|
-| Field Work Orders | 14 | 24 | 10 |
+| Field Work Orders | 14 | 21 | 7 |
 | Office Work Orders | 14 | 14 | 0 |
 | Forms | 12 | 15 | 3 |
 | Payment Structures | 8 | 8 | 0 |
 | Project Workflows | 6 | 6 | 0 |
 | Request Workflows | 5 | 5 | 0 |
 | Automations | 2 | 12 | 10 |
-| **TOTAL** | **61** | **84** | **23** |
+| **TOTAL** | **61** | **81** | **20** |
+
+### Field Work Orders Built (Dec 21)
+1. HVAC Emergency Restart
+2. Emergency Commercial Refrigeration
+3. Emergency Medical Equipment Priority
+4. Panel Surge Damage Assessment
+5. Battery Backup Assessment
+6. Transfer Switch Installation
+7. Emergency Generator Fast-Track Installation
+8. Emergency Generator Service During Power Outage
+9. Electrical Panel Upgrade Work Order - 200A Service Upgrade
+10. Ductwork Inspection and Leak Testing
+11. Water Heater Installation Work Order
+12. [MEP] Furnace Safety Check
+13. AC Maintenance Visit
+14. HVAC System Startup and Commissioning
 
 ---
 
 ## Sprint Checklist
 
-### Hour 1-3: Field Work Orders (10)
-- [ ] Electrical Panel Upgrade
-- [ ] Generator Installation
+### Hour 1-3: Field Work Orders (7 remaining)
+- [x] Electrical Panel Upgrade (built: "Electrical Panel Upgrade Work Order - 200A Service Upgrade")
+- [x] Generator Installation (built: "Emergency Generator Fast-Track Installation")
 - [ ] EV Charger Install
 - [ ] Ductless Mini-Split Install
-- [ ] Water Heater Replacement
+- [x] Water Heater Replacement (built: "Water Heater Installation Work Order")
 - [ ] Backflow Test & Cert
 - [ ] Fire Sprinkler Inspection
 - [ ] Grease Trap Service

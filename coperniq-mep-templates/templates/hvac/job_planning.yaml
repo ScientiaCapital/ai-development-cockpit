@@ -1,0 +1,162 @@
+# [HVAC] Job Planning Worksheet
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Compliance: OSHA, ACCA Standards
+
+template:
+  name: "[HVAC] Job Planning Worksheet"
+  emoji: "📝"
+  description: "Pre-installation planning with material list and crew assignment"
+  category: "HVAC"
+  compliance: "OSHA, ACCA Standards"
+
+  work_order:
+    type: "Field Work Order"
+    name: "[HVAC] Job Planning"
+
+groups:
+  - name: "Job Information"
+    order: 1
+    fields:
+      - name: "Customer Name"
+        type: "Text"
+        required: true
+      - name: "Job Address"
+        type: "Text"
+        required: true
+      - name: "Scheduled Install Date"
+        type: "Text"
+        required: true
+        placeholder: "MM/DD/YYYY"
+      - name: "Estimated Duration"
+        type: "Single select"
+        required: true
+        options:
+          - "Half Day (4 hours)"
+          - "Full Day (8 hours)"
+          - "1.5 Days"
+          - "2 Days"
+          - "3+ Days"
+      - name: "Job Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Change Out - Same Location"
+          - "Change Out - New Location"
+          - "New Construction"
+          - "Add-On System"
+
+  - name: "Crew Assignment"
+    order: 2
+    fields:
+      - name: "Lead Installer"
+        type: "Text"
+        required: true
+      - name: "Helper 1"
+        type: "Text"
+      - name: "Helper 2"
+        type: "Text"
+      - name: "Electrician Needed"
+        type: "Single select"
+        options:
+          - "Yes - Subcontract"
+          - "Yes - In-House"
+          - "No"
+      - name: "Permit Pulled"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes"
+          - "Pending"
+          - "N/A"
+
+  - name: "Equipment Checklist"
+    order: 3
+    critical: true
+    fields:
+      - name: "Outdoor Unit Received"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes - In Warehouse"
+          - "Yes - On Truck"
+          - "No - Ordered"
+      - name: "Indoor Unit Received"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes - In Warehouse"
+          - "Yes - On Truck"
+          - "No - Ordered"
+      - name: "Thermostat Received"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes"
+          - "No - Ordered"
+          - "Customer Providing"
+      - name: "Lineset Size"
+        type: "Single select"
+        options:
+          - "1/4 x 3/8"
+          - "1/4 x 1/2"
+          - "3/8 x 5/8"
+          - "3/8 x 3/4"
+      - name: "Lineset Length (ft)"
+        type: "Numeric"
+
+  - name: "Materials Needed"
+    order: 4
+    fields:
+      - name: "Ductwork Modifications"
+        type: "Multiple select"
+        options:
+          - "None"
+          - "Supply Plenum"
+          - "Return Plenum"
+          - "Trunk Line"
+          - "Branch Runs"
+          - "Registers/Grilles"
+      - name: "Electrical Work"
+        type: "Multiple select"
+        options:
+          - "None"
+          - "New Disconnect"
+          - "New Breaker"
+          - "Panel Upgrade"
+          - "Whip Replacement"
+      - name: "Concrete Pad Needed"
+        type: "Single select"
+        options:
+          - "Yes"
+          - "No - Existing"
+          - "No - Brackets"
+      - name: "Additional Materials Notes"
+        type: "Text"
+
+  - name: "Site Prep Notes"
+    order: 5
+    fields:
+      - name: "Access Notes"
+        type: "Text"
+        placeholder: "Gate code, parking, HOA restrictions"
+      - name: "Disposal Plan"
+        type: "Single select"
+        required: true
+        options:
+          - "Haul Away Old Equipment"
+          - "Customer Keeping"
+          - "N/A - New Install"
+      - name: "Special Instructions"
+        type: "Text"
+      - name: "Pre-Job Photos"
+        type: "File"
+
+metadata:
+  total_fields: 24
+  total_groups: 5
+  trade: "HVAC"
+  phase: "planning"
+  compliance: "OSHA, ACCA Standards"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

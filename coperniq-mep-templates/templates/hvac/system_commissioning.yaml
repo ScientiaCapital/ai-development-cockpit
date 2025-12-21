@@ -1,0 +1,189 @@
+# [HVAC] System Commissioning
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Compliance: ACCA Standard 5, ASHRAE 62.1
+
+template:
+  name: "[HVAC] System Commissioning"
+  emoji: "✅"
+  description: "Post-installation verification and performance testing"
+  category: "HVAC"
+  compliance: "ACCA Standard 5, ASHRAE 62.1"
+
+  work_order:
+    type: "Field Work Order"
+    name: "[HVAC] System Commissioning"
+
+groups:
+  - name: "Project Information"
+    order: 1
+    fields:
+      - name: "Customer Name"
+        type: "Text"
+        required: true
+      - name: "Property Address"
+        type: "Text"
+        required: true
+      - name: "Commissioning Date"
+        type: "Text"
+        required: true
+        placeholder: "MM/DD/YYYY"
+      - name: "Technician Name"
+        type: "Text"
+        required: true
+
+  - name: "Equipment Verification"
+    order: 2
+    critical: true
+    fields:
+      - name: "Outdoor Unit Model"
+        type: "Text"
+        required: true
+      - name: "Outdoor Unit Serial"
+        type: "Text"
+        required: true
+      - name: "Indoor Unit Model"
+        type: "Text"
+        required: true
+      - name: "Indoor Unit Serial"
+        type: "Text"
+        required: true
+      - name: "Thermostat Model"
+        type: "Text"
+        required: true
+      - name: "Equipment Matches Proposal"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail - Mismatch"
+
+  - name: "Electrical Verification"
+    order: 3
+    critical: true
+    fields:
+      - name: "Supply Voltage (L1-L2)"
+        type: "Numeric"
+        required: true
+      - name: "Voltage Within Spec"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass (±10%)"
+          - "Fail"
+      - name: "Compressor Amps"
+        type: "Numeric"
+        required: true
+      - name: "Condenser Fan Amps"
+        type: "Numeric"
+      - name: "Blower Motor Amps"
+        type: "Numeric"
+        required: true
+      - name: "All Amps Below RLA"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail - Over Amperage"
+
+  - name: "Refrigerant Verification"
+    order: 4
+    critical: true
+    fields:
+      - name: "Refrigerant Type"
+        type: "Single select"
+        required: true
+        options:
+          - "R-410A"
+          - "R-32"
+          - "R-454B"
+      - name: "Suction Pressure (PSIG)"
+        type: "Numeric"
+        required: true
+      - name: "Discharge Pressure (PSIG)"
+        type: "Numeric"
+        required: true
+      - name: "Superheat (°F)"
+        type: "Numeric"
+        required: true
+      - name: "Subcooling (°F)"
+        type: "Numeric"
+        required: true
+      - name: "Charge Verification"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - Within Spec"
+          - "Fail - Overcharged"
+          - "Fail - Undercharged"
+
+  - name: "Airflow Verification"
+    order: 5
+    fields:
+      - name: "Measured CFM"
+        type: "Numeric"
+        required: true
+      - name: "Required CFM"
+        type: "Numeric"
+        required: true
+      - name: "CFM Within Spec"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass (±15%)"
+          - "Fail"
+      - name: "Static Pressure (in. w.c.)"
+        type: "Numeric"
+        required: true
+      - name: "Supply Air Temp (°F)"
+        type: "Numeric"
+        required: true
+      - name: "Return Air Temp (°F)"
+        type: "Numeric"
+        required: true
+      - name: "Temperature Split (°F)"
+        type: "Numeric"
+        required: true
+        placeholder: "Cooling: 15-22°F, Heating: 35-65°F"
+
+  - name: "Final Checklist"
+    order: 6
+    fields:
+      - name: "Thermostat Programmed"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes"
+          - "No"
+      - name: "WiFi Connected"
+        type: "Single select"
+        options:
+          - "Yes"
+          - "No"
+          - "N/A"
+      - name: "Customer Walkthrough"
+        type: "Single select"
+        required: true
+        options:
+          - "Completed"
+          - "Pending"
+      - name: "Warranty Registered"
+        type: "Single select"
+        options:
+          - "Yes"
+          - "Pending"
+      - name: "Commissioning Photos"
+        type: "File"
+      - name: "Technician Notes"
+        type: "Text"
+      - name: "Customer Signature"
+        type: "File"
+
+metadata:
+  total_fields: 37
+  total_groups: 6
+  trade: "HVAC"
+  phase: "commissioning"
+  compliance: "ACCA Standard 5, ASHRAE 62.1"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

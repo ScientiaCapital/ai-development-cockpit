@@ -1,0 +1,198 @@
+# [MEP] Standby Generator Installation
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Compliance: NEC Articles 700, 701, 702 - Emergency & Standby Power Systems
+
+template:
+  name: "[MEP] Standby Generator Installation"
+  emoji: "⚡"
+  description: "Standby generator installation checklist - NEC 700/701/702 compliant"
+  category: "Electrical"
+  compliance: "NEC Articles 700, 701, 702 - Emergency & Standby Power Systems"
+
+  work_order:
+    type: "Field Work Order"
+    name: "[MEP] Electrical Service Call"
+
+groups:
+  - name: "Generator Specifications"
+    order: 1
+    fields:
+      - name: "Manufacturer"
+        type: "Single select"
+        required: true
+        options:
+          - "Generac"
+          - "Kohler"
+          - "Cummins"
+          - "Briggs & Stratton"
+          - "CAT"
+          - "Other"
+      - name: "Model Number"
+        type: "Text"
+        required: true
+      - name: "Serial Number"
+        type: "Text"
+      - name: "Power Rating (kW)"
+        type: "Single select"
+        required: true
+        options:
+          - "7.5 kW"
+          - "10 kW"
+          - "16 kW"
+          - "20 kW"
+          - "22 kW"
+          - "38 kW"
+          - "48 kW"
+      - name: "Voltage Output"
+        type: "Single select"
+        required: true
+        options:
+          - "120/240V Single Phase"
+          - "120/208V Three Phase"
+          - "277/480V Three Phase"
+      - name: "Fuel Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Natural Gas"
+          - "Propane (LP)"
+          - "Diesel"
+          - "Dual Fuel (NG/LP)"
+
+  - name: "Transfer Switch"
+    order: 2
+    critical: true
+    fields:
+      - name: "Transfer Switch Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Automatic (ATS)"
+          - "Manual (MTS)"
+          - "Service Entrance Rated"
+      - name: "Transfer Switch Amperage"
+        type: "Single select"
+        required: true
+        options:
+          - "100A"
+          - "150A"
+          - "200A"
+          - "400A"
+      - name: "Number of Circuits"
+        type: "Numeric"
+      - name: "Delay Timer (Seconds)"
+        type: "Numeric"
+        placeholder: "Transfer delay (typically 10-30 sec)"
+
+  - name: "Installation Location"
+    order: 3
+    fields:
+      - name: "Generator Location"
+        type: "Single select"
+        required: true
+        options:
+          - "Exterior Pad"
+          - "Rooftop"
+          - "Generator Room"
+          - "Equipment Yard"
+      - name: "Pad Type"
+        type: "Single select"
+        options:
+          - "Composite Pad"
+          - "Concrete Pad (6\")"
+          - "Gravel Base"
+      - name: "Clearances Met (NEC 110.26)"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes (36\" Front, 18\" Sides)"
+          - "No - Adjustments Needed"
+      - name: "Distance to Windows/Doors (ft)"
+        type: "Numeric"
+
+  - name: "Fuel System"
+    order: 4
+    fields:
+      - name: "Fuel Line Size"
+        type: "Single select"
+        options:
+          - "1/2\" Black Iron"
+          - "3/4\" Black Iron"
+          - "1\" Black Iron"
+      - name: "Fuel Line Pressure (NG WC)"
+        type: "Numeric"
+      - name: "Propane Tank Size"
+        type: "Single select"
+        options:
+          - "N/A (Natural Gas)"
+          - "250 Gallon"
+          - "500 Gallon"
+          - "1000 Gallon"
+      - name: "Fuel Shutoff Valve"
+        type: "Single select"
+        required: true
+        options:
+          - "Installed"
+          - "Existing"
+          - "Not Yet Installed"
+
+  - name: "Commissioning & Testing"
+    order: 5
+    critical: true
+    fields:
+      - name: "Initial Start Test"
+        type: "Single select"
+        options:
+          - "Pass (Auto Start)"
+          - "Fail"
+      - name: "Transfer Test"
+        type: "Single select"
+        options:
+          - "Pass (Utility Out → Gen)"
+          - "Fail"
+      - name: "Re-Transfer Test"
+        type: "Single select"
+        options:
+          - "Pass (Gen → Utility)"
+          - "Fail"
+      - name: "Load Test (50% Load)"
+        type: "Single select"
+        options:
+          - "Pass"
+          - "Fail"
+      - name: "Voltage Output (No Load)"
+        type: "Numeric"
+      - name: "Frequency (Hz)"
+        type: "Numeric"
+        placeholder: "Should be 60 Hz"
+      - name: "Weekly Exercise Test Enabled"
+        type: "Single select"
+        options:
+          - "Yes (Day/Time Set)"
+          - "No"
+
+  - name: "Documentation"
+    order: 6
+    fields:
+      - name: "Installation Photos"
+        type: "File"
+      - name: "Customer Training"
+        type: "Single select"
+        options:
+          - "Completed"
+          - "Pending"
+      - name: "Warranty Registration"
+        type: "Single select"
+        options:
+          - "Completed"
+          - "Customer Responsibility"
+      - name: "Notes"
+        type: "Text"
+
+metadata:
+  total_fields: 30
+  total_groups: 6
+  compliance: "NEC Articles 700, 701, 702 - Emergency & Standby Power Systems"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

@@ -1,0 +1,200 @@
+# [Fire Protection] Emergency Egress Lighting
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Compliance: NFPA 101, IBC, OSHA 1910.37
+
+template:
+  name: "[Fire Protection] Emergency Egress Lighting"
+  emoji: "💡"
+  description: "Emergency and exit lighting inspection and testing"
+  category: "Fire Protection"
+  compliance: "NFPA 101, IBC, OSHA 1910.37"
+
+  work_order:
+    type: "Field Work Order"
+    name: "[Fire Protection] Egress Lighting"
+
+groups:
+  - name: "Facility Information"
+    order: 1
+    fields:
+      - name: "Facility Name"
+        type: "Text"
+        required: true
+      - name: "Facility Address"
+        type: "Text"
+        required: true
+      - name: "Inspection Date"
+        type: "Text"
+        required: true
+        placeholder: "MM/DD/YYYY"
+      - name: "Technician Name"
+        type: "Text"
+        required: true
+      - name: "Occupancy Type"
+        type: "Single select"
+        options:
+          - "Business"
+          - "Mercantile"
+          - "Assembly"
+          - "Educational"
+          - "Healthcare"
+          - "Industrial"
+
+  - name: "Exit Signs"
+    order: 2
+    critical: true
+    fields:
+      - name: "Total Exit Signs"
+        type: "Numeric"
+        required: true
+      - name: "Exit Signs Illuminated"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - All Working"
+          - "Fail - Some Not Working"
+      - name: "Failed Exit Sign Count"
+        type: "Numeric"
+      - name: "Exit Sign Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Internally Illuminated"
+          - "Externally Illuminated"
+          - "Self-Luminous"
+          - "Photoluminescent"
+          - "Combination"
+      - name: "Exit Signs Visible"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - Unobstructed"
+          - "Fail - Obstructed"
+      - name: "Exit Sign Locations Correct"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail - Additional Required"
+
+  - name: "Emergency Lights"
+    order: 3
+    critical: true
+    fields:
+      - name: "Total Emergency Light Units"
+        type: "Numeric"
+        required: true
+      - name: "Emergency Lights Operational"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - All Working"
+          - "Fail - Some Not Working"
+      - name: "Failed Unit Count"
+        type: "Numeric"
+      - name: "Emergency Light Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Battery Backup (Integral)"
+          - "Central Battery System"
+          - "Generator Powered"
+          - "Combination"
+      - name: "Coverage Adequate"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - 1fc Minimum"
+          - "Fail - Dark Spots"
+
+  - name: "Functional Testing"
+    order: 4
+    critical: true
+    fields:
+      - name: "Monthly Test (30 second)"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail"
+      - name: "Annual Test (90 minute)"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail"
+          - "Performed This Visit"
+          - "Due"
+      - name: "Last 90-Minute Test Date"
+        type: "Text"
+      - name: "Transfer to Battery"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - Immediate"
+          - "Fail - Delayed/None"
+      - name: "Battery Condition"
+        type: "Single select"
+        required: true
+        options:
+          - "Good"
+          - "Weak - Monitor"
+          - "Replace"
+
+  - name: "Deficiencies"
+    order: 5
+    fields:
+      - name: "Exit Sign Deficiencies"
+        type: "Multiple select"
+        options:
+          - "None"
+          - "Burned Out Lamps"
+          - "Damaged Housing"
+          - "Wrong Color"
+          - "Incorrect Arrow Direction"
+          - "Missing"
+      - name: "Emergency Light Deficiencies"
+        type: "Multiple select"
+        options:
+          - "None"
+          - "Lamp Failure"
+          - "Battery Failure"
+          - "Damaged Head"
+          - "Missing"
+          - "Obstructed"
+      - name: "Failed Unit Locations"
+        type: "Text"
+        placeholder: "List locations of failed units"
+
+  - name: "Documentation"
+    order: 6
+    fields:
+      - name: "Inspection Result"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Pass with Corrections"
+          - "Fail"
+      - name: "Corrections Required"
+        type: "Text"
+      - name: "Next Monthly Test Due"
+        type: "Text"
+        placeholder: "MM/DD/YYYY"
+      - name: "Next Annual Test Due"
+        type: "Text"
+        placeholder: "MM/DD/YYYY"
+      - name: "Inspection Photos"
+        type: "File"
+      - name: "Technician Signature"
+        type: "File"
+
+metadata:
+  total_fields: 30
+  total_groups: 6
+  trade: "Fire Protection"
+  phase: "inspection"
+  compliance: "NFPA 101, IBC, OSHA 1910.37"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

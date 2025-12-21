@@ -1,0 +1,163 @@
+# [Solar] Shade Analysis Report
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Compliance: NEC 2023 Article 690, NABCEP PV Installation Professional Standards
+
+template:
+  name: "[Solar] Shade Analysis Report"
+  emoji: "☀️"
+  description: "Detailed shading analysis with monthly factors, TSRF calculation, and sun path evaluation"
+  category: "Solar"
+  compliance: "NEC 690, NABCEP, IEEE 1547"
+
+  work_order:
+    type: "Field Work Order"
+    name: "[Solar] Shade Analysis Assessment"
+
+groups:
+  - name: "Site Identification"
+    order: 1
+    fields:
+      - name: "Property Address"
+        type: "Text"
+        required: true
+        placeholder: "Full street address"
+      - name: "Customer Name"
+        type: "Text"
+        required: true
+      - name: "Assessment Date"
+        type: "Text"
+        required: true
+        placeholder: "MM/DD/YYYY"
+      - name: "Technician Name"
+        type: "Text"
+        required: true
+      - name: "Analysis Tool Used"
+        type: "Single select"
+        required: true
+        options:
+          - "Solmetric SunEye"
+          - "Solar Pathfinder"
+          - "Aurora Solar (Remote)"
+          - "HelioScope"
+          - "PVWatts Calculator"
+          - "Other"
+
+  - name: "Monthly Shading Factors (%)"
+    order: 2
+    critical: true
+    fields:
+      - name: "January Shade Factor"
+        type: "Numeric"
+        required: true
+        placeholder: "% shading (0-100)"
+      - name: "February Shade Factor"
+        type: "Numeric"
+        required: true
+      - name: "March Shade Factor"
+        type: "Numeric"
+        required: true
+      - name: "April Shade Factor"
+        type: "Numeric"
+        required: true
+      - name: "May Shade Factor"
+        type: "Numeric"
+        required: true
+      - name: "June Shade Factor"
+        type: "Numeric"
+        required: true
+      - name: "July Shade Factor"
+        type: "Numeric"
+        required: true
+      - name: "August Shade Factor"
+        type: "Numeric"
+        required: true
+      - name: "September Shade Factor"
+        type: "Numeric"
+        required: true
+      - name: "October Shade Factor"
+        type: "Numeric"
+        required: true
+      - name: "November Shade Factor"
+        type: "Numeric"
+        required: true
+      - name: "December Shade Factor"
+        type: "Numeric"
+        required: true
+
+  - name: "TSRF & Sun Path Analysis"
+    order: 3
+    critical: true
+    fields:
+      - name: "Annual TSRF (Total Solar Resource Fraction)"
+        type: "Numeric"
+        required: true
+        placeholder: "0.00 - 1.00 (e.g., 0.92)"
+      - name: "Winter TSRF (Dec-Feb)"
+        type: "Numeric"
+      - name: "Summer TSRF (Jun-Aug)"
+        type: "Numeric"
+      - name: "Peak Production Hours (9am-3pm) Shade"
+        type: "Single select"
+        required: true
+        options:
+          - "Minimal (<5%)"
+          - "Low (5-10%)"
+          - "Moderate (10-20%)"
+          - "High (20-35%)"
+          - "Severe (>35%)"
+      - name: "Site Suitability Rating"
+        type: "Single select"
+        required: true
+        options:
+          - "Excellent (TSRF > 0.95)"
+          - "Very Good (TSRF 0.90-0.95)"
+          - "Good (TSRF 0.85-0.90)"
+          - "Fair (TSRF 0.75-0.85)"
+          - "Poor (TSRF < 0.75)"
+
+  - name: "Shade Source Analysis"
+    order: 4
+    fields:
+      - name: "Primary Shade Objects"
+        type: "Multiple select"
+        options:
+          - "None - Clear Sky"
+          - "Deciduous Trees"
+          - "Evergreen Trees"
+          - "Adjacent Building"
+          - "Chimney"
+          - "Roof Vents"
+          - "Hills/Mountains"
+          - "Power Lines"
+      - name: "Tree Trimming Recommendation"
+        type: "Single select"
+        options:
+          - "Not Required"
+          - "Recommended - Minor Trim"
+          - "Recommended - Major Trim"
+          - "Customer Declined"
+
+  - name: "Documentation"
+    order: 5
+    fields:
+      - name: "Sun Path Diagram"
+        type: "File"
+        description: "Sun path chart with shade overlay"
+      - name: "Shade Analysis Report (PDF)"
+        type: "File"
+      - name: "Site Photos"
+        type: "File"
+      - name: "Technician Notes"
+        type: "Text"
+      - name: "Technician Signature"
+        type: "File"
+
+metadata:
+  total_fields: 30
+  total_groups: 5
+  trade: "Solar"
+  phase: "design"
+  compliance: "NABCEP PV Installation Professional Standards"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

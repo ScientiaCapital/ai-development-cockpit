@@ -1,0 +1,250 @@
+# [TUD Market] Residential EV Charger Installation
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Compliance: NEC 2023 Article 625, SAE J1772
+
+template:
+  name: "[TUD Market] Residential EV Charger Installation"
+  emoji: "🔌"
+  description: "Home EV charger installation for utility rebate programs"
+  category: "TUD Market"
+  compliance: "NEC 2023 Article 625, SAE J1772"
+
+  work_order:
+    type: "Field Work Order"
+    name: "[TUD Market] EV Charger Installation"
+
+groups:
+  - name: "Customer Information"
+    order: 1
+    fields:
+      - name: "Customer Name"
+        type: "Text"
+        required: true
+      - name: "Property Address"
+        type: "Text"
+        required: true
+      - name: "Installation Date"
+        type: "Text"
+        required: true
+        placeholder: "MM/DD/YYYY"
+      - name: "Installer Name"
+        type: "Text"
+        required: true
+      - name: "Vehicle Make/Model"
+        type: "Text"
+      - name: "Utility Program"
+        type: "Text"
+
+  - name: "Charger Specifications"
+    order: 2
+    critical: true
+    fields:
+      - name: "Charger Level"
+        type: "Single select"
+        required: true
+        options:
+          - "Level 2 (240V)"
+          - "Level 1 (120V) - Upgrade"
+      - name: "Charger Manufacturer"
+        type: "Single select"
+        required: true
+        options:
+          - "ChargePoint"
+          - "JuiceBox"
+          - "Grizzl-E"
+          - "Wallbox"
+          - "Tesla Wall Connector"
+          - "Emporia"
+          - "Other"
+      - name: "Charger Model"
+        type: "Text"
+        required: true
+      - name: "Amperage"
+        type: "Single select"
+        required: true
+        options:
+          - "16A"
+          - "24A"
+          - "32A"
+          - "40A"
+          - "48A"
+      - name: "Connector Type"
+        type: "Single select"
+        required: true
+        options:
+          - "J1772"
+          - "Tesla (NACS)"
+          - "Universal (Dual)"
+      - name: "WiFi/Smart Enabled"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes"
+          - "No"
+      - name: "ENERGY STAR Certified"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes"
+          - "No"
+
+  - name: "Electrical Assessment"
+    order: 3
+    critical: true
+    fields:
+      - name: "Main Panel Amperage"
+        type: "Single select"
+        required: true
+        options:
+          - "100A"
+          - "125A"
+          - "150A"
+          - "200A"
+          - "320A"
+          - "400A"
+      - name: "Available Capacity"
+        type: "Single select"
+        required: true
+        options:
+          - "Sufficient"
+          - "Panel Upgrade Required"
+          - "Load Management Required"
+      - name: "Panel Upgrade Performed"
+        type: "Single select"
+        options:
+          - "Yes"
+          - "No - Not Needed"
+          - "N/A"
+      - name: "Circuit Breaker Size"
+        type: "Single select"
+        required: true
+        options:
+          - "20A"
+          - "30A"
+          - "40A"
+          - "50A"
+          - "60A"
+      - name: "Wire Size"
+        type: "Single select"
+        required: true
+        options:
+          - "#10 AWG"
+          - "#8 AWG"
+          - "#6 AWG"
+          - "#4 AWG"
+      - name: "Wire Run Length (ft)"
+        type: "Numeric"
+        required: true
+
+  - name: "Installation Details"
+    order: 4
+    fields:
+      - name: "Charger Location"
+        type: "Single select"
+        required: true
+        options:
+          - "Garage - Interior"
+          - "Garage - Exterior Wall"
+          - "Carport"
+          - "Driveway"
+          - "Other Exterior"
+      - name: "Mounting Method"
+        type: "Single select"
+        required: true
+        options:
+          - "Wall Mounted"
+          - "Pedestal"
+      - name: "Conduit Type"
+        type: "Single select"
+        required: true
+        options:
+          - "EMT"
+          - "Rigid"
+          - "Liquid-Tight Flex"
+          - "PVC"
+          - "MC Cable"
+      - name: "GFCI Protection"
+        type: "Single select"
+        required: true
+        options:
+          - "Built into Charger"
+          - "GFCI Breaker"
+          - "N/A - Per Manufacturer"
+      - name: "Dedicated Circuit"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes"
+          - "No"
+
+  - name: "Testing & Commissioning"
+    order: 5
+    critical: true
+    fields:
+      - name: "Voltage Reading"
+        type: "Numeric"
+        required: true
+      - name: "Charger Powers On"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail"
+      - name: "Charge Test with Vehicle"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - Charging"
+          - "Fail"
+          - "N/A - No Vehicle"
+      - name: "WiFi Connected"
+        type: "Single select"
+        options:
+          - "Yes"
+          - "No"
+          - "N/A"
+      - name: "Load Management Active"
+        type: "Single select"
+        options:
+          - "Yes"
+          - "No"
+          - "N/A"
+
+  - name: "Documentation"
+    order: 6
+    fields:
+      - name: "Permit Obtained"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes"
+          - "Pending Inspection"
+          - "N/A"
+      - name: "Inspection Passed"
+        type: "Single select"
+        options:
+          - "Yes"
+          - "Pending"
+          - "N/A"
+      - name: "Rebate Paperwork Submitted"
+        type: "Single select"
+        options:
+          - "Yes"
+          - "Pending"
+          - "N/A"
+      - name: "Installation Photos"
+        type: "File"
+      - name: "Installer Notes"
+        type: "Text"
+      - name: "Customer Signature"
+        type: "File"
+
+metadata:
+  total_fields: 38
+  total_groups: 6
+  trade: "TUD Market"
+  phase: "install"
+  compliance: "NEC 2023 Article 625, SAE J1772"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

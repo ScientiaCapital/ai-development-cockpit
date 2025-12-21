@@ -1,0 +1,206 @@
+# [Plumbing] New Construction Rough-In
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Compliance: UPC 2021, IPC 2021
+
+template:
+  name: "[Plumbing] New Construction Rough-In"
+  emoji: "🏗️"
+  description: "New construction plumbing rough-in inspection checklist"
+  category: "Plumbing"
+  compliance: "UPC 2021, IPC 2021"
+
+  work_order:
+    type: "Field Work Order"
+    name: "[Plumbing] New Construction Rough-In"
+
+groups:
+  - name: "Project Information"
+    order: 1
+    fields:
+      - name: "Project Name"
+        type: "Text"
+        required: true
+      - name: "Job Address"
+        type: "Text"
+        required: true
+      - name: "Inspection Date"
+        type: "Text"
+        required: true
+        placeholder: "MM/DD/YYYY"
+      - name: "Plumber Name"
+        type: "Text"
+        required: true
+      - name: "Permit Number"
+        type: "Text"
+        required: true
+
+  - name: "Water Supply"
+    order: 2
+    critical: true
+    fields:
+      - name: "Supply Pipe Material"
+        type: "Single select"
+        required: true
+        options:
+          - "Copper"
+          - "PEX-A"
+          - "PEX-B"
+          - "CPVC"
+      - name: "Main Shutoff Installed"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail"
+      - name: "Pressure Test (PSI)"
+        type: "Numeric"
+        required: true
+      - name: "Pressure Test Duration"
+        type: "Single select"
+        required: true
+        options:
+          - "15 min - Pass"
+          - "30 min - Pass"
+          - "Fail - Leak Found"
+      - name: "Hot/Cold Lines Labeled"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail"
+      - name: "Pipe Supports (Max 4ft)"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail"
+
+  - name: "Drain/Waste/Vent (DWV)"
+    order: 3
+    critical: true
+    fields:
+      - name: "DWV Pipe Material"
+        type: "Single select"
+        required: true
+        options:
+          - "ABS"
+          - "PVC"
+          - "Cast Iron"
+      - name: "Proper Slope (1/4 per ft)"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - All Lines"
+          - "Fail - Corrections Needed"
+      - name: "Cleanouts Installed"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail - Missing"
+      - name: "Vents Terminate Above Roof"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Pending - Pre-Roof"
+      - name: "DWV Test Method"
+        type: "Single select"
+        required: true
+        options:
+          - "Water Test"
+          - "Air Test"
+      - name: "DWV Test Result"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - No Leaks"
+          - "Fail - Leaks Found"
+
+  - name: "Fixtures"
+    order: 4
+    fields:
+      - name: "Water Closet Rough-Ins"
+        type: "Numeric"
+        required: true
+      - name: "Lavatory Rough-Ins"
+        type: "Numeric"
+        required: true
+      - name: "Shower/Tub Rough-Ins"
+        type: "Numeric"
+      - name: "Kitchen Sink Rough-In"
+        type: "Single select"
+        options:
+          - "Yes"
+          - "N/A"
+      - name: "Dishwasher Connection"
+        type: "Single select"
+        options:
+          - "Yes"
+          - "N/A"
+      - name: "Washing Machine Box"
+        type: "Single select"
+        options:
+          - "Yes"
+          - "N/A"
+      - name: "Water Heater Location"
+        type: "Single select"
+        options:
+          - "Garage"
+          - "Utility Room"
+          - "Attic"
+          - "Closet"
+          - "TBD"
+
+  - name: "Gas Rough-In"
+    order: 5
+    fields:
+      - name: "Gas Piping Installed"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes"
+          - "No"
+          - "N/A - All Electric"
+      - name: "Gas Pipe Material"
+        type: "Single select"
+        options:
+          - "Black Iron"
+          - "CSST"
+          - "N/A"
+      - name: "Gas Test (PSI)"
+        type: "Numeric"
+      - name: "Gas Test Result"
+        type: "Single select"
+        options:
+          - "Pass"
+          - "Fail"
+          - "N/A"
+
+  - name: "Documentation"
+    order: 6
+    fields:
+      - name: "Ready for Inspection"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes"
+          - "No - Corrections Needed"
+      - name: "Corrections Required"
+        type: "Text"
+      - name: "Rough-In Photos"
+        type: "File"
+      - name: "Plumber Notes"
+        type: "Text"
+      - name: "Plumber Signature"
+        type: "File"
+
+metadata:
+  total_fields: 32
+  total_groups: 6
+  trade: "Plumbing"
+  phase: "rough_in"
+  compliance: "UPC 2021, IPC 2021"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

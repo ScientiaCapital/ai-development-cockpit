@@ -1,0 +1,172 @@
+# [TUD Market] Duct Sealing
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Compliance: ENERGY STAR, ACCA Standard 5
+
+template:
+  name: "[TUD Market] Duct Sealing"
+  emoji: "💨"
+  description: "Duct sealing and testing for energy efficiency"
+  category: "TUD Market"
+  compliance: "ENERGY STAR, ACCA Standard 5"
+
+  work_order:
+    type: "Field Work Order"
+    name: "[TUD Market] Duct Sealing"
+
+groups:
+  - name: "Project Information"
+    order: 1
+    fields:
+      - name: "Customer Name"
+        type: "Text"
+        required: true
+      - name: "Property Address"
+        type: "Text"
+        required: true
+      - name: "Service Date"
+        type: "Text"
+        required: true
+        placeholder: "MM/DD/YYYY"
+      - name: "Technician Name"
+        type: "Text"
+        required: true
+
+  - name: "Pre-Sealing Assessment"
+    order: 2
+    critical: true
+    fields:
+      - name: "Duct Location"
+        type: "Single select"
+        required: true
+        options:
+          - "Conditioned Space"
+          - "Attic"
+          - "Crawlspace"
+          - "Basement"
+          - "Mixed"
+      - name: "Duct Material"
+        type: "Single select"
+        required: true
+        options:
+          - "Sheet Metal"
+          - "Flex Duct"
+          - "Duct Board"
+          - "Combination"
+      - name: "Pre-Seal CFM25"
+        type: "Numeric"
+        required: true
+        placeholder: "Duct leakage at 25 Pa"
+      - name: "Pre-Seal Leakage (%)"
+        type: "Numeric"
+        required: true
+      - name: "Duct Leakage Rating"
+        type: "Single select"
+        required: true
+        options:
+          - "Tight (<4%)"
+          - "Average (4-10%)"
+          - "Leaky (10-20%)"
+          - "Very Leaky (>20%)"
+
+  - name: "Leakage Sources"
+    order: 3
+    fields:
+      - name: "Major Leaks Found"
+        type: "Multiple select"
+        required: true
+        options:
+          - "Boot Connections"
+          - "Return Plenum"
+          - "Supply Plenum"
+          - "Trunk Connections"
+          - "Branch Connections"
+          - "Takeoff Collars"
+          - "Air Handler Cabinet"
+          - "Register Boots"
+      - name: "Disconnected Ducts"
+        type: "Single select"
+        required: true
+        options:
+          - "None"
+          - "Found - Reconnected"
+      - name: "Damaged Ducts"
+        type: "Single select"
+        required: true
+        options:
+          - "None"
+          - "Found - Repaired"
+          - "Found - Replaced"
+
+  - name: "Sealing Work"
+    order: 4
+    fields:
+      - name: "Sealing Method"
+        type: "Multiple select"
+        required: true
+        options:
+          - "Mastic"
+          - "UL 181 Tape"
+          - "Aerosol Sealant"
+          - "Sheet Metal Screws"
+      - name: "Mastic Used (gallons)"
+        type: "Numeric"
+      - name: "Tape Used (rolls)"
+        type: "Numeric"
+      - name: "Areas Sealed"
+        type: "Multiple select"
+        required: true
+        options:
+          - "All Accessible Joints"
+          - "Plenum Connections"
+          - "Boot-to-Floor Connections"
+          - "Trunk Line Joints"
+          - "Air Handler Cabinet"
+
+  - name: "Post-Sealing Test"
+    order: 5
+    critical: true
+    fields:
+      - name: "Post-Seal CFM25"
+        type: "Numeric"
+        required: true
+      - name: "Post-Seal Leakage (%)"
+        type: "Numeric"
+        required: true
+      - name: "Leakage Reduction (%)"
+        type: "Numeric"
+        required: true
+      - name: "Target Met"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass (<4% or 50% reduction)"
+          - "Fail - Additional Work Needed"
+      - name: "Post-Seal Airflow (CFM)"
+        type: "Numeric"
+
+  - name: "Documentation"
+    order: 6
+    fields:
+      - name: "Before Photos"
+        type: "File"
+      - name: "After Photos"
+        type: "File"
+      - name: "Test Report Attached"
+        type: "Single select"
+        options:
+          - "Yes"
+          - "Pending"
+      - name: "Technician Notes"
+        type: "Text"
+      - name: "Customer Signature"
+        type: "File"
+
+metadata:
+  total_fields: 28
+  total_groups: 6
+  trade: "TUD Market"
+  phase: "service"
+  compliance: "ENERGY STAR, ACCA Standard 5"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

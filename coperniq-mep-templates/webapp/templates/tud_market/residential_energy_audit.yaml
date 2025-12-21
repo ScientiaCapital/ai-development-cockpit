@@ -1,0 +1,254 @@
+# [TUD Market] Residential Energy Audit
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Compliance: DOE Home Energy Score, RESNET HERS
+
+template:
+  name: "[TUD Market] Residential Energy Audit"
+  emoji: "🏠"
+  description: "Comprehensive home energy audit with envelope, HVAC, appliances, and upgrade recommendations"
+  category: "TUD Market"
+  compliance: "DOE Home Energy Score, RESNET HERS"
+
+  work_order:
+    type: "Field Work Order"
+    name: "[TUD Market] Energy Audit"
+
+groups:
+  - name: "Property Information"
+    order: 1
+    fields:
+      - name: "Customer Name"
+        type: "Text"
+        required: true
+      - name: "Property Address"
+        type: "Text"
+        required: true
+      - name: "Audit Date"
+        type: "Text"
+        required: true
+        placeholder: "MM/DD/YYYY"
+      - name: "Auditor Name"
+        type: "Text"
+        required: true
+      - name: "Square Footage"
+        type: "Numeric"
+        required: true
+      - name: "Year Built"
+        type: "Text"
+      - name: "Utility Provider"
+        type: "Text"
+      - name: "Average Monthly Electric Bill"
+        type: "Numeric"
+      - name: "Average Monthly Gas Bill"
+        type: "Numeric"
+
+  - name: "Building Envelope"
+    order: 2
+    critical: true
+    fields:
+      - name: "Wall Insulation Type"
+        type: "Single select"
+        options:
+          - "Fiberglass Batts"
+          - "Blown Cellulose"
+          - "Spray Foam"
+          - "None/Unknown"
+      - name: "Wall Insulation R-Value"
+        type: "Single select"
+        options:
+          - "R-0 (None)"
+          - "R-11"
+          - "R-13"
+          - "R-15+"
+          - "Unknown"
+      - name: "Attic Insulation Type"
+        type: "Single select"
+        options:
+          - "Fiberglass Batts"
+          - "Blown Cellulose"
+          - "Spray Foam"
+          - "None"
+      - name: "Attic Insulation R-Value"
+        type: "Single select"
+        options:
+          - "R-0 (None)"
+          - "R-19"
+          - "R-30"
+          - "R-38"
+          - "R-49+"
+      - name: "Window Type"
+        type: "Single select"
+        options:
+          - "Single Pane"
+          - "Double Pane Clear"
+          - "Double Pane Low-E"
+          - "Triple Pane"
+          - "Mixed"
+      - name: "Air Leakage Observed"
+        type: "Multiple select"
+        options:
+          - "Windows"
+          - "Doors"
+          - "Attic Hatch"
+          - "Recessed Lights"
+          - "Outlets/Switches"
+          - "Duct Penetrations"
+          - "None Observed"
+
+  - name: "HVAC System"
+    order: 3
+    critical: true
+    fields:
+      - name: "Heating System Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Gas Furnace"
+          - "Electric Furnace"
+          - "Heat Pump"
+          - "Boiler"
+          - "Ductless Mini-Split"
+          - "Space Heaters"
+      - name: "Heating System Age (Years)"
+        type: "Numeric"
+      - name: "Heating System Efficiency"
+        type: "Single select"
+        options:
+          - "Standard (80% AFUE)"
+          - "Mid (90% AFUE)"
+          - "High (95%+ AFUE)"
+          - "Unknown"
+      - name: "Cooling System Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Central AC"
+          - "Heat Pump"
+          - "Ductless Mini-Split"
+          - "Window Units"
+          - "None"
+      - name: "Cooling System Age (Years)"
+        type: "Numeric"
+      - name: "Cooling System Efficiency (SEER)"
+        type: "Single select"
+        options:
+          - "<10 SEER (Old)"
+          - "10-13 SEER"
+          - "14-16 SEER"
+          - "17+ SEER"
+          - "Unknown"
+      - name: "Thermostat Type"
+        type: "Single select"
+        options:
+          - "Manual"
+          - "Programmable"
+          - "Smart (WiFi)"
+      - name: "Ductwork Condition"
+        type: "Single select"
+        options:
+          - "Good - Sealed"
+          - "Fair - Minor Leaks"
+          - "Poor - Major Leaks"
+          - "N/A - Ductless"
+
+  - name: "Water Heating"
+    order: 4
+    fields:
+      - name: "Water Heater Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Gas Tank"
+          - "Electric Tank"
+          - "Tankless Gas"
+          - "Tankless Electric"
+          - "Heat Pump Water Heater"
+      - name: "Water Heater Age (Years)"
+        type: "Numeric"
+      - name: "Water Heater Size (Gallons)"
+        type: "Numeric"
+      - name: "Set Temperature (°F)"
+        type: "Numeric"
+
+  - name: "Appliances & Lighting"
+    order: 5
+    fields:
+      - name: "Refrigerator Age (Years)"
+        type: "Numeric"
+      - name: "ENERGY STAR Appliances"
+        type: "Multiple select"
+        options:
+          - "Refrigerator"
+          - "Dishwasher"
+          - "Washer"
+          - "Dryer"
+          - "None"
+      - name: "Lighting Type"
+        type: "Single select"
+        options:
+          - "Mostly LED"
+          - "Mostly CFL"
+          - "Mostly Incandescent"
+          - "Mixed"
+      - name: "LED Bulb Count"
+        type: "Numeric"
+
+  - name: "Energy Score & Recommendations"
+    order: 6
+    critical: true
+    fields:
+      - name: "Home Energy Score (1-10)"
+        type: "Numeric"
+        required: true
+        placeholder: "1 = Least Efficient, 10 = Most Efficient"
+      - name: "Estimated Annual Energy Cost"
+        type: "Numeric"
+      - name: "Priority Upgrades"
+        type: "Multiple select"
+        required: true
+        options:
+          - "Air Sealing"
+          - "Attic Insulation"
+          - "Wall Insulation"
+          - "Window Replacement"
+          - "HVAC Upgrade"
+          - "Duct Sealing"
+          - "Water Heater Upgrade"
+          - "Smart Thermostat"
+          - "LED Lighting"
+          - "Solar PV"
+          - "Battery Storage"
+      - name: "Estimated Annual Savings ($)"
+        type: "Numeric"
+      - name: "Available Rebates"
+        type: "Multiple select"
+        options:
+          - "Federal Tax Credit (25C)"
+          - "State Rebate"
+          - "Utility Rebate"
+          - "None Identified"
+
+  - name: "Documentation"
+    order: 7
+    fields:
+      - name: "Blower Door Test (CFM50)"
+        type: "Numeric"
+        placeholder: "Air changes per hour at 50 Pa"
+      - name: "Thermal Imaging Photos"
+        type: "File"
+      - name: "Audit Report (PDF)"
+        type: "File"
+      - name: "Auditor Notes"
+        type: "Text"
+      - name: "Customer Signature"
+        type: "File"
+
+metadata:
+  total_fields: 42
+  total_groups: 7
+  trade: "TUD Market"
+  phase: "sales"
+  compliance: "DOE Home Energy Score, RESNET HERS"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

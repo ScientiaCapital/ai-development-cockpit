@@ -1,0 +1,212 @@
+# [Solar] System Commissioning
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Compliance: NEC 2023 Article 690, NABCEP, IEEE 1547
+
+template:
+  name: "[Solar] System Commissioning"
+  emoji: "☀️"
+  description: "Complete commissioning protocol with string voltages, DC/AC measurements, and inverter startup"
+  category: "Solar"
+  compliance: "NEC 2023 Article 690, NABCEP, IEEE 1547"
+
+  work_order:
+    type: "Field Work Order"
+    name: "[Solar] System Commissioning"
+
+groups:
+  - name: "Project Information"
+    order: 1
+    fields:
+      - name: "Project Name"
+        type: "Text"
+        required: true
+      - name: "Property Address"
+        type: "Text"
+        required: true
+      - name: "Commissioning Date"
+        type: "Text"
+        required: true
+        placeholder: "MM/DD/YYYY"
+      - name: "Technician Name"
+        type: "Text"
+        required: true
+      - name: "System Size (kW DC)"
+        type: "Numeric"
+        required: true
+
+  - name: "Pre-Commissioning Safety"
+    order: 2
+    critical: true
+    fields:
+      - name: "Visual Inspection Complete"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail"
+      - name: "DC Disconnect Accessible"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail"
+          - "N/A - Microinverters"
+      - name: "AC Breaker Accessible"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail"
+
+  - name: "DC String Testing"
+    order: 3
+    critical: true
+    fields:
+      - name: "String 1 Voc (V)"
+        type: "Numeric"
+        required: true
+      - name: "String 1 Isc (A)"
+        type: "Numeric"
+      - name: "String 2 Voc (V)"
+        type: "Numeric"
+      - name: "String 2 Isc (A)"
+        type: "Numeric"
+      - name: "String 3 Voc (V)"
+        type: "Numeric"
+      - name: "String 4 Voc (V)"
+        type: "Numeric"
+      - name: "String Voltages Within Spec"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - All Within 5%"
+          - "Fail - Variance >5%"
+          - "N/A - Microinverters"
+
+  - name: "Inverter Commissioning"
+    order: 4
+    critical: true
+    fields:
+      - name: "Inverter Firmware Version"
+        type: "Text"
+      - name: "Inverter Startup Successful"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - Inverter Online"
+          - "Fail - Error Code"
+      - name: "Inverter Error Code (if any)"
+        type: "Text"
+      - name: "Grid Voltage (VAC)"
+        type: "Numeric"
+        required: true
+      - name: "Grid Frequency (Hz)"
+        type: "Numeric"
+        required: true
+      - name: "AC Output Power (W)"
+        type: "Numeric"
+        required: true
+
+  - name: "System Performance"
+    order: 5
+    fields:
+      - name: "DC Input Power (W)"
+        type: "Numeric"
+        required: true
+      - name: "AC Output Power (W)"
+        type: "Numeric"
+        required: true
+      - name: "Inverter Efficiency (%)"
+        type: "Numeric"
+        placeholder: "AC/DC * 100 (should be >95%)"
+      - name: "Expected Power Output"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - >80% of STC"
+          - "Fail - <80% of STC"
+          - "Weather Limited"
+
+  - name: "Monitoring System"
+    order: 6
+    fields:
+      - name: "Monitoring Platform"
+        type: "Single select"
+        required: true
+        options:
+          - "Enphase Enlighten"
+          - "SolarEdge Monitoring"
+          - "SMA Sunny Portal"
+          - "Tesla App"
+          - "Other"
+      - name: "Monitoring System Online"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - Data Visible"
+          - "Fail - No Communication"
+      - name: "Customer Login Created"
+        type: "Single select"
+        options:
+          - "Yes"
+          - "No - Pending"
+
+  - name: "Rapid Shutdown Test (NEC 690.12)"
+    order: 7
+    critical: true
+    fields:
+      - name: "RSD Initiated"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - RSD Activated"
+          - "Fail"
+      - name: "Array Voltage After RSD (VDC)"
+        type: "Numeric"
+        required: true
+        placeholder: "Should be <80V (NEC 2017) or <1V (NEC 2020+)"
+      - name: "RSD Compliance Met"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - NEC 2017 (<80V)"
+          - "Pass - NEC 2020 (<1V)"
+          - "Fail"
+
+  - name: "Final Handoff"
+    order: 8
+    fields:
+      - name: "Customer Walkthrough Completed"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes"
+          - "No - Pending"
+      - name: "Homeowner Manual Provided"
+        type: "Single select"
+        options:
+          - "Yes"
+          - "No"
+      - name: "Commissioning Photos"
+        type: "File"
+      - name: "Notes"
+        type: "Text"
+      - name: "Technician Signature"
+        type: "File"
+      - name: "System Status"
+        type: "Single select"
+        required: true
+        options:
+          - "Commissioned - Fully Operational"
+          - "Partial - Requires Follow-Up"
+          - "Failed - Not Operational"
+
+metadata:
+  total_fields: 35
+  total_groups: 8
+  trade: "Solar"
+  phase: "commissioning"
+  compliance: "NEC 2023 Article 690, NABCEP, IEEE 1547"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

@@ -1,0 +1,57 @@
+[
+  {
+    "id": "site-001",
+    "clientId": "contact-001",
+    "fullAddress": "789 Pine Avenue, Austin, TX 78701",
+    "street": "789 Pine Avenue",
+    "city": "Austin",
+    "state": "TX",
+    "zipcode": "78701",
+    "timezone": "America/Chicago",
+    "type": "residential"
+  },
+  {
+    "id": "site-002",
+    "clientId": "contact-002",
+    "fullAddress": "1420 Lamar Boulevard, Suite 300, Austin, TX 78704",
+    "street": "1420 Lamar Boulevard, Suite 300",
+    "city": "Austin",
+    "state": "TX",
+    "zipcode": "78704",
+    "timezone": "America/Chicago",
+    "type": "commercial"
+  },
+  {
+    "id": "site-003",
+    "clientId": "contact-003",
+    "fullAddress": "2156 Oak Creek Drive, Austin, TX 78748",
+    "street": "2156 Oak Creek Drive",
+    "city": "Austin",
+    "state": "TX",
+    "zipcode": "78748",
+    "timezone": "America/Chicago",
+    "type": "residential"
+  },
+  {
+    "id": "site-004",
+    "clientId": "contact-004",
+    "fullAddress": "3500 Burnet Road, Building A, Austin, TX 78756",
+    "street": "3500 Burnet Road, Building A",
+    "city": "Austin",
+    "state": "TX",
+    "zipcode": "78756",
+    "timezone": "America/Chicago",
+    "type": "commercial"
+  },
+  {
+    "id": "site-005",
+    "clientId": "contact-005",
+    "fullAddress": "8200 Oakside Drive (Clubhouse), Austin, TX 78759",
+    "street": "8200 Oakside Drive",
+    "city": "Austin",
+    "state": "TX",
+    "zipcode": "78759",
+    "timezone": "America/Chicago",
+    "type": "residential"
+  }
+]

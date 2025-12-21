@@ -1,0 +1,247 @@
+# [Solar] Battery Storage Installation
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Compliance: NEC 2023 Article 706, UL 9540, NFPA 855
+
+template:
+  name: "[Solar] Battery Storage Installation"
+  emoji: "🔋"
+  description: "Battery energy storage system installation - NEC 706 compliant"
+  category: "Solar"
+  compliance: "NEC 2023 Article 706, UL 9540, NFPA 855"
+
+  work_order:
+    type: "Field Work Order"
+    name: "[Solar] Battery Storage Installation"
+
+groups:
+  - name: "Project Information"
+    order: 1
+    fields:
+      - name: "Project Name"
+        type: "Text"
+        required: true
+      - name: "Property Address"
+        type: "Text"
+        required: true
+      - name: "Installation Date"
+        type: "Text"
+        required: true
+        placeholder: "MM/DD/YYYY"
+      - name: "Installer Name"
+        type: "Text"
+        required: true
+
+  - name: "Battery Specifications"
+    order: 2
+    critical: true
+    fields:
+      - name: "Battery Manufacturer"
+        type: "Single select"
+        required: true
+        options:
+          - "Tesla Powerwall"
+          - "Enphase IQ"
+          - "LG RESU"
+          - "SolarEdge"
+          - "Generac PWRcell"
+          - "Franklin WholePower"
+          - "Sonnen"
+          - "Other"
+      - name: "Model Number"
+        type: "Text"
+        required: true
+      - name: "Serial Number"
+        type: "Text"
+        required: true
+      - name: "Battery Chemistry"
+        type: "Single select"
+        required: true
+        options:
+          - "Lithium Iron Phosphate (LFP)"
+          - "Lithium NMC"
+          - "Lithium NCA"
+      - name: "Usable Capacity (kWh)"
+        type: "Numeric"
+        required: true
+      - name: "Number of Units"
+        type: "Numeric"
+        required: true
+      - name: "Continuous Power (kW)"
+        type: "Numeric"
+        required: true
+      - name: "Peak Power (kW)"
+        type: "Numeric"
+
+  - name: "Installation Location"
+    order: 3
+    critical: true
+    fields:
+      - name: "Battery Location"
+        type: "Single select"
+        required: true
+        options:
+          - "Garage (Interior)"
+          - "Garage (Exterior Wall)"
+          - "Exterior Wall"
+          - "Basement"
+          - "Utility Room"
+          - "Outside Enclosure"
+      - name: "Mounting Method"
+        type: "Single select"
+        required: true
+        options:
+          - "Wall-Mounted"
+          - "Floor-Mounted"
+          - "Ground-Mounted (Pad)"
+      - name: "Clearances Met (NEC 706)"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - 3ft Front, 6in Sides"
+          - "Fail - Insufficient Clearance"
+      - name: "Ventilation Adequate"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes"
+          - "No"
+          - "N/A - Outdoor"
+
+  - name: "Inverter/Gateway Configuration"
+    order: 4
+    fields:
+      - name: "Inverter Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Hybrid Inverter (Solar + Battery)"
+          - "Battery Inverter (AC-Coupled)"
+          - "Integrated (All-in-One)"
+      - name: "AC Coupling Configuration"
+        type: "Single select"
+        required: true
+        options:
+          - "AC-Coupled (Existing Solar)"
+          - "DC-Coupled (New Solar + Battery)"
+          - "N/A - Battery Only"
+      - name: "Backup Gateway Installed"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes - Backup Capability"
+          - "No - Grid-Tied Only"
+
+  - name: "Backup Loads"
+    order: 5
+    fields:
+      - name: "Backup Panel Installed"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes - Critical Loads Panel"
+          - "Yes - Whole Home Backup"
+          - "No - Grid-Tie Only"
+      - name: "Critical Loads"
+        type: "Multiple select"
+        options:
+          - "Refrigerator"
+          - "Lights"
+          - "Well Pump"
+          - "Sump Pump"
+          - "Medical Equipment"
+          - "Internet/Router"
+          - "HVAC"
+      - name: "Backup Load Capacity (kW)"
+        type: "Numeric"
+      - name: "Backup Duration (hours)"
+        type: "Numeric"
+
+  - name: "Operating Modes"
+    order: 6
+    fields:
+      - name: "Primary Mode"
+        type: "Single select"
+        required: true
+        options:
+          - "Self-Consumption"
+          - "Backup Only"
+          - "Time-Based Control"
+          - "Off-Grid"
+      - name: "Backup Reserve (%)"
+        type: "Numeric"
+        required: true
+        placeholder: "% SOC to reserve (e.g., 20)"
+      - name: "Grid Charging Enabled"
+        type: "Single select"
+        options:
+          - "Yes"
+          - "No"
+
+  - name: "Commissioning"
+    order: 7
+    critical: true
+    fields:
+      - name: "Battery Startup Successful"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - Battery Online"
+          - "Fail - Error Code"
+      - name: "Initial SOC (%)"
+        type: "Numeric"
+        required: true
+      - name: "Charge Test"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - Charging"
+          - "Fail"
+      - name: "Discharge Test"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - Discharging"
+          - "Fail"
+      - name: "Grid Outage Simulation"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - Seamless Transfer"
+          - "Fail - Did Not Transfer"
+          - "N/A - Grid-Tie Only"
+      - name: "Monitoring Online"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - Data Visible"
+          - "Fail - No Communication"
+
+  - name: "Documentation"
+    order: 8
+    fields:
+      - name: "Installation Photos"
+        type: "File"
+      - name: "Customer Training"
+        type: "Single select"
+        options:
+          - "Completed"
+          - "Pending"
+      - name: "Warranty Registration"
+        type: "Single select"
+        options:
+          - "Completed"
+          - "Pending"
+      - name: "Installer Notes"
+        type: "Text"
+      - name: "Installer Signature"
+        type: "File"
+
+metadata:
+  total_fields: 35
+  total_groups: 8
+  trade: "Solar"
+  phase: "install"
+  compliance: "NEC 2023 Article 706, UL 9540, NFPA 855"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

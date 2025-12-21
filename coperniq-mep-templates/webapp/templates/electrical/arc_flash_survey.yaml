@@ -1,0 +1,184 @@
+# [Electrical] Arc Flash Survey
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Compliance: NFPA 70E, IEEE 1584, OSHA 29 CFR 1910
+
+template:
+  name: "[Electrical] Arc Flash Survey"
+  emoji: "⚡"
+  description: "Arc flash hazard analysis and labeling survey"
+  category: "Electrical"
+  compliance: "NFPA 70E, IEEE 1584, OSHA 29 CFR 1910"
+
+  work_order:
+    type: "Field Work Order"
+    name: "[Electrical] Arc Flash Survey"
+
+groups:
+  - name: "Facility Information"
+    order: 1
+    fields:
+      - name: "Facility Name"
+        type: "Text"
+        required: true
+      - name: "Facility Address"
+        type: "Text"
+        required: true
+      - name: "Survey Date"
+        type: "Text"
+        required: true
+        placeholder: "MM/DD/YYYY"
+      - name: "Engineer Name"
+        type: "Text"
+        required: true
+      - name: "Utility Provider"
+        type: "Text"
+
+  - name: "Service Entrance"
+    order: 2
+    critical: true
+    fields:
+      - name: "Service Voltage"
+        type: "Single select"
+        required: true
+        options:
+          - "120/240V Single Phase"
+          - "120/208V Three Phase"
+          - "277/480V Three Phase"
+          - "480V Three Phase"
+      - name: "Service Amperage"
+        type: "Single select"
+        required: true
+        options:
+          - "200A"
+          - "400A"
+          - "600A"
+          - "800A"
+          - "1000A"
+          - "1200A"
+          - "2000A"
+          - "Other"
+      - name: "Utility Available Fault Current (kA)"
+        type: "Numeric"
+        required: true
+      - name: "Main Breaker Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Molded Case"
+          - "Insulated Case"
+          - "Power Circuit Breaker"
+          - "Fused Disconnect"
+
+  - name: "Equipment Data Collection"
+    order: 3
+    critical: true
+    fields:
+      - name: "Equipment ID"
+        type: "Text"
+        required: true
+      - name: "Equipment Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Switchboard"
+          - "Panelboard"
+          - "Motor Control Center"
+          - "Disconnect Switch"
+          - "Transformer"
+          - "VFD"
+      - name: "Manufacturer"
+        type: "Text"
+      - name: "Overcurrent Device Rating (A)"
+        type: "Numeric"
+        required: true
+      - name: "Overcurrent Device Trip Time"
+        type: "Text"
+        placeholder: "Time-current curve reference"
+      - name: "Working Distance (inches)"
+        type: "Numeric"
+        required: true
+        placeholder: "18 typical"
+
+  - name: "Arc Flash Calculation Results"
+    order: 4
+    critical: true
+    fields:
+      - name: "Incident Energy (cal/cm²)"
+        type: "Numeric"
+        required: true
+      - name: "Arc Flash Boundary (ft)"
+        type: "Numeric"
+        required: true
+      - name: "PPE Category"
+        type: "Single select"
+        required: true
+        options:
+          - "Category 1 (4 cal/cm²)"
+          - "Category 2 (8 cal/cm²)"
+          - "Category 3 (25 cal/cm²)"
+          - "Category 4 (40 cal/cm²)"
+          - "Exceeds Category 4 - Danger"
+      - name: "Shock Hazard"
+        type: "Single select"
+        required: true
+        options:
+          - "Limited Approach"
+          - "Restricted Approach"
+          - "Prohibited Approach"
+      - name: "Glove Class Required"
+        type: "Single select"
+        required: true
+        options:
+          - "Class 00 (500V)"
+          - "Class 0 (1000V)"
+          - "Class 2 (17kV)"
+
+  - name: "Labeling"
+    order: 5
+    fields:
+      - name: "Label Installed"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes - New"
+          - "Yes - Updated"
+          - "Pending"
+      - name: "Label Location"
+        type: "Single select"
+        required: true
+        options:
+          - "Front Cover"
+          - "Interior Door"
+          - "Adjacent Wall"
+      - name: "Label Photo"
+        type: "File"
+
+  - name: "Documentation"
+    order: 6
+    fields:
+      - name: "One-Line Diagram Updated"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes"
+          - "No - Pending"
+      - name: "Short Circuit Study Attached"
+        type: "File"
+      - name: "Coordination Study Attached"
+        type: "File"
+      - name: "Equipment Photos"
+        type: "File"
+      - name: "Engineer Notes"
+        type: "Text"
+      - name: "Engineer Signature"
+        type: "File"
+
+metadata:
+  total_fields: 30
+  total_groups: 6
+  trade: "Electrical"
+  phase: "engineering"
+  compliance: "NFPA 70E, IEEE 1584, OSHA 29 CFR 1910"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

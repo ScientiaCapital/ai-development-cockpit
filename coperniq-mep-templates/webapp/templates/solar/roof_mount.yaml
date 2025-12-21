@@ -1,0 +1,220 @@
+# [Solar] Roof Mount Assessment
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Compliance: IBC, IRC, Local Building Codes
+
+template:
+  name: "[Solar] Roof Mount Assessment"
+  emoji: "🏠"
+  description: "Roof structural assessment for solar panel installation"
+  category: "Solar"
+  compliance: "IBC, IRC, Local Building Codes"
+
+  work_order:
+    type: "Field Work Order"
+    name: "[Solar] Roof Mount Assessment"
+
+groups:
+  - name: "Property Information"
+    order: 1
+    fields:
+      - name: "Property Address"
+        type: "Text"
+        required: true
+      - name: "Assessment Date"
+        type: "Text"
+        required: true
+        placeholder: "MM/DD/YYYY"
+      - name: "Assessor Name"
+        type: "Text"
+        required: true
+      - name: "Year Built"
+        type: "Text"
+      - name: "Last Roof Replacement"
+        type: "Text"
+
+  - name: "Roof Material"
+    order: 2
+    critical: true
+    fields:
+      - name: "Roofing Material"
+        type: "Single select"
+        required: true
+        options:
+          - "Asphalt Shingle"
+          - "Concrete Tile"
+          - "Clay Tile"
+          - "Metal Standing Seam"
+          - "Metal Corrugated"
+          - "TPO/EPDM (Flat)"
+          - "Built-Up (Flat)"
+          - "Wood Shake"
+      - name: "Roof Age (Years)"
+        type: "Numeric"
+        required: true
+      - name: "Roof Condition"
+        type: "Single select"
+        required: true
+        options:
+          - "Excellent (0-5 years)"
+          - "Good (5-15 years)"
+          - "Fair (15-20 years)"
+          - "Poor - Re-roof First"
+      - name: "Estimated Remaining Life (Years)"
+        type: "Numeric"
+      - name: "Re-roof Recommended Before Solar"
+        type: "Single select"
+        required: true
+        options:
+          - "No"
+          - "Yes - Within 2 Years"
+          - "Yes - Immediately"
+
+  - name: "Roof Structure"
+    order: 3
+    critical: true
+    fields:
+      - name: "Roof Framing Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Rafters (Stick-Built)"
+          - "Trusses"
+          - "Unknown"
+      - name: "Rafter/Truss Spacing"
+        type: "Single select"
+        required: true
+        options:
+          - "16 inches OC"
+          - "24 inches OC"
+          - "Other"
+      - name: "Rafter Size"
+        type: "Single select"
+        options:
+          - "2x4"
+          - "2x6"
+          - "2x8"
+          - "2x10"
+          - "Unknown"
+      - name: "Sheathing Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Plywood"
+          - "OSB"
+          - "Skip Sheathing"
+          - "Unknown"
+      - name: "Attic Access"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes - Accessible"
+          - "Limited Access"
+          - "No Access"
+
+  - name: "Roof Geometry"
+    order: 4
+    fields:
+      - name: "Primary Pitch"
+        type: "Single select"
+        required: true
+        options:
+          - "Flat (0-2:12)"
+          - "Low (3-4:12)"
+          - "Medium (5-7:12)"
+          - "Steep (8-12:12)"
+          - "Very Steep (>12:12)"
+      - name: "Primary Orientation"
+        type: "Single select"
+        required: true
+        options:
+          - "South"
+          - "Southeast"
+          - "Southwest"
+          - "East"
+          - "West"
+          - "North"
+      - name: "Azimuth (Degrees)"
+        type: "Numeric"
+      - name: "Usable Roof Area (sq ft)"
+        type: "Numeric"
+        required: true
+      - name: "Number of Roof Planes"
+        type: "Numeric"
+        required: true
+      - name: "Fire Setback Required"
+        type: "Single select"
+        required: true
+        options:
+          - "3ft from Ridge"
+          - "3ft from Edges"
+          - "Both"
+          - "Local Variance"
+
+  - name: "Obstructions & Access"
+    order: 5
+    fields:
+      - name: "Roof Obstructions"
+        type: "Multiple select"
+        options:
+          - "None"
+          - "Vents"
+          - "Skylights"
+          - "Chimney"
+          - "Satellite Dish"
+          - "Existing Solar"
+          - "HVAC Equipment"
+      - name: "Shading Issues"
+        type: "Single select"
+        required: true
+        options:
+          - "None"
+          - "Minor (<10%)"
+          - "Moderate (10-25%)"
+          - "Significant (>25%)"
+      - name: "Shading Source"
+        type: "Multiple select"
+        options:
+          - "Trees - Owner's Property"
+          - "Trees - Neighbor's"
+          - "Adjacent Building"
+          - "Chimney/Vent Shadow"
+          - "None"
+      - name: "Conduit Run Access"
+        type: "Single select"
+        required: true
+        options:
+          - "Exterior"
+          - "Attic"
+          - "Garage"
+          - "Combination"
+
+  - name: "Recommendation"
+    order: 6
+    fields:
+      - name: "Roof Suitable for Solar"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes"
+          - "Yes - With Conditions"
+          - "No"
+      - name: "Estimated Module Count"
+        type: "Numeric"
+      - name: "Estimated System Size (kW)"
+        type: "Numeric"
+      - name: "Conditions/Notes"
+        type: "Text"
+      - name: "Assessment Photos"
+        type: "File"
+      - name: "Assessor Signature"
+        type: "File"
+
+metadata:
+  total_fields: 34
+  total_groups: 6
+  trade: "Solar"
+  phase: "sales"
+  compliance: "IBC, IRC, Local Building Codes"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

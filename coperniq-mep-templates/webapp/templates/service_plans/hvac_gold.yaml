@@ -1,0 +1,66 @@
+# HVAC Gold Plan
+# Coperniq Service Plan Template
+# Generated: 2025-12-20
+
+template:
+  name: "HVAC Gold Plan"
+  emoji: "🥇"
+  description: "Premium quarterly HVAC maintenance with maximum protection"
+  category: "Service Plans"
+
+servicePlan:
+  planName: "HVAC Gold Plan"
+  durationMonths: 12
+  totalPrice: 599
+  invoicingFrequency: "QUARTERLY"
+  quarterlyPayment: 149.75
+
+  benefits:
+    - "Quarterly system inspections (4 visits/year)"
+    - "Priority emergency service"
+    - "20% discount on all repairs"
+    - "No trip charges (including after-hours)"
+    - "Free filter replacements (up to 4/year)"
+    - "Extended warranty protection"
+    - "Transferable to new homeowner"
+
+  servicePlanItems:
+    - name: "Q1 Winter Heating Check"
+      description: "Mid-winter heating performance check"
+      frequency: "QUARTERLY"
+      seasonality: "January-March"
+      includedInspections:
+        - "[MEP] Furnace Safety Inspection"
+
+    - name: "Q2 Spring AC Prep"
+      description: "Pre-summer AC tune-up"
+      frequency: "QUARTERLY"
+      seasonality: "April-June"
+      includedInspections:
+        - "[MEP] AC System Inspection"
+
+    - name: "Q3 Summer Cooling Check"
+      description: "Mid-summer AC performance check"
+      frequency: "QUARTERLY"
+      seasonality: "July-September"
+      includedInspections:
+        - "[MEP] AC System Inspection"
+
+    - name: "Q4 Fall Heating Prep"
+      description: "Pre-winter heating tune-up"
+      frequency: "QUARTERLY"
+      seasonality: "October-December"
+      includedInspections:
+        - "[MEP] Furnace Safety Inspection"
+
+  terms:
+    - "Valid for 12 months from activation"
+    - "Four visits per year (quarterly)"
+    - "Transferable with 30-day notice"
+    - "Automatic renewal with price lock"
+
+metadata:
+  tier: "Gold"
+  targetCustomer: "Premium homeowners, multi-system homes"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

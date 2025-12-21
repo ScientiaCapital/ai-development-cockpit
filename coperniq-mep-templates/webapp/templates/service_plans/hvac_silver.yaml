@@ -1,0 +1,53 @@
+# HVAC Silver Plan
+# Coperniq Service Plan Template
+# Generated: 2025-12-20
+
+template:
+  name: "HVAC Silver Plan"
+  emoji: "🥈"
+  description: "Bi-annual HVAC maintenance for year-round protection"
+  category: "Service Plans"
+
+servicePlan:
+  planName: "HVAC Silver Plan"
+  durationMonths: 12
+  totalPrice: 349
+  invoicingFrequency: "ANNUAL"
+
+  benefits:
+    - "Spring AC tune-up"
+    - "Fall heating tune-up"
+    - "Priority scheduling"
+    - "15% discount on repairs"
+    - "No trip charges during plan period"
+    - "Pre-season reminders"
+
+  servicePlanItems:
+    - name: "Spring AC Tune-up"
+      description: "Complete AC inspection and maintenance"
+      frequency: "BI_ANNUAL"
+      frequencyCount: 1
+      seasonality: "Spring (March-May)"
+      includedInspections:
+        - "[MEP] AC System Inspection"
+
+    - name: "Fall Heating Tune-up"
+      description: "Complete furnace/heat pump inspection"
+      frequency: "BI_ANNUAL"
+      frequencyCount: 1
+      seasonality: "Fall (September-November)"
+      includedInspections:
+        - "[MEP] Furnace Safety Inspection"
+
+  terms:
+    - "Valid for 12 months from activation"
+    - "Two visits per year: Spring and Fall"
+    - "Non-transferable"
+    - "Parts and refrigerant not included"
+
+metadata:
+  tier: "Silver"
+  targetCustomer: "Year-round comfort priority"
+  upsellPath: "Gold Plan"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

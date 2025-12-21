@@ -1,0 +1,198 @@
+# [Plumbing] Gas Line Inspection
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Compliance: NFPA 54, UPC 2021
+
+template:
+  name: "[Plumbing] Gas Line Inspection"
+  emoji: "🔥"
+  description: "Gas piping inspection with leak testing and appliance verification"
+  category: "Plumbing"
+  compliance: "NFPA 54, UPC 2021"
+
+  work_order:
+    type: "Field Work Order"
+    name: "[Plumbing] Gas Line Inspection"
+
+groups:
+  - name: "Service Information"
+    order: 1
+    fields:
+      - name: "Customer Name"
+        type: "Text"
+        required: true
+      - name: "Service Address"
+        type: "Text"
+        required: true
+      - name: "Inspection Date"
+        type: "Text"
+        required: true
+        placeholder: "MM/DD/YYYY"
+      - name: "Technician Name"
+        type: "Text"
+        required: true
+      - name: "Gas Provider"
+        type: "Text"
+
+  - name: "Gas Meter & Service"
+    order: 2
+    critical: true
+    fields:
+      - name: "Meter Location"
+        type: "Single select"
+        required: true
+        options:
+          - "Exterior - Side of House"
+          - "Exterior - Meter Bank"
+          - "Interior - Utility Room"
+          - "Interior - Basement"
+      - name: "Meter Condition"
+        type: "Single select"
+        required: true
+        options:
+          - "Good"
+          - "Damaged - Notify Utility"
+          - "Corroded"
+      - name: "Shutoff Valve Accessible"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes"
+          - "No - Obstructed"
+      - name: "Shutoff Valve Operational"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail - Stuck"
+          - "Fail - Leaking"
+
+  - name: "Gas Piping Inspection"
+    order: 3
+    critical: true
+    fields:
+      - name: "Piping Material"
+        type: "Single select"
+        required: true
+        options:
+          - "Black Iron"
+          - "CSST (Yellow)"
+          - "Copper"
+          - "PE (Exterior)"
+          - "Mixed"
+      - name: "CSST Bonded (if present)"
+        type: "Single select"
+        options:
+          - "Yes - Properly Bonded"
+          - "No - Needs Bonding"
+          - "N/A"
+      - name: "Visible Corrosion"
+        type: "Single select"
+        required: true
+        options:
+          - "None"
+          - "Minor - Monitor"
+          - "Significant - Repair Needed"
+      - name: "Pipe Supports Adequate"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail"
+      - name: "Drip Leg at Appliances"
+        type: "Single select"
+        required: true
+        options:
+          - "Present - All"
+          - "Missing - Some"
+          - "Missing - All"
+
+  - name: "Leak Testing"
+    order: 4
+    critical: true
+    fields:
+      - name: "Test Method"
+        type: "Single select"
+        required: true
+        options:
+          - "Electronic Detector"
+          - "Bubble Solution"
+          - "Pressure Test"
+      - name: "Meter Shutoff Test"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - No Movement"
+          - "Fail - Dial Moving"
+      - name: "Leaks Found"
+        type: "Single select"
+        required: true
+        options:
+          - "None"
+          - "Yes - Repaired"
+          - "Yes - Cannot Repair Today"
+      - name: "Leak Locations"
+        type: "Text"
+        placeholder: "Describe locations if leaks found"
+
+  - name: "Appliance Verification"
+    order: 5
+    fields:
+      - name: "Appliances Connected"
+        type: "Multiple select"
+        required: true
+        options:
+          - "Furnace"
+          - "Water Heater"
+          - "Range/Cooktop"
+          - "Dryer"
+          - "Fireplace"
+          - "Pool Heater"
+          - "Generator"
+      - name: "All Connectors Approved"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes"
+          - "No - Needs Replacement"
+      - name: "Proper Venting"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail - Corrections Needed"
+          - "N/A"
+      - name: "CO Detector Present"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes - Working"
+          - "No - Recommended"
+
+  - name: "Documentation"
+    order: 6
+    fields:
+      - name: "Inspection Result"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Pass with Recommendations"
+          - "Fail - Repairs Required"
+      - name: "Repairs Needed"
+        type: "Text"
+      - name: "Inspection Photos"
+        type: "File"
+      - name: "Technician Notes"
+        type: "Text"
+      - name: "Customer Signature"
+        type: "File"
+
+metadata:
+  total_fields: 28
+  total_groups: 6
+  trade: "Plumbing"
+  phase: "inspection"
+  compliance: "NFPA 54, UPC 2021"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

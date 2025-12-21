@@ -1,0 +1,208 @@
+# [Fire Protection] Alarm System Inspection
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Compliance: NFPA 72 - National Fire Alarm and Signaling Code
+
+template:
+  name: "[Fire Protection] Alarm System Inspection"
+  emoji: "🔔"
+  description: "Fire alarm system inspection and testing - NFPA 72 compliant"
+  category: "Fire Protection"
+  compliance: "NFPA 72"
+
+  work_order:
+    type: "Field Work Order"
+    name: "[Fire Protection] Alarm Inspection"
+
+groups:
+  - name: "System Information"
+    order: 1
+    fields:
+      - name: "Building Name/Address"
+        type: "Text"
+        required: true
+      - name: "Inspection Date"
+        type: "Text"
+        required: true
+        placeholder: "MM/DD/YYYY"
+      - name: "Inspector Name"
+        type: "Text"
+        required: true
+      - name: "Panel Manufacturer"
+        type: "Single select"
+        required: true
+        options:
+          - "Notifier"
+          - "Simplex"
+          - "Edwards"
+          - "Fire-Lite"
+          - "EST"
+          - "Honeywell"
+          - "Other"
+      - name: "Panel Model"
+        type: "Text"
+      - name: "Number of Zones"
+        type: "Numeric"
+      - name: "Last Inspection Date"
+        type: "Text"
+
+  - name: "Control Panel Testing"
+    order: 2
+    critical: true
+    fields:
+      - name: "AC Power Present"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail"
+      - name: "Battery Voltage (VDC)"
+        type: "Numeric"
+        placeholder: "Should be 26-28V for 24V system"
+      - name: "Battery Load Test"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail"
+      - name: "Ground Fault Test"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail"
+      - name: "Trouble Signal Test"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail"
+      - name: "Alarm Signal Test"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail"
+
+  - name: "Initiating Devices"
+    order: 3
+    critical: true
+    fields:
+      - name: "Smoke Detectors Tested"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - All Tested"
+          - "Fail - See Notes"
+          - "N/A"
+      - name: "Smoke Detectors Quantity"
+        type: "Numeric"
+      - name: "Heat Detectors Tested"
+        type: "Single select"
+        options:
+          - "Pass"
+          - "Fail"
+          - "N/A"
+      - name: "Pull Stations Tested"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - All Tested"
+          - "Fail"
+          - "N/A"
+      - name: "Duct Detectors Tested"
+        type: "Single select"
+        options:
+          - "Pass"
+          - "Fail"
+          - "N/A"
+      - name: "Waterflow Switches Tested"
+        type: "Single select"
+        options:
+          - "Pass"
+          - "Fail"
+          - "N/A"
+      - name: "Tamper Switches Tested"
+        type: "Single select"
+        options:
+          - "Pass"
+          - "Fail"
+          - "N/A"
+
+  - name: "Notification Devices"
+    order: 4
+    fields:
+      - name: "Horns/Strobes Tested"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - All Functional"
+          - "Fail - See Notes"
+      - name: "Horn/Strobe Quantity"
+        type: "Numeric"
+      - name: "Voice Evacuation Test"
+        type: "Single select"
+        options:
+          - "Pass"
+          - "Fail"
+          - "N/A"
+      - name: "ADA Compliance (Visual)"
+        type: "Single select"
+        options:
+          - "Pass"
+          - "Fail"
+
+  - name: "Communication Testing"
+    order: 5
+    fields:
+      - name: "Central Station Communication"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - Signal Received"
+          - "Fail - No Signal"
+          - "N/A"
+      - name: "Cellular Backup Test"
+        type: "Single select"
+        options:
+          - "Pass"
+          - "Fail"
+          - "N/A"
+      - name: "Alarm Transmission Time (sec)"
+        type: "Numeric"
+
+  - name: "Documentation"
+    order: 6
+    fields:
+      - name: "Deficiencies Found"
+        type: "Multiple select"
+        options:
+          - "None"
+          - "Dead Batteries"
+          - "Dirty Detectors"
+          - "Missing Devices"
+          - "Communication Failure"
+          - "Horn/Strobe Failure"
+          - "Panel Error"
+      - name: "Inspection Photos"
+        type: "File"
+      - name: "Inspector Notes"
+        type: "Text"
+      - name: "Inspector Signature"
+        type: "File"
+      - name: "Overall System Status"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - System Operational"
+          - "Conditional - Minor Issues"
+          - "Fail - Requires Repair"
+
+metadata:
+  total_fields: 32
+  total_groups: 6
+  trade: "Fire Protection"
+  phase: "service"
+  compliance: "NFPA 72"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

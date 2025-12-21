@@ -1,0 +1,219 @@
+# [TUD Market] Insulation Installation
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Compliance: IECC, ENERGY STAR Homes
+
+template:
+  name: "[TUD Market] Insulation Installation"
+  emoji: "🏠"
+  description: "Insulation installation checklist for attic, wall, and floor"
+  category: "TUD Market"
+  compliance: "IECC, ENERGY STAR Homes"
+
+  work_order:
+    type: "Field Work Order"
+    name: "[TUD Market] Insulation Installation"
+
+groups:
+  - name: "Project Information"
+    order: 1
+    fields:
+      - name: "Customer Name"
+        type: "Text"
+        required: true
+      - name: "Property Address"
+        type: "Text"
+        required: true
+      - name: "Installation Date"
+        type: "Text"
+        required: true
+        placeholder: "MM/DD/YYYY"
+      - name: "Installer Name"
+        type: "Text"
+        required: true
+      - name: "Climate Zone"
+        type: "Single select"
+        required: true
+        options:
+          - "Zone 1"
+          - "Zone 2"
+          - "Zone 3"
+          - "Zone 4"
+          - "Zone 5"
+          - "Zone 6"
+          - "Zone 7"
+
+  - name: "Pre-Installation"
+    order: 2
+    critical: true
+    fields:
+      - name: "Air Sealing Completed"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes - Prior to Insulation"
+          - "No - Not Required"
+          - "Pending"
+      - name: "Combustion Safety Check"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail - Corrected"
+          - "N/A"
+      - name: "Existing Insulation Removed"
+        type: "Single select"
+        options:
+          - "Yes"
+          - "No - Adding Over"
+          - "N/A"
+      - name: "Baffles Installed"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes - All Soffit Vents"
+          - "N/A - No Soffit Vents"
+
+  - name: "Attic Insulation"
+    order: 3
+    fields:
+      - name: "Attic Insulation Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Blown Cellulose"
+          - "Blown Fiberglass"
+          - "Spray Foam - Open Cell"
+          - "Spray Foam - Closed Cell"
+          - "Batts"
+          - "N/A"
+      - name: "Target R-Value"
+        type: "Single select"
+        required: true
+        options:
+          - "R-30"
+          - "R-38"
+          - "R-49"
+          - "R-60"
+          - "N/A"
+      - name: "Installed Depth (inches)"
+        type: "Numeric"
+      - name: "Bags Used"
+        type: "Numeric"
+      - name: "Coverage (sq ft)"
+        type: "Numeric"
+        required: true
+      - name: "Attic Hatch Insulated"
+        type: "Single select"
+        options:
+          - "Yes"
+          - "No"
+          - "N/A"
+
+  - name: "Wall Insulation"
+    order: 4
+    fields:
+      - name: "Wall Insulation Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Dense Pack Cellulose"
+          - "Blown Fiberglass"
+          - "Spray Foam"
+          - "Batts"
+          - "N/A - Not Installed"
+      - name: "Target R-Value"
+        type: "Single select"
+        options:
+          - "R-13"
+          - "R-15"
+          - "R-21"
+          - "N/A"
+      - name: "Cavities Filled"
+        type: "Single select"
+        options:
+          - "All"
+          - "Partial"
+          - "N/A"
+      - name: "Holes Patched/Painted"
+        type: "Single select"
+        options:
+          - "Yes"
+          - "Pending"
+          - "N/A"
+
+  - name: "Floor/Crawl Insulation"
+    order: 5
+    fields:
+      - name: "Floor Insulation Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Fiberglass Batts"
+          - "Spray Foam"
+          - "Rigid Foam"
+          - "N/A - Not Installed"
+      - name: "Target R-Value"
+        type: "Single select"
+        options:
+          - "R-19"
+          - "R-25"
+          - "R-30"
+          - "N/A"
+      - name: "Support Method"
+        type: "Single select"
+        options:
+          - "Wire Stays"
+          - "Strapping"
+          - "N/A"
+      - name: "Vapor Barrier"
+        type: "Single select"
+        options:
+          - "Installed - 6 mil"
+          - "Existing - Good Condition"
+          - "N/A"
+
+  - name: "Quality Verification"
+    order: 6
+    fields:
+      - name: "Density Test (lbs/cu ft)"
+        type: "Numeric"
+        placeholder: "Dense pack: 3.5+ lbs/cu ft"
+      - name: "Coverage Uniform"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail - Corrected"
+      - name: "No Gaps or Voids"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail - Corrected"
+      - name: "Depth Markers Installed"
+        type: "Single select"
+        options:
+          - "Yes"
+          - "N/A"
+      - name: "Certificate Posted"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes"
+          - "No"
+      - name: "Installation Photos"
+        type: "File"
+      - name: "Installer Notes"
+        type: "Text"
+      - name: "Installer Signature"
+        type: "File"
+
+metadata:
+  total_fields: 35
+  total_groups: 6
+  trade: "TUD Market"
+  phase: "install"
+  compliance: "IECC, ENERGY STAR Homes"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

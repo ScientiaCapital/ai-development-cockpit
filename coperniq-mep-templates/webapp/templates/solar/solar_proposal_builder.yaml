@@ -1,0 +1,345 @@
+# [MEP] Solar Proposal Builder - Good/Better/Best
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Compliance: Federal ITC, NEC 2023
+
+template:
+  name: "[MEP] Solar Proposal Builder - Good/Better/Best"
+  emoji: "💰"
+  description: "Tiered solar proposal template with system sizing, production estimates, and financial savings analysis"
+  category: "Solar"
+
+  work_order:
+    type: "Sales Proposal"
+    name: "[MEP] Solar Sales Proposal"
+
+groups:
+  - name: "Customer & Property Info"
+    order: 1
+    fields:
+      - name: "Customer Name"
+        type: "Text"
+        required: true
+        placeholder: "Full name"
+
+      - name: "Property Address"
+        type: "Text"
+        required: true
+        placeholder: "Installation address"
+
+      - name: "Phone"
+        type: "Text"
+        required: true
+        placeholder: "(555) 123-4567"
+
+      - name: "Email"
+        type: "Text"
+        required: true
+        placeholder: "email@example.com"
+
+      - name: "Proposal Date"
+        type: "Text"
+        required: true
+        placeholder: "MM/DD/YYYY"
+
+      - name: "Proposal Valid Until"
+        type: "Text"
+        placeholder: "MM/DD/YYYY (typically 30 days)"
+
+      - name: "Sales Representative"
+        type: "Text"
+        required: true
+        placeholder: "Rep name"
+
+  - name: "Current Energy Profile"
+    order: 2
+    fields:
+      - name: "Current Annual Usage (kWh)"
+        type: "Numeric"
+        required: true
+        placeholder: "From utility bills (12 months)"
+
+      - name: "Average Monthly Bill ($)"
+        type: "Numeric"
+        required: true
+        placeholder: "Current average payment"
+
+      - name: "Utility Company"
+        type: "Text"
+        required: true
+        placeholder: "e.g., PG&E, SCE, SDG&E"
+
+      - name: "Current Rate ($/kWh)"
+        type: "Numeric"
+        placeholder: "Blended average rate"
+
+      - name: "Rate Plan Type"
+        type: "Single select"
+        options:
+          - "Tiered"
+          - "Time-of-Use (TOU)"
+          - "EV Rate"
+          - "Flat Rate"
+
+  - name: "GOOD - Base System"
+    order: 3
+    fields:
+      - name: "[GOOD] System Size (kW DC)"
+        type: "Numeric"
+        required: true
+        placeholder: "e.g., 6.5"
+
+      - name: "[GOOD] Number of Panels"
+        type: "Numeric"
+        required: true
+        placeholder: "e.g., 18"
+
+      - name: "[GOOD] Panel Manufacturer/Model"
+        type: "Text"
+        placeholder: "e.g., Canadian Solar 370W"
+
+      - name: "[GOOD] Panel Wattage (W)"
+        type: "Numeric"
+        placeholder: "e.g., 370"
+
+      - name: "[GOOD] Inverter Type"
+        type: "Single select"
+        options:
+          - "String Inverter"
+          - "Microinverters"
+          - "Power Optimizers"
+
+      - name: "[GOOD] Inverter Manufacturer/Model"
+        type: "Text"
+        placeholder: "e.g., Enphase IQ8+"
+
+      - name: "[GOOD] Est. Annual Production (kWh)"
+        type: "Numeric"
+        required: true
+        placeholder: "Year 1 production"
+
+      - name: "[GOOD] Offset Percentage (%)"
+        type: "Numeric"
+        required: true
+        placeholder: "% of usage covered (e.g., 85)"
+
+      - name: "[GOOD] System Price (Pre-Incentives)"
+        type: "Numeric"
+        required: true
+        placeholder: "Total cost before credits"
+
+      - name: "[GOOD] Federal Tax Credit (30%)"
+        type: "Numeric"
+        placeholder: "Calculated ITC amount"
+
+      - name: "[GOOD] Net System Cost"
+        type: "Numeric"
+        required: true
+        placeholder: "After all incentives"
+
+  - name: "BETTER - Mid-Tier System"
+    order: 4
+    fields:
+      - name: "[BETTER] System Size (kW DC)"
+        type: "Numeric"
+        placeholder: "e.g., 8.5"
+
+      - name: "[BETTER] Number of Panels"
+        type: "Numeric"
+        placeholder: "e.g., 22"
+
+      - name: "[BETTER] Panel Manufacturer/Model"
+        type: "Text"
+        placeholder: "e.g., LG NeON 385W"
+
+      - name: "[BETTER] Inverter Type"
+        type: "Single select"
+        options:
+          - "String Inverter"
+          - "Microinverters"
+          - "Power Optimizers"
+
+      - name: "[BETTER] Est. Annual Production (kWh)"
+        type: "Numeric"
+        placeholder: "Year 1 production"
+
+      - name: "[BETTER] Offset Percentage (%)"
+        type: "Numeric"
+        placeholder: "% of usage covered (e.g., 100)"
+
+      - name: "[BETTER] System Price (Pre-Incentives)"
+        type: "Numeric"
+        placeholder: "Total cost before credits"
+
+      - name: "[BETTER] Federal Tax Credit (30%)"
+        type: "Numeric"
+        placeholder: "Calculated ITC amount"
+
+      - name: "[BETTER] Net System Cost"
+        type: "Numeric"
+        placeholder: "After all incentives"
+
+      - name: "[BETTER] Annual Energy Savings vs GOOD"
+        type: "Numeric"
+        placeholder: "Estimated annual savings (e.g., $250)"
+
+  - name: "BEST - Premium System"
+    order: 5
+    fields:
+      - name: "[BEST] System Size (kW DC)"
+        type: "Numeric"
+        placeholder: "e.g., 10.5"
+
+      - name: "[BEST] Number of Panels"
+        type: "Numeric"
+        placeholder: "e.g., 26"
+
+      - name: "[BEST] Panel Manufacturer/Model"
+        type: "Text"
+        placeholder: "e.g., SunPower Maxeon 400W"
+
+      - name: "[BEST] Inverter Type"
+        type: "Single select"
+        options:
+          - "String Inverter"
+          - "Microinverters"
+          - "Power Optimizers"
+
+      - name: "[BEST] Battery Storage Included"
+        type: "Single select"
+        options:
+          - "No"
+          - "Yes - Tesla Powerwall 2"
+          - "Yes - Enphase IQ Battery"
+          - "Yes - LG Chem RESU"
+          - "Yes - Other"
+
+      - name: "[BEST] Battery Capacity (kWh)"
+        type: "Numeric"
+        placeholder: "e.g., 13.5 (if included)"
+
+      - name: "[BEST] Est. Annual Production (kWh)"
+        type: "Numeric"
+        placeholder: "Year 1 production"
+
+      - name: "[BEST] Offset Percentage (%)"
+        type: "Numeric"
+        placeholder: "% of usage covered (e.g., 110)"
+
+      - name: "[BEST] System Price (Pre-Incentives)"
+        type: "Numeric"
+        placeholder: "Total cost before credits"
+
+      - name: "[BEST] Federal Tax Credit (30%)"
+        type: "Numeric"
+        placeholder: "Calculated ITC amount"
+
+      - name: "[BEST] Net System Cost"
+        type: "Numeric"
+        placeholder: "After all incentives"
+
+      - name: "[BEST] Annual Energy Savings vs GOOD"
+        type: "Numeric"
+        placeholder: "Estimated annual savings (e.g., $500)"
+
+  - name: "Financial Analysis - 25 Year"
+    order: 6
+    fields:
+      - name: "Total Estimated Savings (25yr)"
+        type: "Numeric"
+        placeholder: "Lifetime savings vs. grid"
+
+      - name: "Payback Period (years)"
+        type: "Numeric"
+        placeholder: "Break-even timeline"
+
+      - name: "Year 1 Savings ($)"
+        type: "Numeric"
+        placeholder: "First year utility offset"
+
+      - name: "Internal Rate of Return (IRR %)"
+        type: "Numeric"
+        placeholder: "Investment return rate"
+
+  - name: "Financing Options"
+    order: 7
+    fields:
+      - name: "Option 1: Cash Purchase"
+        type: "Single select"
+        options:
+          - "Available"
+          - "Not Offered"
+
+      - name: "Cash Discount (%)"
+        type: "Numeric"
+        placeholder: "e.g., 5%"
+
+      - name: "Option 2: Solar Loan"
+        type: "Single select"
+        options:
+          - "Available"
+          - "Not Offered"
+
+      - name: "Loan Term (years)"
+        type: "Single select"
+        options:
+          - "10 Year"
+          - "12 Year"
+          - "15 Year"
+          - "20 Year"
+          - "25 Year"
+
+      - name: "Loan APR (%)"
+        type: "Numeric"
+        placeholder: "e.g., 5.99"
+
+      - name: "Monthly Payment ($)"
+        type: "Numeric"
+        placeholder: "Estimated monthly"
+
+      - name: "Option 3: Lease/PPA"
+        type: "Single select"
+        options:
+          - "Available"
+          - "Not Offered"
+
+      - name: "Lease/PPA Rate ($/kWh)"
+        type: "Numeric"
+        placeholder: "e.g., 0.12"
+
+  - name: "Customer Acceptance"
+    order: 8
+    fields:
+      - name: "Selected Option"
+        type: "Single select"
+        options:
+          - "Option 1 - GOOD"
+          - "Option 2 - BETTER"
+          - "Option 3 - BEST"
+          - "Custom Configuration"
+          - "Declined - No Sale"
+
+      - name: "Preferred Financing"
+        type: "Single select"
+        options:
+          - "Cash"
+          - "Solar Loan"
+          - "Lease/PPA"
+          - "Undecided"
+
+      - name: "Customer Signature"
+        type: "File"
+        description: "Acceptance signature (if ready to proceed)"
+
+      - name: "Sales Rep Signature"
+        type: "File"
+        description: "Sales representative signature"
+
+metadata:
+  total_fields: 65
+  total_groups: 8
+  trade: "Solar"
+  compliance: "NEC 2023 Article 690, Federal ITC Compliance (26 USC 25D)"
+  certifications: ["NABCEP PV Sales Professional", "OSHA 10"]
+  created_by: "ai-development-cockpit"
+  version: "1.0"

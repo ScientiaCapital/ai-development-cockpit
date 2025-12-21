@@ -1,0 +1,44 @@
+# HVAC Bronze Plan
+# Coperniq Service Plan Template
+# Generated: 2025-12-20
+
+template:
+  name: "HVAC Bronze Plan"
+  emoji: "🥉"
+  description: "Entry-level annual HVAC maintenance plan"
+  category: "Service Plans"
+
+servicePlan:
+  planName: "HVAC Bronze Plan"
+  durationMonths: 12
+  totalPrice: 199
+  invoicingFrequency: "ONE_TIME"
+
+  benefits:
+    - "Annual tune-up (AC or Heating)"
+    - "Priority scheduling"
+    - "10% discount on repairs"
+    - "No trip charges during plan period"
+    - "Safety inspection included"
+
+  servicePlanItems:
+    - name: "Annual HVAC Tune-up"
+      description: "Choose AC or heating tune-up based on season"
+      frequency: "ANNUAL"
+      frequencyCount: 1
+      includedInspections:
+        - "[MEP] AC System Inspection"
+        - "[MEP] Furnace Safety Inspection"
+
+  terms:
+    - "Valid for 12 months from activation date"
+    - "Customer chooses either AC or heating tune-up"
+    - "Non-transferable"
+    - "Parts and refrigerant not included"
+
+metadata:
+  tier: "Bronze"
+  targetCustomer: "Budget-conscious homeowners"
+  upsellPath: "Silver Plan"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

@@ -1,0 +1,65 @@
+# Plumbing Protect Plan
+# Coperniq Service Plan Template
+# Generated: 2025-12-20
+
+template:
+  name: "Plumbing Protect Plan"
+  emoji: "🚰"
+  description: "Annual plumbing maintenance and protection plan"
+  category: "Service Plans"
+
+servicePlan:
+  planName: "Plumbing Protect Plan"
+  durationMonths: 12
+  totalPrice: 149
+  invoicingFrequency: "ONE_TIME"
+
+  benefits:
+    - "Annual water heater maintenance"
+    - "Whole-home plumbing inspection"
+    - "Priority scheduling"
+    - "10% discount on plumbing repairs"
+    - "No trip charges during plan period"
+    - "Leak detection assessment"
+    - "Water pressure testing"
+
+  servicePlanItems:
+    - name: "Water Heater Maintenance"
+      description: "Complete water heater flush, anode rod inspection, and safety check"
+      frequency: "ANNUAL"
+      frequencyCount: 1
+      includedServices:
+        - "Tank flush and sediment removal"
+        - "Anode rod inspection"
+        - "T&P relief valve test"
+        - "Thermostat calibration"
+
+    - name: "Whole-Home Plumbing Inspection"
+      description: "Comprehensive inspection of all plumbing fixtures"
+      frequency: "ANNUAL"
+      frequencyCount: 1
+      includedServices:
+        - "Visual inspection of all fixtures"
+        - "Toilet leak testing"
+        - "Faucet and showerhead check"
+        - "Under-sink inspection"
+        - "Water pressure testing"
+        - "Drain flow assessment"
+
+  terms:
+    - "Valid for 12 months from activation"
+    - "One annual visit combining both services"
+    - "Non-transferable"
+    - "Parts and materials not included"
+
+  addOns:
+    - "Sewer line camera inspection: $99"
+    - "Additional water heater: $49/year"
+    - "Tankless water heater maintenance: $79/year"
+
+metadata:
+  tier: "Standard"
+  targetCustomer: "Homeowners with tank water heaters"
+  bundleWith: "HVAC Bronze/Silver plans"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

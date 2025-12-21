@@ -1,0 +1,17 @@
+{
+  "id": "contractor-001",
+  "name": "Test HVAC",
+  "trade": "hvac",
+  "email": "testhvac@example.com",
+  "phone": "(512) 555-0100",
+  "markets": ["residential", "commercial"],
+  "phases": ["sales", "install", "service"],
+  "templatesEnabled": [
+    "hvac/ac_inspection",
+    "hvac/furnace_safety",
+    "hvac/maintenance_report",
+    "hvac/equipment_proposal",
+    "hvac/refrigerant_log"
+  ],
+  "preset": "hvac_commercial"
+}

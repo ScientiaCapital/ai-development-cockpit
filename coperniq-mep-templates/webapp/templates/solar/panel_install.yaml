@@ -1,0 +1,207 @@
+# [Solar] Panel Installation
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Compliance: NEC 2023 Article 690, NABCEP, UL 3741
+
+template:
+  name: "[Solar] Panel Installation"
+  emoji: "☀️"
+  description: "Solar panel installation checklist with module layout and wiring"
+  category: "Solar"
+  compliance: "NEC 2023 Article 690, NABCEP, UL 3741"
+
+  work_order:
+    type: "Field Work Order"
+    name: "[Solar] Panel Installation"
+
+groups:
+  - name: "Project Information"
+    order: 1
+    fields:
+      - name: "Project Name"
+        type: "Text"
+        required: true
+      - name: "Property Address"
+        type: "Text"
+        required: true
+      - name: "Installation Date"
+        type: "Text"
+        required: true
+        placeholder: "MM/DD/YYYY"
+      - name: "Lead Installer"
+        type: "Text"
+        required: true
+      - name: "Crew Size"
+        type: "Numeric"
+        required: true
+
+  - name: "Equipment Verification"
+    order: 2
+    critical: true
+    fields:
+      - name: "Module Manufacturer"
+        type: "Single select"
+        required: true
+        options:
+          - "REC"
+          - "Panasonic"
+          - "LG"
+          - "Q Cells"
+          - "Canadian Solar"
+          - "Jinko"
+          - "Other"
+      - name: "Module Model"
+        type: "Text"
+        required: true
+      - name: "Module Wattage"
+        type: "Numeric"
+        required: true
+      - name: "Total Module Count"
+        type: "Numeric"
+        required: true
+      - name: "System Size (kW DC)"
+        type: "Numeric"
+        required: true
+      - name: "Modules Match Design"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail - Substitution Required"
+
+  - name: "Mounting System"
+    order: 3
+    critical: true
+    fields:
+      - name: "Racking Manufacturer"
+        type: "Single select"
+        required: true
+        options:
+          - "IronRidge"
+          - "Unirac"
+          - "Quick Mount PV"
+          - "SnapNRack"
+          - "Other"
+      - name: "Mount Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Roof Mount - Composition"
+          - "Roof Mount - Tile"
+          - "Roof Mount - Metal"
+          - "Ground Mount"
+          - "Carport"
+      - name: "Attachment Method"
+        type: "Single select"
+        required: true
+        options:
+          - "Lag Bolt"
+          - "Tile Hook"
+          - "S-5 Clamp"
+          - "Ballasted"
+      - name: "Flashing Installed"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - All Penetrations"
+          - "Fail"
+      - name: "Grounding Lugs Installed"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail"
+
+  - name: "Array Wiring"
+    order: 4
+    critical: true
+    fields:
+      - name: "String Configuration"
+        type: "Text"
+        required: true
+        placeholder: "e.g., 2 strings of 12"
+      - name: "Wire Type"
+        type: "Single select"
+        required: true
+        options:
+          - "PV Wire"
+          - "USE-2"
+      - name: "Wire Size"
+        type: "Single select"
+        required: true
+        options:
+          - "#10 AWG"
+          - "#8 AWG"
+          - "#6 AWG"
+      - name: "Connectors"
+        type: "Single select"
+        required: true
+        options:
+          - "MC4"
+          - "H4"
+          - "Other"
+      - name: "All Connections Secure"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail"
+      - name: "Wire Management"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - Clips/Ties"
+          - "Fail - Loose Wires"
+
+  - name: "Rapid Shutdown (NEC 690.12)"
+    order: 5
+    critical: true
+    fields:
+      - name: "RSD Method"
+        type: "Single select"
+        required: true
+        options:
+          - "Module-Level (MLPE)"
+          - "String-Level Device"
+          - "Array-Level Device"
+      - name: "RSD Device Manufacturer"
+        type: "Text"
+      - name: "RSD Devices Installed"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - All Modules"
+          - "Fail"
+      - name: "RSD Compliant"
+        type: "Single select"
+        required: true
+        options:
+          - "NEC 2017 (<80V in 30s)"
+          - "NEC 2020 (<30V in 30s)"
+
+  - name: "Documentation"
+    order: 6
+    fields:
+      - name: "Module Serial Numbers Recorded"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes - All"
+          - "No"
+      - name: "String Layout Diagram"
+        type: "File"
+      - name: "Installation Photos"
+        type: "File"
+      - name: "Installer Notes"
+        type: "Text"
+      - name: "Installer Signature"
+        type: "File"
+
+metadata:
+  total_fields: 32
+  total_groups: 6
+  trade: "Solar"
+  phase: "install"
+  compliance: "NEC 2023 Article 690, NABCEP, UL 3741"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

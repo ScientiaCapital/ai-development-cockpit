@@ -1,0 +1,170 @@
+# [MEP] Refrigerant Tracking Log (EPA 608)
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Status: GATE 1 - Ready for Review
+
+template:
+  name: "[MEP] Refrigerant Tracking Log"
+  emoji: "❄️"
+  description: "EPA 608 compliant refrigerant tracking for HVAC service"
+  category: "HVAC"
+  compliance: "EPA Section 608"
+
+  work_order:
+    type: "Field Work Order"
+    name: "[MEP] HVAC Service Call"
+
+groups:
+  - name: "Equipment Identification"
+    order: 1
+    fields:
+      - name: "Equipment Tag/ID"
+        type: "Text"
+        required: true
+        placeholder: "Unit identification tag or number"
+
+      - name: "Equipment Type"
+        type: "Single select"
+        required: false
+        options:
+          - "Split System"
+          - "Package Unit"
+          - "Chiller"
+          - "Reach-In"
+          - "Walk-In"
+          - "Other"
+
+      - name: "Refrigerant Type"
+        type: "Single select"
+        required: true
+        options:
+          - "R-410A"
+          - "R-22"
+          - "R-404A"
+          - "R-134a"
+          - "R-407C"
+          - "R-32"
+          - "Other"
+
+      - name: "Factory Charge (lbs)"
+        type: "Numeric"
+        required: false
+        placeholder: "Original factory refrigerant charge"
+
+  - name: "Service Details"
+    order: 2
+    fields:
+      - name: "Service Date"
+        type: "Text"
+        required: true
+        placeholder: "MM/DD/YYYY"
+
+      - name: "Technician Name"
+        type: "Text"
+        required: true
+        placeholder: "Full name of certified technician"
+
+      - name: "EPA Certification #"
+        type: "Text"
+        required: true
+        placeholder: "Technician's EPA 608 certification number"
+
+      - name: "Service Type"
+        type: "Single select"
+        required: false
+        options:
+          - "Installation"
+          - "Service"
+          - "Repair"
+          - "Recovery"
+          - "Retrofit"
+          - "Disposal"
+
+  - name: "Refrigerant Transaction"
+    order: 3
+    fields:
+      - name: "Refrigerant Added (lbs)"
+        type: "Numeric"
+        required: false
+        placeholder: "Amount added to system"
+
+      - name: "Refrigerant Recovered (lbs)"
+        type: "Numeric"
+        required: false
+        placeholder: "Amount recovered from system"
+
+      - name: "Cylinder ID"
+        type: "Text"
+        required: false
+        placeholder: "Recovery cylinder serial number"
+
+      - name: "Running Total Charge (lbs)"
+        type: "Numeric"
+        required: false
+        placeholder: "Current total system charge"
+
+  - name: "Leak Information"
+    order: 4
+    critical: true
+    fields:
+      - name: "Leak Found"
+        type: "Single select"
+        required: false
+        options:
+          - "No"
+          - "Yes - Repaired"
+          - "Yes - Scheduled Repair"
+
+      - name: "Leak Location"
+        type: "Text"
+        required: false
+        placeholder: "Location of leak if found"
+
+      - name: "Leak Rate Calculation"
+        type: "Numeric"
+        required: false
+        placeholder: "Annual leak rate percentage"
+
+      - name: "Exceeds EPA Threshold"
+        type: "Single select"
+        required: false
+        options:
+          - "No"
+          - "Yes"
+        description: "Commercial/industrial: 20% | Comfort cooling: 30%"
+
+  - name: "Documentation"
+    order: 5
+    fields:
+      - name: "Technician Signature"
+        type: "File"
+        required: true
+        description: "EPA 608 certified technician signature"
+
+      - name: "Notes"
+        type: "Text"
+        required: false
+        placeholder: "Additional notes about refrigerant service"
+
+# EPA 608 Compliance Rules
+compliance_rules:
+  - rule: "Record keeping required for 3 years"
+  - rule: "Systems containing 50+ lbs must verify repairs within 30 days"
+  - rule: "Leak rate >20% (commercial) or >30% (comfort) requires action"
+  - rule: "All technicians must be EPA 608 certified"
+  - rule: "R-22 recovery required - no intentional venting"
+
+# Metadata
+metadata:
+  total_fields: 18
+  total_groups: 5
+  compliance: "EPA Section 608"
+  regulatory: true
+  retention_years: 3
+  created_by: "ai-development-cockpit"
+  version: "1.0"
+  notes: |
+    - This form satisfies EPA 608 record-keeping requirements
+    - All refrigerant transactions must be documented
+    - Leak rates calculated annually for systems >50 lbs
+    - Records must be retained for minimum 3 years

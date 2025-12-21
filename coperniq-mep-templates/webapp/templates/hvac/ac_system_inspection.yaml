@@ -1,0 +1,209 @@
+# [MEP] AC System Inspection Checklist
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Status: GATE 1 - Ready for Review
+
+template:
+  name: "[MEP] AC System Inspection"
+  emoji: "🌡️"
+  description: "Comprehensive AC system inspection checklist for HVAC technicians"
+  category: "HVAC"
+
+  # Links to work order (optional)
+  work_order:
+    type: "Field Work Order"
+    name: "[MEP] HVAC Service Call"
+
+groups:
+  - name: "Equipment Information"
+    order: 1
+    fields:
+      - name: "Unit Make/Model"
+        type: "Text"
+        required: true
+        placeholder: "e.g., Carrier 24ACC636A003"
+
+      - name: "Serial Number"
+        type: "Text"
+        required: true
+        placeholder: "Enter unit serial number"
+
+      - name: "Tonnage/BTU"
+        type: "Numeric"
+        required: false
+        placeholder: "e.g., 3 (tons) or 36000 (BTU)"
+
+      - name: "Refrigerant Type"
+        type: "Single select"
+        required: false
+        options:
+          - "R-410A"
+          - "R-22"
+          - "R-32"
+          - "R-134a"
+          - "Other"
+
+  - name: "Electrical Checks"
+    order: 2
+    fields:
+      - name: "Voltage Reading (V)"
+        type: "Numeric"
+        required: false
+        placeholder: "e.g., 240"
+
+      - name: "Amp Draw - Compressor"
+        type: "Numeric"
+        required: false
+        placeholder: "Measured RLA"
+
+      - name: "Amp Draw - Fan Motor"
+        type: "Numeric"
+        required: false
+        placeholder: "Condenser fan amps"
+
+      - name: "Capacitor Test"
+        type: "Single select"
+        required: false
+        options:
+          - "Pass"
+          - "Fail"
+          - "N/A"
+
+      - name: "Contactor Condition"
+        type: "Single select"
+        required: false
+        options:
+          - "Good"
+          - "Worn"
+          - "Replace"
+
+  - name: "Refrigerant System"
+    order: 3
+    fields:
+      - name: "Suction Pressure (PSI)"
+        type: "Numeric"
+        required: false
+        placeholder: "Low side pressure"
+
+      - name: "Head Pressure (PSI)"
+        type: "Numeric"
+        required: false
+        placeholder: "High side pressure"
+
+      - name: "Subcooling (°F)"
+        type: "Numeric"
+        required: false
+        placeholder: "Calculated subcooling"
+
+      - name: "Superheat (°F)"
+        type: "Numeric"
+        required: false
+        placeholder: "Calculated superheat"
+
+      - name: "Refrigerant Added (oz)"
+        type: "Numeric"
+        required: false
+        placeholder: "Amount added (if any)"
+
+      - name: "Leak Found"
+        type: "Single select"
+        required: false
+        options:
+          - "No Leak"
+          - "Minor Leak"
+          - "Major Leak"
+
+  - name: "Airflow & Filtration"
+    order: 4
+    fields:
+      - name: "Filter Size"
+        type: "Text"
+        required: false
+        placeholder: "e.g., 20x25x1"
+
+      - name: "Filter Condition"
+        type: "Single select"
+        required: false
+        options:
+          - "Clean"
+          - "Dirty"
+          - "Very Dirty"
+          - "Replaced"
+
+      - name: "Supply Temp (°F)"
+        type: "Numeric"
+        required: false
+        placeholder: "Air temp at supply register"
+
+      - name: "Return Temp (°F)"
+        type: "Numeric"
+        required: false
+        placeholder: "Air temp at return"
+
+      - name: "Delta T (°F)"
+        type: "Numeric"
+        required: false
+        placeholder: "Temp difference (typically 15-20°F)"
+
+  - name: "Coils & Drain"
+    order: 5
+    fields:
+      - name: "Evaporator Coil Condition"
+        type: "Single select"
+        required: false
+        options:
+          - "Clean"
+          - "Dirty"
+          - "Cleaned"
+
+      - name: "Condenser Coil Condition"
+        type: "Single select"
+        required: false
+        options:
+          - "Clean"
+          - "Dirty"
+          - "Cleaned"
+
+      - name: "Drain Line Clear"
+        type: "Single select"
+        required: false
+        options:
+          - "Yes"
+          - "No - Treated"
+          - "No - Needs Service"
+
+  - name: "Documentation"
+    order: 6
+    fields:
+      - name: "Before Photos"
+        type: "File"
+        required: false
+        description: "Photos before service"
+
+      - name: "After Photos"
+        type: "File"
+        required: false
+        description: "Photos after service"
+
+      - name: "Technician Notes"
+        type: "Text"
+        required: false
+        placeholder: "Additional observations or notes"
+
+      - name: "Recommendations"
+        type: "Text"
+        required: false
+        placeholder: "Recommended repairs or follow-up"
+
+      - name: "Customer Signature"
+        type: "File"
+        required: false
+        description: "Customer signature capture"
+
+# Metadata
+metadata:
+  total_fields: 27
+  total_groups: 6
+  compliance: "Standard HVAC service checklist"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

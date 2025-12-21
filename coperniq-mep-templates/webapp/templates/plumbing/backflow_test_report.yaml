@@ -1,0 +1,170 @@
+# [MEP] Backflow Test Report
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Status: GATE 1 - Ready for Review
+
+template:
+  name: "[MEP] Backflow Test Report"
+  emoji: "🚿"
+  description: "Certified backflow preventer testing and compliance report"
+  category: "Plumbing"
+
+  work_order:
+    type: "Field Work Order"
+    name: "[MEP] Plumbing Service Call"
+
+groups:
+  - name: "Device Information"
+    order: 1
+    fields:
+      - name: "Serial Number"
+        type: "Text"
+        required: true
+        placeholder: "Enter device serial number"
+
+      - name: "Device Type"
+        type: "Single select"
+        required: true
+        options:
+          - "DCVA"
+          - "RPBA"
+          - "PVB"
+          - "SVBA"
+          - "AVB"
+
+      - name: "Manufacturer"
+        type: "Text"
+        required: false
+        placeholder: "e.g., Watts, Wilkins, Febco"
+
+      - name: "Size (inches)"
+        type: "Single select"
+        required: false
+        options:
+          - "3/4"
+          - "1"
+          - "1-1/4"
+          - "1-1/2"
+          - "2"
+          - "2-1/2"
+          - "3"
+          - "4"
+          - "6"
+          - "8"
+
+      - name: "Location"
+        type: "Text"
+        required: false
+        placeholder: "Device installation location"
+
+      - name: "Hazard Level"
+        type: "Single select"
+        required: false
+        options:
+          - "High"
+          - "Low"
+
+  - name: "Check Valve #1 Test"
+    order: 2
+    fields:
+      - name: "CV1 Opened At (PSI)"
+        type: "Numeric"
+        required: false
+        placeholder: "Opening pressure"
+
+      - name: "CV1 Held Tight"
+        type: "Single select"
+        required: false
+        options:
+          - "Yes"
+          - "No"
+
+      - name: "CV1 Pass/Fail"
+        type: "Single select"
+        required: false
+        options:
+          - "Pass"
+          - "Fail"
+
+  - name: "Check Valve #2 Test"
+    order: 3
+    fields:
+      - name: "CV2 Opened At (PSI)"
+        type: "Numeric"
+        required: false
+        placeholder: "Opening pressure"
+
+      - name: "CV2 Held Tight"
+        type: "Single select"
+        required: false
+        options:
+          - "Yes"
+          - "No"
+
+      - name: "CV2 Pass/Fail"
+        type: "Single select"
+        required: false
+        options:
+          - "Pass"
+          - "Fail"
+
+  - name: "Relief Valve Test"
+    order: 4
+    fields:
+      - name: "RV Opened At (PSI)"
+        type: "Numeric"
+        required: false
+        placeholder: "Opening pressure (RPBA only)"
+
+      - name: "RV Did Not Open"
+        type: "Single select"
+        required: false
+        options:
+          - "Opened Properly"
+          - "Did Not Open"
+
+      - name: "RV Pass/Fail"
+        type: "Single select"
+        required: false
+        options:
+          - "Pass"
+          - "Fail"
+          - "N/A"
+
+  - name: "Certification"
+    order: 5
+    fields:
+      - name: "Overall Result"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass"
+          - "Fail - Repaired & Passed"
+          - "Fail - Replace Recommended"
+
+      - name: "Tester Name"
+        type: "Text"
+        required: true
+        placeholder: "Certified tester name"
+
+      - name: "Certification Number"
+        type: "Text"
+        required: true
+        placeholder: "State certification number"
+
+      - name: "Test Gauge Serial"
+        type: "Text"
+        required: false
+        placeholder: "Test kit serial number"
+
+      - name: "Tester Signature"
+        type: "File"
+        required: false
+        description: "Digital signature capture"
+
+metadata:
+  total_fields: 22
+  total_groups: 5
+  compliance: "Backflow prevention testing per state regulations"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

@@ -1,0 +1,239 @@
+# Security System Inspection
+# Coperniq Form Template for Low Voltage/Security Contractors
+
+template:
+  name: "[MEP] Security System Inspection"
+  emoji: "🔐"
+  description: "Comprehensive security system testing and maintenance"
+  category: "Low Voltage"
+  compliance: "UL 681, NFPA 731"
+
+  work_order:
+    type: "Low Voltage Service"
+    name: "Security Inspection"
+
+groups:
+  - name: "Site Information"
+    order: 1
+    critical: true
+    fields:
+      - name: "Customer Name"
+        type: "Text"
+        required: true
+
+      - name: "Site Address"
+        type: "Text"
+        required: true
+
+      - name: "Inspection Date"
+        type: "Text"
+        required: true
+
+      - name: "Inspector"
+        type: "Text"
+        required: true
+        placeholder: "Name and license #"
+
+      - name: "System Type"
+        type: "Multiple select"
+        required: true
+        options:
+          - "Intrusion Detection"
+          - "Access Control"
+          - "Video Surveillance (CCTV)"
+          - "Intercom"
+          - "Fire Alarm (monitored)"
+
+  - name: "Control Panel"
+    order: 2
+    fields:
+      - name: "Panel Manufacturer"
+        type: "Single select"
+        options:
+          - "Honeywell"
+          - "DSC"
+          - "Bosch"
+          - "Lenel"
+          - "S2"
+          - "Other"
+
+      - name: "Panel Model"
+        type: "Text"
+
+      - name: "Firmware Version"
+        type: "Text"
+
+      - name: "Battery Condition"
+        type: "Single select"
+        required: true
+        options:
+          - "Good (>12.6V)"
+          - "Marginal (12.0-12.6V)"
+          - "Replace (<12.0V)"
+
+      - name: "Battery Voltage Reading"
+        type: "Numeric"
+        description: "Measured voltage"
+
+      - name: "AC Power Status"
+        type: "Single select"
+        required: true
+        options:
+          - "Normal"
+          - "Low"
+          - "No AC Power"
+
+  - name: "Zone Testing"
+    order: 3
+    fields:
+      - name: "Total Zones"
+        type: "Numeric"
+        required: true
+
+      - name: "Zones Tested"
+        type: "Numeric"
+        required: true
+
+      - name: "Zones Passed"
+        type: "Numeric"
+        required: true
+
+      - name: "Failed Zones"
+        type: "Text"
+        placeholder: "List zone numbers that failed"
+
+      - name: "Door/Window Contacts"
+        type: "Single select"
+        options:
+          - "All Functional"
+          - "Issues Found"
+          - "N/A"
+
+      - name: "Motion Detectors"
+        type: "Single select"
+        options:
+          - "All Functional"
+          - "Issues Found"
+          - "N/A"
+
+      - name: "Glass Break Detectors"
+        type: "Single select"
+        options:
+          - "All Functional"
+          - "Issues Found"
+          - "N/A"
+
+  - name: "Communication Test"
+    order: 4
+    critical: true
+    fields:
+      - name: "Monitoring Station"
+        type: "Text"
+        required: true
+        placeholder: "Central station name"
+
+      - name: "Communication Path"
+        type: "Multiple select"
+        required: true
+        options:
+          - "POTS (phone line)"
+          - "Cellular"
+          - "IP/Internet"
+          - "Radio"
+
+      - name: "Signal Test Performed"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes - Confirmed by monitoring"
+          - "Yes - No confirmation yet"
+          - "No - Could not test"
+
+      - name: "Alarm Codes Verified"
+        type: "Single select"
+        options:
+          - "All codes current"
+          - "Codes need update"
+          - "Not checked"
+
+  - name: "Access Control (if applicable)"
+    order: 5
+    fields:
+      - name: "Number of Doors"
+        type: "Numeric"
+
+      - name: "Card Readers Tested"
+        type: "Numeric"
+
+      - name: "Door Locks Status"
+        type: "Single select"
+        options:
+          - "All Functional"
+          - "Issues Found"
+          - "N/A"
+
+      - name: "Request-to-Exit Devices"
+        type: "Single select"
+        options:
+          - "All Functional"
+          - "Issues Found"
+          - "N/A"
+
+  - name: "Video System (if applicable)"
+    order: 6
+    fields:
+      - name: "Number of Cameras"
+        type: "Numeric"
+
+      - name: "Cameras Functional"
+        type: "Numeric"
+
+      - name: "DVR/NVR Status"
+        type: "Single select"
+        options:
+          - "Recording normally"
+          - "Storage full"
+          - "Not recording"
+          - "N/A"
+
+      - name: "Days of Retention"
+        type: "Numeric"
+        description: "How many days of video stored"
+
+  - name: "Recommendations"
+    order: 7
+    fields:
+      - name: "Overall System Status"
+        type: "Single select"
+        required: true
+        options:
+          - "Fully Operational"
+          - "Operational with minor issues"
+          - "Needs repair"
+          - "System compromised"
+
+      - name: "Deficiencies Found"
+        type: "Multiple select"
+        options:
+          - "None"
+          - "Battery replacement needed"
+          - "Zone repair required"
+          - "Communication issue"
+          - "Camera not recording"
+          - "Access control issue"
+          - "Panel firmware outdated"
+
+      - name: "Recommended Actions"
+        type: "Text"
+        placeholder: "List recommended repairs/upgrades"
+
+      - name: "Customer Signature"
+        type: "Text"
+        description: "Customer acknowledged inspection"
+
+metadata:
+  trade: "Low Voltage"
+  certifications: ["State Low Voltage License", "ASIS CPP"]
+  standards: ["UL 681", "NFPA 731"]
+  created_by: "ai-development-cockpit"
+  version: "1.0"

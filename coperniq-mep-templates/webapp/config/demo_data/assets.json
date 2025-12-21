@@ -1,0 +1,90 @@
+[
+  {
+    "id": "asset-001",
+    "siteId": "site-001",
+    "name": "Main AC Unit",
+    "type": "air_conditioner",
+    "manufacturer": "Carrier",
+    "model": "24ACC636A003",
+    "serialNumber": "1234ABC5678",
+    "size": "3 ton",
+    "installDate": "2019-06-15"
+  },
+  {
+    "id": "asset-002",
+    "siteId": "site-001",
+    "name": "Gas Furnace",
+    "type": "furnace",
+    "manufacturer": "Trane",
+    "model": "TUD080C942V1",
+    "serialNumber": "TRN2345678",
+    "size": "80,000 BTU",
+    "installDate": "2019-06-15"
+  },
+  {
+    "id": "asset-003",
+    "siteId": "site-002",
+    "name": "Heat Pump - Office",
+    "type": "heat_pump",
+    "manufacturer": "Lennox",
+    "model": "XP25-048-230",
+    "serialNumber": "LNX8765432",
+    "size": "4 ton",
+    "installDate": "2021-03-22"
+  },
+  {
+    "id": "asset-004",
+    "siteId": "site-003",
+    "name": "Rooftop Unit - Building A",
+    "type": "rooftop_unit",
+    "manufacturer": "Carrier",
+    "model": "50TCQ08A2A6A0A0A0",
+    "serialNumber": "RTU1234567",
+    "size": "7.5 ton",
+    "installDate": "2018-09-10"
+  },
+  {
+    "id": "asset-005",
+    "siteId": "site-003",
+    "name": "Rooftop Unit - Building B",
+    "type": "rooftop_unit",
+    "manufacturer": "Trane",
+    "model": "YCD120C3R0A0",
+    "serialNumber": "RTU9876543",
+    "size": "10 ton",
+    "installDate": "2020-05-18"
+  },
+  {
+    "id": "asset-006",
+    "siteId": "site-002",
+    "name": "Water Heater - Main",
+    "type": "water_heater",
+    "manufacturer": "Rheem",
+    "model": "XE50T10H45U0",
+    "serialNumber": "RHM4567890",
+    "size": "50 gallon",
+    "installDate": "2022-01-12"
+  },
+  {
+    "id": "asset-007",
+    "siteId": "site-004",
+    "name": "Commercial Water Heater",
+    "type": "water_heater",
+    "manufacturer": "Rheem",
+    "model": "XG100T12DU75U0",
+    "serialNumber": "RHM7654321",
+    "size": "100 gallon",
+    "installDate": "2020-11-05"
+  },
+  {
+    "id": "asset-008",
+    "siteId": "site-005",
+    "name": "Mini-Split AC",
+    "type": "air_conditioner",
+    "manufacturer": "Goodman",
+    "model": "MSC123E21AX",
+    "serialNumber": "GDM3456789",
+    "size": "12,000 BTU",
+    "installDate": "2023-04-08"
+  }
+]

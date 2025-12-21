@@ -1,0 +1,188 @@
+# [Plumbing] Service Call
+# Coperniq Form Template Specification
+# Generated: 2025-12-20
+# Compliance: UPC 2021, IPC 2021
+
+template:
+  name: "[Plumbing] Service Call"
+  emoji: "🔧"
+  description: "Emergency and scheduled plumbing service with diagnostics and repair"
+  category: "Plumbing"
+  compliance: "UPC 2021, IPC 2021"
+
+  work_order:
+    type: "Field Work Order"
+    name: "[Plumbing] Service Call"
+
+groups:
+  - name: "Service Information"
+    order: 1
+    fields:
+      - name: "Customer Name"
+        type: "Text"
+        required: true
+      - name: "Service Address"
+        type: "Text"
+        required: true
+      - name: "Service Date"
+        type: "Text"
+        required: true
+        placeholder: "MM/DD/YYYY"
+      - name: "Technician Name"
+        type: "Text"
+        required: true
+      - name: "Service Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Emergency"
+          - "Scheduled"
+          - "Follow-Up"
+          - "Warranty"
+
+  - name: "Customer Complaint"
+    order: 2
+    fields:
+      - name: "Problem Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Leak - Water Supply"
+          - "Leak - Drain"
+          - "Clogged Drain"
+          - "No Hot Water"
+          - "Low Water Pressure"
+          - "Running Toilet"
+          - "Faucet Issue"
+          - "Garbage Disposal"
+          - "Water Heater Issue"
+          - "Sewer Smell"
+          - "Other"
+      - name: "Location in Home"
+        type: "Single select"
+        required: true
+        options:
+          - "Kitchen"
+          - "Bathroom - Master"
+          - "Bathroom - Secondary"
+          - "Laundry Room"
+          - "Basement"
+          - "Outdoor"
+          - "Multiple Locations"
+      - name: "Customer Description"
+        type: "Text"
+
+  - name: "Diagnostic Findings"
+    order: 3
+    critical: true
+    fields:
+      - name: "Root Cause"
+        type: "Single select"
+        required: true
+        options:
+          - "Clog/Blockage"
+          - "Leak - Pipe Joint"
+          - "Leak - Pipe Corrosion"
+          - "Leak - Fixture"
+          - "Failed Valve"
+          - "Failed Water Heater Element"
+          - "Failed Pressure Regulator"
+          - "Tree Root Intrusion"
+          - "Frozen Pipe"
+          - "Other"
+      - name: "Water Shutoff Required"
+        type: "Single select"
+        options:
+          - "No"
+          - "Yes - Fixture Only"
+          - "Yes - Main Shutoff"
+      - name: "Diagnostic Photos"
+        type: "File"
+
+  - name: "Repair Action"
+    order: 4
+    fields:
+      - name: "Repair Performed"
+        type: "Single select"
+        required: true
+        options:
+          - "Cleared Drain"
+          - "Replaced Fixture"
+          - "Repaired Leak"
+          - "Replaced Valve"
+          - "Replaced Water Heater"
+          - "Replaced Pipe Section"
+          - "Adjusted/Tightened"
+          - "Recommend Replacement"
+          - "Unable to Repair"
+      - name: "Parts Used"
+        type: "Multiple select"
+        options:
+          - "None"
+          - "Faucet"
+          - "Valve"
+          - "Supply Line"
+          - "Drain Line"
+          - "P-Trap"
+          - "Wax Ring"
+          - "Water Heater Element"
+          - "Pressure Regulator"
+          - "Other"
+      - name: "Part Numbers/Description"
+        type: "Text"
+
+  - name: "Testing & Verification"
+    order: 5
+    fields:
+      - name: "Leak Test"
+        type: "Single select"
+        required: true
+        options:
+          - "Pass - No Leaks"
+          - "Fail - Leak Present"
+          - "N/A"
+      - name: "Drain Test"
+        type: "Single select"
+        options:
+          - "Pass - Draining Properly"
+          - "Fail - Slow Drain"
+          - "N/A"
+      - name: "Water Pressure (PSI)"
+        type: "Numeric"
+      - name: "Hot Water Temperature (°F)"
+        type: "Numeric"
+
+  - name: "Billing & Documentation"
+    order: 6
+    fields:
+      - name: "Labor Hours"
+        type: "Numeric"
+        required: true
+      - name: "Parts Cost"
+        type: "Numeric"
+      - name: "Trip Charge"
+        type: "Numeric"
+      - name: "Total Invoice"
+        type: "Numeric"
+        required: true
+      - name: "Payment Collected"
+        type: "Single select"
+        options:
+          - "Yes - Paid in Full"
+          - "Yes - Deposit Only"
+          - "No - Invoice Sent"
+      - name: "Completion Photos"
+        type: "File"
+      - name: "Technician Notes"
+        type: "Text"
+      - name: "Customer Signature"
+        type: "File"
+
+metadata:
+  total_fields: 28
+  total_groups: 6
+  trade: "Plumbing"
+  phase: "service"
+  compliance: "UPC 2021, IPC 2021"
+  created_by: "ai-development-cockpit"
+  version: "1.0"

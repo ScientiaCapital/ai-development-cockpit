@@ -1,65 +1,120 @@
-# Plumbing Protect Plan
-# Coperniq Service Plan Template
-# Generated: 2025-12-20
-
+# [Service Plan] Plumbing Protection Enrollment
 template:
-  name: "Plumbing Protect Plan"
-  emoji: "🚰"
-  description: "Annual plumbing maintenance and protection plan"
+  name: "[Service Plan] Plumbing Protection"
+  emoji: "🔧"
+  description: "Enroll customer in annual plumbing protection plan"
   category: "Service Plans"
+  plan_details:
+    tier: "Standard"
+    price: 249
+    duration_months: 12
+    visits_per_year: 1
 
-servicePlan:
-  planName: "Plumbing Protect Plan"
-  durationMonths: 12
-  totalPrice: 149
-  invoicingFrequency: "ONE_TIME"
+groups:
+  - name: "Customer Information"
+    order: 1
+    fields:
+      - name: "Customer Name"
+        type: "Text"
+        required: true
+      - name: "Phone Number"
+        type: "Text"
+        required: true
+      - name: "Email Address"
+        type: "Text"
+        required: true
+      - name: "Service Address"
+        type: "Text"
+        required: true
+      - name: "Billing Address"
+        type: "Text"
 
-  benefits:
-    - "Annual water heater maintenance"
-    - "Whole-home plumbing inspection"
-    - "Priority scheduling"
-    - "10% discount on plumbing repairs"
-    - "No trip charges during plan period"
-    - "Leak detection assessment"
-    - "Water pressure testing"
+  - name: "Property Details"
+    order: 2
+    fields:
+      - name: "Property Type"
+        type: "Single select"
+        required: true
+        options: ["Single Family Home", "Townhouse", "Condo", "Mobile Home", "Multi-Family", "Commercial"]
+      - name: "Property Age"
+        type: "Single select"
+        options: ["0-10 years", "11-25 years", "26-50 years", "50+ years", "Unknown"]
+      - name: "Number of Bathrooms"
+        type: "Single select"
+        required: true
+        options: ["1", "2", "3", "4", "5+"]
+      - name: "Water Heater Type"
+        type: "Single select"
+        required: true
+        options: ["Gas Tank", "Electric Tank", "Tankless Gas", "Tankless Electric", "Heat Pump", "None"]
+      - name: "Water Heater Age"
+        type: "Single select"
+        options: ["0-5 years", "6-10 years", "11-15 years", "15+ years", "Unknown"]
+      - name: "Has Sump Pump"
+        type: "Single select"
+        options: ["Yes", "No"]
+      - name: "Has Water Softener"
+        type: "Single select"
+        options: ["Yes", "No"]
 
-  servicePlanItems:
-    - name: "Water Heater Maintenance"
-      description: "Complete water heater flush, anode rod inspection, and safety check"
-      frequency: "ANNUAL"
-      frequencyCount: 1
-      includedServices:
-        - "Tank flush and sediment removal"
-        - "Anode rod inspection"
-        - "T&P relief valve test"
-        - "Thermostat calibration"
+  - name: "Plan Selection"
+    order: 3
+    fields:
+      - name: "Plan Tier"
+        type: "Single select"
+        required: true
+        options: ["Plumbing Protection - $249/year"]
+      - name: "Add-Ons"
+        type: "Multiple select"
+        options: ["Water Heater Flush (+$79)", "Sump Pump Test (+$49)", "Drain Camera Inspection (+$149)", "Backflow Test (+$99)", "None"]
+      - name: "Total Price"
+        type: "Numeric"
+        required: true
 
-    - name: "Whole-Home Plumbing Inspection"
-      description: "Comprehensive inspection of all plumbing fixtures"
-      frequency: "ANNUAL"
-      frequencyCount: 1
-      includedServices:
-        - "Visual inspection of all fixtures"
-        - "Toilet leak testing"
-        - "Faucet and showerhead check"
-        - "Under-sink inspection"
-        - "Water pressure testing"
-        - "Drain flow assessment"
+  - name: "Payment"
+    order: 4
+    fields:
+      - name: "Payment Method"
+        type: "Single select"
+        required: true
+        options: ["Credit Card", "ACH/Bank", "Invoice", "Check"]
+      - name: "Billing Frequency"
+        type: "Single select"
+        required: true
+        options: ["Annual ($249)", "Monthly ($20.75)"]
+      - name: "Auto-Renewal"
+        type: "Single select"
+        required: true
+        options: ["Yes", "No"]
 
-  terms:
-    - "Valid for 12 months from activation"
-    - "One annual visit combining both services"
-    - "Non-transferable"
-    - "Parts and materials not included"
+  - name: "Agreement"
+    order: 5
+    fields:
+      - name: "Start Date"
+        type: "Text"
+        required: true
+      - name: "Expiration Date"
+        type: "Text"
+        required: true
+      - name: "Customer Accepts Terms"
+        type: "Single select"
+        required: true
+        options: ["Yes"]
+      - name: "Customer Signature"
+        type: "File"
+        required: true
+      - name: "Sales Rep"
+        type: "Text"
+        required: true
+      - name: "Notes"
+        type: "Text"
 
-  addOns:
-    - "Sewer line camera inspection: $99"
-    - "Additional water heater: $49/year"
-    - "Tankless water heater maintenance: $79/year"
+plan_terms:
+  included: ["Annual plumbing inspection", "Water heater check", "Fixture inspection", "Leak detection", "Priority scheduling", "15% repair discount", "No trip charges"]
+  not_included: ["Drain cleaning", "Pipe replacement", "Water heater replacement", "Sewer line work"]
 
 metadata:
-  tier: "Standard"
-  targetCustomer: "Homeowners with tank water heaters"
-  bundleWith: "HVAC Bronze/Silver plans"
-  created_by: "ai-development-cockpit"
-  version: "1.0"
+  total_fields: 23
+  total_groups: 5
+  plan_tier: "Standard"
+  plan_price: 249

@@ -1,53 +1,115 @@
-# HVAC Silver Plan
-# Coperniq Service Plan Template
-# Generated: 2025-12-20
-
+# [Service Plan] HVAC Silver Enrollment
 template:
-  name: "HVAC Silver Plan"
+  name: "[Service Plan] HVAC Silver Enrollment"
   emoji: "🥈"
-  description: "Bi-annual HVAC maintenance for year-round protection"
+  description: "Enroll customer in Silver HVAC maintenance plan - 2 tune-ups/year"
   category: "Service Plans"
+  plan_details:
+    tier: "Silver"
+    price: 349
+    duration_months: 12
+    visits_per_year: 2
 
-servicePlan:
-  planName: "HVAC Silver Plan"
-  durationMonths: 12
-  totalPrice: 349
-  invoicingFrequency: "ANNUAL"
+groups:
+  - name: "Customer Information"
+    order: 1
+    fields:
+      - name: "Customer Name"
+        type: "Text"
+        required: true
+      - name: "Phone Number"
+        type: "Text"
+        required: true
+      - name: "Email Address"
+        type: "Text"
+        required: true
+      - name: "Service Address"
+        type: "Text"
+        required: true
+      - name: "Billing Address"
+        type: "Text"
 
-  benefits:
-    - "Spring AC tune-up"
-    - "Fall heating tune-up"
-    - "Priority scheduling"
-    - "15% discount on repairs"
-    - "No trip charges during plan period"
-    - "Pre-season reminders"
+  - name: "Property & Equipment"
+    order: 2
+    fields:
+      - name: "Property Type"
+        type: "Single select"
+        required: true
+        options: ["Single Family Home", "Townhouse", "Condo", "Mobile Home", "Multi-Family", "Commercial"]
+      - name: "Number of Systems"
+        type: "Single select"
+        required: true
+        options: ["1 System", "2 Systems (+$149)", "3 Systems (+$298)", "4+ Systems"]
+      - name: "AC Age"
+        type: "Single select"
+        options: ["0-5 years", "6-10 years", "11-15 years", "16-20 years", "20+ years", "Unknown"]
+      - name: "Heating Type"
+        type: "Single select"
+        required: true
+        options: ["Gas Furnace", "Electric Furnace", "Heat Pump", "Boiler", "None"]
+      - name: "AC Manufacturer"
+        type: "Text"
+      - name: "Furnace Manufacturer"
+        type: "Text"
 
-  servicePlanItems:
-    - name: "Spring AC Tune-up"
-      description: "Complete AC inspection and maintenance"
-      frequency: "BI_ANNUAL"
-      frequencyCount: 1
-      seasonality: "Spring (March-May)"
-      includedInspections:
-        - "[MEP] AC System Inspection"
+  - name: "Plan Selection"
+    order: 3
+    fields:
+      - name: "Plan Tier"
+        type: "Single select"
+        required: true
+        options: ["Silver - $349/year (2 visits)"]
+      - name: "Add-Ons"
+        type: "Multiple select"
+        options: ["IAQ Check (+$49)", "Duct Inspection (+$79)", "Drain Line Treatment (+$39)", "None"]
+      - name: "Total Price"
+        type: "Numeric"
+        required: true
 
-    - name: "Fall Heating Tune-up"
-      description: "Complete furnace/heat pump inspection"
-      frequency: "BI_ANNUAL"
-      frequencyCount: 1
-      seasonality: "Fall (September-November)"
-      includedInspections:
-        - "[MEP] Furnace Safety Inspection"
+  - name: "Payment"
+    order: 4
+    fields:
+      - name: "Payment Method"
+        type: "Single select"
+        required: true
+        options: ["Credit Card", "ACH/Bank", "Invoice", "Check"]
+      - name: "Billing Frequency"
+        type: "Single select"
+        required: true
+        options: ["Annual ($349)", "Semi-Annual ($179.50)", "Monthly ($29.08)"]
+      - name: "Auto-Renewal"
+        type: "Single select"
+        required: true
+        options: ["Yes", "No"]
 
-  terms:
-    - "Valid for 12 months from activation"
-    - "Two visits per year: Spring and Fall"
-    - "Non-transferable"
-    - "Parts and refrigerant not included"
+  - name: "Agreement"
+    order: 5
+    fields:
+      - name: "Start Date"
+        type: "Text"
+        required: true
+      - name: "Expiration Date"
+        type: "Text"
+        required: true
+      - name: "Customer Accepts Terms"
+        type: "Single select"
+        required: true
+        options: ["Yes"]
+      - name: "Customer Signature"
+        type: "File"
+        required: true
+      - name: "Sales Rep"
+        type: "Text"
+        required: true
+      - name: "Notes"
+        type: "Text"
+
+plan_terms:
+  included: ["Spring AC tune-up", "Fall heating tune-up", "Priority scheduling", "15% repair discount", "No trip charges", "Filter reminder"]
+  not_included: ["Parts/refrigerant (15% off)", "After-hours calls", "Duct cleaning", "Equipment replacement"]
 
 metadata:
-  tier: "Silver"
-  targetCustomer: "Year-round comfort priority"
-  upsellPath: "Gold Plan"
-  created_by: "ai-development-cockpit"
-  version: "1.0"
+  total_fields: 22
+  total_groups: 5
+  plan_tier: "Silver"
+  plan_price: 349

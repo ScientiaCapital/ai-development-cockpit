@@ -1,44 +1,232 @@
-# HVAC Bronze Plan
-# Coperniq Service Plan Template
-# Generated: 2025-12-20
+# [Service Plan] HVAC Bronze Enrollment
+# Coperniq Form Template Specification
+# Generated: 2025-12-21
+# Purpose: Customer enrollment form for Bronze maintenance plan
 
 template:
-  name: "HVAC Bronze Plan"
+  name: "[Service Plan] HVAC Bronze Enrollment"
   emoji: "🥉"
-  description: "Entry-level annual HVAC maintenance plan"
+  description: "Enroll customer in Bronze HVAC maintenance plan - 1 tune-up/year, priority scheduling"
   category: "Service Plans"
+  phase: "sales"
 
-servicePlan:
-  planName: "HVAC Bronze Plan"
-  durationMonths: 12
-  totalPrice: 199
-  invoicingFrequency: "ONE_TIME"
+  plan_details:
+    tier: "Bronze"
+    price: 199
+    duration_months: 12
+    visits_per_year: 1
 
-  benefits:
-    - "Annual tune-up (AC or Heating)"
-    - "Priority scheduling"
-    - "10% discount on repairs"
-    - "No trip charges during plan period"
-    - "Safety inspection included"
+groups:
+  - name: "Customer Information"
+    order: 1
+    fields:
+      - name: "Customer Name"
+        type: "Text"
+        required: true
+        placeholder: "Full name as it appears on billing"
 
-  servicePlanItems:
-    - name: "Annual HVAC Tune-up"
-      description: "Choose AC or heating tune-up based on season"
-      frequency: "ANNUAL"
-      frequencyCount: 1
-      includedInspections:
-        - "[MEP] AC System Inspection"
-        - "[MEP] Furnace Safety Inspection"
+      - name: "Phone Number"
+        type: "Text"
+        required: true
+        placeholder: "(555) 555-5555"
+
+      - name: "Email Address"
+        type: "Text"
+        required: true
+        placeholder: "customer@email.com"
+
+      - name: "Service Address"
+        type: "Text"
+        required: true
+        placeholder: "123 Main St, City, State ZIP"
+
+      - name: "Billing Address (if different)"
+        type: "Text"
+        required: false
+        placeholder: "Leave blank if same as service address"
+
+  - name: "Property & Equipment"
+    order: 2
+    fields:
+      - name: "Property Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Single Family Home"
+          - "Townhouse"
+          - "Condo"
+          - "Mobile Home"
+          - "Multi-Family (2-4 units)"
+          - "Commercial"
+
+      - name: "Number of HVAC Systems"
+        type: "Single select"
+        required: true
+        options:
+          - "1 System"
+          - "2 Systems (+$99)"
+          - "3 Systems (+$198)"
+          - "4+ Systems (Call for pricing)"
+
+      - name: "AC System Age (Years)"
+        type: "Single select"
+        required: false
+        options:
+          - "0-5 years"
+          - "6-10 years"
+          - "11-15 years"
+          - "16-20 years"
+          - "Over 20 years"
+          - "Unknown"
+
+      - name: "Heating System Type"
+        type: "Single select"
+        required: true
+        options:
+          - "Gas Furnace"
+          - "Electric Furnace"
+          - "Heat Pump"
+          - "Boiler"
+          - "No Central Heat"
+
+      - name: "AC Manufacturer"
+        type: "Text"
+        required: false
+        placeholder: "e.g., Carrier, Trane, Lennox"
+
+      - name: "Furnace Manufacturer"
+        type: "Text"
+        required: false
+        placeholder: "e.g., Lennox, Rheem, Goodman"
+
+  - name: "Plan Selection"
+    order: 3
+    fields:
+      - name: "Plan Tier"
+        type: "Single select"
+        required: true
+        options:
+          - "Bronze - $199/year (1 visit)"
+
+      - name: "Preferred Tune-Up Season"
+        type: "Single select"
+        required: true
+        options:
+          - "Spring (AC Tune-Up)"
+          - "Fall (Heating Tune-Up)"
+
+      - name: "Add-Ons"
+        type: "Multiple select"
+        required: false
+        options:
+          - "Indoor Air Quality Check (+$49)"
+          - "Duct Inspection (+$79)"
+          - "Thermostat Evaluation (+$29)"
+          - "None"
+
+      - name: "Total Annual Price"
+        type: "Numeric"
+        required: true
+        placeholder: "199"
+
+  - name: "Payment & Billing"
+    order: 4
+    fields:
+      - name: "Payment Method"
+        type: "Single select"
+        required: true
+        options:
+          - "Credit Card on File"
+          - "ACH/Bank Draft"
+          - "Invoice by Email"
+          - "Check"
+
+      - name: "Billing Frequency"
+        type: "Single select"
+        required: true
+        options:
+          - "Annual (Pay in Full)"
+          - "Monthly ($16.58/mo)"
+
+      - name: "Card Last 4 Digits"
+        type: "Text"
+        required: false
+        placeholder: "Last 4 digits only"
+
+      - name: "Auto-Renewal"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes - Auto-renew annually"
+          - "No - Manual renewal"
+
+  - name: "Agreement & Signature"
+    order: 5
+    fields:
+      - name: "Plan Start Date"
+        type: "Text"
+        required: true
+        placeholder: "MM/DD/YYYY"
+
+      - name: "Plan Expiration Date"
+        type: "Text"
+        required: true
+        placeholder: "MM/DD/YYYY (12 months from start)"
+
+      - name: "Customer Agrees to Terms"
+        type: "Single select"
+        required: true
+        options:
+          - "Yes - Customer reviewed and accepts terms"
+
+      - name: "Customer Signature"
+        type: "File"
+        required: true
+        description: "Digital signature capture"
+
+      - name: "Sales Rep Name"
+        type: "Text"
+        required: true
+        placeholder: "Name of enrolling sales rep"
+
+      - name: "Enrollment Date"
+        type: "Text"
+        required: true
+        placeholder: "MM/DD/YYYY"
+
+      - name: "Notes"
+        type: "Text"
+        required: false
+        placeholder: "Special requests or notes"
+
+# Plan Terms (displayed to customer)
+plan_terms:
+  included:
+    - "1 annual tune-up (AC or heating - customer choice)"
+    - "Priority scheduling (within 48 hours)"
+    - "10% discount on all repairs"
+    - "No trip/diagnostic charges during plan"
+    - "Safety inspection included with tune-up"
+    - "Email reminders before scheduled visit"
+
+  not_included:
+    - "Parts and refrigerant (discounted 10%)"
+    - "Emergency/after-hours service calls"
+    - "Duct cleaning or repair"
+    - "Equipment replacement"
 
   terms:
-    - "Valid for 12 months from activation date"
-    - "Customer chooses either AC or heating tune-up"
-    - "Non-transferable"
-    - "Parts and refrigerant not included"
+    - "Valid for 12 months from activation"
+    - "Non-transferable to new property owner"
+    - "Cancel anytime with prorated refund"
+    - "Additional systems at $99/system/year"
 
 metadata:
-  tier: "Bronze"
-  targetCustomer: "Budget-conscious homeowners"
-  upsellPath: "Silver Plan"
+  total_fields: 24
+  total_groups: 5
+  trade: "HVAC"
+  phase: "sales"
+  plan_tier: "Bronze"
+  plan_price: 199
   created_by: "ai-development-cockpit"
-  version: "1.0"
+  version: "2.0"

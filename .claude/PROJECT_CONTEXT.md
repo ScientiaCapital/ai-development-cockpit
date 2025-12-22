@@ -40,7 +40,29 @@
 - Updated PROJECT_CONTEXT.md with session progress
 - Created 10+ new documentation files (data/, APP26_TESTING_LOG.md, WORKFLOW_PAYMENT_DEPENDENCY_MAP.md, etc.)
 
-## Tomorrow Start: Continue Solar Templates (7 remaining) + Field Work Orders
+## Tomorrow Start: Complete Remaining Solar Templates + Field Work Orders
+
+**Solar Templates (7 remaining)** - Continue AI-assisted form creation:
+1. ⏸️ **Verify Solar Commercial Audit** - Check if form was created successfully (was generating when session paused)
+2. ⏸️ **Rename Solar Proposal Builder** - Update form name with [MEP] prefix
+3. ⏳ **Shade Analysis Report** - Solar shading evaluation, photometric analysis
+4. ⏳ **Battery Storage Installation** - Energy storage system install, capacity sizing
+5. ⏳ **Solar System Commissioning** - System startup, testing, utility interconnection
+6. ⏳ **Panel Installation Checklist** - Module mounting, wiring, grounding
+7. ⏳ **Interconnection Request** - Utility interconnection application forms
+8. ⏳ **System Maintenance** - O&M procedures, cleaning, monitoring
+9. ⏳ **Roof Mount Assessment** - Structural analysis, mounting systems
+
+**Field Work Orders (7 remaining)**:
+1. ⏳ **EV Charger Install** - Tesla/Universal charger installation
+2. ⏳ **Ductless Mini-Split Install** - Heat pump installation
+3. ⏳ **Backflow Test & Cert** - ASSE 6010 certification
+4. ⏳ **Fire Sprinkler Inspection** - NFPA 25 quarterly inspection
+5. ⏳ **Grease Trap Service** - Commercial kitchen maintenance
+6. ⏳ **Roof Leak Repair** - Emergency roofing service
+7. ⏳ **Emergency Plumbing** - After-hours plumbing emergency
+
+**Then (if time permits)**: Start APP26 6-Hour Sprint:
 
 **Build 2 O&M Workflows First** (Foundation Layer):
 

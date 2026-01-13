@@ -2,7 +2,7 @@
 
 **Created:** 2026-01-13
 **Updated:** 2026-01-13
-**Status:** Week 1 COMPLETE ✅ | Week 2 Commercial In Progress
+**Status:** Weeks 1-3 COMPLETE + O&M Contracts + Warranty | 18 Plans Live
 **Target:** Complete template library for plug-and-play multi-trade contractors
 
 ---
@@ -35,7 +35,9 @@ Build a comprehensive service plan template library that enables:
 - [x] [MEP] Solar Commercial (Safe Harbor) - 6 milestones with ITC protection
 - [x] [MEP] Fire Sprinkler (30/50/20)
 
-### Service Plans (in Coperniq UI) - Week 1 Complete ✅
+### Service Plans (18 Live in Coperniq UI)
+
+#### Residential (8 plans)
 - [x] HVAC Bronze Plan (1 year, $199)
 - [x] HVAC Silver Plan (1 year, $349)
 - [x] HVAC Gold Plan (1 year, $499)
@@ -45,6 +47,24 @@ Build a comprehensive service plan template library that enables:
 - [x] Fire Extinguisher Inspection (1 year, $99)
 - [x] Total Home Care Bundle (1 year, $699) - Multi-trade flagship
 
+#### Commercial (5 plans)
+- [x] Commercial HVAC Basic PM (1 year, $1,500)
+- [x] Commercial HVAC Full Service (1 year, $3,000)
+- [x] Commercial Fire NFPA 25 (1 year, $800)
+- [x] Commercial Electrical Safety (1 year, $1,500)
+- [x] Commercial Plumbing PM (1 year, $1,000)
+
+#### O&M Contracts (3 plans)
+- [x] Solar O&M Contract (2-Year, $1,800/yr) - C&I solar
+- [x] Full Building O&M Contract (3-Year, $12,000/yr) - Multi-trade MEP
+- [x] Utility-Scale Solar O&M (5-Year, $10,000/yr) - Industrial/Agriculture
+
+#### Property Management (1 plan)
+- [x] Multi-Family MEP Bundle (2-Year, $21,000/yr) - 50-unit model
+
+#### Warranty (1 plan)
+- [x] Installation Workmanship Warranty (1-Year, $0) - Post-install lock-in
+
 ### Config Files (JSON templates)
 - [x] `config/payment-structures/service-agreement-templates.json`
 - [x] `config/payment-structures/emergency-premium-pricing.json`
@@ -53,52 +73,82 @@ Build a comprehensive service plan template library that enables:
 
 ---
 
-## Service Plan Matrix - To Build
+## Service Plan Matrix - Complete
 
-### RESIDENTIAL ✅ COMPLETE
+### RESIDENTIAL - 8 Plans COMPLETE
 
 | Trade | Plan Name | Price | Duration | Visits/Year | Status |
 |-------|-----------|-------|----------|-------------|--------|
-| **HVAC** | Bronze Maintenance | $199/yr | 12 mo | 2 | ✅ DONE |
-| **HVAC** | Silver Comfort | $349/yr | 12 mo | 2 | ✅ DONE |
-| **HVAC** | Gold Total Care | $499/yr | 12 mo | 2 | ✅ DONE |
-| **Plumbing** | Home Shield | $249/yr | 12 mo | 1 | ✅ DONE |
-| **Electrical** | Safety Plan | $199/yr | 12 mo | 1 | ✅ DONE |
-| **Solar** | Performance Monitoring | $150/yr | 12 mo | Continuous | ✅ DONE |
-| **Fire** | Extinguisher Inspection | $99/yr | 12 mo | 1 | ✅ DONE |
-| **Multi-Trade** | Total Home Care Bundle | $699/yr | 12 mo | 4 | ✅ DONE |
+| **HVAC** | Bronze Maintenance | $199/yr | 12 mo | 2 | DONE |
+| **HVAC** | Silver Comfort | $349/yr | 12 mo | 2 | DONE |
+| **HVAC** | Gold Total Care | $499/yr | 12 mo | 2 | DONE |
+| **Plumbing** | Home Shield | $249/yr | 12 mo | 1 | DONE |
+| **Electrical** | Safety Plan | $199/yr | 12 mo | 1 | DONE |
+| **Solar** | Performance Monitoring | $150/yr | 12 mo | Continuous | DONE |
+| **Fire** | Extinguisher Inspection | $99/yr | 12 mo | 1 | DONE |
+| **Multi-Trade** | Total Home Care Bundle | $699/yr | 12 mo | 4 | DONE |
 
-### COMMERCIAL & INDUSTRIAL (C&I)
+### COMMERCIAL - 5 Plans COMPLETE
 
-| Trade | Plan Name | Pricing Model | Duration | Response SLA | Status |
-|-------|-----------|---------------|----------|--------------|--------|
-| **HVAC** | Commercial Basic PM | $75/ton/yr | 12 mo | 24hr | TODO |
-| **HVAC** | Commercial Full Service | $150/ton/yr | 12 mo | 4hr | TODO |
-| **Electrical** | Commercial Safety | $0.15/sqft/yr | 12 mo | 24hr | TODO |
-| **Plumbing** | Commercial Plumbing PM | $0.10/sqft/yr | 12 mo | 24hr | TODO |
-| **Fire** | NFPA 25 Quarterly | $8/head/yr | 12 mo | N/A | TODO |
-| **Solar** | Commercial PV O&M | $18/kW/yr | 12 mo | 4hr | TODO |
-| **Multi-Trade** | Full Building MEP | $0.50-2.00/sqft/yr | 12 mo | 4hr | TODO |
+| Trade | Plan Name | Price | Duration | Frequency | Status |
+|-------|-----------|-------|----------|-----------|--------|
+| **HVAC** | Commercial Basic PM | $1,500/yr | 12 mo | Quarterly | DONE |
+| **HVAC** | Commercial Full Service | $3,000/yr | 12 mo | Quarterly | DONE |
+| **Fire** | NFPA 25 Quarterly | $800/yr | 12 mo | Quarterly | DONE |
+| **Electrical** | Commercial Safety | $1,500/yr | 12 mo | Bi-Annual | DONE |
+| **Plumbing** | Commercial PM | $1,000/yr | 12 mo | Bi-Annual | DONE |
 
-### INDUSTRIAL / UTILITY SCALE
+### O&M CONTRACTS - 3 Plans COMPLETE
 
-| Trade | Plan Name | Pricing Model | Duration | Response SLA | Status |
-|-------|-----------|---------------|----------|--------------|--------|
-| **HVAC** | Industrial Chiller PM | Monthly retainer | 36 mo | 2hr | TODO |
-| **Electrical** | Critical Power | Monthly retainer | 36 mo | 15min | TODO |
-| **Fire** | Suppression System | Annual + T&M | 12 mo | 2hr | TODO |
-| **Solar** | Utility O&M | $8-12/kW/yr | 60 mo | 4hr | TODO |
-| **Multi-Trade** | Full Facility O&M | Cost-plus w/ cap | 36-60 mo | SLA matrix | TODO |
+| Segment | Plan Name | Price | Duration | Total Value | Status |
+|---------|-----------|-------|----------|-------------|--------|
+| **C&I Solar** | Solar O&M Contract | $1,800/yr | 24 mo | $3,600 | DONE |
+| **Multi-Trade** | Full Building O&M | $12,000/yr | 36 mo | $36,000 | DONE |
+| **Utility/Ag** | Utility-Scale Solar O&M | $10,000/yr | 60 mo | $50,000 | DONE |
 
-### PROPERTY MANAGEMENT (Blue Ocean)
+### PROPERTY MANAGEMENT - 1 Plan COMPLETE
 
-| Segment | Plan Name | Pricing Model | Trades | Status |
-|---------|-----------|---------------|--------|--------|
-| Multi-Family | MEP Bundle | $35/unit/mo | HVAC+Plumbing+Electrical | TODO |
-| HOA | Common Area | $500+/mo | All trades | TODO |
-| Restaurant | Kitchen Package | Flat fee/yr | HVAC+Fire+Plumbing | TODO |
-| Data Center | Critical Systems | Retainer | Cooling+Power+Fire | TODO |
-| EV Fleet | Charger + Solar | Per-charger/mo | Electrical+Solar | TODO |
+| Segment | Plan Name | Price | Duration | Total Value | Status |
+|---------|-----------|-------|----------|-------------|--------|
+| **Multi-Family** | MEP Bundle (50-Unit) | $21,000/yr | 24 mo | $42,000 | DONE |
+
+### WARRANTY - 1 Plan COMPLETE
+
+| Type | Plan Name | Price | Duration | Purpose | Status |
+|------|-----------|-------|----------|---------|--------|
+| **Workmanship** | Installation Warranty | $0 | 12 mo | Post-install lock-in | DONE |
+
+---
+
+## Contract Value Ladder
+
+Understanding the progression from entry-level to enterprise contracts:
+
+| Tier | Example | Annual Value | Duration | Lock-In Strategy |
+|------|---------|--------------|----------|------------------|
+| **Entry** | Residential Bronze | $199 | 1 year | Low friction entry |
+| **Standard** | Commercial PM | $1,000-3,000 | 1 year | Code compliance |
+| **Premium** | O&M Contract | $10,000-21,000 | 2-5 years | Long-term recurring |
+| **Enterprise** | Utility-Scale O&M | $10,000+/yr | 5 years | $50K+ total value |
+| **Lock-In** | Workmanship Warranty | $0 | 1 year | Relationship bridge |
+
+---
+
+## Still To Build
+
+### Property Management Expansion
+| Segment | Plan Name | Pricing Model | Status |
+|---------|-----------|---------------|--------|
+| HOA | Common Area | $500+/mo | TODO |
+| Restaurant | Kitchen Package | Flat fee/yr | TODO |
+| Data Center | Critical Systems | Retainer | TODO |
+| EV Fleet | Charger + Solar | Per-charger/mo | TODO |
+
+### Industrial Specialty
+| Segment | Plan Name | Pricing Model | Status |
+|---------|-----------|---------------|--------|
+| Industrial | Chiller PM | Monthly retainer | TODO |
+| Critical | Power Plans | Monthly retainer | TODO |
 
 ---
 
@@ -139,64 +189,19 @@ Build a comprehensive service plan template library that enables:
 
 ---
 
-## Research In Progress
-
-Six research agents are currently gathering comprehensive data:
-
-1. **Residential Plans** - All trades, all tiers
-2. **C&I Plans** - Pricing models, SLAs, compliance
-3. **Industrial/Utility** - Heavy industrial, utility-scale solar
-4. **O&M Contracts** - Full lifecycle, performance-based
-5. **Blue Ocean Strategies** - Bundled plans, subscriptions, tech-enabled
-6. **Pricing Benchmarks** - Industry rates, margin targets
-
-Output files in `/tmp/claude/` - will be consolidated into JSON templates.
-
----
-
-## Build Order (Recommended)
-
-### Week 1: Residential Foundation ✅ COMPLETE
-1. ✅ Plumbing Home Shield ($249/yr)
-2. ✅ Electrical Safety Plan ($199/yr)
-3. ✅ Solar Performance Monitoring ($150/yr)
-4. ✅ Fire Extinguisher Inspection ($99/yr)
-5. ✅ Total Home Care Multi-Trade Bundle ($699/yr)
-
-### Week 2: Commercial Essentials 🚧 IN PROGRESS
-1. HVAC Commercial Basic PM ($75/ton)
-2. HVAC Commercial Full Service ($150/ton)
-3. NFPA 25 Quarterly Inspection ($8/head)
-4. Commercial Electrical Safety
-5. Commercial Plumbing PM
-
-### Week 3: Property Management Bundles
-1. Multi-Family MEP Bundle ($35/unit)
-2. HOA Common Area Plan
-3. Restaurant Kitchen Package
-4. Medical Office Compliance Package
-
-### Week 4: Industrial & Specialty
-1. Industrial Chiller PM
-2. Critical Power Plans
-3. Utility-Scale Solar O&M
-4. Data Center Package
-5. EV Fleet Package
-
----
-
 ## Coperniq UI Reference
 
 ### Service Plan Fields
 - **Name**: Display name
 - **Total Price**: Annual or per-period cost
-- **Duration**: 6/12/24 months or custom
+- **Duration**: 6/12/24 months or custom (up to 60 months)
 - **Renewal**: Manual or Auto-renew
 - **Service Schedule**: Work Order Template + Frequency
 - **Invoice Schedule**: None/One-time/Monthly/Quarterly/Bi-annual/Annual
+- **Invoice Terms**: Net 30 standard for commercial
 
 ### Creating a Service Plan
-1. Navigate to: Company Settings → Configure → Service Plans
+1. Navigate to: Company Settings -> Configure -> Service Plans
 2. Click "+ Service Plan" button
 3. Fill in Details & Terms section
 4. Configure Service Schedule (link to WO template)
@@ -205,7 +210,7 @@ Output files in `/tmp/claude/` - will be consolidated into JSON templates.
 
 ### Linking to Work Order Templates
 Service Plans can auto-generate work orders. Create matching WO templates:
-- Process Studio → Field Work Orders → Create Template
+- Process Studio -> Field Work Orders -> Create Template
 - Include forms, checklists, parts lists
 
 ---
@@ -227,9 +232,15 @@ Service Plans can auto-generate work orders. Create matching WO templates:
 
 - [x] Consolidate research agent outputs into JSON templates
 - [x] Build residential service plans (8 complete)
-- [ ] Build commercial service plans (Week 2 in progress)
-- [ ] Build property management bundles (Week 3)
+- [x] Build commercial service plans (5 complete)
+- [x] Build O&M contracts (3 complete)
+- [x] Build property management bundles (1 complete)
+- [x] Build warranty plan (1 complete)
 - [x] Create matching Work Order templates (15 templates live)
+- [ ] Build remaining PM bundles (HOA, Restaurant, Data Center)
+- [ ] Build industrial specialty plans
+- [ ] Create strategic Labels for ICP contractors
+- [ ] Create Asset templates
 - [ ] Test automation triggers
 - [ ] Document in CLAUDE.md
 
@@ -241,6 +252,8 @@ Service Plans can auto-generate work orders. Create matching WO templates:
 - NFPA 25 quarterly inspections are code-required for commercial sprinklers
 - Property managers want one vendor, one invoice (huge blue ocean opportunity)
 - Per-kW pricing for solar O&M is industry standard ($15-25/kW residential, $8-15/kW utility)
+- Warranty plans create the relationship bridge from install to recurring PM revenue
+- Multi-year O&M contracts are the "big contract" lock-in for C&I and utility
 
 ---
 

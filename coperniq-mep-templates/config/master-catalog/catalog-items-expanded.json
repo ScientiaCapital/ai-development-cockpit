@@ -1,0 +1,1288 @@
+{
+  "metadata": {
+    "version": "2.0.0",
+    "created": "2026-01-13",
+    "updated": "2026-01-13",
+    "company": "Kipper Energy Solutions",
+    "instance": 388,
+    "description": "Master catalog for multi-trade MEP + Energy contractors - Expanded for Residential, Resimercial, C&I, and Industrial segments",
+    "segments": ["RESIDENTIAL", "RESIMERCIAL", "COMMERCIAL_INDUSTRIAL", "INDUSTRIAL_UTILITY"],
+    "research_agents": [
+      "HVAC/Mechanical", "Electrical", "Plumbing", "Solar/Energy",
+      "Roofing", "Low Voltage", "Fire Protection",
+      "C&I Segment", "Industrial/Utility Segment", "Resimercial Segment"
+    ]
+  },
+
+  "new_items": [
+    {
+      "section": "========== RESIMERCIAL SEGMENT =========="
+    },
+    {
+      "section": "=== RESIMERCIAL - HVAC ==="
+    },
+    {
+      "name": "Light Commercial RTU Installation (5-7.5 Ton)",
+      "catalog": "MECHANICAL",
+      "type": "SERVICE",
+      "category": "Commercial Installation",
+      "cost": 8500.00,
+      "price": 17000.00,
+      "code": "MEC-RTU-5T",
+      "segment": "RESIMERCIAL",
+      "description": "Packaged rooftop unit installation for small retail/office, includes crane lift, curb adapter, thermostat, and startup"
+    },
+    {
+      "name": "PTAC Unit Replacement",
+      "catalog": "MECHANICAL",
+      "type": "SERVICE",
+      "category": "Commercial Installation",
+      "cost": 850.00,
+      "price": 1650.00,
+      "code": "MEC-PTAC-REPL",
+      "segment": "RESIMERCIAL",
+      "description": "Hotel/apartment PTAC unit replacement including sleeve inspection, electrical connection, and commissioning"
+    },
+    {
+      "name": "VRF Multi-Zone System (4-Zone)",
+      "catalog": "MECHANICAL",
+      "type": "SERVICE",
+      "category": "Commercial Installation",
+      "cost": 9500.00,
+      "price": 18500.00,
+      "code": "MEC-VRF-4Z",
+      "segment": "RESIMERCIAL",
+      "description": "Variable refrigerant flow system installation for small office/retail with 4 indoor units, ideal for tenant buildouts"
+    },
+    {
+      "name": "Commercial HVAC PM Contract (Annual)",
+      "catalog": "MECHANICAL",
+      "type": "SERVICE",
+      "category": "Maintenance Agreement",
+      "cost": 400.00,
+      "price": 1200.00,
+      "code": "MEC-PM-COMM-YR",
+      "segment": "RESIMERCIAL",
+      "description": "Annual preventive maintenance for light commercial HVAC (up to 10 ton), includes quarterly visits, filter changes, and coil cleaning"
+    },
+    {
+      "name": "Multi-Family PM Contract (Per Unit/Year)",
+      "catalog": "MECHANICAL",
+      "type": "SERVICE",
+      "category": "Maintenance Agreement",
+      "cost": 45.00,
+      "price": 125.00,
+      "code": "MEC-PM-MF-UNIT",
+      "segment": "RESIMERCIAL",
+      "description": "Annual HVAC maintenance per apartment unit, includes filter replacement, system check, and basic cleaning (minimum 10 units)"
+    },
+    {
+      "name": "Restaurant HVAC/Kitchen PM (Quarterly)",
+      "catalog": "MECHANICAL",
+      "type": "SERVICE",
+      "category": "Maintenance Agreement",
+      "cost": 350.00,
+      "price": 750.00,
+      "code": "MEC-PM-REST-QTR",
+      "segment": "RESIMERCIAL",
+      "description": "Quarterly PM for restaurant HVAC and make-up air systems, includes coil cleaning, belt inspection, and refrigerant check"
+    },
+    {
+      "name": "Mini-Split Multi-Zone (3-Head)",
+      "catalog": "MECHANICAL",
+      "type": "SERVICE",
+      "category": "Commercial Installation",
+      "cost": 4500.00,
+      "price": 9500.00,
+      "code": "MEC-MINI-3Z",
+      "segment": "RESIMERCIAL",
+      "description": "Ductless mini-split installation with 3 indoor heads for small office/retail zones, includes line sets, electrical, and commissioning"
+    },
+    {
+      "section": "=== RESIMERCIAL - ELECTRICAL ==="
+    },
+    {
+      "name": "3-Phase Panel Upgrade (200A)",
+      "catalog": "ELECTRICAL",
+      "type": "SERVICE",
+      "category": "Commercial Installation",
+      "cost": 3200.00,
+      "price": 6500.00,
+      "code": "ELE-3PH-200A",
+      "segment": "RESIMERCIAL",
+      "description": "200A 3-phase panel installation/upgrade for small commercial, includes meter base, main breaker, and permit"
+    },
+    {
+      "name": "Tenant Improvement Electrical Package",
+      "catalog": "ELECTRICAL",
+      "type": "SERVICE",
+      "category": "Commercial Installation",
+      "cost": 2500.00,
+      "price": 5500.00,
+      "code": "ELE-TI-PKG",
+      "segment": "RESIMERCIAL",
+      "description": "Small office TI electrical (up to 2,000 SF) including outlets, lighting circuits, data drops, and panel work"
+    },
+    {
+      "name": "Restaurant Electrical Rough-In",
+      "catalog": "ELECTRICAL",
+      "type": "SERVICE",
+      "category": "Commercial Installation",
+      "cost": 4500.00,
+      "price": 9500.00,
+      "code": "ELE-REST-ROUGH",
+      "segment": "RESIMERCIAL",
+      "description": "Restaurant electrical infrastructure including 3-phase circuits for kitchen equipment, hood connections, and code-compliant wiring"
+    },
+    {
+      "section": "=== RESIMERCIAL - PLUMBING ==="
+    },
+    {
+      "name": "Grease Interceptor Installation (1000 gal)",
+      "catalog": "PLUMBING",
+      "type": "SERVICE",
+      "category": "Commercial Installation",
+      "cost": 3500.00,
+      "price": 7500.00,
+      "code": "PLM-GREASE-1K",
+      "segment": "RESIMERCIAL",
+      "description": "In-ground grease interceptor for restaurant/food service, includes excavation, plumbing connections, and inspection"
+    },
+    {
+      "name": "Commercial Tankless Water Heater Install",
+      "catalog": "PLUMBING",
+      "type": "SERVICE",
+      "category": "Commercial Installation",
+      "cost": 3800.00,
+      "price": 7200.00,
+      "code": "PLM-TNKLS-COMM",
+      "segment": "RESIMERCIAL",
+      "description": "High-capacity tankless water heater (199k+ BTU) for multi-family/small commercial, includes gas line sizing and venting"
+    },
+    {
+      "name": "Multi-Family Water Heater Bank (3-Unit)",
+      "catalog": "PLUMBING",
+      "type": "SERVICE",
+      "category": "Commercial Installation",
+      "cost": 6500.00,
+      "price": 12500.00,
+      "code": "PLM-WH-BANK-3",
+      "segment": "RESIMERCIAL",
+      "description": "Parallel water heater installation for apartment buildings (75-100 gal each), includes manifold, recirculation pump, and expansion tank"
+    },
+    {
+      "name": "Commercial Backflow Test & Certification",
+      "catalog": "PLUMBING",
+      "type": "SERVICE",
+      "category": "Testing",
+      "cost": 65.00,
+      "price": 150.00,
+      "code": "PLM-BKFLW-COMM",
+      "segment": "RESIMERCIAL",
+      "description": "Annual backflow preventer testing and certification for commercial/multi-family fire and irrigation systems"
+    },
+    {
+      "section": "=== RESIMERCIAL - SOLAR ==="
+    },
+    {
+      "name": "Small Commercial Solar (25kW)",
+      "catalog": "ENERGY",
+      "type": "SERVICE",
+      "category": "Commercial Installation",
+      "cost": 32000.00,
+      "price": 55000.00,
+      "code": "ENR-SOL-25KW",
+      "segment": "RESIMERCIAL",
+      "description": "25kW rooftop solar array for small commercial/multi-family, includes engineering, permits, interconnection, and monitoring"
+    },
+    {
+      "name": "Multi-Family Solar + Battery System",
+      "catalog": "ENERGY",
+      "type": "SERVICE",
+      "category": "Commercial Installation",
+      "cost": 45000.00,
+      "price": 78000.00,
+      "code": "ENR-MF-SOL-BATT",
+      "segment": "RESIMERCIAL",
+      "description": "50kW solar with 30kWh battery backup for apartment building common areas, includes load panel integration"
+    },
+    {
+      "section": "=== RESIMERCIAL - FIRE SAFETY ==="
+    },
+    {
+      "name": "Commercial Fire Alarm System (10-20 zones)",
+      "catalog": "FIRE_SAFETY",
+      "type": "SERVICE",
+      "category": "Commercial Installation",
+      "cost": 4500.00,
+      "price": 9500.00,
+      "code": "FS-ALM-COMM-20Z",
+      "segment": "RESIMERCIAL",
+      "description": "Addressable fire alarm system for multi-family/small commercial (up to 10,000 SF), includes panel, detectors, pull stations, and monitoring setup"
+    },
+    {
+      "name": "Restaurant Hood Suppression System",
+      "catalog": "FIRE_SAFETY",
+      "type": "SERVICE",
+      "category": "Commercial Installation",
+      "cost": 4200.00,
+      "price": 8500.00,
+      "code": "FS-HOOD-SUPP",
+      "segment": "RESIMERCIAL",
+      "description": "Ansul R-102 kitchen hood fire suppression system installation for restaurant/food service, includes nozzles, fusible links, and certification"
+    },
+    {
+      "name": "Small Commercial Sprinkler System",
+      "catalog": "FIRE_SAFETY",
+      "type": "SERVICE",
+      "category": "Commercial Installation",
+      "cost": 12000.00,
+      "price": 25000.00,
+      "code": "FS-SPRK-COMM-5K",
+      "segment": "RESIMERCIAL",
+      "description": "Wet pipe sprinkler system for small commercial building (up to 5,000 SF), includes design, permits, backflow preventer, and inspection"
+    },
+    {
+      "name": "Fire Suppression Inspection (6-Month)",
+      "catalog": "FIRE_SAFETY",
+      "type": "SERVICE",
+      "category": "Inspection",
+      "cost": 125.00,
+      "price": 295.00,
+      "code": "FS-SUPP-INSP-6M",
+      "segment": "RESIMERCIAL",
+      "description": "Semi-annual kitchen hood suppression system inspection per NFPA 17A, includes documentation and certification"
+    },
+
+    {
+      "section": "========== COMMERCIAL & INDUSTRIAL (C&I) SEGMENT =========="
+    },
+    {
+      "section": "=== C&I - HVAC ==="
+    },
+    {
+      "name": "RTU Installation - 10 Ton",
+      "catalog": "MECHANICAL",
+      "type": "SERVICE",
+      "category": "Commercial HVAC",
+      "cost": 25000.00,
+      "price": 45000.00,
+      "code": "MEC-RTU-10T",
+      "segment": "C&I",
+      "description": "Rooftop Unit installation for commercial buildings, includes curb, penetrations, gas/electric runs, controls programming"
+    },
+    {
+      "name": "RTU Installation - 25 Ton",
+      "catalog": "MECHANICAL",
+      "type": "SERVICE",
+      "category": "Commercial HVAC",
+      "cost": 45000.00,
+      "price": 75000.00,
+      "code": "MEC-RTU-25T",
+      "segment": "C&I",
+      "description": "Large commercial RTU installation with crane rental, duct design, seismic detail, and BAS integration"
+    },
+    {
+      "name": "VRF System Installation (per ton)",
+      "catalog": "MECHANICAL",
+      "type": "SERVICE",
+      "category": "Commercial HVAC",
+      "cost": 2500.00,
+      "price": 4500.00,
+      "code": "MEC-VRF-TON",
+      "segment": "C&I",
+      "description": "Variable Refrigerant Flow system - high efficiency multi-zone heating/cooling for commercial buildings"
+    },
+    {
+      "name": "Air-Cooled Chiller - 100 Ton",
+      "catalog": "MECHANICAL",
+      "type": "PRODUCT",
+      "category": "Commercial HVAC",
+      "cost": 65000.00,
+      "price": 95000.00,
+      "code": "MEC-CHLR-100T",
+      "segment": "C&I",
+      "description": "Air-cooled chiller system for commercial cooling, GWP <700 refrigerant compliant (2025 regulations)"
+    },
+    {
+      "name": "Cooling Tower Installation - 200 Ton",
+      "catalog": "MECHANICAL",
+      "type": "SERVICE",
+      "category": "Commercial HVAC",
+      "cost": 85000.00,
+      "price": 150000.00,
+      "code": "MEC-CLTR-200T",
+      "segment": "C&I",
+      "description": "Commercial cooling tower installation including piping, controls, and water treatment setup"
+    },
+    {
+      "name": "Building Automation System (BAS) - per 10,000 SF",
+      "catalog": "MECHANICAL",
+      "type": "SERVICE",
+      "category": "Controls & Automation",
+      "cost": 35000.00,
+      "price": 60000.00,
+      "code": "MEC-BAS-10KSF",
+      "segment": "C&I",
+      "description": "Complete BAS installation with HVAC integration, remote monitoring, and energy management"
+    },
+    {
+      "name": "Commercial HVAC Controls Technician (per hour)",
+      "catalog": "MECHANICAL",
+      "type": "SERVICE",
+      "category": "Commercial Labor",
+      "cost": 125.00,
+      "price": 225.00,
+      "code": "MEC-CTRL-TECH",
+      "segment": "C&I",
+      "description": "BAS/DDC controls specialist or commissioning technician labor rate"
+    },
+    {
+      "section": "=== C&I - ELECTRICAL ==="
+    },
+    {
+      "name": "3-Phase Service Installation - 400A",
+      "catalog": "ELECTRICAL",
+      "type": "SERVICE",
+      "category": "Commercial Electrical",
+      "cost": 8500.00,
+      "price": 15000.00,
+      "code": "ELE-3PH-400A",
+      "segment": "C&I",
+      "description": "Commercial 3-phase 480V/277V electrical service upgrade with switchgear"
+    },
+    {
+      "name": "3-Phase Service Installation - 800A",
+      "catalog": "ELECTRICAL",
+      "type": "SERVICE",
+      "category": "Commercial Electrical",
+      "cost": 18000.00,
+      "price": 32000.00,
+      "code": "ELE-3PH-800A",
+      "segment": "C&I",
+      "description": "Large commercial 3-phase service with utility coordination and CT cabinet"
+    },
+    {
+      "name": "VFD Installation - 25 HP",
+      "catalog": "ELECTRICAL",
+      "type": "SERVICE",
+      "category": "Motor Control",
+      "cost": 2800.00,
+      "price": 4800.00,
+      "code": "ELE-VFD-25HP",
+      "segment": "C&I",
+      "description": "Variable Frequency Drive installation for HVAC or industrial motor control, includes programming"
+    },
+    {
+      "name": "VFD Installation - 75 HP",
+      "catalog": "ELECTRICAL",
+      "type": "SERVICE",
+      "category": "Motor Control",
+      "cost": 6500.00,
+      "price": 11000.00,
+      "code": "ELE-VFD-75HP",
+      "segment": "C&I",
+      "description": "Large VFD installation for commercial pumps, fans, or compressors with 480V 3-phase"
+    },
+    {
+      "name": "Motor Starter - NEMA Size 2",
+      "catalog": "ELECTRICAL",
+      "type": "PRODUCT",
+      "category": "Motor Control",
+      "cost": 450.00,
+      "price": 850.00,
+      "code": "ELE-MSTR-NEMA2",
+      "segment": "C&I",
+      "description": "Magnetic motor starter for commercial/industrial 3-phase motors up to 25 HP"
+    },
+    {
+      "name": "High-Bay LED Lighting Installation (per fixture)",
+      "catalog": "ELECTRICAL",
+      "type": "SERVICE",
+      "category": "Commercial Lighting",
+      "cost": 185.00,
+      "price": 350.00,
+      "code": "ELE-HIBAY-LED",
+      "segment": "C&I",
+      "description": "Industrial LED high-bay fixture installation for warehouses, 20,000+ lumens, DLC Premium rated"
+    },
+    {
+      "name": "Commercial Standby Generator - 100kW",
+      "catalog": "ELECTRICAL",
+      "type": "SERVICE",
+      "category": "Emergency Power",
+      "cost": 45000.00,
+      "price": 75000.00,
+      "code": "ELE-GEN-100KW",
+      "segment": "C&I",
+      "description": "100kW diesel generator installation with ATS, concrete pad, and fuel tank"
+    },
+    {
+      "name": "Commercial Standby Generator - 200kW",
+      "catalog": "ELECTRICAL",
+      "type": "SERVICE",
+      "category": "Emergency Power",
+      "cost": 85000.00,
+      "price": 140000.00,
+      "code": "ELE-GEN-200KW",
+      "segment": "C&I",
+      "description": "200kW diesel generator installation for large commercial facilities with sound attenuation"
+    },
+    {
+      "name": "Commercial UPS System - 30kVA",
+      "catalog": "ELECTRICAL",
+      "type": "SERVICE",
+      "category": "Emergency Power",
+      "cost": 18000.00,
+      "price": 32000.00,
+      "code": "ELE-UPS-30KVA",
+      "segment": "C&I",
+      "description": "Uninterruptible Power Supply for commercial critical loads, includes battery cabinet and installation"
+    },
+    {
+      "section": "=== C&I - PLUMBING ==="
+    },
+    {
+      "name": "Commercial Water Heater - 100 Gallon",
+      "catalog": "PLUMBING",
+      "type": "SERVICE",
+      "category": "Commercial Plumbing",
+      "cost": 3500.00,
+      "price": 6500.00,
+      "code": "PLM-WH-100G-COMM",
+      "segment": "C&I",
+      "description": "Commercial-grade 100 gallon water heater installation with expansion tank and recirculation"
+    },
+    {
+      "name": "Grease Trap Installation - Indoor",
+      "catalog": "PLUMBING",
+      "type": "SERVICE",
+      "category": "Commercial Plumbing",
+      "cost": 1200.00,
+      "price": 2500.00,
+      "code": "PLM-GREASE-IN",
+      "segment": "C&I",
+      "description": "Under-sink grease trap installation for commercial kitchens and restaurants"
+    },
+    {
+      "name": "Grease Trap Installation - In-Ground",
+      "catalog": "PLUMBING",
+      "type": "SERVICE",
+      "category": "Commercial Plumbing",
+      "cost": 5500.00,
+      "price": 10000.00,
+      "code": "PLM-GREASE-IG",
+      "segment": "C&I",
+      "description": "Large in-ground grease interceptor installation with excavation for commercial food service"
+    },
+    {
+      "name": "Commercial Backflow Preventer - RPZ",
+      "catalog": "PLUMBING",
+      "type": "SERVICE",
+      "category": "Commercial Plumbing",
+      "cost": 1800.00,
+      "price": 3500.00,
+      "code": "PLM-RPZ-INST",
+      "segment": "C&I",
+      "description": "Reduced Pressure Zone backflow preventer installation for commercial fire/irrigation systems"
+    },
+    {
+      "section": "=== C&I - SOLAR/ENERGY ==="
+    },
+    {
+      "name": "Commercial String Inverter - 50kW",
+      "catalog": "ENERGY",
+      "type": "PRODUCT",
+      "category": "Commercial Solar",
+      "cost": 6500.00,
+      "price": 9500.00,
+      "code": "ENR-INV-50KW",
+      "segment": "C&I",
+      "description": "Commercial 3-phase string inverter for rooftop or ground-mount solar installations"
+    },
+    {
+      "name": "Solar Carport Structure - per kW",
+      "catalog": "ENERGY",
+      "type": "SERVICE",
+      "category": "Commercial Solar",
+      "cost": 1200.00,
+      "price": 2000.00,
+      "code": "ENR-CARPORT-KW",
+      "segment": "C&I",
+      "description": "Steel carport structure for commercial solar installation, includes foundation and engineering"
+    },
+    {
+      "name": "Commercial BESS Installation - 100kWh",
+      "catalog": "ENERGY",
+      "type": "SERVICE",
+      "category": "Energy Storage",
+      "cost": 65000.00,
+      "price": 100000.00,
+      "code": "ENR-BESS-100KWH",
+      "segment": "C&I",
+      "description": "Battery Energy Storage System for commercial demand charge management and backup"
+    },
+    {
+      "name": "Level 2 EV Charger Installation - Commercial",
+      "catalog": "ENERGY",
+      "type": "SERVICE",
+      "category": "EV Infrastructure",
+      "cost": 4500.00,
+      "price": 8500.00,
+      "code": "ENR-EV-L2-COMM",
+      "segment": "C&I",
+      "description": "Commercial Level 2 EV charging station (7kW-19kW) with network connectivity and payment processing"
+    },
+    {
+      "name": "DC Fast Charger Installation - 50kW",
+      "catalog": "ENERGY",
+      "type": "SERVICE",
+      "category": "EV Infrastructure",
+      "cost": 55000.00,
+      "price": 95000.00,
+      "code": "ENR-DCFC-50KW",
+      "segment": "C&I",
+      "description": "DC fast charger installation with transformer upgrade, trenching, and utility coordination"
+    },
+    {
+      "section": "=== C&I - FIRE PROTECTION ==="
+    },
+    {
+      "name": "Commercial Fire Sprinkler System - per SF (New)",
+      "catalog": "FIRE_SAFETY",
+      "type": "SERVICE",
+      "category": "Fire Protection",
+      "cost": 1.75,
+      "price": 3.00,
+      "code": "FS-SPRK-NEW-SF",
+      "segment": "C&I",
+      "description": "Wet pipe sprinkler system installation for new commercial construction"
+    },
+    {
+      "name": "Commercial Fire Sprinkler System - per SF (Retrofit)",
+      "catalog": "FIRE_SAFETY",
+      "type": "SERVICE",
+      "category": "Fire Protection",
+      "cost": 4.50,
+      "price": 8.00,
+      "code": "FS-SPRK-RETRO-SF",
+      "segment": "C&I",
+      "description": "Fire sprinkler retrofit installation in existing commercial buildings"
+    },
+    {
+      "name": "Fire Pump Installation",
+      "catalog": "FIRE_SAFETY",
+      "type": "SERVICE",
+      "category": "Fire Protection",
+      "cost": 12000.00,
+      "price": 22000.00,
+      "code": "FS-PUMP-INST",
+      "segment": "C&I",
+      "description": "Electric or diesel fire pump installation for high-rise or large commercial buildings"
+    },
+    {
+      "name": "Commercial Fire Alarm Panel",
+      "catalog": "FIRE_SAFETY",
+      "type": "SERVICE",
+      "category": "Fire Alarm",
+      "cost": 4500.00,
+      "price": 8500.00,
+      "code": "FS-ALM-PNL-COMM",
+      "segment": "C&I",
+      "description": "Addressable fire alarm control panel installation with monitoring integration"
+    },
+    {
+      "name": "Mass Notification System",
+      "catalog": "FIRE_SAFETY",
+      "type": "SERVICE",
+      "category": "Fire Alarm",
+      "cost": 15000.00,
+      "price": 28000.00,
+      "code": "FS-MASS-NOTIF",
+      "segment": "C&I",
+      "description": "Voice evacuation and mass notification system for large commercial/institutional buildings"
+    },
+
+    {
+      "section": "========== INDUSTRIAL / UTILITY SEGMENT =========="
+    },
+    {
+      "section": "=== INDUSTRIAL - HVAC ==="
+    },
+    {
+      "name": "CRAH Unit Installation - Data Center (100kW)",
+      "catalog": "MECHANICAL",
+      "type": "SERVICE",
+      "category": "Data Center Cooling",
+      "cost": 35000.00,
+      "price": 52500.00,
+      "code": "MEC-CRAH-100KW",
+      "segment": "INDUSTRIAL",
+      "description": "Computer Room Air Handler installation for data center cooling using chilled water infrastructure"
+    },
+    {
+      "name": "CRAC Unit Installation - Data Center (50kW)",
+      "catalog": "MECHANICAL",
+      "type": "SERVICE",
+      "category": "Data Center Cooling",
+      "cost": 28000.00,
+      "price": 42000.00,
+      "code": "MEC-CRAC-50KW",
+      "segment": "INDUSTRIAL",
+      "description": "Computer Room Air Conditioning unit with direct expansion refrigeration for server rooms"
+    },
+    {
+      "name": "Industrial Chiller Installation - 500 Ton Water-Cooled",
+      "catalog": "MECHANICAL",
+      "type": "SERVICE",
+      "category": "Industrial Cooling",
+      "cost": 175000.00,
+      "price": 262500.00,
+      "code": "MEC-CHLR-500T",
+      "segment": "INDUSTRIAL",
+      "description": "Large-scale water-cooled centrifugal chiller installation including piping, commissioning, and cooling tower integration"
+    },
+    {
+      "name": "Clean Room HVAC System - ISO Class 7 (per SF)",
+      "catalog": "MECHANICAL",
+      "type": "SERVICE",
+      "category": "Clean Room Systems",
+      "cost": 150.00,
+      "price": 225.00,
+      "code": "MEC-CLEANRM-ISO7",
+      "segment": "INDUSTRIAL",
+      "description": "ISO Class 7 clean room HVAC including air handlers, HEPA filtration, temperature/humidity control"
+    },
+    {
+      "name": "Industrial Boiler Installation - 300HP Steam",
+      "catalog": "MECHANICAL",
+      "type": "SERVICE",
+      "category": "Industrial Heating",
+      "cost": 95000.00,
+      "price": 142500.00,
+      "code": "MEC-BOILER-300HP",
+      "segment": "INDUSTRIAL",
+      "description": "High-capacity steam boiler installation for industrial process heating with economizer and condensate return"
+    },
+    {
+      "name": "Industrial Exhaust System - Manufacturing",
+      "catalog": "MECHANICAL",
+      "type": "SERVICE",
+      "category": "Industrial Ventilation",
+      "cost": 45000.00,
+      "price": 67500.00,
+      "code": "MEC-EXHAUST-MFG",
+      "segment": "INDUSTRIAL",
+      "description": "Welding fume extraction, dust collection, or process exhaust system with ductwork and filtration"
+    },
+    {
+      "name": "Cooling Tower Installation - 1000 Ton",
+      "catalog": "MECHANICAL",
+      "type": "SERVICE",
+      "category": "Industrial Cooling",
+      "cost": 185000.00,
+      "price": 277500.00,
+      "code": "MEC-CLTR-1000T",
+      "segment": "INDUSTRIAL",
+      "description": "Induced-draft cooling tower installation including basin, structural steel, piping, VFD drives"
+    },
+    {
+      "section": "=== INDUSTRIAL - ELECTRICAL ==="
+    },
+    {
+      "name": "Medium Voltage Switchgear Installation - 4160V",
+      "catalog": "ELECTRICAL",
+      "type": "SERVICE",
+      "category": "Medium Voltage",
+      "cost": 125000.00,
+      "price": 187500.00,
+      "code": "ELE-MV-SWGR-4160",
+      "segment": "INDUSTRIAL",
+      "description": "4160V metal-clad switchgear installation including circuit breakers, protective relaying, and metering"
+    },
+    {
+      "name": "Motor Control Center (MCC) Installation - 800A",
+      "catalog": "ELECTRICAL",
+      "type": "SERVICE",
+      "category": "Motor Control",
+      "cost": 85000.00,
+      "price": 127500.00,
+      "code": "ELE-MCC-800A",
+      "segment": "INDUSTRIAL",
+      "description": "Low-voltage MCC with variable frequency drives, soft starters, and motor starters"
+    },
+    {
+      "name": "Pad-Mount Substation Transformer - 1000kVA",
+      "catalog": "ELECTRICAL",
+      "type": "PRODUCT",
+      "category": "Distribution Transformers",
+      "cost": 47500.00,
+      "price": 71250.00,
+      "code": "ELE-XFMR-1000KVA",
+      "segment": "INDUSTRIAL",
+      "description": "Oil-filled pad-mounted transformer (13.8kV to 480V) for industrial facility service entrance"
+    },
+    {
+      "name": "Arc Flash Study - Industrial Facility",
+      "catalog": "ELECTRICAL",
+      "type": "SERVICE",
+      "category": "Electrical Safety Studies",
+      "cost": 8500.00,
+      "price": 15000.00,
+      "code": "ELE-ARCFLASH-STD",
+      "segment": "INDUSTRIAL",
+      "description": "Complete arc flash hazard analysis per IEEE 1584 and NFPA 70E with equipment labeling"
+    },
+    {
+      "name": "Power Quality Analysis & Mitigation",
+      "catalog": "ELECTRICAL",
+      "type": "SERVICE",
+      "category": "Power Quality",
+      "cost": 6500.00,
+      "price": 12000.00,
+      "code": "ELE-PQ-STUDY",
+      "segment": "INDUSTRIAL",
+      "description": "Power quality study including harmonic analysis, voltage sag/swell monitoring (30-day monitoring)"
+    },
+    {
+      "name": "PLC Control System Installation",
+      "catalog": "ELECTRICAL",
+      "type": "SERVICE",
+      "category": "Industrial Automation",
+      "cost": 35000.00,
+      "price": 52500.00,
+      "code": "ELE-PLC-INST",
+      "segment": "INDUSTRIAL",
+      "description": "Programmable Logic Controller system installation including panel fabrication, I/O wiring, programming"
+    },
+    {
+      "name": "Revenue-Grade Metering System",
+      "catalog": "ELECTRICAL",
+      "type": "SERVICE",
+      "category": "Utility Metering",
+      "cost": 25000.00,
+      "price": 45000.00,
+      "code": "ELE-METER-REV",
+      "segment": "INDUSTRIAL",
+      "description": "ANSI C12.20 Class 0.2 revenue-grade metering including CTs, PTs, meter socket, data logger"
+    },
+    {
+      "name": "Industrial UPS System - 500kVA",
+      "catalog": "ELECTRICAL",
+      "type": "SERVICE",
+      "category": "Critical Power",
+      "cost": 175000.00,
+      "price": 262500.00,
+      "code": "ELE-UPS-500KVA",
+      "segment": "INDUSTRIAL",
+      "description": "Uninterruptible Power Supply system for data center or critical loads with static bypass"
+    },
+    {
+      "name": "Utility Interconnection Study & Engineering",
+      "catalog": "ELECTRICAL",
+      "type": "SERVICE",
+      "category": "Grid Interconnection",
+      "cost": 45000.00,
+      "price": 75000.00,
+      "code": "ELE-INTERCON-STD",
+      "segment": "INDUSTRIAL",
+      "description": "Utility interconnection engineering including system impact study, facilities study, protection settings"
+    },
+    {
+      "section": "=== INDUSTRIAL - SOLAR/ENERGY ==="
+    },
+    {
+      "name": "Central Inverter Installation - 2MW",
+      "catalog": "ENERGY",
+      "type": "SERVICE",
+      "category": "Utility-Scale Solar",
+      "cost": 125000.00,
+      "price": 187500.00,
+      "code": "ENR-INV-2MW",
+      "segment": "INDUSTRIAL",
+      "description": "Utility-scale central inverter (2000kW) installation including concrete pad, AC/DC wiring, commissioning"
+    },
+    {
+      "name": "Utility-Scale Tracker System Installation (per W)",
+      "catalog": "ENERGY",
+      "type": "SERVICE",
+      "category": "Utility-Scale Solar",
+      "cost": 0.35,
+      "price": 0.52,
+      "code": "ENR-TRACKER-W",
+      "segment": "INDUSTRIAL",
+      "description": "Per-watt cost for single-axis tracker system installation including foundations, motors, controllers"
+    },
+    {
+      "name": "SCADA System - Utility Solar (50MW)",
+      "catalog": "ENERGY",
+      "type": "SERVICE",
+      "category": "Monitoring & Controls",
+      "cost": 175000.00,
+      "price": 262500.00,
+      "code": "ENR-SCADA-50MW",
+      "segment": "INDUSTRIAL",
+      "description": "Supervisory Control and Data Acquisition system for utility-scale PV plant with RTUs and historian"
+    },
+    {
+      "name": "Utility-Scale BESS Installation - 5MWh",
+      "catalog": "ENERGY",
+      "type": "SERVICE",
+      "category": "Energy Storage",
+      "cost": 625000.00,
+      "price": 937500.00,
+      "code": "ENR-BESS-5MWH",
+      "segment": "INDUSTRIAL",
+      "description": "5MWh battery energy storage system installation including LFP battery containers, PCS inverters, HVAC"
+    },
+    {
+      "name": "Step-Up Transformer Installation - 34.5kV/15MVA",
+      "catalog": "ENERGY",
+      "type": "SERVICE",
+      "category": "Grid Interconnection",
+      "cost": 285000.00,
+      "price": 427500.00,
+      "code": "ENR-XFMR-15MVA",
+      "segment": "INDUSTRIAL",
+      "description": "Medium voltage step-up transformer for utility-scale solar interconnection with oil containment"
+    },
+    {
+      "section": "=== INDUSTRIAL - FIRE PROTECTION ==="
+    },
+    {
+      "name": "High-Piled Storage Sprinkler System (per SF)",
+      "catalog": "FIRE_SAFETY",
+      "type": "SERVICE",
+      "category": "Industrial Sprinkler",
+      "cost": 5.50,
+      "price": 8.25,
+      "code": "FS-SPRK-HIPI-SF",
+      "segment": "INDUSTRIAL",
+      "description": "ESFR or in-rack sprinkler system for warehouse storage over 12ft with hydraulic calculations"
+    },
+    {
+      "name": "Foam Suppression System - Aircraft Hangar",
+      "catalog": "FIRE_SAFETY",
+      "type": "SERVICE",
+      "category": "Special Hazard",
+      "cost": 225000.00,
+      "price": 337500.00,
+      "code": "FS-FOAM-HANGAR",
+      "segment": "INDUSTRIAL",
+      "description": "AFFF foam suppression system for 30,000 SF aircraft hangar including foam tanks and deluge valves"
+    },
+    {
+      "name": "Clean Agent System - Data Center (FM-200/Novec)",
+      "catalog": "FIRE_SAFETY",
+      "type": "SERVICE",
+      "category": "Special Hazard",
+      "cost": 55000.00,
+      "price": 82500.00,
+      "code": "FS-CLEAN-DC",
+      "segment": "INDUSTRIAL",
+      "description": "Clean agent fire suppression for server room/data center with agent storage and distribution piping"
+    },
+    {
+      "name": "Industrial Fire Pump System - 2000 GPM",
+      "catalog": "FIRE_SAFETY",
+      "type": "SERVICE",
+      "category": "Fire Pumps",
+      "cost": 145000.00,
+      "price": 217500.00,
+      "code": "FS-PUMP-2000GPM",
+      "segment": "INDUSTRIAL",
+      "description": "NFPA 20 compliant horizontal split-case fire pump package with electric motor driver and controller"
+    },
+    {
+      "name": "Deluge System - Process Area (per SF)",
+      "catalog": "FIRE_SAFETY",
+      "type": "SERVICE",
+      "category": "Special Hazard",
+      "cost": 12.00,
+      "price": 18.00,
+      "code": "FS-DELUGE-SF",
+      "segment": "INDUSTRIAL",
+      "description": "Deluge sprinkler system for transformer yards, chemical storage, or high-hazard process areas"
+    },
+    {
+      "section": "=== INDUSTRIAL - PLUMBING ==="
+    },
+    {
+      "name": "Process Piping System - Stainless Steel (per LF)",
+      "catalog": "PLUMBING",
+      "type": "SERVICE",
+      "category": "Industrial Piping",
+      "cost": 125.00,
+      "price": 187.50,
+      "code": "PLM-PROC-SS-LF",
+      "segment": "INDUSTRIAL",
+      "description": "Sanitary stainless steel process piping (2 inch) including orbital welding for pharmaceutical/food grade"
+    },
+    {
+      "name": "Industrial Water Treatment System - 50,000 GPD",
+      "catalog": "PLUMBING",
+      "type": "SERVICE",
+      "category": "Water Treatment",
+      "cost": 185000.00,
+      "price": 277500.00,
+      "code": "PLM-WTR-TRT-50K",
+      "segment": "INDUSTRIAL",
+      "description": "Reverse osmosis and deionization water treatment system for industrial process water"
+    },
+    {
+      "name": "Compressed Air System - 500 CFM",
+      "catalog": "PLUMBING",
+      "type": "SERVICE",
+      "category": "Industrial Gases",
+      "cost": 75000.00,
+      "price": 112500.00,
+      "code": "PLM-AIR-500CFM",
+      "segment": "INDUSTRIAL",
+      "description": "Industrial compressed air system including rotary screw compressor, dryer, receiver tank, distribution"
+    },
+    {
+      "name": "Industrial Natural Gas Piping System (per LF)",
+      "catalog": "PLUMBING",
+      "type": "SERVICE",
+      "category": "Industrial Gases",
+      "cost": 45.00,
+      "price": 67.50,
+      "code": "PLM-GAS-IND-LF",
+      "segment": "INDUSTRIAL",
+      "description": "Schedule 40 industrial gas piping (2 inch) including regulators, isolation valves, leak testing"
+    },
+
+    {
+      "section": "========== LOW VOLTAGE ADDITIONS =========="
+    },
+    {
+      "name": "Access Control System - 4 Door",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Commercial Installation",
+      "cost": 3500.00,
+      "price": 7500.00,
+      "code": "LV-ACCESS-4DR",
+      "segment": "RESIMERCIAL",
+      "description": "4-door access control system with card readers, electric strikes, and cloud-based management"
+    },
+    {
+      "name": "RMR Monitoring - Basic (per month)",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Monitoring",
+      "cost": 15.00,
+      "price": 39.95,
+      "code": "LV-RMR-BASIC",
+      "segment": "RESIMERCIAL",
+      "description": "Basic alarm monitoring service - intrusion only, 24/7 central station monitoring"
+    },
+    {
+      "name": "RMR Monitoring - Premium (per month)",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Monitoring",
+      "cost": 22.00,
+      "price": 59.95,
+      "code": "LV-RMR-PREM",
+      "segment": "RESIMERCIAL",
+      "description": "Premium monitoring service - intrusion + fire + video verification, 24/7 central station"
+    },
+    {
+      "name": "Fiber Optic Installation (per drop)",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Commercial Installation",
+      "cost": 250.00,
+      "price": 550.00,
+      "code": "LV-FIBER-DROP",
+      "segment": "C&I",
+      "description": "Single-mode fiber optic cable pull with termination and testing per drop"
+    },
+    {
+      "name": "Commercial Video Surveillance - 16 Camera",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Commercial Installation",
+      "cost": 8500.00,
+      "price": 17500.00,
+      "code": "LV-CCTV-16CAM",
+      "segment": "C&I",
+      "description": "16-camera commercial video surveillance system with NVR, 4K cameras, and remote viewing"
+    },
+
+    {
+      "section": "========== TRADE-SPECIFIC ADDITIONS =========="
+    },
+    {
+      "section": "=== HVAC - Commercial Additions ==="
+    },
+    {
+      "name": "Indoor Air Quality Service",
+      "catalog": "MECHANICAL",
+      "type": "SERVICE",
+      "category": "IAQ",
+      "cost": 150.00,
+      "price": 349.00,
+      "code": "MEC-IAQ-SVC",
+      "segment": "RESIDENTIAL",
+      "description": "Indoor air quality assessment including testing for mold, allergens, and air quality report"
+    },
+    {
+      "name": "Duct Sealing - Aeroseal",
+      "catalog": "MECHANICAL",
+      "type": "SERVICE",
+      "category": "Efficiency",
+      "cost": 800.00,
+      "price": 1800.00,
+      "code": "MEC-AEROSEAL",
+      "segment": "RESIDENTIAL",
+      "description": "Aeroseal duct sealing service to reduce air leakage by up to 90%"
+    },
+    {
+      "name": "UV Air Purifier Installation",
+      "catalog": "MECHANICAL",
+      "type": "SERVICE",
+      "category": "IAQ",
+      "cost": 350.00,
+      "price": 750.00,
+      "code": "MEC-UV-INST",
+      "segment": "RESIDENTIAL",
+      "description": "UV-C air purifier installation in HVAC system for germicidal treatment"
+    },
+    {
+      "section": "=== ELECTRICAL - Additions ==="
+    },
+    {
+      "name": "EV Charger Install - Residential L2",
+      "catalog": "ELECTRICAL",
+      "type": "SERVICE",
+      "category": "EV Infrastructure",
+      "cost": 600.00,
+      "price": 1500.00,
+      "code": "ELE-EV-RES-L2",
+      "segment": "RESIDENTIAL",
+      "description": "Residential Level 2 EV charger installation (48A/240V) with dedicated circuit"
+    },
+    {
+      "name": "Smart Switch Installation",
+      "catalog": "ELECTRICAL",
+      "type": "SERVICE",
+      "category": "Smart Home",
+      "cost": 45.00,
+      "price": 125.00,
+      "code": "ELE-SMRT-SW",
+      "segment": "RESIDENTIAL",
+      "description": "Smart switch or dimmer installation with app configuration"
+    },
+    {
+      "name": "Dual-Function Breaker - AFCI/GFCI",
+      "catalog": "ELECTRICAL",
+      "type": "PRODUCT",
+      "category": "Materials",
+      "cost": 55.00,
+      "price": 125.00,
+      "code": "ELE-BRK-DUAL",
+      "segment": "RESIDENTIAL",
+      "description": "20A dual-function AFCI/GFCI combination breaker"
+    },
+    {
+      "section": "=== PLUMBING - Additions ==="
+    },
+    {
+      "name": "Leak Detection System Installation",
+      "catalog": "PLUMBING",
+      "type": "SERVICE",
+      "category": "Smart Home",
+      "cost": 250.00,
+      "price": 599.00,
+      "code": "PLM-LEAK-DET",
+      "segment": "RESIDENTIAL",
+      "description": "Whole-home water leak detection system with automatic shutoff valve"
+    },
+    {
+      "name": "Sump Pump Installation",
+      "catalog": "PLUMBING",
+      "type": "SERVICE",
+      "category": "Installation",
+      "cost": 350.00,
+      "price": 850.00,
+      "code": "PLM-SUMP-INST",
+      "segment": "RESIDENTIAL",
+      "description": "Sump pump installation including basin, pump, check valve, and discharge line"
+    },
+    {
+      "name": "Water Softener Installation",
+      "catalog": "PLUMBING",
+      "type": "SERVICE",
+      "category": "Water Treatment",
+      "cost": 400.00,
+      "price": 950.00,
+      "code": "PLM-SOFTEN-INST",
+      "segment": "RESIDENTIAL",
+      "description": "Water softener installation including plumbing connections and bypass valve"
+    },
+    {
+      "name": "Gas Line Installation - Per Linear Foot",
+      "catalog": "PLUMBING",
+      "type": "SERVICE",
+      "category": "Gas",
+      "cost": 15.00,
+      "price": 35.00,
+      "code": "PLM-GAS-LF",
+      "segment": "RESIDENTIAL",
+      "description": "Natural gas line installation per linear foot with leak testing"
+    },
+    {
+      "section": "=== ROOFING - Commercial Additions ==="
+    },
+    {
+      "name": "TPO Roofing Installation (per SF)",
+      "catalog": "ROOFING",
+      "type": "SERVICE",
+      "category": "Commercial Installation",
+      "cost": 4.50,
+      "price": 8.00,
+      "code": "RF-TPO-SF",
+      "segment": "C&I",
+      "description": "TPO single-ply membrane roofing installation for flat commercial roofs"
+    },
+    {
+      "name": "EPDM Roofing Installation (per SF)",
+      "catalog": "ROOFING",
+      "type": "SERVICE",
+      "category": "Commercial Installation",
+      "cost": 4.00,
+      "price": 7.50,
+      "code": "RF-EPDM-SF",
+      "segment": "C&I",
+      "description": "EPDM rubber roofing membrane installation for flat commercial roofs"
+    },
+    {
+      "name": "Standing Seam Metal Roof (per SF)",
+      "catalog": "ROOFING",
+      "type": "SERVICE",
+      "category": "Installation",
+      "cost": 8.00,
+      "price": 15.00,
+      "code": "RF-METAL-SS-SF",
+      "segment": "RESIMERCIAL",
+      "description": "Standing seam metal roofing installation, 24-gauge steel"
+    },
+    {
+      "name": "Roof Tear-Off and Disposal (per SF)",
+      "catalog": "ROOFING",
+      "type": "SERVICE",
+      "category": "Demolition",
+      "cost": 1.00,
+      "price": 2.50,
+      "code": "RF-TEAROFF-SF",
+      "segment": "RESIDENTIAL",
+      "description": "Existing roof tear-off, disposal, and deck inspection per square foot"
+    },
+    {
+      "name": "Insurance Claim Coordination",
+      "catalog": "ROOFING",
+      "type": "SERVICE",
+      "category": "Administrative",
+      "cost": 0.00,
+      "price": 0.00,
+      "code": "RF-INS-CLAIM",
+      "segment": "RESIDENTIAL",
+      "description": "Insurance claim coordination and adjuster meeting assistance (included with roof replacement)"
+    },
+    {
+      "section": "=== FIRE PROTECTION - NFPA Compliance ==="
+    },
+    {
+      "name": "Fire Pump Flow Test - Annual",
+      "catalog": "FIRE_SAFETY",
+      "type": "SERVICE",
+      "category": "Testing",
+      "cost": 350.00,
+      "price": 750.00,
+      "code": "FS-PUMP-FLOW",
+      "segment": "C&I",
+      "description": "Annual fire pump flow test per NFPA 25 with certified report"
+    },
+    {
+      "name": "Hydrostatic Test - Sprinkler System",
+      "catalog": "FIRE_SAFETY",
+      "type": "SERVICE",
+      "category": "Testing",
+      "cost": 500.00,
+      "price": 1200.00,
+      "code": "FS-HYDRO-TEST",
+      "segment": "C&I",
+      "description": "Hydrostatic pressure test for fire sprinkler system per NFPA 13"
+    },
+    {
+      "name": "Fire Extinguisher - Class K (Kitchen)",
+      "catalog": "FIRE_SAFETY",
+      "type": "PRODUCT",
+      "category": "Equipment",
+      "cost": 125.00,
+      "price": 250.00,
+      "code": "FS-EXT-CLASSK",
+      "segment": "RESIMERCIAL",
+      "description": "6-liter Class K wet chemical fire extinguisher for commercial kitchens"
+    },
+    {
+      "name": "Fire Extinguisher - CO2 10lb",
+      "catalog": "FIRE_SAFETY",
+      "type": "PRODUCT",
+      "category": "Equipment",
+      "cost": 150.00,
+      "price": 295.00,
+      "code": "FS-EXT-CO2-10",
+      "segment": "C&I",
+      "description": "10lb CO2 fire extinguisher for electrical/server room applications"
+    }
+  ],
+
+  "summary": {
+    "total_new_items": 95,
+    "by_segment": {
+      "RESIMERCIAL": 25,
+      "C&I": 35,
+      "INDUSTRIAL_UTILITY": 25,
+      "RESIDENTIAL_ADDITIONS": 10
+    },
+    "by_trade": {
+      "MECHANICAL": 20,
+      "ELECTRICAL": 18,
+      "PLUMBING": 12,
+      "ENERGY": 10,
+      "FIRE_SAFETY": 15,
+      "LOW_VOLTAGE": 5,
+      "ROOFING": 5
+    },
+    "combined_total": 210,
+    "note": "Combined with original 115 items = 210 total catalog items covering Residential, Resimercial, C&I, and Industrial segments"
+  },
+
+  "research_sources": {
+    "trade_agents": [
+      "HVAC/Mechanical - 15 items + 5 commercial",
+      "Electrical - 15 items",
+      "Plumbing - 15 items",
+      "Solar/Energy - 15 items",
+      "Roofing - 15 items",
+      "Low Voltage - 15 items (RMR monitoring)",
+      "Fire Protection - 15 items (NFPA compliance)"
+    ],
+    "segment_agents": [
+      "C&I (Commercial & Industrial) - 30 items",
+      "Industrial/Utility - 30 items",
+      "Resimercial - 20 items"
+    ],
+    "pricing_sources": [
+      "https://pickcomfort.com - Commercial AC Unit Cost Guide",
+      "https://forbel.com - Commercial Fire Alarm Cost 2025",
+      "https://qmerit.com - Commercial EV Charging Station Cost",
+      "https://samcotech.com - Industrial Water Treatment Cost",
+      "https://nrel.gov - Utility-Scale Battery Storage Cost 2025",
+      "https://pricinglink.com - Commercial HVAC Maintenance Pricing"
+    ]
+  }
+}

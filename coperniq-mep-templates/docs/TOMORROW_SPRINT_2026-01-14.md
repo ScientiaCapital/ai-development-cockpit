@@ -111,6 +111,60 @@ Based on PLANNING.md backlog item BL-001:
    - Battery System Check
    - EV Charger Install Verification
 
+### HIGH PRIORITY - Payment Structures Research
+
+**Do the homework BEFORE contractors ask** - Stay ahead with comprehensive payment research.
+
+#### By Trade Vertical
+
+| Trade | Traditional Structures | Modern Options | Research Focus |
+|-------|----------------------|----------------|----------------|
+| **HVAC** | Flat rate, T&M, bid | Equipment financing, comfort-as-a-service | Heat pump financing programs, utility rebates |
+| **Electrical** | T&M, progress billing | EV charger subscriptions, solar PPA | EV charging subscription models, panel upgrade financing |
+| **Plumbing** | Flat rate, emergency rates | Leak detection subscriptions, water treatment rentals | Water-as-a-service models |
+| **Solar/Energy** | Cash, loan, lease, PPA | BESS subscriptions, virtual net metering | Community solar, battery leasing, utility tariffs |
+| **Roofing** | Insurance claims, progress | Roof-as-a-service, subscription warranties | Extended warranty programs, insurance partnerships |
+| **Low Voltage** | Install + RMR | Full RMR models ($39-59/mo) | Security monitoring tiers, video storage pricing |
+| **Fire Safety** | Annual contracts | Compliance-as-a-service | NFPA compliance bundles, inspection subscriptions |
+
+#### By Market Segment
+
+| Segment | Common Structures | Emerging Models | Key Differentiators |
+|---------|------------------|-----------------|---------------------|
+| **Residential** | Credit cards, financing, home equity | BNPL (buy now pay later), utility on-bill | Affordability, instant approval |
+| **Resimercial** | Net 30, progress payments | Equipment-as-a-service, lease-to-own | Cash flow management for small business |
+| **C&I Commercial** | Progress billing, retainage | Energy savings agreements, PACE financing | Capex vs Opex decision making |
+| **Industrial/Utility** | Milestone payments, bonds | Power purchase agreements, ESCOs | Long-term contracts, performance guarantees |
+
+#### Cutting-Edge Payment Innovations
+
+Research these forward-thinking approaches:
+
+- [ ] **Equipment-as-a-Service (EaaS)** - HVAC units, water heaters, solar+storage as monthly fee
+- [ ] **Comfort-as-a-Service** - All-inclusive climate control subscription
+- [ ] **Energy-as-a-Service** - Bundled solar+storage+EV with single payment
+- [ ] **Outcome-Based Contracts** - Payment tied to energy savings achieved
+- [ ] **PACE Financing** - Property Assessed Clean Energy for commercial
+- [ ] **Green Bank Programs** - State-level low-interest green financing
+- [ ] **Utility On-Bill Financing** - Repayment through utility bills
+- [ ] **Community Solar Subscriptions** - Shared solar for renters/multi-family
+- [ ] **Virtual Net Metering** - Credits across multiple meters
+- [ ] **RMR Stacking** - Combining monitoring services (security + HVAC + solar)
+- [ ] **Embedded Insurance** - Built-in equipment protection plans
+- [ ] **BNPL for Home Services** - Affirm/Klarna-style for contractors
+
+#### Integration Points for Coperniq
+
+- [ ] Configure payment plan options in Service Plans
+- [ ] Add financing fields to Project workflows
+- [ ] Create payment milestone automations
+- [ ] Build invoice templates with payment terms
+- [ ] Set up recurring billing for subscriptions
+
+Navigate to:
+- Service Plans: `https://app.coperniq.io/388/company/studio/plans`
+- Invoice Templates: `https://app.coperniq.io/388/company/studio/templates`
+
 ### MEDIUM PRIORITY - Voice Agent POC
 
 Continue Track D from plan file:
@@ -182,6 +236,17 @@ Before starting new work, verify:
 | **Utility BESS 5MWh** | $625,000 | $937,500 | 50% |
 
 **Key Insight**: RMR (Recurring Monthly Revenue) services have the highest margin and should be prioritized in sales workflows.
+
+### Payment Structure Strategy by Margin
+
+| Margin Tier | Items | Recommended Payment Model |
+|-------------|-------|---------------------------|
+| **150%+** | RMR Monitoring, Service Agreements | Subscription/auto-renew billing |
+| **70-100%** | Equipment installs, Commercial RTU | Progress billing, equipment financing |
+| **50-70%** | Large commercial, utility-scale | Milestone payments, PPAs, PACE |
+| **<50%** | Material-heavy jobs | Down payment + COD, shorter terms |
+
+**Strategic Focus**: Push higher-margin services (RMR, subscriptions) while using financing options to close larger equipment deals that generate long-term service revenue.
 
 ---
 

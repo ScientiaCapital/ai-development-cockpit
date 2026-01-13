@@ -237,12 +237,14 @@ Service Plans can auto-generate work orders. Create matching WO templates:
 - [x] Build property management bundles (1 complete)
 - [x] Build warranty plan (1 complete)
 - [x] Create matching Work Order templates (15 templates live)
+- [x] Create strategic Labels for ICP contractors (32 labels: 18 Work + 14 Asset)
+- [x] Asset types built-in (54 types across 5 categories - Fire Protection gap identified)
+- [ ] Complete Stripe payment onboarding (51 items due)
+- [ ] Connect solar monitoring (Enphase/SolarEdge) for O&M
+- [ ] Connect QuickBooks for accounting sync
+- [ ] Test automation triggers
 - [ ] Build remaining PM bundles (HOA, Restaurant, Data Center)
 - [ ] Build industrial specialty plans
-- [ ] Create strategic Labels for ICP contractors
-- [ ] Create Asset templates
-- [ ] Test automation triggers
-- [ ] Document in CLAUDE.md
 
 ---
 
@@ -254,7 +256,8 @@ Service Plans can auto-generate work orders. Create matching WO templates:
 - Per-kW pricing for solar O&M is industry standard ($15-25/kW residential, $8-15/kW utility)
 - Warranty plans create the relationship bridge from install to recurring PM revenue
 - Multi-year O&M contracts are the "big contract" lock-in for C&I and utility
+- **Fire Protection GAP**: Not available as trade or asset type in Coperniq platform (feature request needed)
 
 ---
 
-*Last updated: 2026-01-13 by Claude + Tim*
+*Last updated: 2026-01-13 (Labels + Asset Discovery Session) by Claude + Tim*

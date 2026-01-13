@@ -1,0 +1,262 @@
+name: Inverter Diagnostic Work Order
+version: "1.0"
+trade: solar
+type: work_order
+category: service
+compliance: ["NEC 690", "UL 1741"]
+description: >
+  Field work order for solar inverter troubleshooting and diagnostic service.
+  Covers string, micro, and hybrid inverter systems.
+
+fields:
+  header:
+    - id: wo_number
+      label: Work Order Number
+      type: text
+      required: true
+      auto_generate: true
+      format: "WO-INV-{YYYYMMDD}-{SEQ}"
+    - id: priority
+      label: Priority
+      type: select
+      required: true
+      options:
+        - { value: routine, label: "Routine Service" }
+        - { value: urgent, label: "Urgent (No Production)" }
+        - { value: emergency, label: "Emergency (Safety/Fire)" }
+    - id: reported_issue
+      label: Reported Issue
+      type: textarea
+      required: true
+      placeholder: "Describe customer complaint or monitoring alert"
+
+  inverter_info:
+    - id: inverter_type
+      label: Inverter Type
+      type: select
+      required: true
+      options:
+        - { value: string, label: "String Inverter" }
+        - { value: micro, label: "Microinverter" }
+        - { value: optimizer, label: "Power Optimizer + String" }
+        - { value: hybrid, label: "Hybrid (Battery)" }
+        - { value: central, label: "Central Inverter (Commercial)" }
+    - id: inverter_make
+      label: Manufacturer
+      type: select
+      required: true
+      options:
+        - { value: enphase, label: "Enphase" }
+        - { value: solaredge, label: "SolarEdge" }
+        - { value: sma, label: "SMA" }
+        - { value: fronius, label: "Fronius" }
+        - { value: tesla, label: "Tesla" }
+        - { value: generac, label: "Generac" }
+        - { value: other, label: "Other" }
+    - id: inverter_model
+      label: Model Number
+      type: text
+      required: true
+    - id: serial_number
+      label: Serial Number
+      type: text
+      required: true
+    - id: firmware_version
+      label: Firmware Version
+      type: text
+      required: false
+    - id: rated_power
+      label: Rated Power (kW)
+      type: number
+      unit: kW
+      required: true
+
+  error_codes:
+    label: Error Code Analysis
+    - id: error_code
+      label: Error/Fault Code Displayed
+      type: text
+      required: false
+    - id: error_description
+      label: Error Description
+      type: textarea
+      required: false
+    - id: led_status
+      label: LED Status Indicators
+      type: multiselect
+      options:
+        - { value: green_solid, label: "Green - Solid" }
+        - { value: green_blink, label: "Green - Blinking" }
+        - { value: yellow, label: "Yellow/Amber" }
+        - { value: red_solid, label: "Red - Solid" }
+        - { value: red_blink, label: "Red - Blinking" }
+        - { value: no_lights, label: "No Lights/Power" }
+
+  electrical_testing:
+    label: Electrical Measurements
+    - id: dc_input_voltage
+      label: DC Input Voltage
+      type: number
+      unit: V
+      required: true
+    - id: dc_input_current
+      label: DC Input Current
+      type: number
+      unit: A
+      required: true
+    - id: ac_output_voltage
+      label: AC Output Voltage
+      type: number
+      unit: V
+      required: true
+      validation:
+        min: 228
+        max: 252
+        alert: "Voltage outside 240V +/-5% tolerance"
+    - id: ac_output_current
+      label: AC Output Current
+      type: number
+      unit: A
+      required: true
+    - id: ac_output_power
+      label: AC Output Power
+      type: number
+      unit: W
+      required: true
+    - id: frequency
+      label: Grid Frequency
+      type: number
+      unit: Hz
+      required: true
+      validation:
+        min: 59.3
+        max: 60.5
+    - id: ground_resistance
+      label: Ground Resistance
+      type: number
+      unit: Ω
+      required: false
+
+  diagnostic_checks:
+    label: Diagnostic Checklist
+    - id: dc_disconnect_test
+      label: DC Disconnect Operation
+      type: select
+      required: true
+      options:
+        - { value: pass, label: "Operating correctly" }
+        - { value: fail, label: "Failed/stuck" }
+        - { value: na, label: "N/A (no disconnect)" }
+    - id: ac_disconnect_test
+      label: AC Disconnect Operation
+      type: select
+      required: true
+      options:
+        - { value: pass, label: "Operating correctly" }
+        - { value: fail, label: "Failed/stuck" }
+    - id: rapid_shutdown
+      label: Rapid Shutdown Test
+      type: select
+      required: true
+      options:
+        - { value: pass, label: "Activates within 30 seconds" }
+        - { value: fail, label: "Failed to activate" }
+        - { value: na, label: "Pre-2017 NEC (not required)" }
+    - id: ground_fault_test
+      label: Ground Fault Indicator
+      type: select
+      required: true
+      options:
+        - { value: clear, label: "No ground faults" }
+        - { value: fault, label: "Ground fault present" }
+    - id: arc_fault_test
+      label: Arc Fault Detection
+      type: select
+      required: false
+      options:
+        - { value: clear, label: "No arc faults" }
+        - { value: fault, label: "Arc fault detected" }
+        - { value: na, label: "N/A (no AFCI)" }
+    - id: fan_operation
+      label: Cooling Fan Operation
+      type: select
+      required: false
+      options:
+        - { value: normal, label: "Normal operation" }
+        - { value: noisy, label: "Noisy/vibrating" }
+        - { value: not_running, label: "Not running" }
+        - { value: na, label: "No fan (passive cooling)" }
+
+  root_cause:
+    - id: diagnosis
+      label: Root Cause Diagnosis
+      type: select
+      required: true
+      options:
+        - { value: inverter_failure, label: "Inverter hardware failure" }
+        - { value: grid_issue, label: "Grid voltage/frequency issue" }
+        - { value: dc_issue, label: "DC side issue (panels/wiring)" }
+        - { value: communication, label: "Communication/monitoring failure" }
+        - { value: firmware, label: "Firmware issue" }
+        - { value: grounding, label: "Grounding issue" }
+        - { value: environmental, label: "Environmental (heat/moisture)" }
+        - { value: user_error, label: "User error/settings" }
+        - { value: other, label: "Other (see notes)" }
+    - id: diagnosis_notes
+      label: Detailed Diagnosis Notes
+      type: textarea
+      required: true
+      min_length: 50
+
+  resolution:
+    - id: resolution_type
+      label: Resolution
+      type: select
+      required: true
+      options:
+        - { value: repaired, label: "Repaired on site" }
+        - { value: replaced, label: "Inverter replaced" }
+        - { value: settings, label: "Settings adjusted" }
+        - { value: firmware, label: "Firmware updated" }
+        - { value: warranty, label: "Warranty claim submitted" }
+        - { value: parts_ordered, label: "Parts ordered - return visit" }
+        - { value: escalated, label: "Escalated to manufacturer" }
+        - { value: no_issue, label: "No issue found" }
+    - id: parts_used
+      label: Parts Used
+      type: parts_lookup
+      required: false
+    - id: warranty_claim
+      label: Warranty Claim Number
+      type: text
+      required_if: "resolution_type == 'warranty'"
+
+  completion:
+    - id: system_producing
+      label: System Producing After Service
+      type: boolean
+      required: true
+    - id: production_verified
+      label: Production Verified in Monitoring
+      type: boolean
+      required: true
+    - id: customer_trained
+      label: Customer Briefed on Issue/Resolution
+      type: boolean
+      required: true
+    - id: tech_signature
+      label: Technician Signature
+      type: signature
+      required: true
+    - id: labor_hours
+      label: Labor Hours
+      type: number
+      unit: hours
+      required: true
+    - id: photos
+      label: Service Photos
+      type: file_upload
+      accept: ["image/*"]
+      min: 2
+      max: 10
+      required: true

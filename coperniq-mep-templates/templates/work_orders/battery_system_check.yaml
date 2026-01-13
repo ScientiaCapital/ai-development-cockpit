@@ -1,0 +1,271 @@
+name: Battery Energy Storage System Check
+version: "1.0"
+trade: solar
+type: work_order
+category: service
+compliance: ["NEC 706", "UL 9540", "NFPA 855"]
+description: >
+  Field work order for residential and commercial battery energy storage system (BESS)
+  inspection, maintenance, and performance verification.
+
+fields:
+  header:
+    - id: wo_number
+      label: Work Order Number
+      type: text
+      required: true
+      auto_generate: true
+      format: "WO-BESS-{YYYYMMDD}-{SEQ}"
+    - id: service_type
+      label: Service Type
+      type: select
+      required: true
+      options:
+        - { value: annual_pm, label: "Annual PM Inspection" }
+        - { value: diagnostic, label: "Diagnostic/Troubleshooting" }
+        - { value: warranty, label: "Warranty Service" }
+        - { value: commissioning, label: "New System Commissioning" }
+
+  system_info:
+    - id: battery_manufacturer
+      label: Battery Manufacturer
+      type: select
+      required: true
+      options:
+        - { value: tesla, label: "Tesla Powerwall" }
+        - { value: enphase, label: "Enphase IQ Battery" }
+        - { value: generac, label: "Generac PWRcell" }
+        - { value: lg, label: "LG RESU" }
+        - { value: sonnen, label: "Sonnen" }
+        - { value: franklinwh, label: "FranklinWH" }
+        - { value: panasonic, label: "Panasonic EverVolt" }
+        - { value: other, label: "Other" }
+    - id: battery_model
+      label: Model
+      type: text
+      required: true
+    - id: serial_number
+      label: Serial Number
+      type: text
+      required: true
+    - id: capacity_kwh
+      label: Total Capacity (kWh)
+      type: number
+      unit: kWh
+      required: true
+    - id: num_units
+      label: Number of Battery Units
+      type: number
+      required: true
+      default: 1
+    - id: install_date
+      label: Installation Date
+      type: date
+      required: false
+    - id: backup_loads
+      label: Backed-Up Loads
+      type: multiselect
+      options:
+        - { value: whole_home, label: "Whole Home" }
+        - { value: essential_loads, label: "Essential Loads Only" }
+        - { value: refrigerator, label: "Refrigerator" }
+        - { value: lights, label: "Lights" }
+        - { value: hvac, label: "HVAC" }
+        - { value: well_pump, label: "Well Pump" }
+        - { value: medical, label: "Medical Equipment" }
+
+  visual_inspection:
+    label: Visual Inspection
+    - id: enclosure_condition
+      label: Enclosure Condition
+      type: select
+      required: true
+      options:
+        - { value: good, label: "Good - No damage" }
+        - { value: cosmetic, label: "Cosmetic damage only" }
+        - { value: damage, label: "Physical damage" }
+        - { value: corrosion, label: "Corrosion present" }
+    - id: ventilation
+      label: Ventilation/Clearance
+      type: select
+      required: true
+      options:
+        - { value: adequate, label: "Adequate clearance" }
+        - { value: obstructed, label: "Partially obstructed" }
+        - { value: blocked, label: "Blocked (safety concern)" }
+    - id: wiring_connections
+      label: Wiring Connections
+      type: select
+      required: true
+      options:
+        - { value: secure, label: "Secure - No issues" }
+        - { value: loose, label: "Loose connections found" }
+        - { value: damage, label: "Damaged wiring" }
+    - id: gateway_status
+      label: Gateway/Controller Status
+      type: select
+      required: true
+      options:
+        - { value: online, label: "Online - Connected" }
+        - { value: offline, label: "Offline - No connection" }
+        - { value: error, label: "Error state" }
+
+  performance_check:
+    label: Performance Verification
+    - id: state_of_charge
+      label: Current State of Charge (SOC)
+      type: number
+      unit: "%"
+      required: true
+      validation:
+        min: 0
+        max: 100
+    - id: state_of_health
+      label: State of Health (SOH)
+      type: number
+      unit: "%"
+      required: true
+      validation:
+        min: 70
+        alert: "SOH below 70% indicates degraded battery"
+    - id: usable_capacity
+      label: Current Usable Capacity
+      type: number
+      unit: kWh
+      required: true
+    - id: charge_rate
+      label: Maximum Charge Rate
+      type: number
+      unit: kW
+      required: true
+    - id: discharge_rate
+      label: Maximum Discharge Rate
+      type: number
+      unit: kW
+      required: true
+    - id: round_trip_efficiency
+      label: Round-Trip Efficiency
+      type: number
+      unit: "%"
+      required: false
+      validation:
+        min: 85
+        alert: "Efficiency below 85% needs investigation"
+
+  safety_checks:
+    label: Safety Verification
+    - id: dc_disconnect_test
+      label: DC Disconnect Operation
+      type: select
+      required: true
+      options:
+        - { value: pass, label: "Operating correctly" }
+        - { value: fail, label: "Failed/stuck" }
+    - id: thermal_runaway_protection
+      label: Thermal Management System
+      type: select
+      required: true
+      options:
+        - { value: normal, label: "Operating normally" }
+        - { value: elevated, label: "Elevated temperature" }
+        - { value: overtemp, label: "Over-temperature warning" }
+    - id: fire_suppression
+      label: Fire Suppression (if equipped)
+      type: select
+      required: false
+      options:
+        - { value: ready, label: "Ready/armed" }
+        - { value: discharged, label: "Discharged - needs recharge" }
+        - { value: na, label: "Not equipped" }
+    - id: ground_fault
+      label: Ground Fault Status
+      type: select
+      required: true
+      options:
+        - { value: clear, label: "No ground faults" }
+        - { value: fault, label: "Ground fault indicated" }
+
+  backup_test:
+    label: Backup Power Test
+    - id: backup_test_performed
+      label: Backup Power Test Performed
+      type: boolean
+      required: true
+    - id: transfer_switch_test
+      label: Transfer Switch Operation
+      type: select
+      required_if: "backup_test_performed == true"
+      options:
+        - { value: pass, label: "Transfers within 20ms" }
+        - { value: slow, label: "Slow transfer (>100ms)" }
+        - { value: fail, label: "Failed to transfer" }
+    - id: backed_loads_powered
+      label: All Backed Loads Powered During Test
+      type: boolean
+      required_if: "backup_test_performed == true"
+    - id: backup_duration_test
+      label: Backup Duration Estimate (at current SOC)
+      type: number
+      unit: hours
+      required: false
+
+  grid_interaction:
+    label: Grid Interaction (if applicable)
+    - id: grid_services_enabled
+      label: Grid Services Enabled
+      type: multiselect
+      options:
+        - { value: tou, label: "Time-of-Use Optimization" }
+        - { value: demand_response, label: "Demand Response" }
+        - { value: vpp, label: "Virtual Power Plant" }
+        - { value: self_consumption, label: "Self-Consumption Only" }
+        - { value: backup_only, label: "Backup Only Mode" }
+    - id: export_enabled
+      label: Grid Export Enabled
+      type: boolean
+      required: true
+
+  recommendations:
+    - id: firmware_update_available
+      label: Firmware Update Available
+      type: boolean
+      default: false
+    - id: firmware_updated
+      label: Firmware Updated
+      type: boolean
+      required_if: "firmware_update_available == true"
+    - id: issues_found
+      label: Issues Requiring Attention
+      type: textarea
+      required: false
+    - id: next_service_date
+      label: Recommended Next Service
+      type: date
+      required: true
+
+  completion:
+    - id: system_operational
+      label: System Fully Operational
+      type: boolean
+      required: true
+    - id: customer_briefed
+      label: Customer Briefed on System Status
+      type: boolean
+      required: true
+    - id: tech_signature
+      label: Technician Signature
+      type: signature
+      required: true
+    - id: labor_hours
+      label: Labor Hours
+      type: number
+      unit: hours
+      required: true
+    - id: photos
+      label: Service Photos
+      type: file_upload
+      accept: ["image/*"]
+      min: 2
+      max: 10
+      required: true
+      guidelines: "Include: battery unit, gateway, electrical connections, any issues"

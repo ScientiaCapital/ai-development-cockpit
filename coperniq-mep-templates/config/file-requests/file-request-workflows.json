@@ -1,0 +1,358 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-13",
+    "description": "File Request Workflows for Coperniq Instance 388",
+    "instance": 388,
+    "company": "Kipper Energy Solutions"
+  },
+  "fileRequestTemplates": {
+    "PROJECT_DOCUMENTATION": {
+      "name": "Project Documentation Package",
+      "description": "Standard project documentation collection",
+      "applicableTrades": ["ALL"],
+      "requests": [
+        {
+          "id": "SITE_PHOTOS_BEFORE",
+          "name": "Site Photos - Before",
+          "description": "Current condition photos before work begins",
+          "required": true,
+          "fileTypes": ["image/jpeg", "image/png", "image/heic"],
+          "minCount": 4,
+          "maxCount": 20,
+          "guidelines": "Include: exterior from street, equipment location, electrical panel, work area access"
+        },
+        {
+          "id": "SITE_PHOTOS_AFTER",
+          "name": "Site Photos - After",
+          "description": "Completed work photos for documentation",
+          "required": true,
+          "fileTypes": ["image/jpeg", "image/png", "image/heic"],
+          "minCount": 4,
+          "maxCount": 20,
+          "guidelines": "Include: installed equipment, connections, labels, overall installation"
+        },
+        {
+          "id": "SIGNED_CONTRACT",
+          "name": "Signed Contract/Proposal",
+          "description": "Customer-signed agreement",
+          "required": true,
+          "fileTypes": ["application/pdf", "image/jpeg", "image/png"],
+          "minCount": 1,
+          "maxCount": 5,
+          "guidelines": "All pages, legible signatures"
+        },
+        {
+          "id": "PERMIT_DOCUMENTS",
+          "name": "Permit Documents",
+          "description": "Building permits, mechanical permits, electrical permits",
+          "required": false,
+          "fileTypes": ["application/pdf", "image/jpeg", "image/png"],
+          "minCount": 1,
+          "maxCount": 10,
+          "guidelines": "Include: permit application, approved permit, inspections"
+        }
+      ]
+    },
+    "INSURANCE_VERIFICATION": {
+      "name": "Insurance & Certification Verification",
+      "description": "Insurance and certification document collection",
+      "applicableTrades": ["ALL"],
+      "requests": [
+        {
+          "id": "INSURANCE_COI",
+          "name": "Certificate of Insurance (COI)",
+          "description": "Current liability insurance certificate",
+          "required": true,
+          "fileTypes": ["application/pdf"],
+          "minCount": 1,
+          "maxCount": 1,
+          "guidelines": "Must be current, show policy limits, additional insured if required"
+        },
+        {
+          "id": "WORKERS_COMP",
+          "name": "Workers Compensation Certificate",
+          "description": "Current workers comp coverage",
+          "required": true,
+          "fileTypes": ["application/pdf"],
+          "minCount": 1,
+          "maxCount": 1,
+          "guidelines": "Must be current for state of work"
+        },
+        {
+          "id": "LICENSE_COPY",
+          "name": "Contractor License",
+          "description": "State/local contractor license",
+          "required": true,
+          "fileTypes": ["application/pdf", "image/jpeg", "image/png"],
+          "minCount": 1,
+          "maxCount": 3,
+          "guidelines": "Must show current expiration date"
+        }
+      ]
+    },
+    "EQUIPMENT_DOCUMENTATION": {
+      "name": "Equipment Documentation",
+      "description": "Equipment manuals, warranties, spec sheets",
+      "applicableTrades": ["HVAC", "ELECTRICAL", "PLUMBING", "SOLAR", "FIRE_PROTECTION"],
+      "requests": [
+        {
+          "id": "EQUIPMENT_MANUAL",
+          "name": "Equipment Manual/IOM",
+          "description": "Installation, Operation, and Maintenance manual",
+          "required": false,
+          "fileTypes": ["application/pdf"],
+          "minCount": 1,
+          "maxCount": 10,
+          "guidelines": "For each major piece of equipment installed"
+        },
+        {
+          "id": "WARRANTY_REGISTRATION",
+          "name": "Warranty Registration",
+          "description": "Completed manufacturer warranty registration",
+          "required": true,
+          "fileTypes": ["application/pdf", "image/jpeg", "image/png"],
+          "minCount": 1,
+          "maxCount": 5,
+          "guidelines": "Include confirmation number or registration receipt"
+        },
+        {
+          "id": "SPEC_SHEETS",
+          "name": "Equipment Spec Sheets",
+          "description": "Technical specifications for installed equipment",
+          "required": false,
+          "fileTypes": ["application/pdf"],
+          "minCount": 1,
+          "maxCount": 10,
+          "guidelines": "Helps with future service and replacement"
+        }
+      ]
+    },
+    "HVAC_SPECIFIC": {
+      "name": "HVAC Project Documentation",
+      "description": "HVAC-specific documentation requirements",
+      "applicableTrades": ["HVAC"],
+      "requests": [
+        {
+          "id": "MANUAL_J_CALCULATION",
+          "name": "Manual J Load Calculation",
+          "description": "ACCA Manual J sizing calculation",
+          "required": false,
+          "fileTypes": ["application/pdf"],
+          "minCount": 1,
+          "maxCount": 1,
+          "guidelines": "For new installations and replacements"
+        },
+        {
+          "id": "COMBUSTION_TEST",
+          "name": "Combustion Analysis Report",
+          "description": "Gas appliance combustion test results",
+          "required": false,
+          "fileTypes": ["application/pdf", "image/jpeg"],
+          "minCount": 1,
+          "maxCount": 5,
+          "guidelines": "CO levels, combustion efficiency readings"
+        },
+        {
+          "id": "EPA_REFRIGERANT_LOG",
+          "name": "EPA 608 Refrigerant Log",
+          "description": "Refrigerant tracking documentation",
+          "required": true,
+          "fileTypes": ["application/pdf", "image/jpeg"],
+          "minCount": 1,
+          "maxCount": 1,
+          "guidelines": "Required for systems with 50+ lbs refrigerant"
+        }
+      ]
+    },
+    "SOLAR_SPECIFIC": {
+      "name": "Solar Project Documentation",
+      "description": "Solar PV specific documentation requirements",
+      "applicableTrades": ["SOLAR"],
+      "requests": [
+        {
+          "id": "INTERCONNECTION_AGREEMENT",
+          "name": "Utility Interconnection Agreement",
+          "description": "Signed utility interconnection agreement",
+          "required": true,
+          "fileTypes": ["application/pdf"],
+          "minCount": 1,
+          "maxCount": 3,
+          "guidelines": "Required for grid-tied systems"
+        },
+        {
+          "id": "PTO_LETTER",
+          "name": "Permission to Operate (PTO)",
+          "description": "Utility PTO approval letter",
+          "required": true,
+          "fileTypes": ["application/pdf", "image/jpeg"],
+          "minCount": 1,
+          "maxCount": 1,
+          "guidelines": "Required before system activation"
+        },
+        {
+          "id": "SINGLE_LINE_DIAGRAM",
+          "name": "Single Line Diagram",
+          "description": "Electrical single line diagram",
+          "required": true,
+          "fileTypes": ["application/pdf"],
+          "minCount": 1,
+          "maxCount": 3,
+          "guidelines": "PE stamped if required by AHJ"
+        },
+        {
+          "id": "SHADE_ANALYSIS",
+          "name": "Shade Analysis Report",
+          "description": "Sun path analysis and production estimate",
+          "required": false,
+          "fileTypes": ["application/pdf"],
+          "minCount": 1,
+          "maxCount": 1,
+          "guidelines": "From Solar Pathfinder, Suneye, or Aurora"
+        },
+        {
+          "id": "AHPPANE_PHOTOS",
+          "name": "Panel Serial Number Photos",
+          "description": "Photos of all panel serial number labels",
+          "required": true,
+          "fileTypes": ["image/jpeg", "image/png"],
+          "minCount": 1,
+          "maxCount": 50,
+          "guidelines": "For warranty registration and equipment tracking"
+        }
+      ]
+    },
+    "FIRE_PROTECTION_SPECIFIC": {
+      "name": "Fire Protection Documentation",
+      "description": "Fire protection compliance documentation",
+      "applicableTrades": ["FIRE_PROTECTION"],
+      "requests": [
+        {
+          "id": "NFPA_INSPECTION_REPORT",
+          "name": "NFPA 25 Inspection Report",
+          "description": "ITM inspection documentation",
+          "required": true,
+          "fileTypes": ["application/pdf"],
+          "minCount": 1,
+          "maxCount": 1,
+          "guidelines": "Quarterly/annual inspection per NFPA 25"
+        },
+        {
+          "id": "FIRE_MARSHAL_APPROVAL",
+          "name": "Fire Marshal Approval",
+          "description": "Local fire marshal inspection approval",
+          "required": true,
+          "fileTypes": ["application/pdf", "image/jpeg"],
+          "minCount": 1,
+          "maxCount": 3,
+          "guidelines": "Required for new installations and modifications"
+        },
+        {
+          "id": "BACKFLOW_TEST",
+          "name": "Backflow Prevention Test",
+          "description": "Annual backflow preventer test report",
+          "required": true,
+          "fileTypes": ["application/pdf"],
+          "minCount": 1,
+          "maxCount": 1,
+          "guidelines": "Certified tester report"
+        }
+      ]
+    },
+    "ELECTRICAL_SPECIFIC": {
+      "name": "Electrical Project Documentation",
+      "description": "Electrical-specific documentation requirements",
+      "applicableTrades": ["ELECTRICAL"],
+      "requests": [
+        {
+          "id": "LOAD_CALCULATION",
+          "name": "Load Calculation",
+          "description": "NEC Article 220 load calculation",
+          "required": false,
+          "fileTypes": ["application/pdf"],
+          "minCount": 1,
+          "maxCount": 1,
+          "guidelines": "For panel upgrades and new service"
+        },
+        {
+          "id": "ARC_FLASH_STUDY",
+          "name": "Arc Flash Study",
+          "description": "IEEE 1584 arc flash analysis",
+          "required": false,
+          "fileTypes": ["application/pdf"],
+          "minCount": 1,
+          "maxCount": 3,
+          "guidelines": "Required for commercial/industrial"
+        },
+        {
+          "id": "PANEL_SCHEDULE",
+          "name": "Panel Schedule",
+          "description": "Updated panel directory/schedule",
+          "required": true,
+          "fileTypes": ["application/pdf", "image/jpeg"],
+          "minCount": 1,
+          "maxCount": 5,
+          "guidelines": "Required after any panel modifications"
+        }
+      ]
+    },
+    "PLUMBING_SPECIFIC": {
+      "name": "Plumbing Project Documentation",
+      "description": "Plumbing-specific documentation requirements",
+      "applicableTrades": ["PLUMBING"],
+      "requests": [
+        {
+          "id": "CAMERA_INSPECTION_VIDEO",
+          "name": "Camera Inspection Video",
+          "description": "Sewer/drain camera inspection footage",
+          "required": false,
+          "fileTypes": ["video/mp4", "video/quicktime"],
+          "minCount": 1,
+          "maxCount": 5,
+          "guidelines": "For sewer inspections and diagnostics"
+        },
+        {
+          "id": "BACKFLOW_CERTIFICATION",
+          "name": "Backflow Test Certification",
+          "description": "Annual backflow preventer test",
+          "required": false,
+          "fileTypes": ["application/pdf"],
+          "minCount": 1,
+          "maxCount": 1,
+          "guidelines": "Certified tester report, required annually"
+        },
+        {
+          "id": "WATER_HEATER_ENERGY_GUIDE",
+          "name": "Water Heater Energy Guide",
+          "description": "Energy guide label for installed water heater",
+          "required": false,
+          "fileTypes": ["application/pdf", "image/jpeg"],
+          "minCount": 1,
+          "maxCount": 1,
+          "guidelines": "For rebate eligibility verification"
+        }
+      ]
+    }
+  },
+  "automationTriggers": {
+    "ON_PROJECT_CREATED": {
+      "action": "SEND_FILE_REQUEST",
+      "template": "PROJECT_DOCUMENTATION",
+      "delay": 0,
+      "message": "Please upload the following documents to get started with your project."
+    },
+    "ON_INSTALLATION_COMPLETE": {
+      "action": "SEND_FILE_REQUEST",
+      "template": "EQUIPMENT_DOCUMENTATION",
+      "delay": 24,
+      "delayUnit": "hours",
+      "message": "Your installation is complete! Please upload warranty registration and equipment documentation."
+    },
+    "ON_PERMIT_REQUIRED": {
+      "action": "SEND_FILE_REQUEST",
+      "specificRequests": ["PERMIT_DOCUMENTS"],
+      "delay": 0,
+      "message": "Please upload your permit documents when approved."
+    }
+  }
+}

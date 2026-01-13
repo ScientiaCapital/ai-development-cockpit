@@ -1,0 +1,606 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-13",
+    "description": "Solar Installation Project Workflow for Coperniq Instance 388",
+    "instance": 388,
+    "company": "Kipper Energy Solutions",
+    "trade": "SOLAR"
+  },
+  "workflow": {
+    "name": "Solar Installation Workflow",
+    "type": "PROJECT_WORKFLOW",
+    "applicableProjectTypes": ["SOLAR_RESIDENTIAL", "SOLAR_COMMERCIAL", "SOLAR_INDUSTRIAL"],
+    "defaultDuration": {
+      "residential": 45,
+      "commercial": 90,
+      "industrial": 180,
+      "unit": "days"
+    }
+  },
+  "phases": [
+    {
+      "id": "LEAD",
+      "name": "Lead",
+      "order": 1,
+      "color": "#6366F1",
+      "icon": "user-plus",
+      "description": "New solar lead intake and qualification",
+      "duration": {
+        "min": 1,
+        "max": 7,
+        "unit": "days"
+      },
+      "tasks": [
+        {
+          "id": "LEAD_INTAKE",
+          "name": "Lead Intake Form",
+          "type": "FORM",
+          "formTemplate": "solar_lead_intake",
+          "required": true
+        },
+        {
+          "id": "QUALIFY_LEAD",
+          "name": "Qualify Lead",
+          "type": "CHECKLIST",
+          "items": [
+            "Homeownership verified",
+            "Roof age < 15 years or replacement planned",
+            "Average electric bill > $100/month",
+            "No major shading issues",
+            "Credit score acceptable (if financing)"
+          ]
+        }
+      ],
+      "exitCriteria": [
+        "Lead intake form completed",
+        "Lead qualified or disqualified"
+      ],
+      "automations": [
+        {
+          "trigger": "PHASE_ENTERED",
+          "action": "SEND_EMAIL",
+          "template": "SOLAR_LEAD_WELCOME"
+        }
+      ]
+    },
+    {
+      "id": "SITE_SURVEY",
+      "name": "Site Survey",
+      "order": 2,
+      "color": "#8B5CF6",
+      "icon": "map-pin",
+      "description": "On-site assessment and measurements",
+      "duration": {
+        "min": 1,
+        "max": 14,
+        "unit": "days"
+      },
+      "tasks": [
+        {
+          "id": "SCHEDULE_SURVEY",
+          "name": "Schedule Site Survey",
+          "type": "SCHEDULING",
+          "required": true
+        },
+        {
+          "id": "SITE_ASSESSMENT",
+          "name": "Solar Site Assessment",
+          "type": "FORM",
+          "formTemplate": "solar_site_assessment",
+          "required": true
+        },
+        {
+          "id": "SHADE_ANALYSIS",
+          "name": "Shade Analysis",
+          "type": "FORM",
+          "formTemplate": "shade_analysis",
+          "required": true
+        },
+        {
+          "id": "ROOF_PHOTOS",
+          "name": "Roof Photography",
+          "type": "FILE_REQUEST",
+          "minPhotos": 10,
+          "required": true
+        }
+      ],
+      "exitCriteria": [
+        "Site assessment form completed",
+        "Shade analysis completed",
+        "Roof photos uploaded"
+      ]
+    },
+    {
+      "id": "DESIGN",
+      "name": "Design",
+      "order": 3,
+      "color": "#EC4899",
+      "icon": "pencil-ruler",
+      "description": "System design and proposal creation",
+      "duration": {
+        "min": 3,
+        "max": 14,
+        "unit": "days"
+      },
+      "tasks": [
+        {
+          "id": "SYSTEM_DESIGN",
+          "name": "System Design",
+          "type": "TASK",
+          "description": "Create system design in Aurora/Helioscope",
+          "required": true
+        },
+        {
+          "id": "PRODUCTION_MODEL",
+          "name": "Production Estimate",
+          "type": "TASK",
+          "description": "Generate year-1 and lifetime production estimates",
+          "required": true
+        },
+        {
+          "id": "PROPOSAL_BUILDER",
+          "name": "Build Proposal",
+          "type": "FORM",
+          "formTemplate": "solar_proposal_builder",
+          "required": true
+        },
+        {
+          "id": "FINANCE_OPTIONS",
+          "name": "Finance Options",
+          "type": "CHECKLIST",
+          "items": [
+            "Cash price calculated",
+            "Loan options presented",
+            "Lease/PPA options (if applicable)",
+            "ITC/rebate information included"
+          ]
+        }
+      ],
+      "exitCriteria": [
+        "System design approved",
+        "Proposal created and sent to customer"
+      ]
+    },
+    {
+      "id": "CONTRACT",
+      "name": "Contract",
+      "order": 4,
+      "color": "#F59E0B",
+      "icon": "file-signature",
+      "description": "Contract signing and initial payment",
+      "duration": {
+        "min": 1,
+        "max": 30,
+        "unit": "days"
+      },
+      "tasks": [
+        {
+          "id": "SEND_CONTRACT",
+          "name": "Send Contract",
+          "type": "DOCUMENT",
+          "template": "SOLAR_INSTALLATION_CONTRACT",
+          "required": true
+        },
+        {
+          "id": "COLLECT_SIGNATURE",
+          "name": "Collect Signature",
+          "type": "SIGNATURE_REQUEST",
+          "required": true
+        },
+        {
+          "id": "INITIAL_PAYMENT",
+          "name": "Collect Initial Payment",
+          "type": "PAYMENT",
+          "paymentStructure": "SOLAR_MILESTONE",
+          "milestone": "CONTRACT_SIGNED",
+          "percentage": 10,
+          "required": true
+        },
+        {
+          "id": "FINANCE_APPLICATION",
+          "name": "Submit Finance Application",
+          "type": "TASK",
+          "required_if": "financeType != 'CASH'",
+          "description": "Submit loan/lease application"
+        }
+      ],
+      "exitCriteria": [
+        "Contract signed",
+        "Initial payment received",
+        "Finance approved (if applicable)"
+      ],
+      "automations": [
+        {
+          "trigger": "CONTRACT_SIGNED",
+          "action": "CREATE_INVOICE",
+          "template": "SOLAR_DEPOSIT_INVOICE"
+        }
+      ]
+    },
+    {
+      "id": "PERMIT",
+      "name": "Permit",
+      "order": 5,
+      "color": "#10B981",
+      "icon": "clipboard-check",
+      "description": "Permitting and HOA approval",
+      "duration": {
+        "min": 14,
+        "max": 60,
+        "unit": "days"
+      },
+      "tasks": [
+        {
+          "id": "PERMIT_PACKAGE",
+          "name": "Prepare Permit Package",
+          "type": "TASK",
+          "description": "Create permit drawings, single-line diagram, structural calcs",
+          "required": true
+        },
+        {
+          "id": "SUBMIT_PERMIT",
+          "name": "Submit Building Permit",
+          "type": "TASK",
+          "required": true
+        },
+        {
+          "id": "HOA_APPROVAL",
+          "name": "HOA Approval",
+          "type": "TASK",
+          "required_if": "site.hasHOA == true",
+          "description": "Submit to HOA and obtain approval"
+        },
+        {
+          "id": "UTILITY_INTERCONNECTION",
+          "name": "Submit Interconnection Application",
+          "type": "TASK",
+          "required": true,
+          "description": "Submit utility interconnection application"
+        },
+        {
+          "id": "PERMIT_APPROVED",
+          "name": "Permit Approved",
+          "type": "MILESTONE",
+          "required": true
+        }
+      ],
+      "exitCriteria": [
+        "Building permit approved",
+        "HOA approval received (if applicable)",
+        "Interconnection application submitted"
+      ],
+      "automations": [
+        {
+          "trigger": "PERMIT_APPROVED",
+          "action": "SEND_NOTIFICATION",
+          "template": "PERMIT_APPROVED_CUSTOMER"
+        }
+      ]
+    },
+    {
+      "id": "INSTALL",
+      "name": "Install",
+      "order": 6,
+      "color": "#3B82F6",
+      "icon": "tools",
+      "description": "Physical installation of solar system",
+      "duration": {
+        "min": 1,
+        "max": 5,
+        "unit": "days"
+      },
+      "tasks": [
+        {
+          "id": "ORDER_EQUIPMENT",
+          "name": "Order Equipment",
+          "type": "PURCHASE_ORDER",
+          "required": true
+        },
+        {
+          "id": "SCHEDULE_INSTALL",
+          "name": "Schedule Installation",
+          "type": "SCHEDULING",
+          "required": true
+        },
+        {
+          "id": "PRE_INSTALL_PAYMENT",
+          "name": "Collect Pre-Install Payment",
+          "type": "PAYMENT",
+          "paymentStructure": "SOLAR_MILESTONE",
+          "milestone": "PRE_INSTALL",
+          "percentage": 40,
+          "required": true
+        },
+        {
+          "id": "ROOF_MOUNT",
+          "name": "Roof Mount Installation",
+          "type": "FORM",
+          "formTemplate": "roof_mount",
+          "required": true
+        },
+        {
+          "id": "PANEL_INSTALL",
+          "name": "Panel Installation",
+          "type": "FORM",
+          "formTemplate": "panel_install",
+          "required": true
+        },
+        {
+          "id": "ELECTRICAL_WORK",
+          "name": "Electrical Work",
+          "type": "CHECKLIST",
+          "items": [
+            "Inverter installed",
+            "DC wiring completed",
+            "AC wiring completed",
+            "Disconnect installed",
+            "Meter socket/production meter ready"
+          ]
+        },
+        {
+          "id": "POST_INSTALL_PAYMENT",
+          "name": "Collect Post-Install Payment",
+          "type": "PAYMENT",
+          "paymentStructure": "SOLAR_MILESTONE",
+          "milestone": "INSTALL_COMPLETE",
+          "percentage": 40,
+          "required": true
+        }
+      ],
+      "exitCriteria": [
+        "All panels installed",
+        "Electrical work completed",
+        "Ready for inspection"
+      ],
+      "automations": [
+        {
+          "trigger": "INSTALL_COMPLETE",
+          "action": "SCHEDULE_INSPECTION",
+          "type": "BUILDING_FINAL"
+        }
+      ]
+    },
+    {
+      "id": "INSPECTION",
+      "name": "Inspection",
+      "order": 7,
+      "color": "#6366F1",
+      "icon": "search",
+      "description": "Building and utility inspections",
+      "duration": {
+        "min": 1,
+        "max": 14,
+        "unit": "days"
+      },
+      "tasks": [
+        {
+          "id": "BUILDING_INSPECTION",
+          "name": "Building Final Inspection",
+          "type": "INSPECTION",
+          "inspectorType": "BUILDING",
+          "required": true
+        },
+        {
+          "id": "UTILITY_INSPECTION",
+          "name": "Utility Inspection",
+          "type": "INSPECTION",
+          "inspectorType": "UTILITY",
+          "required": false,
+          "description": "Some utilities require separate inspection"
+        },
+        {
+          "id": "COMMISSIONING",
+          "name": "System Commissioning",
+          "type": "FORM",
+          "formTemplate": "commissioning",
+          "required": true
+        }
+      ],
+      "exitCriteria": [
+        "Building inspection passed",
+        "System commissioned and tested"
+      ]
+    },
+    {
+      "id": "INTERCONNECT",
+      "name": "Interconnect",
+      "order": 8,
+      "color": "#8B5CF6",
+      "icon": "plug",
+      "description": "Utility interconnection and meter exchange",
+      "duration": {
+        "min": 7,
+        "max": 45,
+        "unit": "days"
+      },
+      "tasks": [
+        {
+          "id": "SUBMIT_CTO",
+          "name": "Submit Certificate to Operate",
+          "type": "TASK",
+          "required": true,
+          "description": "Submit final docs to utility"
+        },
+        {
+          "id": "METER_EXCHANGE",
+          "name": "Meter Exchange",
+          "type": "TASK",
+          "required": true,
+          "description": "Utility installs net meter"
+        },
+        {
+          "id": "PTO_RECEIVED",
+          "name": "Permission to Operate Received",
+          "type": "MILESTONE",
+          "required": true
+        }
+      ],
+      "exitCriteria": [
+        "PTO letter received",
+        "Net meter installed",
+        "System energized on utility grid"
+      ],
+      "automations": [
+        {
+          "trigger": "PTO_RECEIVED",
+          "action": "ACTIVATE_SYSTEM",
+          "description": "Turn on system and start monitoring"
+        }
+      ]
+    },
+    {
+      "id": "PTO",
+      "name": "PTO Complete",
+      "order": 9,
+      "color": "#10B981",
+      "icon": "check-circle",
+      "description": "Final walkthrough and project completion",
+      "duration": {
+        "min": 1,
+        "max": 7,
+        "unit": "days"
+      },
+      "tasks": [
+        {
+          "id": "FINAL_WALKTHROUGH",
+          "name": "Customer Final Walkthrough",
+          "type": "MEETING",
+          "required": true,
+          "description": "Train customer on system operation"
+        },
+        {
+          "id": "MONITORING_SETUP",
+          "name": "Set Up Monitoring",
+          "type": "CHECKLIST",
+          "items": [
+            "Customer app account created",
+            "Monitoring alerts configured",
+            "Production reporting verified"
+          ]
+        },
+        {
+          "id": "FINAL_PAYMENT",
+          "name": "Collect Final Payment",
+          "type": "PAYMENT",
+          "paymentStructure": "SOLAR_MILESTONE",
+          "milestone": "PTO_COMPLETE",
+          "percentage": 10,
+          "required": true
+        },
+        {
+          "id": "WARRANTY_REGISTRATION",
+          "name": "Register Warranties",
+          "type": "FILE_REQUEST",
+          "template": "WARRANTY_REGISTRATION",
+          "required": true
+        },
+        {
+          "id": "REBATE_SUBMISSION",
+          "name": "Submit Rebate Applications",
+          "type": "TASK",
+          "required_if": "rebatesAvailable == true"
+        },
+        {
+          "id": "SERVICE_PLAN_OFFER",
+          "name": "Offer Service Plan",
+          "type": "TASK",
+          "required": true,
+          "description": "Offer Solar O&M service plan"
+        }
+      ],
+      "exitCriteria": [
+        "Customer trained",
+        "Final payment collected",
+        "Warranties registered",
+        "Project closed"
+      ],
+      "automations": [
+        {
+          "trigger": "PROJECT_COMPLETE",
+          "action": "SEND_EMAIL",
+          "template": "SOLAR_WELCOME_PACKET"
+        },
+        {
+          "trigger": "PROJECT_COMPLETE",
+          "action": "CREATE_TASK",
+          "template": "SOLAR_30_DAY_CHECKUP",
+          "delay_days": 30
+        }
+      ]
+    }
+  ],
+  "milestones": [
+    {
+      "id": "CONTRACT_SIGNED",
+      "name": "Contract Signed",
+      "phase": "CONTRACT",
+      "paymentTrigger": true,
+      "percentage": 10
+    },
+    {
+      "id": "PERMIT_APPROVED",
+      "name": "Permit Approved",
+      "phase": "PERMIT",
+      "paymentTrigger": false
+    },
+    {
+      "id": "PRE_INSTALL",
+      "name": "Pre-Installation",
+      "phase": "INSTALL",
+      "paymentTrigger": true,
+      "percentage": 40
+    },
+    {
+      "id": "INSTALL_COMPLETE",
+      "name": "Installation Complete",
+      "phase": "INSTALL",
+      "paymentTrigger": true,
+      "percentage": 40
+    },
+    {
+      "id": "PTO_RECEIVED",
+      "name": "PTO Received",
+      "phase": "INTERCONNECT",
+      "paymentTrigger": false
+    },
+    {
+      "id": "PTO_COMPLETE",
+      "name": "Project Complete",
+      "phase": "PTO",
+      "paymentTrigger": true,
+      "percentage": 10
+    }
+  ],
+  "paymentStructure": {
+    "name": "Solar Commercial (10/40/40/10)",
+    "type": "MILESTONE_BASED",
+    "milestones": [
+      { "name": "Contract Signed", "percentage": 10 },
+      { "name": "Pre-Installation", "percentage": 40 },
+      { "name": "Installation Complete", "percentage": 40 },
+      { "name": "PTO Complete", "percentage": 10 }
+    ]
+  },
+  "requiredDocuments": [
+    "Signed Contract",
+    "Site Photos",
+    "Permit Package",
+    "Interconnection Agreement",
+    "Building Permit",
+    "PTO Letter",
+    "Warranty Registrations"
+  ],
+  "integrations": [
+    {
+      "type": "MONITORING",
+      "platforms": ["ENPHASE", "SOLAREDGE", "TESLA"],
+      "autoConnect": true
+    },
+    {
+      "type": "UTILITY",
+      "action": "SUBMIT_INTERCONNECTION",
+      "phase": "PERMIT"
+    }
+  ]
+}

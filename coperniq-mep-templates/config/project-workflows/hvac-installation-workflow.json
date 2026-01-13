@@ -1,0 +1,340 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-13",
+    "description": "HVAC Installation Project Workflow for Coperniq Instance 388",
+    "instance": 388,
+    "company": "Kipper Energy Solutions",
+    "trade": "HVAC"
+  },
+  "workflow": {
+    "name": "HVAC Installation Workflow",
+    "type": "PROJECT_WORKFLOW",
+    "applicableProjectTypes": ["HVAC_RESIDENTIAL", "HVAC_COMMERCIAL", "HVAC_REPLACEMENT", "HVAC_NEW_CONSTRUCTION"],
+    "defaultDuration": {
+      "residential_replacement": 3,
+      "residential_new": 5,
+      "commercial": 21,
+      "unit": "days"
+    }
+  },
+  "phases": [
+    {
+      "id": "LEAD",
+      "name": "Lead",
+      "order": 1,
+      "color": "#6366F1",
+      "icon": "user-plus",
+      "description": "New HVAC lead intake and qualification",
+      "duration": {
+        "min": 1,
+        "max": 7,
+        "unit": "days"
+      },
+      "tasks": [
+        {
+          "id": "LEAD_INTAKE",
+          "name": "Lead Intake Form",
+          "type": "FORM",
+          "formTemplate": "hvac_lead_intake",
+          "required": true
+        },
+        {
+          "id": "QUALIFY_LEAD",
+          "name": "Qualify Lead",
+          "type": "CHECKLIST",
+          "items": [
+            "Budget discussed",
+            "Urgency level identified",
+            "Decision maker confirmed",
+            "Competitor quotes mentioned"
+          ]
+        }
+      ],
+      "exitCriteria": [
+        "Lead intake completed",
+        "Appointment scheduled or declined"
+      ]
+    },
+    {
+      "id": "SITE_SURVEY",
+      "name": "Site Survey",
+      "order": 2,
+      "color": "#8B5CF6",
+      "icon": "map-pin",
+      "description": "In-home comfort assessment",
+      "duration": {
+        "min": 1,
+        "max": 3,
+        "unit": "days"
+      },
+      "tasks": [
+        {
+          "id": "SITE_SURVEY_FORM",
+          "name": "Site Survey",
+          "type": "FORM",
+          "formTemplate": "hvac_site_survey",
+          "required": true
+        },
+        {
+          "id": "MANUAL_J",
+          "name": "Manual J Data Collection",
+          "type": "FORM",
+          "formTemplate": "manual_j_input",
+          "required": false,
+          "description": "For proper load calculation"
+        },
+        {
+          "id": "EXISTING_EQUIPMENT",
+          "name": "Document Existing Equipment",
+          "type": "FILE_REQUEST",
+          "minPhotos": 6,
+          "guidelines": "Nameplate, serial number, installation, ductwork"
+        }
+      ],
+      "exitCriteria": [
+        "Site survey completed",
+        "Load calculation done or scheduled"
+      ]
+    },
+    {
+      "id": "PROPOSAL",
+      "name": "Proposal",
+      "order": 3,
+      "color": "#EC4899",
+      "icon": "file-text",
+      "description": "Good-Better-Best proposal presentation",
+      "duration": {
+        "min": 1,
+        "max": 7,
+        "unit": "days"
+      },
+      "tasks": [
+        {
+          "id": "BUILD_PROPOSAL",
+          "name": "Build Equipment Proposal",
+          "type": "FORM",
+          "formTemplate": "hvac_equipment_proposal",
+          "required": true
+        },
+        {
+          "id": "PRESENT_PROPOSAL",
+          "name": "Present Proposal to Customer",
+          "type": "MEETING",
+          "required": true
+        },
+        {
+          "id": "FOLLOW_UP",
+          "name": "Follow-up Call",
+          "type": "TASK",
+          "required_if": "proposal_status != 'ACCEPTED'",
+          "delay_days": 2
+        }
+      ],
+      "exitCriteria": [
+        "Proposal presented",
+        "Decision received (accepted/declined)"
+      ]
+    },
+    {
+      "id": "CONTRACT",
+      "name": "Contract",
+      "order": 4,
+      "color": "#F59E0B",
+      "icon": "file-signature",
+      "description": "Contract signing and deposit",
+      "duration": {
+        "min": 1,
+        "max": 3,
+        "unit": "days"
+      },
+      "tasks": [
+        {
+          "id": "SEND_CONTRACT",
+          "name": "Send Contract",
+          "type": "DOCUMENT",
+          "template": "HVAC_INSTALLATION_CONTRACT",
+          "required": true
+        },
+        {
+          "id": "COLLECT_DEPOSIT",
+          "name": "Collect Deposit",
+          "type": "PAYMENT",
+          "paymentStructure": "RESIDENTIAL_50_50",
+          "milestone": "CONTRACT_SIGNED",
+          "percentage": 50,
+          "required": true
+        },
+        {
+          "id": "FINANCING",
+          "name": "Submit Financing (if applicable)",
+          "type": "TASK",
+          "required_if": "paymentMethod == 'FINANCING'"
+        }
+      ],
+      "exitCriteria": [
+        "Contract signed",
+        "Deposit collected"
+      ]
+    },
+    {
+      "id": "PERMIT",
+      "name": "Permit",
+      "order": 5,
+      "color": "#10B981",
+      "icon": "clipboard-check",
+      "description": "Mechanical permit (if required)",
+      "duration": {
+        "min": 1,
+        "max": 14,
+        "unit": "days"
+      },
+      "tasks": [
+        {
+          "id": "SUBMIT_PERMIT",
+          "name": "Submit Mechanical Permit",
+          "type": "TASK",
+          "required_if": "permitRequired == true"
+        },
+        {
+          "id": "ORDER_EQUIPMENT",
+          "name": "Order Equipment",
+          "type": "PURCHASE_ORDER",
+          "required": true
+        }
+      ],
+      "exitCriteria": [
+        "Permit approved (or not required)",
+        "Equipment ordered/received"
+      ]
+    },
+    {
+      "id": "INSTALL",
+      "name": "Install",
+      "order": 6,
+      "color": "#3B82F6",
+      "icon": "tools",
+      "description": "Physical installation",
+      "duration": {
+        "min": 1,
+        "max": 3,
+        "unit": "days"
+      },
+      "tasks": [
+        {
+          "id": "SCHEDULE_INSTALL",
+          "name": "Schedule Installation",
+          "type": "SCHEDULING",
+          "required": true
+        },
+        {
+          "id": "FURNACE_INSTALL",
+          "name": "Furnace Installation",
+          "type": "FORM",
+          "formTemplate": "furnace_installation",
+          "required_if": "includesFurnace == true"
+        },
+        {
+          "id": "AC_INSTALL",
+          "name": "Condenser Installation",
+          "type": "FORM",
+          "formTemplate": "condenser_installation",
+          "required_if": "includesAC == true"
+        },
+        {
+          "id": "STARTUP",
+          "name": "System Startup & Commissioning",
+          "type": "FORM",
+          "formTemplate": "system_commissioning",
+          "required": true
+        }
+      ],
+      "exitCriteria": [
+        "Equipment installed",
+        "System commissioned and tested"
+      ]
+    },
+    {
+      "id": "COMPLETE",
+      "name": "Complete",
+      "order": 7,
+      "color": "#10B981",
+      "icon": "check-circle",
+      "description": "Final inspection and handoff",
+      "duration": {
+        "min": 1,
+        "max": 7,
+        "unit": "days"
+      },
+      "tasks": [
+        {
+          "id": "FINAL_INSPECTION",
+          "name": "Final Inspection",
+          "type": "INSPECTION",
+          "required_if": "permitRequired == true"
+        },
+        {
+          "id": "WALKTHROUGH",
+          "name": "Customer Walkthrough",
+          "type": "MEETING",
+          "required": true
+        },
+        {
+          "id": "FINAL_PAYMENT",
+          "name": "Collect Final Payment",
+          "type": "PAYMENT",
+          "paymentStructure": "RESIDENTIAL_50_50",
+          "milestone": "PROJECT_COMPLETE",
+          "percentage": 50,
+          "required": true
+        },
+        {
+          "id": "WARRANTY_REGISTRATION",
+          "name": "Register Warranty",
+          "type": "TASK",
+          "required": true
+        },
+        {
+          "id": "REBATE_SUBMISSION",
+          "name": "Submit Utility Rebates",
+          "type": "TASK",
+          "required_if": "rebatesAvailable == true"
+        },
+        {
+          "id": "SERVICE_PLAN",
+          "name": "Offer Service Plan",
+          "type": "TASK",
+          "required": true,
+          "description": "Offer Bronze/Silver/Gold maintenance plan"
+        }
+      ],
+      "exitCriteria": [
+        "Inspection passed",
+        "Final payment collected",
+        "Warranty registered",
+        "Service plan offered"
+      ],
+      "automations": [
+        {
+          "trigger": "PROJECT_COMPLETE",
+          "action": "SEND_EMAIL",
+          "template": "HVAC_THANK_YOU"
+        },
+        {
+          "trigger": "PROJECT_COMPLETE",
+          "action": "CREATE_TASK",
+          "template": "HVAC_30_DAY_CHECKUP",
+          "delay_days": 30
+        }
+      ]
+    }
+  ],
+  "paymentStructure": {
+    "name": "Residential 50/50",
+    "type": "MILESTONE_BASED",
+    "milestones": [
+      { "name": "Contract Signed", "percentage": 50 },
+      { "name": "Project Complete", "percentage": 50 }
+    ]
+  }
+}

@@ -1,0 +1,321 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-13",
+    "description": "Field Service Work Order Workflow for Coperniq Instance 388",
+    "instance": 388,
+    "company": "Kipper Energy Solutions",
+    "trades": ["HVAC", "PLUMBING", "ELECTRICAL", "SOLAR", "FIRE_PROTECTION"]
+  },
+  "workflow": {
+    "name": "Field Service Workflow",
+    "type": "WORK_ORDER_WORKFLOW",
+    "applicableTypes": ["SERVICE_CALL", "REPAIR", "DIAGNOSTIC", "WARRANTY"],
+    "defaultDuration": {
+      "standard": 4,
+      "emergency": 2,
+      "unit": "hours"
+    }
+  },
+  "phases": [
+    {
+      "id": "OPEN",
+      "name": "Open",
+      "order": 1,
+      "color": "#EF4444",
+      "icon": "phone-incoming",
+      "description": "New service request received",
+      "duration": {
+        "max": 4,
+        "unit": "hours"
+      },
+      "tasks": [
+        {
+          "id": "CREATE_WO",
+          "name": "Create Work Order",
+          "type": "AUTO",
+          "required": true
+        },
+        {
+          "id": "CUSTOMER_CONTACT",
+          "name": "Initial Customer Contact",
+          "type": "CALL",
+          "required": true,
+          "description": "Confirm issue, gather details"
+        },
+        {
+          "id": "PRIORITY_ASSIGNMENT",
+          "name": "Assign Priority",
+          "type": "SELECT",
+          "options": ["Emergency", "Urgent", "Normal", "Scheduled"],
+          "required": true
+        }
+      ],
+      "exitCriteria": [
+        "Work order created",
+        "Priority assigned"
+      ]
+    },
+    {
+      "id": "DISPATCH",
+      "name": "Dispatch",
+      "order": 2,
+      "color": "#F59E0B",
+      "icon": "truck",
+      "description": "Technician assignment and scheduling",
+      "duration": {
+        "max": 24,
+        "unit": "hours"
+      },
+      "tasks": [
+        {
+          "id": "ASSIGN_TECH",
+          "name": "Assign Technician",
+          "type": "TECHNICIAN_SELECT",
+          "required": true,
+          "filterBy": ["trade", "location", "availability", "skills"]
+        },
+        {
+          "id": "SCHEDULE_VISIT",
+          "name": "Schedule Service Visit",
+          "type": "SCHEDULING",
+          "required": true
+        },
+        {
+          "id": "CONFIRM_APPOINTMENT",
+          "name": "Send Appointment Confirmation",
+          "type": "NOTIFICATION",
+          "channels": ["EMAIL", "SMS"],
+          "required": true
+        }
+      ],
+      "exitCriteria": [
+        "Technician assigned",
+        "Appointment scheduled",
+        "Customer notified"
+      ],
+      "automations": [
+        {
+          "trigger": "TECH_ASSIGNED",
+          "action": "SEND_SMS",
+          "template": "APPOINTMENT_CONFIRMATION"
+        }
+      ]
+    },
+    {
+      "id": "EN_ROUTE",
+      "name": "En Route",
+      "order": 3,
+      "color": "#3B82F6",
+      "icon": "navigation",
+      "description": "Technician traveling to site",
+      "duration": {
+        "max": 2,
+        "unit": "hours"
+      },
+      "tasks": [
+        {
+          "id": "NOTIFY_CUSTOMER",
+          "name": "Notify Customer - On My Way",
+          "type": "NOTIFICATION",
+          "auto_send": true,
+          "template": "TECH_EN_ROUTE"
+        }
+      ],
+      "exitCriteria": [
+        "Customer notified of arrival"
+      ]
+    },
+    {
+      "id": "ON_SITE",
+      "name": "On Site",
+      "order": 4,
+      "color": "#8B5CF6",
+      "icon": "map-pin",
+      "description": "Technician arrived and working",
+      "duration": {
+        "avg": 2,
+        "unit": "hours"
+      },
+      "tasks": [
+        {
+          "id": "CHECK_IN",
+          "name": "Check In at Site",
+          "type": "GEOFENCE_CHECK",
+          "required": true
+        },
+        {
+          "id": "DIAGNOSE",
+          "name": "Diagnose Issue",
+          "type": "TASK",
+          "required": true
+        },
+        {
+          "id": "SERVICE_FORM",
+          "name": "Complete Service Form",
+          "type": "FORM",
+          "formTemplate": "{{trade}}_service_call",
+          "required": true
+        },
+        {
+          "id": "QUOTE_REPAIR",
+          "name": "Quote Repair (if needed)",
+          "type": "TASK",
+          "required_if": "repairNeeded == true && estimatedCost > diagnosticFee"
+        },
+        {
+          "id": "PERFORM_REPAIR",
+          "name": "Perform Repair",
+          "type": "TASK",
+          "required_if": "repairApproved == true"
+        },
+        {
+          "id": "PARTS_USED",
+          "name": "Log Parts Used",
+          "type": "PARTS_LOOKUP",
+          "required_if": "partsUsed > 0"
+        }
+      ],
+      "exitCriteria": [
+        "Service form completed",
+        "Repair completed or quote provided"
+      ]
+    },
+    {
+      "id": "COMPLETE",
+      "name": "Complete",
+      "order": 5,
+      "color": "#10B981",
+      "icon": "check-circle",
+      "description": "Work order finalized",
+      "duration": {
+        "max": 30,
+        "unit": "minutes"
+      },
+      "tasks": [
+        {
+          "id": "CUSTOMER_SIGNATURE",
+          "name": "Collect Customer Signature",
+          "type": "SIGNATURE",
+          "required": true
+        },
+        {
+          "id": "COLLECT_PAYMENT",
+          "name": "Collect Payment",
+          "type": "PAYMENT",
+          "methods": ["CARD", "CHECK", "INVOICE"],
+          "required_if": "invoiceImmediately == true"
+        },
+        {
+          "id": "TAKE_PHOTOS",
+          "name": "Take Completion Photos",
+          "type": "FILE_UPLOAD",
+          "min": 2,
+          "required": true
+        },
+        {
+          "id": "OFFER_SERVICE_PLAN",
+          "name": "Offer Service Plan",
+          "type": "TASK",
+          "required_if": "customer.hasServicePlan == false"
+        }
+      ],
+      "exitCriteria": [
+        "Signature collected",
+        "Photos uploaded",
+        "Payment collected or invoice sent"
+      ],
+      "automations": [
+        {
+          "trigger": "WO_COMPLETED",
+          "action": "SEND_EMAIL",
+          "template": "SERVICE_COMPLETED_RECEIPT"
+        },
+        {
+          "trigger": "WO_COMPLETED",
+          "action": "CREATE_INVOICE",
+          "condition": "paymentCollected == false"
+        }
+      ]
+    },
+    {
+      "id": "FOLLOW_UP",
+      "name": "Follow Up",
+      "order": 6,
+      "color": "#6366F1",
+      "icon": "phone",
+      "description": "Post-service follow up",
+      "duration": {
+        "max": 72,
+        "unit": "hours"
+      },
+      "tasks": [
+        {
+          "id": "SATISFACTION_SURVEY",
+          "name": "Send Satisfaction Survey",
+          "type": "AUTO",
+          "delay_hours": 24,
+          "template": "CSAT_SURVEY"
+        },
+        {
+          "id": "FOLLOW_UP_CALL",
+          "name": "Follow Up Call",
+          "type": "TASK",
+          "required_if": "issueType == 'EMERGENCY' || surveyScore < 8",
+          "delay_hours": 48
+        }
+      ],
+      "exitCriteria": [
+        "Survey sent",
+        "Follow-up completed (if required)"
+      ]
+    }
+  ],
+  "priorityRules": {
+    "EMERGENCY": {
+      "sla_hours": 2,
+      "color": "#EF4444",
+      "triggers": ["NO_HEAT", "NO_AC_EXTREME", "GAS_LEAK", "WATER_LEAK", "POWER_OUT"],
+      "afterHoursAllowed": true,
+      "premiumRate": 1.5
+    },
+    "URGENT": {
+      "sla_hours": 24,
+      "color": "#F59E0B",
+      "triggers": ["SYSTEM_DOWN", "REDUCED_CAPACITY"],
+      "afterHoursAllowed": true,
+      "premiumRate": 1.0
+    },
+    "NORMAL": {
+      "sla_hours": 48,
+      "color": "#3B82F6",
+      "triggers": ["STANDARD_REPAIR", "DIAGNOSTIC"],
+      "afterHoursAllowed": false,
+      "premiumRate": 1.0
+    },
+    "SCHEDULED": {
+      "sla_hours": 168,
+      "color": "#10B981",
+      "triggers": ["PM_VISIT", "WARRANTY_CHECK"],
+      "afterHoursAllowed": false,
+      "premiumRate": 1.0
+    }
+  },
+  "pricingRules": {
+    "diagnosticFee": {
+      "residential": 89,
+      "commercial": 125,
+      "waived_if": "customer.hasServicePlan == true"
+    },
+    "tripCharge": {
+      "inArea": 0,
+      "outOfArea": 89,
+      "afterHours": 145
+    },
+    "minimumLabor": {
+      "hours": 1,
+      "rate_residential": 125,
+      "rate_commercial": 150
+    }
+  }
+}

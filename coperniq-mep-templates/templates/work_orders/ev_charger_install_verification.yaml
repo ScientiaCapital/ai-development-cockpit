@@ -1,0 +1,299 @@
+name: EV Charger Installation Verification
+version: "1.0"
+trade: electrical
+type: work_order
+category: installation
+compliance: ["NEC 625", "UL 2594", "SAE J1772"]
+description: >
+  Field work order for verifying EV charger (EVSE) installation completeness,
+  electrical safety, and proper operation.
+
+fields:
+  header:
+    - id: wo_number
+      label: Work Order Number
+      type: text
+      required: true
+      auto_generate: true
+      format: "WO-EV-{YYYYMMDD}-{SEQ}"
+    - id: install_type
+      label: Installation Type
+      type: select
+      required: true
+      options:
+        - { value: new, label: "New Installation" }
+        - { value: upgrade, label: "Upgrade (existing to new)" }
+        - { value: relocate, label: "Relocation" }
+        - { value: service_upgrade, label: "Panel Upgrade + EVSE" }
+
+  charger_info:
+    - id: charger_level
+      label: Charger Level
+      type: select
+      required: true
+      options:
+        - { value: level1, label: "Level 1 (120V)" }
+        - { value: level2, label: "Level 2 (240V)" }
+        - { value: dcfc, label: "DC Fast Charger" }
+    - id: charger_manufacturer
+      label: Manufacturer
+      type: select
+      required: true
+      options:
+        - { value: chargepoint, label: "ChargePoint" }
+        - { value: tesla, label: "Tesla Wall Connector" }
+        - { value: juicebox, label: "JuiceBox" }
+        - { value: clipper_creek, label: "Clipper Creek" }
+        - { value: grizzl_e, label: "Grizzl-E" }
+        - { value: emporia, label: "Emporia" }
+        - { value: wallbox, label: "Wallbox" }
+        - { value: siemens, label: "Siemens" }
+        - { value: other, label: "Other" }
+    - id: charger_model
+      label: Model Number
+      type: text
+      required: true
+    - id: serial_number
+      label: Serial Number
+      type: text
+      required: true
+    - id: output_amps
+      label: Output Amperage
+      type: select
+      required: true
+      options:
+        - { value: "16", label: "16A (3.8 kW)" }
+        - { value: "32", label: "32A (7.7 kW)" }
+        - { value: "40", label: "40A (9.6 kW)" }
+        - { value: "48", label: "48A (11.5 kW)" }
+        - { value: "80", label: "80A (19.2 kW)" }
+    - id: connector_type
+      label: Connector Type
+      type: select
+      required: true
+      options:
+        - { value: j1772, label: "J1772 (Standard)" }
+        - { value: nacs, label: "NACS (Tesla/North American)" }
+        - { value: ccs, label: "CCS Combo" }
+        - { value: chademo, label: "CHAdeMO" }
+    - id: network_connected
+      label: Network/WiFi Connected
+      type: boolean
+      required: true
+
+  electrical_verification:
+    label: Electrical Installation Verification
+    - id: circuit_breaker_size
+      label: Circuit Breaker Size
+      type: select
+      required: true
+      options:
+        - { value: "20", label: "20A" }
+        - { value: "30", label: "30A" }
+        - { value: "40", label: "40A" }
+        - { value: "50", label: "50A" }
+        - { value: "60", label: "60A" }
+        - { value: "100", label: "100A" }
+    - id: wire_gauge
+      label: Wire Gauge
+      type: select
+      required: true
+      options:
+        - { value: "10", label: "10 AWG" }
+        - { value: "8", label: "8 AWG" }
+        - { value: "6", label: "6 AWG" }
+        - { value: "4", label: "4 AWG" }
+        - { value: "3", label: "3 AWG" }
+        - { value: "2", label: "2 AWG" }
+        - { value: "1/0", label: "1/0 AWG" }
+    - id: wire_type
+      label: Wire Type
+      type: select
+      required: true
+      options:
+        - { value: nm, label: "NM-B (Romex)" }
+        - { value: thwn, label: "THWN in Conduit" }
+        - { value: mc, label: "MC Cable" }
+        - { value: ser, label: "SER Cable" }
+        - { value: uf, label: "UF-B (Underground)" }
+    - id: conduit_type
+      label: Conduit Type (if applicable)
+      type: select
+      required: false
+      options:
+        - { value: emt, label: "EMT" }
+        - { value: pvc, label: "PVC" }
+        - { value: rigid, label: "Rigid" }
+        - { value: lfmc, label: "Liquid-Tight Flex" }
+        - { value: na, label: "No conduit (MC/NM)" }
+    - id: distance_to_panel
+      label: Distance from Panel (feet)
+      type: number
+      unit: ft
+      required: true
+
+  nec_compliance:
+    label: NEC 625 Compliance Checklist
+    - id: dedicated_circuit
+      label: Dedicated Branch Circuit
+      type: boolean
+      required: true
+      validation:
+        must_be: true
+        alert: "NEC 625.40 requires dedicated circuit"
+    - id: breaker_rating_check
+      label: Breaker ≥125% of Continuous Load
+      type: select
+      required: true
+      options:
+        - { value: pass, label: "Compliant" }
+        - { value: fail, label: "Undersized" }
+    - id: gfci_required
+      label: GFCI Protection (if required)
+      type: select
+      required: true
+      options:
+        - { value: integral, label: "Integral to EVSE" }
+        - { value: breaker, label: "GFCI Breaker" }
+        - { value: na, label: "Not required (listed EVSE)" }
+    - id: disconnect_present
+      label: Disconnect Within Sight
+      type: select
+      required: true
+      options:
+        - { value: lockable, label: "Lockable disconnect present" }
+        - { value: integral, label: "Integral to EVSE" }
+        - { value: breaker, label: "Breaker serves as disconnect" }
+    - id: height_compliant
+      label: Mounting Height Compliant (42-48")
+      type: boolean
+      required: true
+    - id: ada_compliant
+      label: ADA Compliant (if public/commercial)
+      type: select
+      required: false
+      options:
+        - { value: compliant, label: "ADA compliant" }
+        - { value: na, label: "Residential (N/A)" }
+        - { value: non_compliant, label: "Not compliant" }
+
+  testing:
+    label: Electrical Testing
+    - id: voltage_l1_l2
+      label: Voltage L1-L2 (V)
+      type: number
+      unit: V
+      required: true
+      validation:
+        min: 228
+        max: 252
+    - id: voltage_l1_g
+      label: Voltage L1-Ground (V)
+      type: number
+      unit: V
+      required: true
+    - id: voltage_l2_g
+      label: Voltage L2-Ground (V)
+      type: number
+      unit: V
+      required: true
+    - id: amperage_draw
+      label: Amperage Draw During Charge
+      type: number
+      unit: A
+      required: true
+    - id: ground_continuity
+      label: Ground Continuity
+      type: select
+      required: true
+      options:
+        - { value: pass, label: "Pass (<1Ω)" }
+        - { value: fail, label: "Fail (>1Ω)" }
+    - id: polarity_check
+      label: Polarity Check
+      type: select
+      required: true
+      options:
+        - { value: correct, label: "Correct" }
+        - { value: reversed, label: "Reversed (CRITICAL)" }
+
+  functional_test:
+    label: Functional Testing
+    - id: vehicle_available
+      label: Vehicle Available for Testing
+      type: boolean
+      required: true
+    - id: charge_initiated
+      label: Charge Successfully Initiated
+      type: boolean
+      required_if: "vehicle_available == true"
+    - id: charge_rate_achieved
+      label: Expected Charge Rate Achieved
+      type: boolean
+      required_if: "vehicle_available == true"
+    - id: app_connected
+      label: App/Network Connection Verified
+      type: boolean
+      required_if: "network_connected == true"
+    - id: scheduled_charging
+      label: Scheduled Charging Tested
+      type: select
+      required: false
+      options:
+        - { value: tested, label: "Tested successfully" }
+        - { value: not_tested, label: "Not tested" }
+        - { value: na, label: "Feature not available" }
+
+  completion:
+    - id: customer_trained
+      label: Customer Trained on Operation
+      type: boolean
+      required: true
+    - id: manual_provided
+      label: Manual/Documentation Provided
+      type: boolean
+      required: true
+    - id: warranty_registered
+      label: Warranty Registered
+      type: boolean
+      required: true
+    - id: panel_schedule_updated
+      label: Panel Schedule Updated
+      type: boolean
+      required: true
+    - id: permit_final
+      label: Permit Status
+      type: select
+      required: true
+      options:
+        - { value: final_passed, label: "Final inspection passed" }
+        - { value: final_pending, label: "Final inspection pending" }
+        - { value: no_permit, label: "No permit required" }
+    - id: tech_signature
+      label: Technician Signature
+      type: signature
+      required: true
+    - id: labor_hours
+      label: Labor Hours
+      type: number
+      unit: hours
+      required: true
+    - id: photos
+      label: Installation Photos
+      type: file_upload
+      accept: ["image/*"]
+      min: 6
+      max: 15
+      required: true
+      guidelines: "Include: charger front, nameplate, panel connection, breaker, conduit run, ground rod (if new)"
+
+automation_triggers:
+  - event: FORM_SUBMITTED
+    condition: "permit_final == 'final_pending'"
+    action: CREATE_FOLLOW_UP_TASK
+    template: "PERMIT_FINAL_INSPECTION"
+    delay_days: 3
+  - event: FORM_SUBMITTED
+    action: SEND_EMAIL
+    template: "EV_CHARGER_WELCOME"
+    to: "{{contact.email}}"

@@ -1,0 +1,245 @@
+name: Solar Panel Inspection Work Order
+version: "1.0"
+trade: solar
+type: work_order
+category: service
+compliance: ["IEC 62446", "NEC 690"]
+description: >
+  Field work order for routine solar panel inspection and performance verification.
+  Includes visual inspection, electrical testing, and production analysis.
+
+fields:
+  header:
+    - id: wo_number
+      label: Work Order Number
+      type: text
+      required: true
+      auto_generate: true
+      format: "WO-SOL-{YYYYMMDD}-{SEQ}"
+    - id: priority
+      label: Priority
+      type: select
+      required: true
+      options:
+        - { value: routine, label: "Routine PM" }
+        - { value: urgent, label: "Urgent (Performance Issue)" }
+        - { value: emergency, label: "Emergency (Safety Issue)" }
+    - id: scheduled_date
+      label: Scheduled Date
+      type: date
+      required: true
+    - id: technician_id
+      label: Assigned Technician
+      type: technician_select
+      required: true
+      filter: ["NABCEP", "OSHA10"]
+
+  system_info:
+    - id: system_size_kw
+      label: System Size (kW DC)
+      type: number
+      required: true
+      unit: kW
+    - id: panel_count
+      label: Number of Panels
+      type: number
+      required: true
+    - id: panel_manufacturer
+      label: Panel Manufacturer
+      type: text
+      required: true
+    - id: inverter_type
+      label: Inverter Type
+      type: select
+      required: true
+      options:
+        - { value: string, label: "String Inverter" }
+        - { value: micro, label: "Microinverters" }
+        - { value: optimizer, label: "DC Optimizers + String" }
+        - { value: hybrid, label: "Hybrid Inverter (Battery)" }
+    - id: install_date
+      label: Installation Date
+      type: date
+      required: false
+    - id: monitoring_platform
+      label: Monitoring Platform
+      type: select
+      options:
+        - { value: enphase, label: "Enphase Enlighten" }
+        - { value: solaredge, label: "SolarEdge Monitoring" }
+        - { value: tesla, label: "Tesla App" }
+        - { value: sma, label: "SMA Sunny Portal" }
+        - { value: other, label: "Other" }
+
+  visual_inspection:
+    label: Visual Inspection Checklist
+    - id: panel_condition
+      label: Panel Condition
+      type: select
+      required: true
+      options:
+        - { value: good, label: "Good - No visible damage" }
+        - { value: soiled, label: "Soiled - Needs cleaning" }
+        - { value: damaged, label: "Damaged - See notes" }
+        - { value: hotspot, label: "Hot spot detected" }
+    - id: mounting_condition
+      label: Mounting/Racking Condition
+      type: select
+      required: true
+      options:
+        - { value: secure, label: "Secure - No issues" }
+        - { value: loose, label: "Loose fasteners found" }
+        - { value: corrosion, label: "Corrosion present" }
+        - { value: damage, label: "Structural damage" }
+    - id: wiring_condition
+      label: Wiring/Conduit Condition
+      type: select
+      required: true
+      options:
+        - { value: good, label: "Good condition" }
+        - { value: degraded, label: "UV degradation" }
+        - { value: damaged, label: "Physical damage" }
+        - { value: animal, label: "Animal damage/nesting" }
+    - id: roof_penetrations
+      label: Roof Penetrations
+      type: select
+      required: true
+      options:
+        - { value: sealed, label: "Properly sealed" }
+        - { value: resealing, label: "Needs resealing" }
+        - { value: leak, label: "Active leak/staining" }
+    - id: ground_fault
+      label: Ground Fault Indicators
+      type: select
+      required: true
+      options:
+        - { value: clear, label: "No faults indicated" }
+        - { value: fault, label: "Ground fault present" }
+
+  electrical_testing:
+    label: Electrical Measurements
+    - id: voc_string1
+      label: Voc String 1 (V)
+      type: number
+      unit: V
+      required: true
+    - id: voc_string2
+      label: Voc String 2 (V)
+      type: number
+      unit: V
+      required: false
+    - id: isc_string1
+      label: Isc String 1 (A)
+      type: number
+      unit: A
+      required: true
+    - id: dc_voltage_variance
+      label: DC Voltage Variance Between Strings
+      type: number
+      unit: "%"
+      validation:
+        max: 5
+        alert: "Variance >5% indicates potential panel issue"
+    - id: ac_output_power
+      label: AC Output Power at Time of Test
+      type: number
+      unit: W
+      required: true
+    - id: insulation_resistance
+      label: Insulation Resistance Test
+      type: select
+      options:
+        - { value: pass, label: "Pass (>40 MΩ·m²)" }
+        - { value: marginal, label: "Marginal (1-40 MΩ·m²)" }
+        - { value: fail, label: "Fail (<1 MΩ·m²)" }
+        - { value: not_performed, label: "Not Performed" }
+
+  production_analysis:
+    label: Production Analysis
+    - id: expected_production
+      label: Expected Daily Production
+      type: number
+      unit: kWh
+      required: true
+    - id: actual_production
+      label: Actual Daily Production (Last 30 Days Avg)
+      type: number
+      unit: kWh
+      required: true
+    - id: performance_ratio
+      label: Performance Ratio
+      type: number
+      unit: "%"
+      calculated: true
+      formula: "(actual_production / expected_production) * 100"
+      validation:
+        min: 75
+        alert: "PR below 75% requires investigation"
+    - id: underperforming_panels
+      label: Underperforming Panels Identified
+      type: number
+      required: false
+    - id: monitoring_connectivity
+      label: Monitoring Connectivity Status
+      type: select
+      required: true
+      options:
+        - { value: online, label: "Online - Reporting normally" }
+        - { value: intermittent, label: "Intermittent connection" }
+        - { value: offline, label: "Offline - No data" }
+
+  recommendations:
+    - id: cleaning_needed
+      label: Panel Cleaning Recommended
+      type: boolean
+      default: false
+    - id: repairs_needed
+      label: Repairs Needed
+      type: boolean
+      default: false
+    - id: repair_description
+      label: Repair Description
+      type: textarea
+      required_if: "repairs_needed == true"
+    - id: follow_up_required
+      label: Follow-up Visit Required
+      type: boolean
+      default: false
+    - id: next_inspection_date
+      label: Recommended Next Inspection
+      type: date
+      required: true
+
+  completion:
+    - id: tech_signature
+      label: Technician Signature
+      type: signature
+      required: true
+    - id: completion_time
+      label: Completion Time
+      type: timestamp
+      auto_generate: true
+    - id: labor_hours
+      label: Labor Hours
+      type: number
+      unit: hours
+      required: true
+    - id: photos
+      label: Inspection Photos
+      type: file_upload
+      accept: ["image/*"]
+      min: 4
+      max: 20
+      required: true
+      guidelines: "Include: array overview, inverter, any issues found, meter"
+
+automation_triggers:
+  - event: FORM_SUBMITTED
+    condition: "performance_ratio < 75"
+    action: CREATE_FOLLOW_UP_TASK
+    template: "SOLAR_DIAGNOSTIC"
+    priority: "HIGH"
+  - event: FORM_SUBMITTED
+    condition: "repairs_needed == true"
+    action: GENERATE_QUOTE
+    template: "SOLAR_REPAIR_QUOTE"

@@ -1,0 +1,674 @@
+{
+  "vertical_id": "roofing_contractor",
+  "display_name": "Roofing Contractor",
+  "description": "Comprehensive roofing workflow configuration for residential, commercial, and storm restoration contractors",
+  "version": "1.0.0",
+  "created": "2026-01-13",
+  "workflow_type": "phase_based",
+
+  "project_types": {
+    "residential_re_roofing": {
+      "subtypes": ["shingle", "tile", "metal", "slate", "cedar_shake"],
+      "typical_duration_days": "1-5",
+      "crew_size": "3-8",
+      "phases": ["lead", "inspection", "proposal", "material_order", "tear_off", "installation", "final_inspection", "warranty"]
+    },
+    "commercial_flat": {
+      "subtypes": ["tpo", "epdm", "bur", "pvc", "modified_bitumen"],
+      "typical_duration_days": "3-21",
+      "crew_size": "4-15",
+      "phases": ["bid", "design", "permit", "material_order", "demo", "installation", "inspection", "closeout"]
+    },
+    "industrial": {
+      "subtypes": ["metal", "spray_foam", "coatings"],
+      "typical_duration_days": "7-60",
+      "crew_size": "8-25",
+      "phases": ["rfp_response", "site_survey", "engineering", "permit", "mobilization", "installation", "commissioning", "closeout"]
+    },
+    "solar_roofing": {
+      "subtypes": ["gaf_timberline_solar", "rack_mounted_prep", "solar_ready"],
+      "typical_duration_days": "3-10",
+      "crew_size": "4-10",
+      "phases": ["lead", "site_assessment", "design", "permit", "installation", "electrical", "inspection", "interconnect"]
+    },
+    "storm_restoration": {
+      "subtypes": ["hail_damage", "wind_damage", "tree_damage", "water_intrusion"],
+      "typical_duration_days": "2-7",
+      "crew_size": "4-12",
+      "phases": ["lead", "emergency_tarp", "inspection", "claim_filed", "adjuster_meeting", "supplement", "approval", "material_order", "tear_off", "installation", "completion", "depreciation_release"]
+    }
+  },
+
+  "workflow_phases": {
+    "residential_retail": {
+      "phases": [
+        {
+          "id": "lead",
+          "name": "Lead Generation",
+          "status_triggers": ["new_lead", "referral", "website_inquiry", "door_knock"],
+          "required_fields": ["contact_name", "contact_phone", "site_address"],
+          "automations": ["send_intro_email", "schedule_callback"]
+        },
+        {
+          "id": "inspection",
+          "name": "Roof Inspection",
+          "status_triggers": ["inspection_scheduled", "inspection_complete"],
+          "required_fields": ["roof_type", "roof_age", "damage_assessment", "photos"],
+          "integrations": ["eagleview_measurement", "gaf_quickmeasure"],
+          "forms": ["roof_inspection_checklist", "photo_documentation"]
+        },
+        {
+          "id": "proposal",
+          "name": "Estimate/Proposal",
+          "status_triggers": ["estimate_sent", "estimate_viewed", "signed"],
+          "required_fields": ["total_squares", "material_selection", "price", "warranty_type"],
+          "integrations": ["abc_supply_pricing", "material_list_generator"]
+        },
+        {
+          "id": "material_order",
+          "name": "Material Ordering",
+          "status_triggers": ["materials_ordered", "materials_delivered"],
+          "required_fields": ["shingle_type", "underlayment_type", "ice_water_shield_sqft", "flashing_types", "delivery_date"],
+          "integrations": ["abc_supply_api", "beacon_supply"]
+        },
+        {
+          "id": "tear_off",
+          "name": "Tear-Off & Disposal",
+          "status_triggers": ["tear_off_started", "tear_off_complete", "dumpster_hauled"],
+          "required_fields": ["dumpster_size", "layers_removed", "deck_condition"],
+          "compliance": ["waste_manifest", "disposal_receipt"]
+        },
+        {
+          "id": "installation",
+          "name": "Installation",
+          "status_triggers": ["installation_started", "installation_complete"],
+          "required_fields": ["crew_lead", "crew_size", "start_time", "weather_conditions"],
+          "forms": ["daily_progress_report", "quality_checklist"]
+        },
+        {
+          "id": "final_inspection",
+          "name": "Final Inspection",
+          "status_triggers": ["inspection_scheduled", "inspection_passed", "punch_list"],
+          "required_fields": ["inspector_name", "pass_fail", "punch_list_items"],
+          "forms": ["final_inspection_checklist", "customer_walkthrough"]
+        },
+        {
+          "id": "warranty",
+          "name": "Warranty Registration",
+          "status_triggers": ["warranty_submitted", "warranty_confirmed"],
+          "required_fields": ["warranty_type", "registration_number", "coverage_years"],
+          "integrations": ["gaf_warranty_system", "owens_corning_warranty", "certainteed_warranty"]
+        }
+      ]
+    },
+
+    "storm_restoration": {
+      "phases": [
+        {
+          "id": "lead",
+          "name": "Lead Acquisition",
+          "status_triggers": ["storm_canvass", "inbound_call", "referral"],
+          "required_fields": ["storm_date", "damage_type", "insurance_carrier"],
+          "notes": "Door-knocking requires local permits in some jurisdictions"
+        },
+        {
+          "id": "emergency_tarp",
+          "name": "Emergency Tarp/Dry-In",
+          "status_triggers": ["tarp_requested", "tarp_installed"],
+          "required_fields": ["tarp_sqft", "temporary_repair_type"],
+          "billing": "billable_to_insurance_emergency_services"
+        },
+        {
+          "id": "inspection",
+          "name": "Damage Inspection",
+          "status_triggers": ["inspection_complete"],
+          "required_fields": ["damage_photos", "damage_diagram", "full_replacement_recommended"],
+          "forms": ["storm_damage_assessment", "photo_documentation_matrix"]
+        },
+        {
+          "id": "claim_filed",
+          "name": "Insurance Claim Filed",
+          "status_triggers": ["claim_submitted", "claim_number_received"],
+          "required_fields": ["claim_number", "policy_number", "adjuster_name"]
+        },
+        {
+          "id": "adjuster_meeting",
+          "name": "Adjuster Meeting",
+          "status_triggers": ["meeting_scheduled", "meeting_complete"],
+          "required_fields": ["adjuster_present", "contractor_present", "findings_agreed"],
+          "forms": ["adjuster_meeting_notes", "scope_agreement"]
+        },
+        {
+          "id": "supplement",
+          "name": "Supplement Process",
+          "status_triggers": ["supplement_needed", "supplement_submitted", "supplement_approved"],
+          "required_fields": ["supplement_items", "additional_amount", "xactimate_codes"],
+          "notes": "Use Xactimate codes for proper supplement documentation"
+        },
+        {
+          "id": "approval",
+          "name": "Claim Approval",
+          "status_triggers": ["acv_check_received", "scope_approved"],
+          "required_fields": ["approved_amount", "deductible", "acv_payment", "depreciation_holdback"]
+        },
+        {
+          "id": "material_order",
+          "name": "Material Ordering",
+          "status_triggers": ["materials_ordered", "materials_delivered"],
+          "required_fields": ["material_list", "delivery_date", "color_match_verified"]
+        },
+        {
+          "id": "installation",
+          "name": "Installation",
+          "status_triggers": ["installation_started", "installation_complete"],
+          "required_fields": ["crew_lead", "weather_window", "code_upgrades_installed"],
+          "forms": ["installation_quality_checklist"]
+        },
+        {
+          "id": "completion",
+          "name": "Job Completion",
+          "status_triggers": ["customer_walkthrough", "coc_signed"],
+          "required_fields": ["certificate_of_completion", "customer_signature", "final_photos"],
+          "forms": ["certificate_of_completion", "customer_satisfaction_survey"]
+        },
+        {
+          "id": "depreciation_release",
+          "name": "Recoverable Depreciation",
+          "status_triggers": ["rcv_submitted", "rcv_received"],
+          "required_fields": ["final_invoice_submitted", "depreciation_amount", "rcv_check_received"],
+          "notes": "RCV policy - submit completion docs to release depreciation holdback"
+        }
+      ]
+    },
+
+    "commercial": {
+      "phases": [
+        {
+          "id": "bid",
+          "name": "Bid/RFP Response",
+          "status_triggers": ["rfp_received", "bid_submitted"],
+          "required_fields": ["project_name", "bid_amount", "bid_due_date", "bond_required"]
+        },
+        {
+          "id": "award",
+          "name": "Contract Award",
+          "status_triggers": ["awarded", "contract_signed"],
+          "required_fields": ["contract_value", "start_date", "completion_date", "retainage_percent"]
+        },
+        {
+          "id": "preconstruction",
+          "name": "Pre-Construction",
+          "status_triggers": ["kickoff_meeting", "submittals_submitted", "submittals_approved"],
+          "required_fields": ["submittal_log", "project_schedule", "safety_plan"]
+        },
+        {
+          "id": "mobilization",
+          "name": "Mobilization",
+          "status_triggers": ["materials_staged", "equipment_delivered", "crew_assigned"],
+          "required_fields": ["staging_area", "crane_required", "traffic_control"]
+        },
+        {
+          "id": "demo",
+          "name": "Demo/Tear-Off",
+          "status_triggers": ["demo_started", "demo_complete"],
+          "required_fields": ["existing_system_type", "layers_removed", "deck_repairs_needed"],
+          "compliance": ["waste_manifest", "asbestos_testing_if_applicable"]
+        },
+        {
+          "id": "installation",
+          "name": "Installation",
+          "status_triggers": ["installation_started", "50_percent", "substantial_completion"],
+          "required_fields": ["daily_reports", "weather_log", "membrane_sqft_installed"],
+          "billing": "progress_billing_milestones"
+        },
+        {
+          "id": "inspection",
+          "name": "Final Inspection",
+          "status_triggers": ["inspection_scheduled", "inspection_passed", "punch_list"],
+          "required_fields": ["third_party_inspection", "core_cuts_if_required", "warranty_inspection"]
+        },
+        {
+          "id": "closeout",
+          "name": "Project Closeout",
+          "status_triggers": ["closeout_docs_submitted", "retainage_released", "warranty_issued"],
+          "required_fields": ["as_built_drawings", "warranty_certificate", "maintenance_manual", "lien_waiver"]
+        }
+      ]
+    }
+  },
+
+  "billing_models": {
+    "retail_residential": {
+      "structure": "deposit_completion",
+      "typical_deposit": "10-33%",
+      "payment_schedule": ["deposit_on_contract", "balance_on_completion"],
+      "payment_methods": ["check", "credit_card", "financing"]
+    },
+    "insurance_restoration": {
+      "structure": "acv_rcv",
+      "payment_schedule": ["acv_check_on_approval", "deductible_from_customer", "rcv_on_completion"],
+      "key_terms": {
+        "acv": "Actual Cash Value - depreciated value paid upfront",
+        "rcv": "Replacement Cost Value - full replacement cost",
+        "recoverable_depreciation": "Difference between RCV and ACV, released upon completion",
+        "supplement": "Additional items not in original scope, submitted via Xactimate"
+      },
+      "xactimate_required": true
+    },
+    "commercial": {
+      "structure": "progress_billing",
+      "typical_schedule": ["mobilization_10%", "50_percent_milestone", "substantial_completion_35%", "final_completion_less_retainage"],
+      "retainage": "5-10%",
+      "retainage_release": "30-60_days_after_substantial_completion"
+    }
+  },
+
+  "integrations": {
+    "aerial_measurement": {
+      "eagleview": {
+        "description": "High-resolution aerial imagery and measurement reports",
+        "turnaround": "24-48 hours",
+        "data_provided": ["roof_sqft", "pitch", "facets", "ridge_length", "valley_length", "perimeter"],
+        "integration_partners": ["acculynx", "jobnimbus", "roofr"]
+      },
+      "gaf_quickmeasure": {
+        "description": "GAF's aerial measurement service",
+        "turnaround": "under_1_hour_residential",
+        "data_provided": ["measurements", "3d_model", "material_list"],
+        "integration_partners": ["acculynx", "jobnimbus", "roofle"]
+      }
+    },
+    "material_suppliers": {
+      "abc_supply": {
+        "description": "Largest wholesale roofing distributor - 1000+ locations",
+        "api_available": true,
+        "api_capabilities": ["real_time_pricing", "product_catalog", "order_placement", "delivery_tracking", "account_data"],
+        "integration_partners": ["servicetitan", "jobnimbus", "acculynx", "roofr"],
+        "api_cost": "free_for_customers"
+      },
+      "beacon_supply": {
+        "description": "Major roofing distributor with digital tools",
+        "api_available": true,
+        "integration": "eagleview_smart_order"
+      },
+      "srs_distribution": {
+        "description": "National roofing distributor"
+      }
+    },
+    "crm_platforms": {
+      "jobnimbus": {
+        "best_for": "small_to_medium_teams",
+        "pricing": "$275-$375/mo",
+        "strengths": ["easy_onboarding", "flexible_boards", "open_api", "sumoquote_acquired"]
+      },
+      "acculynx": {
+        "best_for": "large_operations",
+        "pricing": "premium",
+        "strengths": ["most_features", "ai_lead_scoring", "complete_operations_platform"],
+        "considerations": ["steep_learning_curve", "rigid_customization", "costly_addons"]
+      },
+      "roofr": {
+        "best_for": "sales_focused_teams",
+        "pricing": "$89/mo_crm_$10_measurements",
+        "strengths": ["fastest_estimates", "best_proposal_design", "budget_friendly"],
+        "considerations": ["limited_post_sale_features", "no_mobile_app"]
+      }
+    },
+    "weather_tracking": {
+      "purpose": "installation_window_planning",
+      "data_needed": ["precipitation_probability", "wind_speed", "temperature", "humidity"],
+      "integration_triggers": ["auto_reschedule_if_rain", "notify_crew_of_weather_change"]
+    }
+  },
+
+  "manufacturer_programs": {
+    "gaf": {
+      "program_tiers": [
+        {
+          "name": "GAF Certified",
+          "requirements": ["licensed", "insured"],
+          "warranty_offered": "standard"
+        },
+        {
+          "name": "GAF Master Elite",
+          "status": "top_2_percent_of_contractors",
+          "requirements": [
+            "licensed_in_state",
+            "minimum_1M_liability_insurance",
+            "7_years_industry_experience",
+            "1_year_in_gaf_program",
+            "99_percent_customer_satisfaction",
+            "B_rating_BBB_minimum",
+            "4_star_google_reviews",
+            "ongoing_gaf_training",
+            "pass_gaf_testing"
+          ],
+          "warranty_offered": "golden_pledge_50_year",
+          "annual_recertification": true
+        },
+        {
+          "name": "GAF Master Elite Presidents Club",
+          "status": "elite_recognition",
+          "stars": ["1_star", "2_star", "3_star"]
+        }
+      ],
+      "solar_program": {
+        "name": "GAF Timberline Solar",
+        "product": "Timberline_Solar_ES_2",
+        "watts_per_shingle": 57,
+        "installation": "nailable_like_shingles",
+        "contractor_support": ["system_design", "electrical_permitting", "installation_support"],
+        "warranty": "combined_roof_and_solar"
+      }
+    },
+    "owens_corning": {
+      "program_tiers": [
+        {
+          "name": "Owens Corning Preferred",
+          "requirements": [
+            "licensed_and_insured",
+            "general_liability_workers_comp",
+            "bbb_good_standing",
+            "3_years_in_business",
+            "no_bankruptcy_7_years",
+            "no_liens_judgments_5_years",
+            "clear_credit_record"
+          ]
+        },
+        {
+          "name": "Owens Corning Platinum Preferred",
+          "status": "top_1_percent_of_contractors",
+          "requirements": [
+            "all_preferred_requirements",
+            "minimum_1M_liability_insurance",
+            "rigorous_background_screening",
+            "financial_stability_verification",
+            "specialized_oc_product_training",
+            "continuous_education",
+            "customer_service_screening"
+          ],
+          "warranty_offered": "platinum_protection"
+        }
+      ]
+    },
+    "certainteed": {
+      "program_tiers": [
+        {
+          "name": "ShingleMaster",
+          "requirements": ["trained_applicators", "proper_insurance"]
+        },
+        {
+          "name": "SELECT ShingleMaster",
+          "status": "less_than_2_percent_of_roofers",
+          "requirements": [
+            "5_years_operating_or_1_year_shinglemaster",
+            "all_supervisors_master_shingle_applicators",
+            "50_percent_crew_master_shingle_applicators",
+            "shingle_quality_specialist_on_team",
+            "owner_pass_business_fiscal_responsibility_exam",
+            "general_liability_insurance",
+            "workers_compensation",
+            "code_of_ethics_compliance",
+            "4_out_of_5_customer_satisfaction_rating",
+            "financial_stability_verification",
+            "ongoing_regulatory_compliance"
+          ],
+          "warranty_offered": "5_star_surestart_plus"
+        }
+      ]
+    }
+  },
+
+  "compliance_requirements": {
+    "licensing": {
+      "overview": "32 states require state-level roofing license; 18 require local licensing",
+      "key_states": {
+        "california": {
+          "threshold": "$500_or_more",
+          "license_type": "Class_C_Specialty",
+          "issuing_body": "Contractors_State_License_Board"
+        },
+        "arizona": {
+          "license_type": "Specialty_Contractor_ROC",
+          "exam_required": true,
+          "bond_required": true,
+          "separate_residential_commercial": true
+        },
+        "florida": {
+          "license_type": "Certified_Roofing_Contractor",
+          "statewide_validity": true
+        },
+        "texas": {
+          "state_license_required": false,
+          "local_permits_may_apply": true
+        },
+        "illinois": {
+          "license_types": ["limited_8_units_or_less", "unlimited_all_commercial"],
+          "issuing_body": "IDFPR"
+        }
+      },
+      "common_requirements": [
+        "workers_compensation_insurance",
+        "general_liability_insurance_1M_minimum",
+        "surety_bond",
+        "trade_examination",
+        "financial_statement"
+      ]
+    },
+    "osha_fall_protection": {
+      "standard": "29_CFR_1926.501",
+      "trigger_height": "6_feet",
+      "low_slope_requirements": [
+        "guardrail_systems",
+        "safety_net_systems",
+        "personal_fall_arrest_systems",
+        "warning_line_systems",
+        "safety_monitoring_systems_roofs_50ft_or_less_width"
+      ],
+      "steep_slope_requirements": [
+        "guardrails_with_toeboards",
+        "safety_nets",
+        "personal_fall_arrest_systems"
+      ],
+      "residential_alternative_allowed": {
+        "conditions": ["slope_8_in_12_or_less", "fall_distance_25ft_or_less"],
+        "methods": ["safety_monitors", "slide_guards"]
+      },
+      "training_required": "all_workers_on_roof"
+    },
+    "epa_rrp_lead": {
+      "full_name": "Renovation_Repair_Painting_Rule",
+      "applies_to": "pre_1978_homes_child_care_facilities",
+      "effective_date": "2010-04-22",
+      "triggers": {
+        "interior": "6_sqft_disturbed_in_room",
+        "exterior": "20_sqft_disturbed",
+        "always_covered": ["window_replacement", "demolition"]
+      },
+      "requirements": [
+        "epa_certified_firm",
+        "certified_renovator_on_site",
+        "lead_safe_work_practices",
+        "proper_containment",
+        "hepa_filtered_vacuums"
+      ],
+      "penalties": {
+        "civil": "up_to_32200_per_day_per_violation",
+        "criminal": "up_to_50000_per_day_plus_imprisonment"
+      },
+      "testing": "assume_lead_unless_properly_tested_negative"
+    },
+    "waste_disposal": {
+      "documentation_required": [
+        "waste_manifests",
+        "weight_tickets",
+        "disposal_receipts"
+      ],
+      "record_retention": "3_years_minimum",
+      "hazardous_materials": {
+        "asbestos_roofing": {
+          "permit_required_if": "greater_than_160_sqft_friable",
+          "training_required": "OSHA_1926.1101",
+          "special_disposal": true
+        },
+        "lead_paint_debris": "follow_rrp_disposal_requirements"
+      },
+      "generator_categories": {
+        "lqg": {
+          "threshold": "2205_lbs_or_more_per_month",
+          "storage_limit": "90_days"
+        },
+        "sqg": {
+          "threshold": "220_to_2205_lbs_per_month"
+        },
+        "cesqg": {
+          "threshold": "220_lbs_or_less_per_month",
+          "accumulation_limit": "2205_lbs",
+          "no_time_limit": true
+        }
+      },
+      "dumpster_sizing": {
+        "rule_of_thumb": "1000_sqft_single_layer_equals_3_cubic_yards_3_tons"
+      }
+    }
+  },
+
+  "material_workflow": {
+    "residential_shingle_materials": {
+      "order_sequence": [
+        "shingles",
+        "underlayment_synthetic_or_felt",
+        "ice_water_shield",
+        "drip_edge",
+        "flashing_step_wall_pipe",
+        "ridge_cap",
+        "starter_strip",
+        "vents_ridge_static_powered",
+        "nails_coil_or_strip",
+        "sealants_caulks"
+      ],
+      "installation_sequence": [
+        "drip_edge_at_eaves",
+        "ice_water_shield_at_eaves_valleys_penetrations",
+        "underlayment_over_ice_water_shield",
+        "drip_edge_at_rakes_over_underlayment",
+        "flashing_at_penetrations_walls",
+        "starter_strip",
+        "field_shingles",
+        "ridge_cap",
+        "final_flashing_sealant"
+      ],
+      "ice_water_shield_locations": [
+        "eaves_2ft_minimum_past_interior_wall",
+        "valleys",
+        "around_penetrations",
+        "against_walls",
+        "low_slope_areas_2_12_to_4_12"
+      ]
+    },
+    "commercial_flat_materials": {
+      "tpo_system": [
+        "cover_board",
+        "insulation",
+        "tpo_membrane",
+        "adhesive_or_fasteners",
+        "seam_tape",
+        "flashing_membrane",
+        "termination_bars",
+        "sealants"
+      ],
+      "epdm_system": [
+        "cover_board",
+        "insulation",
+        "epdm_membrane",
+        "bonding_adhesive_or_fasteners_or_ballast",
+        "seam_tape_or_adhesive",
+        "flashing",
+        "termination_bars"
+      ]
+    }
+  },
+
+  "coperniq_entity_mapping": {
+    "Contact": "customer_or_lead",
+    "Site": "property_address",
+    "Asset": "roof_system_with_specs",
+    "Task": "work_order_or_phase_task",
+    "System": "installed_roof_system_for_warranty_tracking",
+    "FinancialDocument": "estimate_invoice_insurance_supplement"
+  },
+
+  "forms_needed": {
+    "inspection": [
+      "residential_roof_inspection_checklist",
+      "commercial_roof_condition_assessment",
+      "storm_damage_photo_matrix",
+      "attic_ventilation_assessment"
+    ],
+    "safety": [
+      "job_hazard_analysis_jha",
+      "daily_safety_briefing",
+      "fall_protection_plan",
+      "equipment_inspection_checklist"
+    ],
+    "production": [
+      "daily_production_report",
+      "material_delivery_verification",
+      "quality_control_checklist",
+      "installation_completion_checklist"
+    ],
+    "customer": [
+      "customer_authorization_contract",
+      "certificate_of_completion",
+      "warranty_registration_form",
+      "customer_satisfaction_survey"
+    ],
+    "insurance": [
+      "assignment_of_benefits_if_applicable",
+      "scope_agreement_form",
+      "supplement_documentation",
+      "completion_certificate_for_rcv"
+    ]
+  },
+
+  "kpis_and_metrics": {
+    "sales": [
+      "leads_generated",
+      "inspections_completed",
+      "close_rate",
+      "average_ticket_price",
+      "revenue_per_lead"
+    ],
+    "production": [
+      "jobs_completed_per_week",
+      "average_days_to_complete",
+      "squares_installed_per_day",
+      "callback_rate",
+      "punch_list_items_per_job"
+    ],
+    "financial": [
+      "gross_margin_per_job",
+      "material_cost_percentage",
+      "labor_cost_percentage",
+      "average_supplement_recovery",
+      "days_sales_outstanding"
+    ],
+    "customer": [
+      "customer_satisfaction_score",
+      "google_review_rating",
+      "referral_rate",
+      "warranty_claim_rate"
+    ]
+  },
+
+  "sources": {
+    "abc_supply_api": "https://www.abcsupply.com/media-center/press-release/abc-supply-co-inc-gives-customers-unprecedented-access-to-data-with-new-api/",
+    "gaf_master_elite": "https://www.gaf.com/en-us/plan-design/homeowner-education/choose-gaf-roofer",
+    "gaf_quickmeasure": "https://www.gaf.com/en-us/resources/business-services/quickmeasure",
+    "gaf_solar": "https://www.gaf.com/en-us/plan-design/homeowner-education/solar-roof",
+    "owens_corning_platinum": "https://www.owenscorning.com/en-us/roofing/rewards-program",
+    "certainteed_select": "https://www.certainteed.com/select-shinglemaster",
+    "osha_fall_protection": "https://www.osha.gov/laws-regs/regulations/standardnumber/1926/1926.501",
+    "epa_rrp": "https://www.epa.gov/lead/lead-renovation-repair-and-painting-program"
+  }
+}

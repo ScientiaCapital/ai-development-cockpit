@@ -62,3 +62,9 @@ logs/
 tmp/
 temp/
 *.tmp
+
+# Serena MCP server cache
+.serena/
+
+# Backup archives
+*.zip

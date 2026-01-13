@@ -261,3 +261,52 @@ Service Plans can auto-generate work orders. Create matching WO templates:
 ---
 
 *Last updated: 2026-01-13 (Labels + Asset Discovery Session) by Claude + Tim*
+
+---
+
+## Tomorrow Start: Sprint Guide (2026-01-14)
+
+### Quick Context Load
+```
+Instance 388: Kipper Energy Solutions
+URL: https://app.coperniq.io/388
+Status: Labels ✅ | Catalog ✅ | Service Plans ✅ | Payments ⏳
+```
+
+### Priority 1: Complete Stripe Onboarding
+**Why:** Invoicing blocked until Stripe setup complete
+**Action:** Company Settings → General → Payments → "Continue onboarding" (51 items)
+**Time:** ~30 mins
+
+### Priority 2: Connect Solar Monitoring
+**Why:** Enables O&M contract automation (production alerts, performance tracking)
+**Action:** Company Settings → Systems → Install Enphase OR SolarEdge
+**Requirements:** Customer API credentials from monitoring portal
+
+### Priority 3: Connect QuickBooks
+**Why:** Automates invoice sync, reduces double-entry
+**Action:** Company Settings → Integrations → QuickBooks Online → Connect
+**Requirements:** QB Online admin login
+
+### Optional: Upload Company Logo
+**Where:** Company Settings → General → Company logo
+**Format:** PNG/JPG, square preferred
+
+### Blockers to Escalate
+| Issue | Who | Notes |
+|-------|-----|-------|
+| Fire Protection trade missing | Coperniq Support | Submit feature request |
+| Fire Protection asset types missing | Coperniq Support | Sprinklers, Fire Pump, Alarm Panel |
+
+### Files Reference
+| Doc | Path | Purpose |
+|-----|------|---------|
+| Architecture | `docs/COPERNIQ_AGENTIC_PLATFORM.md` | MCP server + Voice AI design |
+| Service Plans | `docs/SERVICE_PLANS_ROADMAP.md` | 18 plans + pricing |
+| Payment Config | `config/payment-structures/` | JSON templates |
+
+### Done Criteria for Tomorrow
+- [ ] Stripe onboarding complete (can create invoices)
+- [ ] At least one monitoring integration connected
+- [ ] Company logo uploaded
+- [ ] Fire Protection feature request submitted to Coperniq

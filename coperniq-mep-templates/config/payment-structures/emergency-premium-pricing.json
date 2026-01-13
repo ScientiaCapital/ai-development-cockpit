@@ -1,0 +1,350 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-13",
+    "description": "Emergency Service & Premium Pricing Templates for Coperniq Instance 388",
+    "instance": 388,
+    "company": "Kipper Energy Solutions"
+  },
+  "businessHours": {
+    "standard": {
+      "weekday": {"start": "07:00", "end": "17:00"},
+      "saturday": {"start": "08:00", "end": "12:00"},
+      "sunday": "CLOSED",
+      "holidays": "CLOSED"
+    },
+    "extended": {
+      "weekday": {"start": "07:00", "end": "20:00"},
+      "saturday": {"start": "08:00", "end": "17:00"},
+      "sunday": {"start": "09:00", "end": "15:00"},
+      "holidays": "EMERGENCY_ONLY"
+    }
+  },
+  "emergencyRates": {
+    "AFTER_HOURS": {
+      "name": "After-Hours Service",
+      "description": "Service outside standard business hours (5PM-7AM weekdays)",
+      "multipliers": {
+        "tripCharge": 1.5,
+        "laborRate": 1.5,
+        "minimumCharge": 1.5
+      },
+      "flatFees": {
+        "afterHoursDispatch": 95,
+        "description": "Added to standard trip charge"
+      },
+      "applicableHours": "17:00-07:00 Monday-Friday"
+    },
+    "WEEKEND": {
+      "name": "Weekend Service",
+      "description": "Saturday and Sunday service calls",
+      "multipliers": {
+        "tripCharge": 1.5,
+        "laborRate": 1.5,
+        "minimumCharge": 1.5
+      },
+      "flatFees": {
+        "weekendDispatch": 125
+      },
+      "applicableHours": "All day Saturday and Sunday"
+    },
+    "HOLIDAY": {
+      "name": "Holiday Service",
+      "description": "Major holiday service calls",
+      "multipliers": {
+        "tripCharge": 2.0,
+        "laborRate": 2.0,
+        "minimumCharge": 2.0
+      },
+      "flatFees": {
+        "holidayDispatch": 195
+      },
+      "holidays": [
+        "New Year's Day",
+        "Memorial Day",
+        "Independence Day",
+        "Labor Day",
+        "Thanksgiving",
+        "Christmas Day"
+      ]
+    },
+    "EMERGENCY_PRIORITY": {
+      "name": "Emergency Priority Response",
+      "description": "Guaranteed 2-hour response for critical situations",
+      "applicability": [
+        "No heat when below 40°F outside",
+        "No AC when above 90°F outside",
+        "Gas leak or CO alarm",
+        "Sewer backup",
+        "Electrical hazard (sparking, burning smell)",
+        "No water"
+      ],
+      "flatFees": {
+        "priorityDispatch": 175,
+        "description": "Guarantees technician dispatch within 30 minutes"
+      },
+      "responseGuarantee": {
+        "dispatchWithin": 30,
+        "arrivalWithin": 120,
+        "unit": "minutes"
+      }
+    }
+  },
+  "laborRates": {
+    "HVAC": {
+      "standard": {
+        "journeyman": 125,
+        "leadTech": 145,
+        "helper": 75,
+        "unit": "per hour"
+      },
+      "afterHours": {
+        "journeyman": 187.50,
+        "leadTech": 217.50,
+        "helper": 112.50
+      },
+      "holiday": {
+        "journeyman": 250,
+        "leadTech": 290,
+        "helper": 150
+      }
+    },
+    "PLUMBING": {
+      "standard": {
+        "journeyman": 135,
+        "masterPlumber": 165,
+        "helper": 80
+      },
+      "afterHours": {
+        "journeyman": 202.50,
+        "masterPlumber": 247.50,
+        "helper": 120
+      }
+    },
+    "ELECTRICAL": {
+      "standard": {
+        "journeyman": 130,
+        "masterElectrician": 160,
+        "helper": 75
+      },
+      "afterHours": {
+        "journeyman": 195,
+        "masterElectrician": 240,
+        "helper": 112.50
+      }
+    },
+    "FIRE_PROTECTION": {
+      "standard": {
+        "sprinklerFitter": 140,
+        "fireTech": 125
+      },
+      "afterHours": {
+        "sprinklerFitter": 210,
+        "fireTech": 187.50
+      }
+    }
+  },
+  "tripCharges": {
+    "RESIDENTIAL": {
+      "standard": {
+        "withinServiceArea": 89,
+        "outsideServiceArea": 129,
+        "serviceAreaRadius": 25,
+        "unit": "miles from shop"
+      },
+      "afterHours": {
+        "withinServiceArea": 145,
+        "outsideServiceArea": 195
+      },
+      "holiday": {
+        "withinServiceArea": 195,
+        "outsideServiceArea": 275
+      }
+    },
+    "COMMERCIAL": {
+      "standard": {
+        "base": 125,
+        "perMileBeyond": 2.50,
+        "baseRadius": 30
+      },
+      "emergency": {
+        "base": 195,
+        "perMileBeyond": 3.50
+      }
+    }
+  },
+  "diagnosticFees": {
+    "HVAC": {
+      "standard": 89,
+      "complex": 145,
+      "complexDescription": "System commissioning, refrigerant circuit diagnosis",
+      "waivedIfRepair": true,
+      "waiverThreshold": 250
+    },
+    "PLUMBING": {
+      "standard": 95,
+      "cameraInspection": 295,
+      "leakDetection": 195,
+      "waivedIfRepair": true,
+      "waiverThreshold": 300
+    },
+    "ELECTRICAL": {
+      "standard": 95,
+      "circuitTracing": 175,
+      "thermalImaging": 245,
+      "waivedIfRepair": true,
+      "waiverThreshold": 275
+    }
+  },
+  "minimumCharges": {
+    "RESIDENTIAL": {
+      "standard": {
+        "HVAC": 189,
+        "PLUMBING": 199,
+        "ELECTRICAL": 195
+      },
+      "afterHours": {
+        "HVAC": 295,
+        "PLUMBING": 325,
+        "ELECTRICAL": 295
+      },
+      "holiday": {
+        "HVAC": 395,
+        "PLUMBING": 425,
+        "ELECTRICAL": 395
+      },
+      "description": "Minimum charge includes trip + first 30 minutes labor"
+    },
+    "COMMERCIAL": {
+      "standard": {
+        "HVAC": 295,
+        "PLUMBING": 325,
+        "ELECTRICAL": 295
+      },
+      "emergency": {
+        "HVAC": 495,
+        "PLUMBING": 525,
+        "ELECTRICAL": 495
+      }
+    }
+  },
+  "premiumServices": {
+    "SAME_DAY_GUARANTEE": {
+      "name": "Same-Day Service Guarantee",
+      "description": "Guaranteed service today or it's free",
+      "premium": 75,
+      "availability": "Based on technician availability",
+      "refundPolicy": "Full refund if not serviced by midnight"
+    },
+    "ARRIVAL_WINDOW_UPGRADE": {
+      "name": "Narrow Arrival Window",
+      "description": "Upgrade from 4-hour to 2-hour arrival window",
+      "premium": 45,
+      "standardWindow": "4 hours",
+      "upgradedWindow": "2 hours"
+    },
+    "SPECIFIC_TECH_REQUEST": {
+      "name": "Specific Technician Request",
+      "description": "Request a specific technician by name",
+      "premium": 25,
+      "availability": "Subject to technician schedule"
+    },
+    "VIRTUAL_DIAGNOSTIC": {
+      "name": "Video Call Diagnostic",
+      "description": "Tech guides customer through troubleshooting via video",
+      "price": 49,
+      "duration": "30 minutes",
+      "applicableIssues": [
+        "Thermostat programming",
+        "Tripped breakers",
+        "Clogged drains",
+        "Pilot light relighting"
+      ],
+      "refundIfVisitNeeded": true
+    }
+  },
+  "serviceAgreementDiscounts": {
+    "BRONZE": {
+      "laborDiscount": 10,
+      "partsDiscount": 10,
+      "afterHoursMultiplierReduction": 0,
+      "tripChargeWaived": false,
+      "diagnosticWaived": false
+    },
+    "SILVER": {
+      "laborDiscount": 15,
+      "partsDiscount": 15,
+      "afterHoursMultiplierReduction": 0.1,
+      "tripChargeWaived": false,
+      "diagnosticWaived": true
+    },
+    "GOLD": {
+      "laborDiscount": 20,
+      "partsDiscount": 20,
+      "afterHoursMultiplierReduction": 0.25,
+      "tripChargeWaived": true,
+      "diagnosticWaived": true
+    }
+  },
+  "seasonalPricing": {
+    "PEAK_SEASON": {
+      "name": "Peak Season Rates",
+      "HVAC": {
+        "summer": {"months": [6, 7, 8], "multiplier": 1.15},
+        "winter": {"months": [12, 1, 2], "multiplier": 1.10}
+      },
+      "applicability": "Emergency/demand service only - scheduled work exempt"
+    },
+    "SHOULDER_SEASON": {
+      "name": "Shoulder Season Specials",
+      "months": [3, 4, 5, 9, 10, 11],
+      "promotions": [
+        {"type": "AC_TUNEUP", "price": 79, "regularPrice": 99},
+        {"type": "HEATING_TUNEUP", "price": 79, "regularPrice": 99},
+        {"type": "WHOLE_HOUSE_CHECK", "price": 149, "regularPrice": 189}
+      ]
+    }
+  },
+  "commercialEmergency": {
+    "PRIORITY_ACCOUNTS": {
+      "name": "Priority Commercial Accounts",
+      "description": "Guaranteed response for critical facilities",
+      "eligibleFacilities": [
+        "Healthcare facilities",
+        "Data centers",
+        "Food service",
+        "Assisted living",
+        "Schools (during session)"
+      ],
+      "benefits": {
+        "guaranteedResponseHours": 2,
+        "dedicatedTechOnCall": true,
+        "partsStockingAgreement": true
+      },
+      "pricing": {
+        "monthlyRetainer": 500,
+        "reducedEmergencyPremium": 0.5,
+        "description": "50% off emergency premiums"
+      }
+    }
+  },
+  "paymentRequirements": {
+    "EMERGENCY": {
+      "paymentDue": "AT_SERVICE",
+      "acceptedMethods": ["CREDIT_CARD", "DEBIT_CARD", "CHECK"],
+      "noInvoiceOption": false,
+      "depositRequired": false
+    },
+    "AFTER_HOURS": {
+      "paymentDue": "AT_SERVICE",
+      "acceptedMethods": ["CREDIT_CARD", "DEBIT_CARD"],
+      "checkAccepted": false,
+      "reason": "No office staff to process checks"
+    },
+    "COMMERCIAL": {
+      "paymentDue": "NET_30",
+      "creditApprovalRequired": true,
+      "creditLimit": "Based on account history"
+    }
+  }
+}

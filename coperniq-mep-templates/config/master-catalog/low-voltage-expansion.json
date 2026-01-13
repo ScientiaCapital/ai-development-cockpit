@@ -1,0 +1,1308 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-13",
+    "description": "Low Voltage catalog expansion - Priority items for multi-segment contractor",
+    "segments": ["RESIDENTIAL", "COMMERCIAL", "ENTERPRISE"],
+    "sub_trades": [
+      "Access Control",
+      "Video Surveillance",
+      "Intrusion Detection",
+      "Fire Alarm (LV)",
+      "Audio/Visual",
+      "Structured Cabling",
+      "Building Automation",
+      "Nurse Call/Healthcare",
+      "RMR Services"
+    ]
+  },
+
+  "catalog_items": [
+    {
+      "section": "========== ACCESS CONTROL - PRODUCTS =========="
+    },
+    {
+      "name": "Access Control Panel - 2 Door",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Access Control",
+      "manufacturer": "Mercury/HID",
+      "cost": 650.00,
+      "price": 1200.00,
+      "code": "LV-ACP-2DR",
+      "segment": "COMMERCIAL",
+      "description": "2-door access control panel with network connectivity"
+    },
+    {
+      "name": "Access Control Panel - 8 Door",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Access Control",
+      "manufacturer": "Mercury/HID",
+      "cost": 1800.00,
+      "price": 3200.00,
+      "code": "LV-ACP-8DR",
+      "segment": "COMMERCIAL",
+      "description": "8-door enterprise access control panel with redundant power"
+    },
+    {
+      "name": "Card Reader - Proximity",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Access Control",
+      "manufacturer": "HID",
+      "cost": 125.00,
+      "price": 275.00,
+      "code": "LV-RDR-PROX",
+      "segment": "COMMERCIAL",
+      "description": "HID iCLASS proximity card reader for door entry"
+    },
+    {
+      "name": "Card Reader - Multi-Technology",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Access Control",
+      "manufacturer": "HID",
+      "cost": 225.00,
+      "price": 450.00,
+      "code": "LV-RDR-MULTI",
+      "segment": "COMMERCIAL",
+      "description": "Multi-tech reader supporting proximity, smart card, and mobile credentials"
+    },
+    {
+      "name": "Card Reader - Biometric Fingerprint",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Access Control",
+      "manufacturer": "Various",
+      "cost": 850.00,
+      "price": 1500.00,
+      "code": "LV-RDR-BIO",
+      "segment": "ENTERPRISE",
+      "description": "Fingerprint biometric reader with card backup"
+    },
+    {
+      "name": "Electric Strike - Standard Duty",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Access Control",
+      "cost": 85.00,
+      "price": 185.00,
+      "code": "LV-STRK-STD",
+      "segment": "COMMERCIAL",
+      "description": "12/24VDC electric door strike for standard commercial doors"
+    },
+    {
+      "name": "Electric Strike - Fire Rated",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Access Control",
+      "cost": 175.00,
+      "price": 350.00,
+      "code": "LV-STRK-FIRE",
+      "segment": "COMMERCIAL",
+      "description": "Fire-rated heavy duty electric strike for fire doors"
+    },
+    {
+      "name": "Magnetic Lock - 600lb",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Access Control",
+      "cost": 125.00,
+      "price": 275.00,
+      "code": "LV-MAGL-600",
+      "segment": "COMMERCIAL",
+      "description": "600lb holding force electromagnetic lock, surface mount"
+    },
+    {
+      "name": "Magnetic Lock - 1200lb Double",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Access Control",
+      "cost": 225.00,
+      "price": 450.00,
+      "code": "LV-MAGL-1200",
+      "segment": "COMMERCIAL",
+      "description": "1200lb dual maglock for double doors"
+    },
+    {
+      "name": "Smart Lock - WiFi Deadbolt",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Access Control",
+      "manufacturer": "Yale/Schlage",
+      "cost": 180.00,
+      "price": 350.00,
+      "code": "LV-LOCK-WIFI",
+      "segment": "RESIDENTIAL",
+      "description": "WiFi-connected smart deadbolt with app control"
+    },
+    {
+      "name": "Proximity Cards - 100 Pack",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Access Control",
+      "cost": 75.00,
+      "price": 225.00,
+      "code": "LV-CARD-100",
+      "segment": "COMMERCIAL",
+      "description": "100-pack clamshell proximity cards, 26-bit H10301"
+    },
+    {
+      "name": "Smart Cards - 100 Pack",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Access Control",
+      "cost": 350.00,
+      "price": 750.00,
+      "code": "LV-SCARD-100",
+      "segment": "COMMERCIAL",
+      "description": "100-pack iCLASS SE smart cards with encryption"
+    },
+    {
+      "name": "Key Fob Credentials - 10 Pack",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Access Control",
+      "cost": 45.00,
+      "price": 125.00,
+      "code": "LV-FOB-10PK",
+      "segment": "COMMERCIAL",
+      "description": "10-pack proximity key fobs, 125kHz"
+    },
+    {
+      "name": "Video Intercom - 2-Wire",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Access Control",
+      "manufacturer": "Aiphone/Doorbird",
+      "cost": 350.00,
+      "price": 650.00,
+      "code": "LV-INTER-2W",
+      "segment": "RESIDENTIAL",
+      "description": "2-wire video intercom system with monitor"
+    },
+    {
+      "name": "Telephone Entry System - 500 Unit",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Access Control",
+      "cost": 1800.00,
+      "price": 3500.00,
+      "code": "LV-TES-500",
+      "segment": "COMMERCIAL",
+      "description": "Multi-tenant telephone entry system, 500 directory capacity"
+    },
+
+    {
+      "section": "========== ACCESS CONTROL - SERVICES =========="
+    },
+    {
+      "name": "Access Control Install - Per Door",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Access Control",
+      "cost": 350.00,
+      "price": 750.00,
+      "code": "LV-AC-INST-DR",
+      "segment": "COMMERCIAL",
+      "description": "Access control installation per door including reader, hardware, and wiring"
+    },
+    {
+      "name": "Access Control Programming - Per Door",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Access Control",
+      "cost": 100.00,
+      "price": 225.00,
+      "code": "LV-AC-PROG-DR",
+      "segment": "COMMERCIAL",
+      "description": "Access control programming and configuration per door"
+    },
+    {
+      "name": "Credential Enrollment - Per User",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Access Control",
+      "cost": 15.00,
+      "price": 45.00,
+      "code": "LV-AC-ENROLL",
+      "segment": "COMMERCIAL",
+      "description": "User credential enrollment including photo badge printing"
+    },
+    {
+      "name": "Access Control Cloud License - Per Door/Month",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "RMR - Access Control",
+      "cost": 8.00,
+      "price": 25.00,
+      "code": "LV-AC-CLOUD-MO",
+      "segment": "COMMERCIAL",
+      "description": "Monthly cloud-based access control management per door (RMR)"
+    },
+
+    {
+      "section": "========== VIDEO SURVEILLANCE - PRODUCTS =========="
+    },
+    {
+      "name": "IP Camera - Bullet 4K AI",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Video Surveillance",
+      "manufacturer": "Various",
+      "cost": 350.00,
+      "price": 650.00,
+      "code": "LV-CAM-BUL-4K",
+      "segment": "COMMERCIAL",
+      "description": "4K bullet camera with AI human/vehicle detection, NDAA compliant"
+    },
+    {
+      "name": "IP Camera - Dome 4K AI",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Video Surveillance",
+      "manufacturer": "Various",
+      "cost": 375.00,
+      "price": 695.00,
+      "code": "LV-CAM-DOM-4K",
+      "segment": "COMMERCIAL",
+      "description": "4K dome camera with vandal-resistant housing and AI analytics"
+    },
+    {
+      "name": "IP Camera - PTZ 4K 30x Zoom",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Video Surveillance",
+      "manufacturer": "Various",
+      "cost": 1500.00,
+      "price": 2800.00,
+      "code": "LV-CAM-PTZ-4K",
+      "segment": "COMMERCIAL",
+      "description": "4K PTZ camera with 30x optical zoom and auto-tracking"
+    },
+    {
+      "name": "IP Camera - Fisheye 12MP",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Video Surveillance",
+      "manufacturer": "Various",
+      "cost": 650.00,
+      "price": 1200.00,
+      "code": "LV-CAM-FISH-12",
+      "segment": "COMMERCIAL",
+      "description": "12MP 360-degree fisheye camera for complete room coverage"
+    },
+    {
+      "name": "IP Camera - License Plate (LPR)",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Video Surveillance",
+      "manufacturer": "Various",
+      "cost": 1200.00,
+      "price": 2400.00,
+      "code": "LV-CAM-LPR",
+      "segment": "COMMERCIAL",
+      "description": "License plate recognition camera with built-in analytics"
+    },
+    {
+      "name": "NVR - 16 Channel 4K",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Video Surveillance",
+      "cost": 800.00,
+      "price": 1600.00,
+      "code": "LV-NVR-16CH",
+      "segment": "COMMERCIAL",
+      "description": "16-channel 4K network video recorder with 8TB RAID storage"
+    },
+    {
+      "name": "NVR - 32 Channel 4K",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Video Surveillance",
+      "cost": 1500.00,
+      "price": 2800.00,
+      "code": "LV-NVR-32CH",
+      "segment": "COMMERCIAL",
+      "description": "32-channel 4K NVR with 16TB RAID storage and redundant power"
+    },
+    {
+      "name": "NVR - 64 Channel Enterprise",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Video Surveillance",
+      "cost": 4500.00,
+      "price": 8500.00,
+      "code": "LV-NVR-64CH",
+      "segment": "ENTERPRISE",
+      "description": "64-channel enterprise NVR with failover and 32TB storage"
+    },
+    {
+      "name": "Video Management Software License",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Video Surveillance",
+      "cost": 150.00,
+      "price": 350.00,
+      "code": "LV-VMS-LIC",
+      "segment": "COMMERCIAL",
+      "description": "VMS software license per camera (perpetual)"
+    },
+    {
+      "name": "PoE Switch - 24 Port PoE+",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Video Surveillance",
+      "cost": 650.00,
+      "price": 1200.00,
+      "code": "LV-SW-24POE",
+      "segment": "COMMERCIAL",
+      "description": "24-port PoE+ managed switch, 400W power budget"
+    },
+
+    {
+      "section": "========== VIDEO SURVEILLANCE - SERVICES =========="
+    },
+    {
+      "name": "Camera Installation - Per Unit",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Video Surveillance",
+      "cost": 125.00,
+      "price": 295.00,
+      "code": "LV-CAM-INST",
+      "segment": "COMMERCIAL",
+      "description": "IP camera installation including mounting, wiring, and configuration"
+    },
+    {
+      "name": "Video System Programming",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Video Surveillance",
+      "cost": 350.00,
+      "price": 750.00,
+      "code": "LV-VID-PROG",
+      "segment": "COMMERCIAL",
+      "description": "Video surveillance system programming and remote access setup"
+    },
+    {
+      "name": "Video Analytics Configuration",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Video Surveillance",
+      "cost": 500.00,
+      "price": 1200.00,
+      "code": "LV-VA-CONFIG",
+      "segment": "ENTERPRISE",
+      "description": "AI video analytics configuration including zones and alerts"
+    },
+    {
+      "name": "Remote Video Monitoring - Per Cam/Month",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "RMR - Video",
+      "cost": 25.00,
+      "price": 75.00,
+      "code": "LV-RVM-MO",
+      "segment": "COMMERCIAL",
+      "description": "24/7 remote video monitoring service per camera (RMR)"
+    },
+    {
+      "name": "Video Verification - Per Cam/Month",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "RMR - Video",
+      "cost": 45.00,
+      "price": 125.00,
+      "code": "LV-VVER-MO",
+      "segment": "COMMERCIAL",
+      "description": "Video verification service for alarm events (RMR)"
+    },
+    {
+      "name": "Cloud Video Storage - Per Cam/Month",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "RMR - Video",
+      "cost": 3.00,
+      "price": 9.95,
+      "code": "LV-VCS-MO",
+      "segment": "RESIDENTIAL",
+      "description": "Cloud video storage 30 days per camera (RMR)"
+    },
+
+    {
+      "section": "========== INTRUSION DETECTION - PRODUCTS =========="
+    },
+    {
+      "name": "Intrusion Panel - 32 Zone Hybrid",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Intrusion Detection",
+      "manufacturer": "Various",
+      "cost": 450.00,
+      "price": 950.00,
+      "code": "LV-INTR-32Z",
+      "segment": "COMMERCIAL",
+      "description": "32-zone hybrid alarm panel supporting wired and wireless zones"
+    },
+    {
+      "name": "Intrusion Panel - 64 Zone Addressable",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Intrusion Detection",
+      "manufacturer": "Various",
+      "cost": 850.00,
+      "price": 1650.00,
+      "code": "LV-INTR-64Z",
+      "segment": "COMMERCIAL",
+      "description": "64-zone addressable commercial alarm panel"
+    },
+    {
+      "name": "Glass Break Sensor - Acoustic",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Intrusion Detection",
+      "cost": 35.00,
+      "price": 85.00,
+      "code": "LV-SENS-GB",
+      "segment": "COMMERCIAL",
+      "description": "Acoustic glass break detector, 25ft coverage"
+    },
+    {
+      "name": "Dual-Tech Motion Sensor",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Intrusion Detection",
+      "cost": 65.00,
+      "price": 145.00,
+      "code": "LV-SENS-DUAL",
+      "segment": "COMMERCIAL",
+      "description": "PIR + microwave dual-technology motion sensor"
+    },
+    {
+      "name": "Vibration/Shock Sensor",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Intrusion Detection",
+      "cost": 55.00,
+      "price": 125.00,
+      "code": "LV-SENS-VIB",
+      "segment": "COMMERCIAL",
+      "description": "Vibration sensor for safes and vault doors"
+    },
+    {
+      "name": "Beam Sensor - 100ft Range",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Intrusion Detection",
+      "cost": 250.00,
+      "price": 495.00,
+      "code": "LV-BEAM-100",
+      "segment": "COMMERCIAL",
+      "description": "Photoelectric beam sensor for perimeter detection"
+    },
+    {
+      "name": "Panic Button - Wireless",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Intrusion Detection",
+      "cost": 45.00,
+      "price": 95.00,
+      "code": "LV-PANIC-W",
+      "segment": "COMMERCIAL",
+      "description": "Wireless panic/duress button"
+    },
+    {
+      "name": "Outdoor Siren - 120dB with Strobe",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Intrusion Detection",
+      "cost": 85.00,
+      "price": 175.00,
+      "code": "LV-SIREN-OUT",
+      "segment": "COMMERCIAL",
+      "description": "120dB weatherproof siren with strobe light"
+    },
+
+    {
+      "section": "========== FIRE ALARM (LV) - PRODUCTS =========="
+    },
+    {
+      "name": "Fire Alarm Panel - 2 Zone Conventional",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Fire Alarm",
+      "manufacturer": "Various",
+      "cost": 450.00,
+      "price": 950.00,
+      "code": "LV-FACP-2Z",
+      "segment": "COMMERCIAL",
+      "description": "2-zone conventional fire alarm control panel"
+    },
+    {
+      "name": "Fire Alarm Panel - 127 Point Addressable",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Fire Alarm",
+      "manufacturer": "Various",
+      "cost": 1800.00,
+      "price": 3500.00,
+      "code": "LV-FACP-127",
+      "segment": "COMMERCIAL",
+      "description": "127-point addressable fire alarm panel"
+    },
+    {
+      "name": "Smoke Detector - Addressable Photo",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Fire Alarm",
+      "cost": 65.00,
+      "price": 145.00,
+      "code": "LV-SMK-ADDR",
+      "segment": "COMMERCIAL",
+      "description": "Addressable photoelectric smoke detector"
+    },
+    {
+      "name": "Heat Detector - Addressable",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Fire Alarm",
+      "cost": 55.00,
+      "price": 125.00,
+      "code": "LV-HEAT-ADDR",
+      "segment": "COMMERCIAL",
+      "description": "Addressable rate-of-rise heat detector"
+    },
+    {
+      "name": "Duct Smoke Detector",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Fire Alarm",
+      "cost": 175.00,
+      "price": 350.00,
+      "code": "LV-DUCT-SMK",
+      "segment": "COMMERCIAL",
+      "description": "Duct smoke detector for HVAC integration"
+    },
+    {
+      "name": "Horn/Strobe - Wall Mount ADA",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Fire Alarm",
+      "cost": 75.00,
+      "price": 165.00,
+      "code": "LV-HORN-WALL",
+      "segment": "COMMERCIAL",
+      "description": "ADA compliant horn/strobe notification appliance"
+    },
+    {
+      "name": "Remote Annunciator Panel",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Fire Alarm",
+      "cost": 350.00,
+      "price": 750.00,
+      "code": "LV-ANNUN-REM",
+      "segment": "COMMERCIAL",
+      "description": "Remote annunciator for lobby or security desk"
+    },
+
+    {
+      "section": "========== FIRE ALARM (LV) - SERVICES =========="
+    },
+    {
+      "name": "Fire Alarm Device Installation - Per Point",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Fire Alarm",
+      "cost": 85.00,
+      "price": 195.00,
+      "code": "LV-FA-INST-PT",
+      "segment": "COMMERCIAL",
+      "description": "Fire alarm device installation per point"
+    },
+    {
+      "name": "Fire Alarm Programming - Per Zone",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Fire Alarm",
+      "cost": 75.00,
+      "price": 175.00,
+      "code": "LV-FA-PROG-Z",
+      "segment": "COMMERCIAL",
+      "description": "Fire alarm system programming per zone"
+    },
+    {
+      "name": "Fire Alarm Monitoring - Monthly",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "RMR - Fire",
+      "cost": 35.00,
+      "price": 95.00,
+      "code": "LV-FA-MON-MO",
+      "segment": "COMMERCIAL",
+      "description": "24/7 UL listed fire alarm monitoring (RMR)"
+    },
+
+    {
+      "section": "========== AUDIO/VISUAL - PRODUCTS =========="
+    },
+    {
+      "name": "Display - 65\" 4K Commercial",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Audio/Visual",
+      "manufacturer": "Samsung/LG",
+      "cost": 950.00,
+      "price": 1800.00,
+      "code": "LV-DISP-65",
+      "segment": "COMMERCIAL",
+      "description": "65-inch 4K commercial-grade display"
+    },
+    {
+      "name": "Display - 75\" 4K Commercial",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Audio/Visual",
+      "manufacturer": "Samsung/LG",
+      "cost": 1500.00,
+      "price": 2800.00,
+      "code": "LV-DISP-75",
+      "segment": "COMMERCIAL",
+      "description": "75-inch 4K commercial-grade display"
+    },
+    {
+      "name": "Display - 86\" Interactive Touch",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Audio/Visual",
+      "manufacturer": "Various",
+      "cost": 4500.00,
+      "price": 8500.00,
+      "code": "LV-DISP-86-INT",
+      "segment": "COMMERCIAL",
+      "description": "86-inch interactive touch display with whiteboard"
+    },
+    {
+      "name": "Video Bar - All-in-One USB",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Audio/Visual",
+      "manufacturer": "Poly/Logitech",
+      "cost": 850.00,
+      "price": 1600.00,
+      "code": "LV-VBAR-AIO",
+      "segment": "COMMERCIAL",
+      "description": "All-in-one USB video bar with camera, mic, and speakers"
+    },
+    {
+      "name": "PTZ Camera - Conference Room",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Audio/Visual",
+      "manufacturer": "Various",
+      "cost": 650.00,
+      "price": 1200.00,
+      "code": "LV-CAM-CONF",
+      "segment": "COMMERCIAL",
+      "description": "12x zoom PTZ camera for conference rooms"
+    },
+    {
+      "name": "Ceiling Microphone Array",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Audio/Visual",
+      "manufacturer": "Shure/Biamp",
+      "cost": 750.00,
+      "price": 1500.00,
+      "code": "LV-MIC-CEIL",
+      "segment": "COMMERCIAL",
+      "description": "Ceiling-mounted beamforming microphone array"
+    },
+    {
+      "name": "DSP - Audio Processor",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Audio/Visual",
+      "manufacturer": "Biamp/QSC",
+      "cost": 1200.00,
+      "price": 2400.00,
+      "code": "LV-DSP-PROC",
+      "segment": "COMMERCIAL",
+      "description": "Digital signal processor for conferencing and AV"
+    },
+    {
+      "name": "Ceiling Speaker - 70V",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Audio/Visual",
+      "manufacturer": "JBL/Bose",
+      "cost": 85.00,
+      "price": 185.00,
+      "code": "LV-SPK-CEIL",
+      "segment": "COMMERCIAL",
+      "description": "70V ceiling speaker for distributed audio"
+    },
+    {
+      "name": "Control System - Touch Panel 10\"",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Audio/Visual",
+      "manufacturer": "Crestron/Extron",
+      "cost": 1500.00,
+      "price": 2800.00,
+      "code": "LV-CTRL-TOUCH",
+      "segment": "COMMERCIAL",
+      "description": "10-inch touch panel for AV room control"
+    },
+    {
+      "name": "Wireless Presentation System",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Audio/Visual",
+      "manufacturer": "Crestron/Barco",
+      "cost": 850.00,
+      "price": 1600.00,
+      "code": "LV-WPRES-SYS",
+      "segment": "COMMERCIAL",
+      "description": "Wireless presentation system for BYOD meeting rooms"
+    },
+
+    {
+      "section": "========== AUDIO/VISUAL - SERVICES =========="
+    },
+    {
+      "name": "AV Design & Engineering",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Audio/Visual",
+      "cost": 2500.00,
+      "price": 5500.00,
+      "code": "LV-AV-DESIGN",
+      "segment": "COMMERCIAL",
+      "description": "Audio/visual system design and engineering"
+    },
+    {
+      "name": "Display Installation & Mount",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Audio/Visual",
+      "cost": 250.00,
+      "price": 550.00,
+      "code": "LV-AV-DISP-INST",
+      "segment": "COMMERCIAL",
+      "description": "Commercial display installation including mount and wiring"
+    },
+    {
+      "name": "Conference Room AV Package Install",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Audio/Visual",
+      "cost": 2500.00,
+      "price": 5500.00,
+      "code": "LV-AV-CONF-INST",
+      "segment": "COMMERCIAL",
+      "description": "Complete conference room AV system installation"
+    },
+    {
+      "name": "AV System Programming - Per Hour",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Audio/Visual",
+      "cost": 150.00,
+      "price": 295.00,
+      "code": "LV-AV-PROG-HR",
+      "segment": "COMMERCIAL",
+      "description": "AV control system programming per hour"
+    },
+    {
+      "name": "AV Remote Support - Monthly",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "RMR - AV",
+      "cost": 150.00,
+      "price": 395.00,
+      "code": "LV-AV-SUPPORT-MO",
+      "segment": "COMMERCIAL",
+      "description": "Remote AV support and help desk (RMR)"
+    },
+
+    {
+      "section": "========== STRUCTURED CABLING - PRODUCTS =========="
+    },
+    {
+      "name": "Cat6A Cable - Per Ft Plenum",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Structured Cabling",
+      "cost": 0.45,
+      "price": 1.00,
+      "code": "LV-CAT6A-PL-FT",
+      "segment": "COMMERCIAL",
+      "description": "Cat6A plenum-rated cable per foot, 10G capable"
+    },
+    {
+      "name": "Cat6A Patch Panel - 24 Port",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Structured Cabling",
+      "cost": 225.00,
+      "price": 450.00,
+      "code": "LV-PP-24-C6A",
+      "segment": "COMMERCIAL",
+      "description": "24-port Cat6A shielded patch panel"
+    },
+    {
+      "name": "Cat6A Keystone Jack",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Structured Cabling",
+      "cost": 15.00,
+      "price": 35.00,
+      "code": "LV-KS-C6A",
+      "segment": "COMMERCIAL",
+      "description": "Cat6A shielded keystone jack"
+    },
+    {
+      "name": "OM4 Fiber Cable - Per Ft",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Structured Cabling",
+      "cost": 1.25,
+      "price": 2.75,
+      "code": "LV-OM4-FT",
+      "segment": "COMMERCIAL",
+      "description": "OM4 multimode fiber cable per foot, 100G capable"
+    },
+    {
+      "name": "OS2 Fiber Cable - Per Ft",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Structured Cabling",
+      "cost": 0.65,
+      "price": 1.50,
+      "code": "LV-OS2-FT",
+      "segment": "COMMERCIAL",
+      "description": "OS2 singlemode fiber cable per foot"
+    },
+    {
+      "name": "Fiber Patch Panel - 24 Port LC",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Structured Cabling",
+      "cost": 350.00,
+      "price": 695.00,
+      "code": "LV-FPP-24",
+      "segment": "COMMERCIAL",
+      "description": "24-port fiber patch panel with LC duplex adapters"
+    },
+    {
+      "name": "Network Rack - 42U Enclosed",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Structured Cabling",
+      "cost": 850.00,
+      "price": 1600.00,
+      "code": "LV-RACK-42U",
+      "segment": "COMMERCIAL",
+      "description": "42U enclosed network rack with sides and fans"
+    },
+    {
+      "name": "Network Rack - 12U Wall Mount",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Structured Cabling",
+      "cost": 250.00,
+      "price": 495.00,
+      "code": "LV-RACK-12U-W",
+      "segment": "COMMERCIAL",
+      "description": "12U wall-mount swing-out network rack"
+    },
+    {
+      "name": "PDU - 30A Managed Vertical",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Structured Cabling",
+      "cost": 650.00,
+      "price": 1200.00,
+      "code": "LV-PDU-30A-M",
+      "segment": "ENTERPRISE",
+      "description": "30A managed PDU with outlet-level monitoring"
+    },
+
+    {
+      "section": "========== STRUCTURED CABLING - SERVICES =========="
+    },
+    {
+      "name": "Network Drop Install - Cat6A",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Structured Cabling",
+      "cost": 95.00,
+      "price": 225.00,
+      "code": "LV-DROP-C6A",
+      "segment": "COMMERCIAL",
+      "description": "Cat6A network drop installation and termination"
+    },
+    {
+      "name": "Fiber Drop Install - Per Strand",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Structured Cabling",
+      "cost": 125.00,
+      "price": 295.00,
+      "code": "LV-DROP-FIBER",
+      "segment": "COMMERCIAL",
+      "description": "Fiber optic cable installation per strand"
+    },
+    {
+      "name": "MDF/IDF Build-Out",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Structured Cabling",
+      "cost": 2500.00,
+      "price": 5500.00,
+      "code": "LV-MDF-BUILD",
+      "segment": "COMMERCIAL",
+      "description": "Main/Intermediate distribution frame build-out"
+    },
+    {
+      "name": "Cable Certification Testing - Per Drop",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Structured Cabling",
+      "cost": 25.00,
+      "price": 65.00,
+      "code": "LV-CERT-DROP",
+      "segment": "COMMERCIAL",
+      "description": "Level VI cable certification test per drop"
+    },
+    {
+      "name": "Fiber Certification - Tier 2 OTDR",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Structured Cabling",
+      "cost": 75.00,
+      "price": 175.00,
+      "code": "LV-CERT-F-T2",
+      "segment": "COMMERCIAL",
+      "description": "BICSI Tier 2 OTDR fiber certification per strand"
+    },
+    {
+      "name": "Cabling Design - BICSI Compliant",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Structured Cabling",
+      "cost": 2500.00,
+      "price": 5500.00,
+      "code": "LV-CABLE-DESIGN",
+      "segment": "COMMERCIAL",
+      "description": "BICSI-compliant structured cabling design"
+    },
+
+    {
+      "section": "========== BUILDING AUTOMATION/BMS - PRODUCTS =========="
+    },
+    {
+      "name": "BACnet Controller - 32 Point",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Building Automation",
+      "cost": 850.00,
+      "price": 1600.00,
+      "code": "LV-BAC-32",
+      "segment": "COMMERCIAL",
+      "description": "32-point BACnet controller for HVAC integration"
+    },
+    {
+      "name": "BACnet Controller - 64 Point",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Building Automation",
+      "cost": 1500.00,
+      "price": 2800.00,
+      "code": "LV-BAC-64",
+      "segment": "COMMERCIAL",
+      "description": "64-point BACnet controller for large systems"
+    },
+    {
+      "name": "Room Temperature Sensor - BACnet",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Building Automation",
+      "cost": 85.00,
+      "price": 175.00,
+      "code": "LV-TEMP-ROOM",
+      "segment": "COMMERCIAL",
+      "description": "BACnet/Modbus room temperature sensor"
+    },
+    {
+      "name": "CO2 Sensor - Wall Mount",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Building Automation",
+      "cost": 225.00,
+      "price": 450.00,
+      "code": "LV-CO2-WALL",
+      "segment": "COMMERCIAL",
+      "description": "CO2 sensor for indoor air quality monitoring"
+    },
+    {
+      "name": "Occupancy Sensor - PoE",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Building Automation",
+      "cost": 125.00,
+      "price": 275.00,
+      "code": "LV-OCC-POE",
+      "segment": "COMMERCIAL",
+      "description": "PoE occupancy sensor for lighting/HVAC control"
+    },
+    {
+      "name": "Energy Meter - 3 Phase",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Building Automation",
+      "cost": 650.00,
+      "price": 1200.00,
+      "code": "LV-ENERGY-3PH",
+      "segment": "COMMERCIAL",
+      "description": "3-phase energy meter for sub-metering"
+    },
+
+    {
+      "section": "========== BUILDING AUTOMATION/BMS - SERVICES =========="
+    },
+    {
+      "name": "BMS Design & Engineering",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Building Automation",
+      "cost": 5000.00,
+      "price": 12000.00,
+      "code": "LV-BMS-DESIGN",
+      "segment": "COMMERCIAL",
+      "description": "Building management system design and engineering"
+    },
+    {
+      "name": "BMS Point Installation",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Building Automation",
+      "cost": 125.00,
+      "price": 295.00,
+      "code": "LV-BMS-POINT",
+      "segment": "COMMERCIAL",
+      "description": "BMS point installation per sensor/device"
+    },
+    {
+      "name": "BMS Programming - Per Controller",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Building Automation",
+      "cost": 500.00,
+      "price": 1200.00,
+      "code": "LV-BMS-PROG",
+      "segment": "COMMERCIAL",
+      "description": "BMS controller programming and sequences"
+    },
+    {
+      "name": "BMS Remote Monitoring - Monthly",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "RMR - BMS",
+      "cost": 250.00,
+      "price": 595.00,
+      "code": "LV-BMS-MON-MO",
+      "segment": "COMMERCIAL",
+      "description": "24/7 BMS remote monitoring service (RMR)"
+    },
+
+    {
+      "section": "========== NURSE CALL / HEALTHCARE - PRODUCTS =========="
+    },
+    {
+      "name": "Nurse Call Master Station",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Nurse Call",
+      "manufacturer": "TekTone/Jeron",
+      "cost": 1500.00,
+      "price": 2800.00,
+      "code": "LV-NC-MASTER",
+      "segment": "HEALTHCARE",
+      "description": "32-station nurse call master station"
+    },
+    {
+      "name": "Patient Station - Pillow Speaker",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Nurse Call",
+      "cost": 125.00,
+      "price": 275.00,
+      "code": "LV-NC-PATIENT",
+      "segment": "HEALTHCARE",
+      "description": "Patient bedside station with pillow speaker"
+    },
+    {
+      "name": "Corridor Dome Light",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Nurse Call",
+      "cost": 125.00,
+      "price": 275.00,
+      "code": "LV-NC-DOME",
+      "segment": "HEALTHCARE",
+      "description": "LED multi-color corridor dome light"
+    },
+    {
+      "name": "Pull Cord Station - Bathroom",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Nurse Call",
+      "cost": 95.00,
+      "price": 195.00,
+      "code": "LV-NC-PULL",
+      "segment": "HEALTHCARE",
+      "description": "Bathroom pull cord emergency station"
+    },
+    {
+      "name": "Wireless Pendant - Fall Detection",
+      "catalog": "LOW_VOLTAGE",
+      "type": "PRODUCT",
+      "category": "Nurse Call",
+      "cost": 85.00,
+      "price": 175.00,
+      "code": "LV-NC-PEND",
+      "segment": "HEALTHCARE",
+      "description": "Wireless pendant with fall detection"
+    },
+
+    {
+      "section": "========== NURSE CALL - SERVICES =========="
+    },
+    {
+      "name": "Nurse Call Install - Per Bed",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Nurse Call",
+      "cost": 350.00,
+      "price": 750.00,
+      "code": "LV-NC-INST-BED",
+      "segment": "HEALTHCARE",
+      "description": "Nurse call system installation per patient bed"
+    },
+    {
+      "name": "Nurse Call System Programming",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "Nurse Call",
+      "cost": 1500.00,
+      "price": 3500.00,
+      "code": "LV-NC-PROG",
+      "segment": "HEALTHCARE",
+      "description": "Nurse call system programming and integration"
+    },
+    {
+      "name": "Annual Nurse Call Maintenance",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "RMR - Healthcare",
+      "cost": 2500.00,
+      "price": 5500.00,
+      "code": "LV-NC-MAINT-YR",
+      "segment": "HEALTHCARE",
+      "description": "Annual nurse call system maintenance contract (RMR)"
+    },
+
+    {
+      "section": "========== RMR SERVICES - MONITORING =========="
+    },
+    {
+      "name": "Interactive Alarm Monitoring - Monthly",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "RMR - Monitoring",
+      "cost": 35.00,
+      "price": 89.95,
+      "code": "LV-RMR-INT",
+      "segment": "RESIDENTIAL",
+      "description": "Interactive monitoring with app control and automation (RMR)"
+    },
+    {
+      "name": "Cellular Communicator Fee - Monthly",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "RMR - Monitoring",
+      "cost": 10.00,
+      "price": 25.00,
+      "code": "LV-CELL-MO",
+      "segment": "ALL",
+      "description": "Cellular LTE/5G communicator monthly fee (RMR)"
+    },
+    {
+      "name": "Maintenance Agreement - Residential Monthly",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "RMR - Maintenance",
+      "cost": 15.00,
+      "price": 29.95,
+      "code": "LV-MAINT-RES-MO",
+      "segment": "RESIDENTIAL",
+      "description": "Priority service maintenance agreement (RMR)"
+    },
+    {
+      "name": "Maintenance Agreement - Commercial Monthly",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "RMR - Maintenance",
+      "cost": 75.00,
+      "price": 195.00,
+      "code": "LV-MAINT-COM-MO",
+      "segment": "COMMERCIAL",
+      "description": "Commercial maintenance agreement with SLA (RMR)"
+    },
+    {
+      "name": "Network Monitoring - Monthly",
+      "catalog": "LOW_VOLTAGE",
+      "type": "SERVICE",
+      "category": "RMR - IT",
+      "cost": 50.00,
+      "price": 150.00,
+      "code": "LV-NET-MON-MO",
+      "segment": "COMMERCIAL",
+      "description": "Network infrastructure monitoring per site (RMR)"
+    }
+  ],
+
+  "summary": {
+    "total_new_items": 115,
+    "by_category": {
+      "Access Control Products": 15,
+      "Access Control Services": 4,
+      "Video Surveillance Products": 10,
+      "Video Surveillance Services": 6,
+      "Intrusion Detection Products": 8,
+      "Fire Alarm Products": 7,
+      "Fire Alarm Services": 3,
+      "Audio/Visual Products": 10,
+      "Audio/Visual Services": 5,
+      "Structured Cabling Products": 9,
+      "Structured Cabling Services": 6,
+      "Building Automation Products": 6,
+      "Building Automation Services": 4,
+      "Nurse Call Products": 5,
+      "Nurse Call Services": 3,
+      "RMR Services": 5
+    },
+    "by_segment": {
+      "RESIDENTIAL": 8,
+      "COMMERCIAL": 85,
+      "ENTERPRISE": 12,
+      "HEALTHCARE": 10
+    },
+    "rmr_items_count": 15,
+    "note": "These 115 items fill the identified gaps in Low Voltage coverage for multi-segment contractors"
+  }
+}

@@ -1,0 +1,409 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-13",
+    "description": "Service Agreement & Maintenance Contract Templates for Coperniq Instance 388",
+    "instance": 388,
+    "company": "Kipper Energy Solutions"
+  },
+  "serviceAgreementTypes": {
+    "HVAC_RESIDENTIAL": {
+      "BRONZE": {
+        "name": "Bronze Maintenance Plan",
+        "description": "Basic preventive maintenance coverage",
+        "billingOptions": [
+          {
+            "frequency": "ANNUAL",
+            "price": 199,
+            "discount": 0
+          },
+          {
+            "frequency": "MONTHLY",
+            "price": 19.99,
+            "discount": 0,
+            "autoPayRequired": true
+          }
+        ],
+        "coverage": {
+          "visitsPerYear": 2,
+          "visitTypes": ["Spring AC Tune-Up", "Fall Heating Tune-Up"],
+          "partsDiscount": 10,
+          "laborDiscount": 10,
+          "emergencyPriority": false,
+          "afterHoursDiscount": 0
+        },
+        "inclusions": [
+          "Filter inspection (customer-supplied filters)",
+          "Thermostat calibration check",
+          "Electrical connection inspection",
+          "Condensate drain flush",
+          "Refrigerant level check (visual)"
+        ],
+        "exclusions": [
+          "Parts and refrigerant",
+          "Emergency/after-hours service",
+          "Duct cleaning",
+          "Indoor air quality equipment"
+        ]
+      },
+      "SILVER": {
+        "name": "Silver Comfort Plan",
+        "description": "Enhanced coverage with priority service",
+        "billingOptions": [
+          {
+            "frequency": "ANNUAL",
+            "price": 349,
+            "discount": 8
+          },
+          {
+            "frequency": "SEMI_ANNUAL",
+            "price": 189,
+            "discount": 0
+          },
+          {
+            "frequency": "MONTHLY",
+            "price": 34.99,
+            "discount": 0,
+            "autoPayRequired": true
+          }
+        ],
+        "coverage": {
+          "visitsPerYear": 2,
+          "visitTypes": ["Spring AC Tune-Up", "Fall Heating Tune-Up"],
+          "partsDiscount": 15,
+          "laborDiscount": 15,
+          "emergencyPriority": true,
+          "afterHoursDiscount": 10,
+          "diagnosticFeeWaived": true
+        },
+        "inclusions": [
+          "All Bronze inclusions",
+          "Standard 1\" filter included (2 per year)",
+          "Refrigerant top-off up to 1 lb",
+          "Priority scheduling (same-day when available)",
+          "No diagnostic fee on service calls"
+        ]
+      },
+      "GOLD": {
+        "name": "Gold Total Care Plan",
+        "description": "Comprehensive coverage with maximum savings",
+        "billingOptions": [
+          {
+            "frequency": "ANNUAL",
+            "price": 499,
+            "discount": 10
+          },
+          {
+            "frequency": "MONTHLY",
+            "price": 49.99,
+            "discount": 0,
+            "autoPayRequired": true
+          }
+        ],
+        "coverage": {
+          "visitsPerYear": 2,
+          "visitTypes": ["Spring AC Tune-Up", "Fall Heating Tune-Up"],
+          "partsDiscount": 20,
+          "laborDiscount": 20,
+          "emergencyPriority": true,
+          "afterHoursDiscount": 25,
+          "diagnosticFeeWaived": true,
+          "noTripCharge": true
+        },
+        "inclusions": [
+          "All Silver inclusions",
+          "Premium pleated filter included (4 per year)",
+          "Refrigerant top-off up to 2 lbs",
+          "Guaranteed same-day emergency service",
+          "No trip charge on any service call",
+          "Annual duct inspection",
+          "Blower wheel cleaning",
+          "Evaporator coil cleaning"
+        ]
+      }
+    },
+    "HVAC_COMMERCIAL": {
+      "BASIC": {
+        "name": "Commercial Basic PM",
+        "description": "Quarterly preventive maintenance",
+        "billingOptions": [
+          {
+            "frequency": "ANNUAL",
+            "pricePerTon": 75,
+            "minPrice": 600,
+            "discount": 5
+          },
+          {
+            "frequency": "QUARTERLY",
+            "pricePerTon": 20,
+            "minPrice": 175,
+            "discount": 0
+          },
+          {
+            "frequency": "MONTHLY",
+            "pricePerTon": 7,
+            "minPrice": 65,
+            "discount": 0
+          }
+        ],
+        "coverage": {
+          "visitsPerYear": 4,
+          "responseTimeHours": 24,
+          "partsDiscount": 10,
+          "laborDiscount": 10
+        },
+        "inclusions": [
+          "Quarterly filter changes",
+          "Belt inspection/adjustment",
+          "Electrical inspection",
+          "Refrigerant check",
+          "Condensate drain service"
+        ]
+      },
+      "COMPREHENSIVE": {
+        "name": "Commercial Full Service",
+        "description": "Monthly maintenance with priority response",
+        "billingOptions": [
+          {
+            "frequency": "ANNUAL",
+            "pricePerTon": 150,
+            "minPrice": 1200
+          },
+          {
+            "frequency": "MONTHLY",
+            "pricePerTon": 14,
+            "minPrice": 120
+          }
+        ],
+        "coverage": {
+          "visitsPerYear": 12,
+          "responseTimeHours": 4,
+          "partsDiscount": 20,
+          "laborDiscount": 20,
+          "emergencyIncluded": true
+        },
+        "inclusions": [
+          "All Basic inclusions",
+          "Monthly filter changes",
+          "Coil cleaning (2x/year)",
+          "4-hour emergency response",
+          "After-hours coverage included",
+          "Annual refrigerant analysis"
+        ]
+      }
+    },
+    "PLUMBING_RESIDENTIAL": {
+      "HOME_SHIELD": {
+        "name": "Home Plumbing Shield",
+        "description": "Annual plumbing protection plan",
+        "billingOptions": [
+          {
+            "frequency": "ANNUAL",
+            "price": 249,
+            "discount": 0
+          },
+          {
+            "frequency": "MONTHLY",
+            "price": 24.99,
+            "autoPayRequired": true
+          }
+        ],
+        "coverage": {
+          "visitsPerYear": 1,
+          "visitType": "Annual Plumbing Inspection",
+          "partsDiscount": 15,
+          "laborDiscount": 15,
+          "emergencyPriority": true
+        },
+        "inclusions": [
+          "Annual whole-house plumbing inspection",
+          "Water heater flush & inspection",
+          "All faucet/fixture inspection",
+          "Water pressure test",
+          "Leak detection check",
+          "Priority scheduling",
+          "15% discount on repairs"
+        ]
+      }
+    },
+    "ELECTRICAL_RESIDENTIAL": {
+      "ELECTRICAL_SAFETY": {
+        "name": "Electrical Safety Plan",
+        "description": "Annual electrical safety inspection",
+        "billingOptions": [
+          {
+            "frequency": "ANNUAL",
+            "price": 199,
+            "discount": 0
+          }
+        ],
+        "coverage": {
+          "visitsPerYear": 1,
+          "visitType": "Annual Electrical Safety Inspection",
+          "partsDiscount": 10,
+          "laborDiscount": 10
+        },
+        "inclusions": [
+          "Panel inspection and thermal scan",
+          "Outlet/switch testing",
+          "GFCI/AFCI testing",
+          "Smoke/CO detector testing",
+          "Surge protector inspection",
+          "Electrical safety report"
+        ]
+      }
+    },
+    "FIRE_PROTECTION": {
+      "NFPA25_QUARTERLY": {
+        "name": "NFPA 25 Quarterly Inspection",
+        "description": "Code-required sprinkler system inspection",
+        "billingOptions": [
+          {
+            "frequency": "ANNUAL",
+            "pricePerHead": 8,
+            "minPrice": 800
+          },
+          {
+            "frequency": "QUARTERLY",
+            "pricePerHead": 2.50,
+            "minPrice": 250
+          }
+        ],
+        "coverage": {
+          "visitsPerYear": 4,
+          "complianceStandard": "NFPA 25",
+          "reportingIncluded": true
+        },
+        "inclusions": [
+          "Visual inspection of all sprinkler heads",
+          "Control valve inspection",
+          "Alarm device testing",
+          "Water flow test (annual)",
+          "Fire pump test (where applicable)",
+          "Inspection report for AHJ"
+        ]
+      },
+      "FIRE_EXTINGUISHER": {
+        "name": "Fire Extinguisher Inspection",
+        "description": "Annual fire extinguisher service",
+        "billingOptions": [
+          {
+            "frequency": "ANNUAL",
+            "pricePerUnit": 25,
+            "minPrice": 75
+          }
+        ],
+        "coverage": {
+          "visitsPerYear": 1,
+          "complianceStandard": "NFPA 10",
+          "taggingIncluded": true
+        },
+        "inclusions": [
+          "Visual inspection",
+          "Pressure check",
+          "Tag/label update",
+          "6-year maintenance reminder",
+          "Hydrostatic test reminder (12-year)"
+        ]
+      }
+    },
+    "SOLAR_MONITORING": {
+      "PERFORMANCE_MONITORING": {
+        "name": "Solar Performance Monitoring",
+        "description": "Remote system monitoring and alerts",
+        "billingOptions": [
+          {
+            "frequency": "ANNUAL",
+            "pricePerKw": 15,
+            "minPrice": 150
+          },
+          {
+            "frequency": "MONTHLY",
+            "pricePerKw": 1.50,
+            "minPrice": 15
+          }
+        ],
+        "coverage": {
+          "monitoring": "24/7 remote",
+          "alertTypes": ["Production drop", "Inverter fault", "Communication loss"],
+          "responseType": "Notification to customer and dispatch"
+        },
+        "inclusions": [
+          "Real-time production monitoring",
+          "Monthly performance reports",
+          "Automatic fault detection",
+          "Priority dispatch on issues",
+          "Annual production guarantee review"
+        ]
+      }
+    }
+  },
+  "renewalSettings": {
+    "autoRenewal": {
+      "enabled": true,
+      "notificationDays": [60, 30, 7],
+      "priceIncreaseCapPercent": 5
+    },
+    "cancellationPolicy": {
+      "noticeDays": 30,
+      "proRatedRefund": true,
+      "earlyTerminationFee": "None for annual plans"
+    }
+  },
+  "paymentProcessing": {
+    "acceptedMethods": ["CREDIT_CARD", "ACH", "CHECK"],
+    "autoPayIncentive": {
+      "enabled": true,
+      "discountPercent": 5,
+      "description": "5% discount for autopay enrollment"
+    },
+    "failedPaymentHandling": {
+      "retryDays": [3, 7, 14],
+      "gracePeriodDays": 30,
+      "suspensionAfterDays": 45
+    }
+  },
+  "propertyManagement": {
+    "MULTI_FAMILY": {
+      "name": "Multi-Family MEP Service Agreement",
+      "description": "Bundled MEP services for apartment complexes",
+      "billingOptions": [
+        {
+          "frequency": "MONTHLY",
+          "pricePerUnit": 35,
+          "minUnits": 20,
+          "minPrice": 700
+        }
+      ],
+      "coverage": {
+        "trades": ["HVAC", "PLUMBING", "ELECTRICAL"],
+        "responseTimeHours": 4,
+        "afterHoursIncluded": true
+      },
+      "inclusions": [
+        "Quarterly HVAC PM (all units)",
+        "Annual plumbing inspection (common areas)",
+        "24/7 emergency response",
+        "Tenant coordination",
+        "Unit turnover priority",
+        "Monthly reporting"
+      ]
+    },
+    "HOA_COMMERCIAL": {
+      "name": "HOA/Commercial Common Area",
+      "description": "Common area MEP maintenance",
+      "billingOptions": [
+        {
+          "frequency": "MONTHLY",
+          "basePrice": 500,
+          "additionalPerSqFt": 0.02
+        }
+      ],
+      "coverage": {
+        "areas": ["Clubhouse", "Pool equipment", "Common HVAC", "Landscape lighting"],
+        "responseTimeHours": 8,
+        "afterHoursEmergencyOnly": true
+      }
+    }
+  }
+}

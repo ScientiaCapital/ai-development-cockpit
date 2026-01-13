@@ -1,0 +1,534 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-13",
+    "company": "Kipper Energy Solutions",
+    "instance": 388,
+    "description": "Plumbing catalog expansion - Phase 1 Priority items",
+    "segments": ["RESIDENTIAL", "COMMERCIAL", "INDUSTRIAL"],
+    "total_items": 55
+  },
+
+  "water_heaters": {
+    "description": "Water heaters by type and capacity",
+    "items": [
+      { "section": "=== RESIDENTIAL WATER HEATERS ===" },
+      {
+        "name": "Gas Water Heater 40 Gallon",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Rheem",
+        "cost": 450.00,
+        "price": 750.00,
+        "code": "PLB-WH-GAS-40",
+        "description": "40 gallon gas water heater, 40K BTU, 0.62 UEF, residential"
+      },
+      {
+        "name": "Gas Water Heater 50 Gallon",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Rheem",
+        "cost": 550.00,
+        "price": 895.00,
+        "code": "PLB-WH-GAS-50",
+        "description": "50 gallon gas water heater, 40K BTU, 0.62 UEF, residential"
+      },
+      {
+        "name": "Gas Water Heater 75 Gallon",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Rheem",
+        "cost": 850.00,
+        "price": 1350.00,
+        "code": "PLB-WH-GAS-75",
+        "description": "75 gallon gas water heater, 75K BTU, high recovery, residential/light commercial"
+      },
+      {
+        "name": "Electric Water Heater 40 Gallon",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Rheem",
+        "cost": 380.00,
+        "price": 650.00,
+        "code": "PLB-WH-ELEC-40",
+        "description": "40 gallon electric water heater, 4500W elements, 0.93 UEF"
+      },
+      {
+        "name": "Electric Water Heater 50 Gallon",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Rheem",
+        "cost": 450.00,
+        "price": 750.00,
+        "code": "PLB-WH-ELEC-50",
+        "description": "50 gallon electric water heater, 4500W elements, 0.93 UEF"
+      },
+      {
+        "name": "Tankless Water Heater Gas",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Rinnai",
+        "cost": 1200.00,
+        "price": 1900.00,
+        "code": "PLB-WH-TNKLS-GAS",
+        "description": "Tankless gas water heater, 199K BTU, 9.8 GPM, residential"
+      },
+      {
+        "name": "Heat Pump Water Heater 50 Gallon",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Rheem",
+        "cost": 1500.00,
+        "price": 2400.00,
+        "code": "PLB-WH-HPWH-50",
+        "description": "50 gallon heat pump water heater, 3.55 UEF, Energy Star"
+      },
+      {
+        "name": "Heat Pump Water Heater 80 Gallon",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Rheem",
+        "cost": 1800.00,
+        "price": 2900.00,
+        "code": "PLB-WH-HPWH-80",
+        "description": "80 gallon heat pump water heater, 3.55 UEF, Energy Star"
+      },
+      { "section": "=== COMMERCIAL WATER HEATERS ===" },
+      {
+        "name": "Commercial Water Heater 100 Gallon",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "A.O. Smith",
+        "cost": 3500.00,
+        "price": 5500.00,
+        "code": "PLB-WH-COMM-100",
+        "description": "100 gallon commercial gas water heater, 199K BTU, ASME rated"
+      },
+      {
+        "name": "Commercial Water Heater 200 Gallon",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "A.O. Smith",
+        "cost": 6500.00,
+        "price": 10000.00,
+        "code": "PLB-WH-COMM-200",
+        "description": "200 gallon commercial gas water heater, 300K BTU, ASME rated"
+      }
+    ]
+  },
+
+  "backflow_assemblies": {
+    "description": "Backflow prevention assemblies - Compliance critical",
+    "items": [
+      { "section": "=== BACKFLOW PREVENTION ===" },
+      {
+        "name": "PVB Backflow 3/4\"",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Watts",
+        "cost": 85.00,
+        "price": 165.00,
+        "code": "PLB-BF-PVB-075",
+        "description": "Pressure vacuum breaker 3/4\", irrigation and hose bibb protection"
+      },
+      {
+        "name": "PVB Backflow 1\"",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Watts",
+        "cost": 115.00,
+        "price": 225.00,
+        "code": "PLB-BF-PVB-100",
+        "description": "Pressure vacuum breaker 1\", irrigation and hose bibb protection"
+      },
+      {
+        "name": "DCVA Backflow 1\"",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Watts",
+        "cost": 275.00,
+        "price": 475.00,
+        "code": "PLB-BF-DCVA-100",
+        "description": "Double check valve assembly 1\", potable water protection"
+      },
+      {
+        "name": "DCVA Backflow 2\"",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Watts",
+        "cost": 650.00,
+        "price": 1100.00,
+        "code": "PLB-BF-DCVA-200",
+        "description": "Double check valve assembly 2\", commercial potable water"
+      },
+      {
+        "name": "RPZ Backflow 1\"",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Watts",
+        "cost": 450.00,
+        "price": 795.00,
+        "code": "PLB-BF-RPZ-100",
+        "description": "Reduced pressure zone assembly 1\", high hazard protection"
+      },
+      {
+        "name": "RPZ Backflow 2\"",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Watts",
+        "cost": 950.00,
+        "price": 1650.00,
+        "code": "PLB-BF-RPZ-200",
+        "description": "Reduced pressure zone assembly 2\", commercial high hazard"
+      },
+      {
+        "name": "RPZ Backflow 4\"",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Watts",
+        "cost": 3200.00,
+        "price": 5200.00,
+        "code": "PLB-BF-RPZ-400",
+        "description": "Reduced pressure zone assembly 4\", industrial/commercial fire"
+      }
+    ]
+  },
+
+  "pumps": {
+    "description": "Pumps - sump, ejector, booster",
+    "items": [
+      { "section": "=== PUMPS ===" },
+      {
+        "name": "Sump Pump 1/3 HP",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Zoeller",
+        "cost": 175.00,
+        "price": 325.00,
+        "code": "PLB-PUMP-SUMP-033",
+        "description": "Submersible sump pump 1/3 HP, 45 GPM at 10ft head"
+      },
+      {
+        "name": "Sump Pump 1/2 HP",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Zoeller",
+        "cost": 225.00,
+        "price": 425.00,
+        "code": "PLB-PUMP-SUMP-050",
+        "description": "Submersible sump pump 1/2 HP, 60 GPM at 10ft head"
+      },
+      {
+        "name": "Sewage Ejector Pump 1/2 HP",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Zoeller",
+        "cost": 450.00,
+        "price": 795.00,
+        "code": "PLB-PUMP-EJECT-050",
+        "description": "Sewage ejector pump 1/2 HP, 2\" solids handling, basement bathroom"
+      },
+      {
+        "name": "Sewage Ejector Pump 1 HP",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Zoeller",
+        "cost": 650.00,
+        "price": 1100.00,
+        "code": "PLB-PUMP-EJECT-100",
+        "description": "Sewage ejector pump 1 HP, 2\" solids handling, commercial"
+      },
+      {
+        "name": "Booster Pump System Residential",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Grundfos",
+        "cost": 850.00,
+        "price": 1450.00,
+        "code": "PLB-PUMP-BOOST-RES",
+        "description": "Residential booster pump, 3/4 HP, 20 GPM, low pressure correction"
+      },
+      {
+        "name": "Recirculation Pump",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Grundfos",
+        "cost": 175.00,
+        "price": 325.00,
+        "code": "PLB-PUMP-RECIRC",
+        "description": "Hot water recirculation pump with timer, instant hot water"
+      }
+    ]
+  },
+
+  "fixtures": {
+    "description": "Plumbing fixtures - toilets, faucets, sinks",
+    "items": [
+      { "section": "=== FIXTURES ===" },
+      {
+        "name": "Toilet Standard 1.28 GPF",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "American Standard",
+        "cost": 145.00,
+        "price": 275.00,
+        "code": "PLB-FIX-TOILET-STD",
+        "description": "Two-piece toilet 1.28 GPF, elongated bowl, WaterSense"
+      },
+      {
+        "name": "Toilet High Efficiency 1.0 GPF",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "American Standard",
+        "cost": 225.00,
+        "price": 395.00,
+        "code": "PLB-FIX-TOILET-HE",
+        "description": "High efficiency toilet 1.0 GPF, elongated, pressure-assist"
+      },
+      {
+        "name": "Toilet Commercial Wall-Mount",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "American Standard",
+        "cost": 350.00,
+        "price": 595.00,
+        "code": "PLB-FIX-TOILET-WALL",
+        "description": "Wall-mount toilet bowl, elongated, commercial, requires carrier"
+      },
+      {
+        "name": "Flushometer Valve 1.28 GPF",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Sloan",
+        "cost": 285.00,
+        "price": 495.00,
+        "code": "PLB-FIX-FLUSH-128",
+        "description": "Manual flushometer 1.28 GPF for wall-mount toilets"
+      },
+      {
+        "name": "Lavatory Faucet - Residential",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Delta",
+        "cost": 95.00,
+        "price": 185.00,
+        "code": "PLB-FIX-FAU-LAV-RES",
+        "description": "Two-handle lavatory faucet, chrome, 1.2 GPM"
+      },
+      {
+        "name": "Kitchen Faucet - Pull-Down",
+        "catalog": "PLUMBING",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Delta",
+        "cost": 185.00,
+        "price": 325.00,
+        "code": "PLB-FIX-FAU-KITCH",
+        "description": "Single-handle pull-down kitchen faucet, chrome, 1.8 GPM"
+      }
+    ]
+  },
+
+  "services": {
+    "description": "Plumbing services - installation, repair, maintenance",
+    "items": [
+      { "section": "=== INSTALLATION SERVICES ===" },
+      {
+        "name": "Water Heater Install - Standard Gas",
+        "catalog": "PLUMBING",
+        "type": "SERVICE",
+        "category": "Installation",
+        "cost": 350.00,
+        "price": 650.00,
+        "code": "PLB-INST-WH-GAS",
+        "description": "Standard gas water heater replacement, includes haul-away"
+      },
+      {
+        "name": "Water Heater Install - Tankless",
+        "catalog": "PLUMBING",
+        "type": "SERVICE",
+        "category": "Installation",
+        "cost": 600.00,
+        "price": 1200.00,
+        "code": "PLB-INST-WH-TNKLS",
+        "description": "Tankless water heater installation, includes gas line upgrade"
+      },
+      {
+        "name": "Water Heater Install - Heat Pump",
+        "catalog": "PLUMBING",
+        "type": "SERVICE",
+        "category": "Installation",
+        "cost": 550.00,
+        "price": 1100.00,
+        "code": "PLB-INST-WH-HPWH",
+        "description": "Heat pump water heater installation, includes electrical"
+      },
+      {
+        "name": "Fixture Installation - per Fixture",
+        "catalog": "PLUMBING",
+        "type": "SERVICE",
+        "category": "Installation",
+        "cost": 125.00,
+        "price": 275.00,
+        "code": "PLB-INST-FIX",
+        "description": "Plumbing fixture installation (toilet, faucet, sink)"
+      },
+      {
+        "name": "Backflow Assembly Installation",
+        "catalog": "PLUMBING",
+        "type": "SERVICE",
+        "category": "Installation",
+        "cost": 175.00,
+        "price": 350.00,
+        "code": "PLB-INST-BF",
+        "description": "Backflow preventer installation, includes initial test"
+      },
+      { "section": "=== TESTING & INSPECTION ===" },
+      {
+        "name": "Backflow Test - Annual",
+        "catalog": "PLUMBING",
+        "type": "SERVICE",
+        "category": "Testing",
+        "cost": 50.00,
+        "price": 125.00,
+        "code": "PLB-TEST-BF",
+        "description": "Annual backflow preventer test and certification"
+      },
+      {
+        "name": "Backflow Test - with Minor Repair",
+        "catalog": "PLUMBING",
+        "type": "SERVICE",
+        "category": "Testing",
+        "cost": 95.00,
+        "price": 225.00,
+        "code": "PLB-TEST-BF-REP",
+        "description": "Backflow test with minor rebuild (O-rings, springs)"
+      },
+      {
+        "name": "Sewer Camera Inspection",
+        "catalog": "PLUMBING",
+        "type": "SERVICE",
+        "category": "Inspection",
+        "cost": 150.00,
+        "price": 350.00,
+        "code": "PLB-INSP-CAMERA",
+        "description": "Video camera sewer line inspection, includes recording"
+      },
+      {
+        "name": "Water Quality Test",
+        "catalog": "PLUMBING",
+        "type": "SERVICE",
+        "category": "Testing",
+        "cost": 75.00,
+        "price": 175.00,
+        "code": "PLB-TEST-WATER",
+        "description": "Water quality test - hardness, pH, TDS, chlorine"
+      },
+      { "section": "=== REPAIR SERVICES ===" },
+      {
+        "name": "Plumbing Service Call - Diagnostic",
+        "catalog": "PLUMBING",
+        "type": "SERVICE",
+        "category": "Inspection",
+        "cost": 45.00,
+        "price": 95.00,
+        "code": "PLB-SVC-DIAG",
+        "description": "Service call with diagnostic, applied to repair"
+      },
+      {
+        "name": "Drain Cleaning - Floor Drain",
+        "catalog": "PLUMBING",
+        "type": "SERVICE",
+        "category": "Maintenance",
+        "cost": 85.00,
+        "price": 195.00,
+        "code": "PLB-DRAIN-FLOOR",
+        "description": "Floor drain cleaning, cable machine"
+      },
+      {
+        "name": "Drain Cleaning - Main Line",
+        "catalog": "PLUMBING",
+        "type": "SERVICE",
+        "category": "Maintenance",
+        "cost": 175.00,
+        "price": 395.00,
+        "code": "PLB-DRAIN-MAIN",
+        "description": "Main sewer line cleaning, cable or hydro-jet"
+      },
+      {
+        "name": "Hydro-Jetting Service",
+        "catalog": "PLUMBING",
+        "type": "SERVICE",
+        "category": "Maintenance",
+        "cost": 350.00,
+        "price": 695.00,
+        "code": "PLB-HYDROJET",
+        "description": "High-pressure hydro-jetting for grease or root clearing"
+      },
+      {
+        "name": "Emergency Plumbing Service - After Hours",
+        "catalog": "PLUMBING",
+        "type": "SERVICE",
+        "category": "Maintenance",
+        "cost": 125.00,
+        "price": 295.00,
+        "code": "PLB-EMERG-AH",
+        "description": "Emergency plumbing service call, after hours premium"
+      }
+    ]
+  },
+
+  "summary": {
+    "total_new_items": 55,
+    "by_category": {
+      "water_heaters": 10,
+      "backflow_assemblies": 7,
+      "pumps": 6,
+      "fixtures": 6,
+      "services": 15
+    },
+    "by_segment": {
+      "RESIDENTIAL": 30,
+      "COMMERCIAL": 20,
+      "INDUSTRIAL": 5
+    },
+    "by_type": {
+      "PRODUCT": 29,
+      "SERVICE": 15
+    },
+    "notes": [
+      "Backflow testing is compliance-driven recurring revenue",
+      "Water heater replacements are high-volume residential",
+      "Commercial fixtures use Sloan flushometers (standard)",
+      "All products use major manufacturer pricing (Rheem, Watts, Zoeller)"
+    ]
+  }
+}

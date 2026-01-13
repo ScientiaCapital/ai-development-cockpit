@@ -1,0 +1,591 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-13",
+    "description": "Core Workflow Automations for Coperniq Instance 388",
+    "instance": 388,
+    "company": "Kipper Energy Solutions",
+    "coperniqAutomationStudio": "https://app.coperniq.io/388/company/studio/automations"
+  },
+  "automationCategories": {
+    "LEAD_MANAGEMENT": {
+      "description": "Automations for lead intake, assignment, and qualification",
+      "automations": [
+        {
+          "id": "LEAD_ASSIGNMENT_HVAC",
+          "name": "[MEP] HVAC Lead Assignment",
+          "description": "Auto-assign HVAC leads to sales rep based on trade group",
+          "status": "ACTIVE",
+          "trigger": {
+            "type": "REQUEST_CREATED",
+            "conditions": {
+              "tradeGroup": "MECHANICAL"
+            }
+          },
+          "actions": [
+            {
+              "type": "UPDATE_PROPERTY",
+              "field": "assigneeId",
+              "value": "{{salesRep.hvac}}"
+            },
+            {
+              "type": "SEND_NOTIFICATION",
+              "to": "{{salesRep.hvac.email}}",
+              "template": "NEW_LEAD_ALERT"
+            }
+          ]
+        },
+        {
+          "id": "LEAD_ASSIGNMENT_PLUMBING",
+          "name": "[MEP] Plumbing Lead Assignment",
+          "description": "Auto-assign plumbing leads based on service type",
+          "status": "TEMPLATE",
+          "trigger": {
+            "type": "REQUEST_CREATED",
+            "conditions": {
+              "tradeGroup": "PLUMBING"
+            }
+          },
+          "actions": [
+            {
+              "type": "UPDATE_PROPERTY",
+              "field": "assigneeId",
+              "value": "{{salesRep.plumbing}}"
+            }
+          ]
+        },
+        {
+          "id": "LEAD_ASSIGNMENT_ELECTRICAL",
+          "name": "[MEP] Electrical Lead Assignment",
+          "description": "Auto-assign electrical leads",
+          "status": "TEMPLATE",
+          "trigger": {
+            "type": "REQUEST_CREATED",
+            "conditions": {
+              "tradeGroup": "ELECTRICAL"
+            }
+          },
+          "actions": [
+            {
+              "type": "UPDATE_PROPERTY",
+              "field": "assigneeId",
+              "value": "{{salesRep.electrical}}"
+            }
+          ]
+        },
+        {
+          "id": "LEAD_ASSIGNMENT_SOLAR",
+          "name": "[Solar] Lead Assignment",
+          "description": "Auto-assign solar leads with safe harbor alert",
+          "status": "TEMPLATE",
+          "trigger": {
+            "type": "REQUEST_CREATED",
+            "conditions": {
+              "tradeGroup": "ENERGY"
+            }
+          },
+          "actions": [
+            {
+              "type": "UPDATE_PROPERTY",
+              "field": "assigneeId",
+              "value": "{{salesRep.solar}}"
+            },
+            {
+              "type": "CONDITIONAL_ACTION",
+              "condition": "projectType == 'COMMERCIAL'",
+              "action": {
+                "type": "ADD_TAG",
+                "tag": "ITC_SAFE_HARBOR_DEADLINE_2026-06-30"
+              }
+            }
+          ]
+        },
+        {
+          "id": "LEAD_FOLLOWUP_24H",
+          "name": "[MEP] Lead Follow-up Reminder (24h)",
+          "description": "Remind sales rep to follow up if lead not contacted within 24 hours",
+          "status": "TEMPLATE",
+          "trigger": {
+            "type": "TIME_BASED",
+            "delay": {
+              "hours": 24
+            },
+            "condition": "lead.status == 'NEW'"
+          },
+          "actions": [
+            {
+              "type": "SEND_NOTIFICATION",
+              "to": "{{lead.assignee.email}}",
+              "subject": "Lead Follow-up Needed: {{lead.contact.name}}",
+              "body": "Lead has not been contacted in 24 hours. Please follow up."
+            },
+            {
+              "type": "UPDATE_PROPERTY",
+              "field": "priority",
+              "value": "HIGH"
+            }
+          ]
+        }
+      ]
+    },
+    "QUOTE_TO_JOB": {
+      "description": "Automations for quote approval and job creation",
+      "automations": [
+        {
+          "id": "QUOTE_APPROVED_CREATE_JOB",
+          "name": "[MEP] Quote to Job Conversion",
+          "description": "When quote is approved, create project/job automatically",
+          "status": "ACTIVE",
+          "trigger": {
+            "type": "QUOTE_STATUS_CHANGED",
+            "fromStatus": "SENT",
+            "toStatus": "APPROVED"
+          },
+          "actions": [
+            {
+              "type": "CREATE_PROJECT",
+              "copyFrom": "QUOTE",
+              "fields": {
+                "title": "{{quote.title}}",
+                "contactId": "{{quote.contactId}}",
+                "siteId": "{{quote.siteId}}",
+                "tradeGroup": "{{quote.tradeGroup}}",
+                "status": "PENDING"
+              }
+            },
+            {
+              "type": "UPDATE_QUOTE",
+              "field": "projectId",
+              "value": "{{newProject.id}}"
+            },
+            {
+              "type": "SEND_EMAIL",
+              "to": "{{quote.contact.email}}",
+              "template": "QUOTE_APPROVED_CONFIRMATION"
+            }
+          ]
+        },
+        {
+          "id": "QUOTE_SIGNED_PROCESS_DEPOSIT",
+          "name": "[MEP] Quote Signed - Process Deposit",
+          "description": "When quote signed, create deposit invoice based on milestone template",
+          "status": "TEMPLATE",
+          "trigger": {
+            "type": "DOCUMENT_SIGNED",
+            "documentType": "QUOTE"
+          },
+          "actions": [
+            {
+              "type": "CREATE_INVOICE",
+              "fields": {
+                "title": "Deposit - {{project.title}}",
+                "amount": "{{calculateDepositAmount(project.total, project.milestoneTemplate)}}",
+                "dueDate": "{{today}}",
+                "projectId": "{{project.id}}",
+                "milestone": "DEPOSIT"
+              }
+            },
+            {
+              "type": "SEND_EMAIL",
+              "to": "{{project.contact.email}}",
+              "template": "DEPOSIT_INVOICE",
+              "attachInvoice": true
+            }
+          ]
+        },
+        {
+          "id": "QUOTE_EXPIRED_NOTIFICATION",
+          "name": "[MEP] Quote Expiration Warning",
+          "description": "Notify sales when quote is about to expire",
+          "status": "TEMPLATE",
+          "trigger": {
+            "type": "TIME_BASED",
+            "condition": "quote.expirationDate - today <= 3 days",
+            "filter": "quote.status == 'SENT'"
+          },
+          "actions": [
+            {
+              "type": "SEND_NOTIFICATION",
+              "to": "{{quote.assignee.email}}",
+              "subject": "Quote Expiring: {{quote.title}}",
+              "body": "Quote for {{quote.contact.name}} expires in {{daysUntilExpiration}} days."
+            }
+          ]
+        }
+      ]
+    },
+    "INVOICE_AND_PAYMENT": {
+      "description": "Automations for invoicing and payment processing",
+      "automations": [
+        {
+          "id": "JOB_COMPLETE_INVOICE",
+          "name": "[MEP] Job Complete - Generate Invoice",
+          "description": "When final work order completed, generate final invoice",
+          "status": "PARTIAL",
+          "trigger": {
+            "type": "WORK_ORDER_COMPLETED",
+            "conditions": {
+              "workOrderType": "FINAL_INSPECTION",
+              "allFieldWOsComplete": true
+            }
+          },
+          "actions": [
+            {
+              "type": "CREATE_INVOICE",
+              "fields": {
+                "title": "Final Payment - {{project.title}}",
+                "amount": "{{project.remainingBalance}}",
+                "dueDate": "{{today + 7 days}}",
+                "projectId": "{{project.id}}",
+                "milestone": "FINAL"
+              }
+            },
+            {
+              "type": "SEND_EMAIL",
+              "to": "{{project.contact.email}}",
+              "template": "FINAL_INVOICE",
+              "attachInvoice": true,
+              "attachCompletionForms": true
+            }
+          ]
+        },
+        {
+          "id": "PAYMENT_RECEIVED",
+          "name": "[MEP] Payment Received - Thank You",
+          "description": "Send thank you email when payment received",
+          "status": "TEMPLATE",
+          "trigger": {
+            "type": "INVOICE_PAID",
+            "source": ["STRIPE_WEBHOOK", "MANUAL_ENTRY"]
+          },
+          "actions": [
+            {
+              "type": "UPDATE_PROJECT",
+              "field": "paymentStatus",
+              "value": "PAID"
+            },
+            {
+              "type": "SEND_EMAIL",
+              "to": "{{invoice.contact.email}}",
+              "template": "PAYMENT_THANK_YOU"
+            },
+            {
+              "type": "SEND_EMAIL",
+              "to": "{{accounting.email}}",
+              "template": "PAYMENT_RECORDED_INTERNAL"
+            }
+          ]
+        },
+        {
+          "id": "PAYMENT_REMINDER_7D",
+          "name": "[MEP] Payment Reminder - 7 Days Overdue",
+          "description": "Gentle reminder for invoices 7 days past due",
+          "status": "TEMPLATE",
+          "trigger": {
+            "type": "TIME_BASED",
+            "condition": "invoice.dueDate + 7 days == today",
+            "filter": "invoice.status == 'UNPAID'"
+          },
+          "actions": [
+            {
+              "type": "SEND_EMAIL",
+              "to": "{{invoice.contact.email}}",
+              "template": "PAYMENT_REMINDER_GENTLE",
+              "subject": "Friendly Reminder: Invoice {{invoice.number}} Due"
+            }
+          ]
+        },
+        {
+          "id": "PAYMENT_REMINDER_30D",
+          "name": "[MEP] Payment Reminder - 30 Days Overdue",
+          "description": "Firm reminder for invoices 30 days past due",
+          "status": "TEMPLATE",
+          "trigger": {
+            "type": "TIME_BASED",
+            "condition": "invoice.dueDate + 30 days == today",
+            "filter": "invoice.status == 'UNPAID'"
+          },
+          "actions": [
+            {
+              "type": "SEND_EMAIL",
+              "to": "{{invoice.contact.email}}",
+              "template": "PAYMENT_REMINDER_FIRM",
+              "subject": "Action Required: Invoice {{invoice.number}} Past Due"
+            },
+            {
+              "type": "SEND_NOTIFICATION",
+              "to": "{{project.assignee.email}}",
+              "subject": "Collections Alert: {{project.contact.name}}"
+            }
+          ]
+        },
+        {
+          "id": "MILESTONE_PAYMENT_TRIGGER",
+          "name": "[MEP] Milestone Complete - Invoice",
+          "description": "When milestone is marked complete, generate milestone invoice",
+          "status": "TEMPLATE",
+          "trigger": {
+            "type": "PHASE_COMPLETED",
+            "phases": ["ROUGH_IN", "TRIM_OUT", "COMMISSIONING"]
+          },
+          "actions": [
+            {
+              "type": "CREATE_INVOICE",
+              "fields": {
+                "title": "{{phase.name}} Complete - {{project.title}}",
+                "amount": "{{calculateMilestoneAmount(project.total, phase.milestone)}}",
+                "dueDate": "{{today + project.paymentTermsDays}}",
+                "projectId": "{{project.id}}",
+                "milestone": "{{phase.milestone}}"
+              }
+            },
+            {
+              "type": "SEND_EMAIL",
+              "to": "{{project.contact.email}}",
+              "template": "MILESTONE_INVOICE"
+            }
+          ]
+        }
+      ]
+    },
+    "SERVICE_AGREEMENT": {
+      "description": "Automations for service agreement management",
+      "automations": [
+        {
+          "id": "SA_RENEWAL_60D",
+          "name": "[MEP] Service Agreement Renewal - 60 Day Notice",
+          "description": "Send renewal notice 60 days before expiration",
+          "status": "TEMPLATE",
+          "trigger": {
+            "type": "TIME_BASED",
+            "condition": "serviceAgreement.endDate - 60 days == today",
+            "filter": "serviceAgreement.status == 'ACTIVE'"
+          },
+          "actions": [
+            {
+              "type": "SEND_EMAIL",
+              "to": "{{serviceAgreement.contact.email}}",
+              "template": "SA_RENEWAL_NOTICE",
+              "subject": "Your Service Agreement Renews Soon"
+            },
+            {
+              "type": "CREATE_TASK",
+              "fields": {
+                "title": "Service Agreement Renewal - {{serviceAgreement.contact.name}}",
+                "assigneeId": "{{serviceAgreement.assignee.id}}",
+                "dueDate": "{{serviceAgreement.endDate - 30 days}}"
+              }
+            }
+          ]
+        },
+        {
+          "id": "SA_PM_SCHEDULE_CREATE",
+          "name": "[MEP] Create PM Schedule from Agreement",
+          "description": "When service agreement activated, create PM visit schedule",
+          "status": "TEMPLATE",
+          "trigger": {
+            "type": "SERVICE_AGREEMENT_ACTIVATED"
+          },
+          "actions": [
+            {
+              "type": "CREATE_RECURRING_TASKS",
+              "template": "{{serviceAgreement.planType}}_PM_SCHEDULE",
+              "frequency": "{{serviceAgreement.visitFrequency}}",
+              "startDate": "{{serviceAgreement.startDate}}",
+              "endDate": "{{serviceAgreement.endDate}}"
+            }
+          ]
+        },
+        {
+          "id": "SA_PAYMENT_FAILED",
+          "name": "[MEP] Service Agreement - Payment Failed",
+          "description": "Notify when recurring payment fails",
+          "status": "TEMPLATE",
+          "trigger": {
+            "type": "WEBHOOK",
+            "event": "PAYMENT_FAILED"
+          },
+          "actions": [
+            {
+              "type": "SEND_EMAIL",
+              "to": "{{serviceAgreement.contact.email}}",
+              "template": "SA_PAYMENT_FAILED",
+              "subject": "Payment Issue - Action Required"
+            },
+            {
+              "type": "UPDATE_SERVICE_AGREEMENT",
+              "field": "paymentStatus",
+              "value": "FAILED"
+            },
+            {
+              "type": "SEND_NOTIFICATION",
+              "to": "{{accounting.email}}",
+              "subject": "SA Payment Failed: {{serviceAgreement.contact.name}}"
+            }
+          ]
+        }
+      ]
+    },
+    "SCHEDULING": {
+      "description": "Automations for technician scheduling and dispatch",
+      "automations": [
+        {
+          "id": "APPOINTMENT_REMINDER_24H",
+          "name": "[MEP] Appointment Reminder - 24 Hours",
+          "description": "Send appointment reminder 24 hours before scheduled time",
+          "status": "TEMPLATE",
+          "trigger": {
+            "type": "TIME_BASED",
+            "condition": "task.startDate - 24 hours == now"
+          },
+          "actions": [
+            {
+              "type": "SEND_SMS",
+              "to": "{{task.contact.phone}}",
+              "message": "Reminder: Your {{task.tradeGroup}} appointment is tomorrow at {{task.startTime}}. Tech: {{task.assignee.name}}. Reply Y to confirm or call to reschedule."
+            },
+            {
+              "type": "SEND_EMAIL",
+              "to": "{{task.contact.email}}",
+              "template": "APPOINTMENT_REMINDER"
+            }
+          ]
+        },
+        {
+          "id": "TECH_EN_ROUTE",
+          "name": "[MEP] Technician En Route Notification",
+          "description": "Notify customer when tech is on the way",
+          "status": "TEMPLATE",
+          "trigger": {
+            "type": "TASK_STATUS_CHANGED",
+            "toStatus": "EN_ROUTE"
+          },
+          "actions": [
+            {
+              "type": "SEND_SMS",
+              "to": "{{task.contact.phone}}",
+              "message": "Your technician {{task.assignee.firstName}} is on the way! ETA: {{task.eta}}. Track: {{trackingLink}}"
+            }
+          ]
+        },
+        {
+          "id": "EMERGENCY_DISPATCH",
+          "name": "[MEP] Emergency Dispatch",
+          "description": "Immediately assign and dispatch for emergency calls",
+          "status": "TEMPLATE",
+          "trigger": {
+            "type": "REQUEST_CREATED",
+            "conditions": {
+              "priority": "EMERGENCY"
+            }
+          },
+          "actions": [
+            {
+              "type": "AUTO_ASSIGN",
+              "logic": "NEAREST_AVAILABLE_TECH",
+              "tradeGroup": "{{request.tradeGroup}}"
+            },
+            {
+              "type": "SEND_NOTIFICATION",
+              "to": "{{assignedTech.phone}}",
+              "message": "EMERGENCY: {{request.description}} at {{request.site.address}}. Customer: {{request.contact.name}} {{request.contact.phone}}"
+            },
+            {
+              "type": "SEND_SMS",
+              "to": "{{request.contact.phone}}",
+              "message": "We've received your emergency request. A technician has been dispatched and will arrive within 2 hours."
+            },
+            {
+              "type": "UPDATE_TASK",
+              "field": "status",
+              "value": "DISPATCHED"
+            }
+          ]
+        }
+      ]
+    },
+    "COMPLETION_AND_FOLLOWUP": {
+      "description": "Automations for job completion and customer follow-up",
+      "automations": [
+        {
+          "id": "JOB_COMPLETE_SURVEY",
+          "name": "[MEP] Job Complete - Request Review",
+          "description": "Send review request after job completion",
+          "status": "TEMPLATE",
+          "trigger": {
+            "type": "TIME_BASED",
+            "condition": "project.completedDate + 2 days == today"
+          },
+          "actions": [
+            {
+              "type": "SEND_EMAIL",
+              "to": "{{project.contact.email}}",
+              "template": "REQUEST_REVIEW",
+              "subject": "How did we do? Leave us a review!"
+            },
+            {
+              "type": "SEND_SMS",
+              "to": "{{project.contact.phone}}",
+              "message": "Thanks for choosing us! We'd love a 5-star review: {{reviewLink}}"
+            }
+          ]
+        },
+        {
+          "id": "EQUIPMENT_WARRANTY_REGISTRATION",
+          "name": "[MEP] Equipment Warranty Registration",
+          "description": "Create task to register equipment warranty after install",
+          "status": "TEMPLATE",
+          "trigger": {
+            "type": "PROJECT_COMPLETED",
+            "conditions": {
+              "hasEquipment": true
+            }
+          },
+          "actions": [
+            {
+              "type": "CREATE_TASK",
+              "fields": {
+                "title": "Register Warranty - {{project.equipment.manufacturer}} {{project.equipment.model}}",
+                "assigneeId": "{{warrantyAdmin.id}}",
+                "dueDate": "{{project.completedDate + 7 days}}",
+                "description": "Register equipment serial: {{project.equipment.serialNumber}}"
+              }
+            }
+          ]
+        },
+        {
+          "id": "PM_VISIT_FOLLOWUP",
+          "name": "[MEP] PM Visit Complete - Follow-up",
+          "description": "Send follow-up after PM visit with recommendations",
+          "status": "TEMPLATE",
+          "trigger": {
+            "type": "TASK_COMPLETED",
+            "conditions": {
+              "taskType": "PM_VISIT"
+            }
+          },
+          "actions": [
+            {
+              "type": "SEND_EMAIL",
+              "to": "{{task.contact.email}}",
+              "template": "PM_VISIT_SUMMARY",
+              "attachForms": true,
+              "subject": "Your Maintenance Visit Summary"
+            },
+            {
+              "type": "CONDITIONAL_ACTION",
+              "condition": "task.form.recommendedRepairs.length > 0",
+              "action": {
+                "type": "CREATE_QUOTE",
+                "fields": {
+                  "title": "Recommended Repairs - {{task.contact.name}}",
+                  "lineItems": "{{task.form.recommendedRepairs}}"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

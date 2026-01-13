@@ -1,0 +1,510 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-13",
+    "company": "Kipper Energy Solutions",
+    "instance": 388,
+    "description": "Solar & Energy catalog expansion - Phase 1 Priority items",
+    "segments": ["RESIDENTIAL", "COMMERCIAL", "UTILITY"],
+    "total_items": 50
+  },
+
+  "pv_modules": {
+    "description": "Solar PV modules by segment",
+    "items": [
+      { "section": "=== PV MODULES ===" },
+      {
+        "name": "PV Module 400W Residential",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "Commercial Solar",
+        "manufacturer": "QCells",
+        "cost": 145.00,
+        "price": 225.00,
+        "code": "SOL-PV-400W-RES",
+        "description": "400W monocrystalline module, residential, 25-year warranty"
+      },
+      {
+        "name": "PV Module 430W Premium",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "Commercial Solar",
+        "manufacturer": "REC",
+        "cost": 195.00,
+        "price": 295.00,
+        "code": "SOL-PV-430W-PREM",
+        "description": "430W N-type module, premium efficiency, 25-year warranty"
+      },
+      {
+        "name": "PV Module 550W Commercial",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "Commercial Solar",
+        "manufacturer": "Trina",
+        "cost": 165.00,
+        "price": 255.00,
+        "code": "SOL-PV-550W-COMM",
+        "description": "550W bifacial module, commercial rooftop, 182mm cells"
+      },
+      {
+        "name": "PV Module 585W Utility",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "Utility-Scale Solar",
+        "manufacturer": "LONGi",
+        "cost": 155.00,
+        "price": 235.00,
+        "code": "SOL-PV-585W-UTIL",
+        "description": "585W bifacial module, utility-scale, tracker compatible"
+      }
+    ]
+  },
+
+  "inverters": {
+    "description": "Inverters - string, micro, hybrid",
+    "items": [
+      { "section": "=== RESIDENTIAL INVERTERS ===" },
+      {
+        "name": "String Inverter 7.6kW Residential",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "Commercial Solar",
+        "manufacturer": "SolarEdge",
+        "cost": 1450.00,
+        "price": 2200.00,
+        "code": "SOL-INV-STR-7.6",
+        "description": "7.6kW string inverter, 240V, rapid shutdown compliant"
+      },
+      {
+        "name": "String Inverter 10kW Residential",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "Commercial Solar",
+        "manufacturer": "SolarEdge",
+        "cost": 1750.00,
+        "price": 2650.00,
+        "code": "SOL-INV-STR-10",
+        "description": "10kW string inverter, 240V, rapid shutdown compliant"
+      },
+      {
+        "name": "Microinverter IQ8+ (4-pack)",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "Commercial Solar",
+        "manufacturer": "Enphase",
+        "cost": 650.00,
+        "price": 980.00,
+        "code": "SOL-INV-MICRO-IQ8",
+        "description": "IQ8+ microinverter 4-pack, module-level MPPT"
+      },
+      {
+        "name": "Hybrid Inverter 7.6kW",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "Commercial Solar",
+        "manufacturer": "SolarEdge",
+        "cost": 2400.00,
+        "price": 3600.00,
+        "code": "SOL-INV-HYB-7.6",
+        "description": "7.6kW hybrid inverter, battery-ready, backup capability"
+      },
+      { "section": "=== COMMERCIAL INVERTERS ===" },
+      {
+        "name": "String Inverter 50kW Commercial",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "Commercial Solar",
+        "manufacturer": "SMA",
+        "cost": 4500.00,
+        "price": 6800.00,
+        "code": "SOL-INV-STR-50",
+        "description": "50kW commercial string inverter, 480V 3-phase"
+      },
+      {
+        "name": "String Inverter 100kW Commercial",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "Commercial Solar",
+        "manufacturer": "SMA",
+        "cost": 8500.00,
+        "price": 12800.00,
+        "code": "SOL-INV-STR-100",
+        "description": "100kW commercial string inverter, 480V 3-phase"
+      },
+      {
+        "name": "Central Inverter 500kW",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "Utility-Scale Solar",
+        "manufacturer": "SMA",
+        "cost": 45000.00,
+        "price": 65000.00,
+        "code": "SOL-INV-CENT-500",
+        "description": "500kW central inverter, utility-scale, medium voltage ready"
+      }
+    ]
+  },
+
+  "battery_storage": {
+    "description": "Battery energy storage systems",
+    "items": [
+      { "section": "=== RESIDENTIAL BATTERY STORAGE ===" },
+      {
+        "name": "Battery System 10kWh",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "Energy Storage",
+        "manufacturer": "Tesla",
+        "cost": 7500.00,
+        "price": 11500.00,
+        "code": "SOL-BATT-10KWH",
+        "description": "10kWh residential battery, whole-home backup, 5kW continuous"
+      },
+      {
+        "name": "Battery System 13.5kWh",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "Energy Storage",
+        "manufacturer": "Tesla",
+        "cost": 9500.00,
+        "price": 14500.00,
+        "code": "SOL-BATT-13.5KWH",
+        "description": "13.5kWh Powerwall 3, whole-home backup, 11.5kW continuous"
+      },
+      {
+        "name": "Battery System 16kWh Premium",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "Energy Storage",
+        "manufacturer": "Enphase",
+        "cost": 12000.00,
+        "price": 18500.00,
+        "code": "SOL-BATT-16KWH",
+        "description": "16kWh modular battery system, 5kW per unit, stackable"
+      },
+      { "section": "=== COMMERCIAL BATTERY STORAGE ===" },
+      {
+        "name": "Commercial BESS 100kWh",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "Energy Storage",
+        "manufacturer": "Tesla",
+        "cost": 65000.00,
+        "price": 95000.00,
+        "code": "SOL-BESS-100KWH",
+        "description": "100kWh commercial battery system, demand charge reduction"
+      },
+      {
+        "name": "Commercial BESS 250kWh",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "Energy Storage",
+        "manufacturer": "Tesla",
+        "cost": 150000.00,
+        "price": 225000.00,
+        "code": "SOL-BESS-250KWH",
+        "description": "250kWh commercial battery system, peak shaving"
+      }
+    ]
+  },
+
+  "racking": {
+    "description": "Solar racking and mounting",
+    "items": [
+      { "section": "=== RACKING SYSTEMS ===" },
+      {
+        "name": "Racking - Comp Shingle Rail (per module)",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "Mounting",
+        "manufacturer": "IronRidge",
+        "cost": 45.00,
+        "price": 75.00,
+        "code": "SOL-RACK-SHINGLE",
+        "description": "Composite shingle racking per module, includes flashings"
+      },
+      {
+        "name": "Racking - Tile Roof (per module)",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "Mounting",
+        "manufacturer": "Quick Mount",
+        "cost": 85.00,
+        "price": 135.00,
+        "code": "SOL-RACK-TILE",
+        "description": "Tile hook racking per module, includes flashing"
+      },
+      {
+        "name": "Racking - Flat Roof Ballasted (per module)",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "Mounting",
+        "manufacturer": "Unirac",
+        "cost": 65.00,
+        "price": 105.00,
+        "code": "SOL-RACK-FLAT",
+        "description": "Ballasted flat roof racking per module, 10° tilt"
+      },
+      {
+        "name": "Racking - Ground Mount (per module)",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "Mounting",
+        "manufacturer": "IronRidge",
+        "cost": 95.00,
+        "price": 155.00,
+        "code": "SOL-RACK-GROUND",
+        "description": "Ground mount racking per module, includes post and footer"
+      },
+      {
+        "name": "Carport Structure (per kW)",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "Mounting",
+        "manufacturer": "Baja",
+        "cost": 850.00,
+        "price": 1350.00,
+        "code": "SOL-RACK-CARPORT",
+        "description": "Solar carport structure per kW installed, includes steel"
+      }
+    ]
+  },
+
+  "bos": {
+    "description": "Balance of system components",
+    "items": [
+      { "section": "=== BOS COMPONENTS ===" },
+      {
+        "name": "Rapid Shutdown Device (per string)",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Tigo",
+        "cost": 85.00,
+        "price": 145.00,
+        "code": "SOL-RSD-STRING",
+        "description": "NEC 2020 rapid shutdown device per string, module-level"
+      },
+      {
+        "name": "AC Disconnect 60A",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Eaton",
+        "cost": 65.00,
+        "price": 115.00,
+        "code": "SOL-DISC-AC-60",
+        "description": "60A AC disconnect, NEMA 3R, outdoor rated"
+      },
+      {
+        "name": "DC Combiner Box 2-String",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "SolarBOS",
+        "cost": 175.00,
+        "price": 295.00,
+        "code": "SOL-COMB-2STR",
+        "description": "2-string DC combiner box, fused, NEMA 4X"
+      },
+      {
+        "name": "Production Meter",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "Monitoring",
+        "manufacturer": "Enphase",
+        "cost": 145.00,
+        "price": 245.00,
+        "code": "SOL-METER-PROD",
+        "description": "Revenue-grade production meter, utility-grade accuracy"
+      }
+    ]
+  },
+
+  "ev_infrastructure": {
+    "description": "EV charging equipment",
+    "items": [
+      { "section": "=== EV CHARGING ===" },
+      {
+        "name": "L2 EV Charger 48A Residential",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "EV Infrastructure",
+        "manufacturer": "ChargePoint",
+        "cost": 550.00,
+        "price": 895.00,
+        "code": "SOL-EV-L2-48A",
+        "description": "Level 2 EV charger 48A, hardwired, WiFi enabled"
+      },
+      {
+        "name": "L2 EV Charger Commercial",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "EV Infrastructure",
+        "manufacturer": "ChargePoint",
+        "cost": 2500.00,
+        "price": 4200.00,
+        "code": "SOL-EV-L2-COMM",
+        "description": "Commercial L2 EV charger, dual port, networked"
+      },
+      {
+        "name": "DCFC 50kW",
+        "catalog": "ENERGY",
+        "type": "PRODUCT",
+        "category": "EV Infrastructure",
+        "manufacturer": "ChargePoint",
+        "cost": 35000.00,
+        "price": 55000.00,
+        "code": "SOL-EV-DCFC-50",
+        "description": "DC fast charger 50kW, CCS/CHAdeMO, commercial"
+      }
+    ]
+  },
+
+  "services": {
+    "description": "Solar installation and O&M services",
+    "items": [
+      { "section": "=== INSTALLATION SERVICES ===" },
+      {
+        "name": "Solar Install - Residential (per watt)",
+        "catalog": "ENERGY",
+        "type": "SERVICE",
+        "category": "Commercial Installation",
+        "cost": 0.45,
+        "price": 0.85,
+        "code": "SOL-INST-RES-W",
+        "description": "Residential solar installation labor per watt DC"
+      },
+      {
+        "name": "Solar Install - Commercial (per watt)",
+        "catalog": "ENERGY",
+        "type": "SERVICE",
+        "category": "Commercial Installation",
+        "cost": 0.35,
+        "price": 0.65,
+        "code": "SOL-INST-COMM-W",
+        "description": "Commercial solar installation labor per watt DC"
+      },
+      {
+        "name": "Battery Install - Residential",
+        "catalog": "ENERGY",
+        "type": "SERVICE",
+        "category": "Commercial Installation",
+        "cost": 1200.00,
+        "price": 2500.00,
+        "code": "SOL-INST-BATT-RES",
+        "description": "Residential battery installation, includes electrical work"
+      },
+      {
+        "name": "EV Charger Install - Residential",
+        "catalog": "ENERGY",
+        "type": "SERVICE",
+        "category": "Commercial Installation",
+        "cost": 450.00,
+        "price": 895.00,
+        "code": "SOL-INST-EV-RES",
+        "description": "Residential EV charger installation, includes 50A circuit"
+      },
+      { "section": "=== DESIGN & ENGINEERING ===" },
+      {
+        "name": "Site Survey - Residential",
+        "catalog": "ENERGY",
+        "type": "SERVICE",
+        "category": "Site Survey",
+        "cost": 75.00,
+        "price": 195.00,
+        "code": "SOL-SURV-RES",
+        "description": "Residential solar site survey, includes measurements and photos"
+      },
+      {
+        "name": "Permit Package - Residential",
+        "catalog": "ENERGY",
+        "type": "SERVICE",
+        "category": "Engineering",
+        "cost": 150.00,
+        "price": 350.00,
+        "code": "SOL-PERMIT-RES",
+        "description": "Residential permit package with structural and electrical"
+      },
+      {
+        "name": "PE Stamp - Structural",
+        "catalog": "ENERGY",
+        "type": "SERVICE",
+        "category": "Engineering",
+        "cost": 200.00,
+        "price": 450.00,
+        "code": "SOL-PE-STRUCT",
+        "description": "Professional engineer structural stamp for solar"
+      },
+      {
+        "name": "Interconnection Application",
+        "catalog": "ENERGY",
+        "type": "SERVICE",
+        "category": "Grid Interconnection",
+        "cost": 150.00,
+        "price": 350.00,
+        "code": "SOL-INTERCON",
+        "description": "Utility interconnection application and coordination"
+      },
+      { "section": "=== O&M SERVICES ===" },
+      {
+        "name": "Solar O&M - Annual Residential",
+        "catalog": "ENERGY",
+        "type": "SERVICE",
+        "category": "Maintenance Agreement",
+        "cost": 150.00,
+        "price": 295.00,
+        "code": "SOL-OM-RES-ANN",
+        "description": "Annual residential solar O&M, cleaning and inspection"
+      },
+      {
+        "name": "Solar O&M - Annual Commercial (per kW)",
+        "catalog": "ENERGY",
+        "type": "SERVICE",
+        "category": "Maintenance Agreement",
+        "cost": 15.00,
+        "price": 35.00,
+        "code": "SOL-OM-COMM-KW",
+        "description": "Annual commercial solar O&M per kW installed"
+      },
+      {
+        "name": "Solar Monitoring - Monthly",
+        "catalog": "ENERGY",
+        "type": "SERVICE",
+        "category": "Monitoring",
+        "cost": 15.00,
+        "price": 35.00,
+        "code": "SOL-MON-MO",
+        "description": "Monthly solar production monitoring and alerts"
+      }
+    ]
+  },
+
+  "summary": {
+    "total_new_items": 50,
+    "by_category": {
+      "pv_modules": 4,
+      "inverters": 7,
+      "battery_storage": 5,
+      "racking": 5,
+      "bos": 4,
+      "ev_infrastructure": 3,
+      "services": 11
+    },
+    "by_segment": {
+      "RESIDENTIAL": 25,
+      "COMMERCIAL": 18,
+      "UTILITY": 7
+    },
+    "by_type": {
+      "PRODUCT": 28,
+      "SERVICE": 11
+    },
+    "notes": [
+      "Module pricing reflects 2026 market rates ($/watt declining)",
+      "Battery storage includes IRA tax credit eligible products",
+      "EV infrastructure supports NEVI program requirements",
+      "O&M services create recurring revenue stream"
+    ]
+  }
+}

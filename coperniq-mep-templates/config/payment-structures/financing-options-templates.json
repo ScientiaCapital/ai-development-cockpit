@@ -1,0 +1,322 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-13",
+    "description": "Third-Party Financing Integration Templates for Coperniq Instance 388",
+    "instance": 388,
+    "company": "Kipper Energy Solutions"
+  },
+  "financingProviders": {
+    "GREENSKY": {
+      "name": "GreenSky",
+      "type": "DEFERRED_INTEREST",
+      "website": "https://www.greensky.com",
+      "dealerPortal": "https://portal.greensky.com",
+      "applicableTrades": ["HVAC", "PLUMBING", "ELECTRICAL", "ROOFING"],
+      "programs": [
+        {
+          "code": "PLAN2199",
+          "name": "Same-As-Cash 12 Months",
+          "term": 12,
+          "apr": 0,
+          "deferredInterestAPR": 26.99,
+          "dealerFee": 5.99,
+          "minAmount": 1000,
+          "maxAmount": 55000,
+          "description": "No interest if paid in full within 12 months"
+        },
+        {
+          "code": "PLAN3199",
+          "name": "Same-As-Cash 18 Months",
+          "term": 18,
+          "apr": 0,
+          "deferredInterestAPR": 26.99,
+          "dealerFee": 7.99,
+          "minAmount": 2500,
+          "maxAmount": 55000
+        },
+        {
+          "code": "PLAN9963",
+          "name": "Low Monthly Payment 120 Months",
+          "term": 120,
+          "apr": 9.99,
+          "dealerFee": 12.99,
+          "minAmount": 5000,
+          "maxAmount": 55000,
+          "description": "Fixed rate, low monthly payments"
+        }
+      ],
+      "integrationNotes": {
+        "fundingTimeline": "2-3 business days after completion certificate",
+        "completionCertificateRequired": true,
+        "changeOrderProcess": "Must update loan amount before funding"
+      }
+    },
+    "SYNCHRONY": {
+      "name": "Synchrony Financial",
+      "type": "DEFERRED_INTEREST",
+      "website": "https://www.synchrony.com",
+      "dealerPortal": "https://retailerportal.synchronybusiness.com",
+      "applicableTrades": ["HVAC", "PLUMBING", "ELECTRICAL", "SOLAR"],
+      "programs": [
+        {
+          "code": "SYNC6M",
+          "name": "6 Month Promotional",
+          "term": 6,
+          "apr": 0,
+          "deferredInterestAPR": 29.99,
+          "dealerFee": 3.99,
+          "minAmount": 500,
+          "maxAmount": 25000
+        },
+        {
+          "code": "SYNC12M",
+          "name": "12 Month Promotional",
+          "term": 12,
+          "apr": 0,
+          "deferredInterestAPR": 29.99,
+          "dealerFee": 6.99,
+          "minAmount": 1000,
+          "maxAmount": 35000
+        },
+        {
+          "code": "SYNC60M",
+          "name": "60 Month Fixed",
+          "term": 60,
+          "apr": 7.99,
+          "dealerFee": 8.99,
+          "minAmount": 3000,
+          "maxAmount": 45000
+        }
+      ]
+    },
+    "WELLS_FARGO": {
+      "name": "Wells Fargo Home Projects",
+      "type": "FIXED_RATE",
+      "website": "https://retailservices.wellsfargo.com",
+      "dealerPortal": "https://retailservices.wellsfargo.com/dealer",
+      "applicableTrades": ["HVAC", "ELECTRICAL", "ROOFING", "SOLAR"],
+      "programs": [
+        {
+          "code": "WFHP3599",
+          "name": "Prime Rate Financing",
+          "term": 84,
+          "apr": 5.99,
+          "dealerFee": 4.99,
+          "minAmount": 1000,
+          "maxAmount": 100000,
+          "creditScoreMin": 720
+        },
+        {
+          "code": "WFHP6899",
+          "name": "Standard Rate Financing",
+          "term": 84,
+          "apr": 8.99,
+          "dealerFee": 6.99,
+          "minAmount": 1000,
+          "maxAmount": 75000,
+          "creditScoreMin": 640
+        }
+      ],
+      "integrationNotes": {
+        "approvalTime": "Instant decision in most cases",
+        "documentationRequired": ["project estimate", "customer ID"],
+        "fundingTimeline": "1-2 business days"
+      }
+    },
+    "SERVICE_FINANCE": {
+      "name": "Service Finance Company",
+      "type": "FIXED_RATE",
+      "website": "https://svcfin.com",
+      "dealerPortal": "https://portal.svcfin.com",
+      "applicableTrades": ["HVAC", "PLUMBING", "ELECTRICAL", "SOLAR", "ROOFING"],
+      "programs": [
+        {
+          "code": "SFC12SAC",
+          "name": "Same-As-Cash 12 Months",
+          "term": 12,
+          "apr": 0,
+          "deferredInterestAPR": 17.99,
+          "dealerFee": 6.00,
+          "minAmount": 1000,
+          "maxAmount": 100000
+        },
+        {
+          "code": "SFC180",
+          "name": "180 Month Fixed",
+          "term": 180,
+          "apr": 8.49,
+          "dealerFee": 10.00,
+          "minAmount": 7500,
+          "maxAmount": 100000,
+          "description": "15-year financing for large projects"
+        }
+      ]
+    },
+    "MOSAIC": {
+      "name": "Mosaic Solar Loans",
+      "type": "SOLAR_SPECIFIC",
+      "website": "https://joinmosaic.com",
+      "dealerPortal": "https://portal.joinmosaic.com",
+      "applicableTrades": ["SOLAR"],
+      "programs": [
+        {
+          "code": "MOSAIC10",
+          "name": "10 Year Solar Loan",
+          "term": 120,
+          "aprRange": {"min": 3.99, "max": 7.99},
+          "dealerFee": 15.00,
+          "minAmount": 5000,
+          "maxAmount": 150000
+        },
+        {
+          "code": "MOSAIC25",
+          "name": "25 Year Solar Loan",
+          "term": 300,
+          "aprRange": {"min": 4.99, "max": 8.99},
+          "dealerFee": 20.00,
+          "minAmount": 10000,
+          "maxAmount": 150000,
+          "description": "Matches system warranty period"
+        }
+      ],
+      "integrationNotes": {
+        "autoPayDiscount": "0.25% APR reduction",
+        "utilitySavingsGuarantee": true,
+        "reAmortization": "Available after 12 months"
+      }
+    },
+    "SUNLIGHT": {
+      "name": "Sunlight Financial",
+      "type": "SOLAR_SPECIFIC",
+      "website": "https://sunlightfinancial.com",
+      "applicableTrades": ["SOLAR", "ELECTRICAL"],
+      "programs": [
+        {
+          "code": "SUN12",
+          "name": "12 Year Solar Loan",
+          "term": 144,
+          "aprRange": {"min": 3.49, "max": 6.99},
+          "dealerFee": 12.00,
+          "minAmount": 3000,
+          "maxAmount": 100000
+        },
+        {
+          "code": "SUN20",
+          "name": "20 Year Solar Loan",
+          "term": 240,
+          "aprRange": {"min": 4.49, "max": 7.99},
+          "dealerFee": 16.00,
+          "minAmount": 5000,
+          "maxAmount": 100000
+        }
+      ],
+      "programs25C": [
+        {
+          "code": "SUN25C",
+          "name": "25C Panel Upgrade Loan",
+          "term": 60,
+          "aprRange": {"min": 5.99, "max": 9.99},
+          "dealerFee": 8.00,
+          "minAmount": 2500,
+          "maxAmount": 30000,
+          "description": "For electrical panel upgrades qualifying for 25C tax credit"
+        }
+      ]
+    }
+  },
+  "alternativePaymentMethods": {
+    "PACE": {
+      "name": "Property Assessed Clean Energy",
+      "type": "PROPERTY_TAX_LIEN",
+      "applicableTrades": ["SOLAR", "HVAC", "ROOFING"],
+      "characteristics": {
+        "repaymentVia": "Property tax bill",
+        "transfersWithProperty": true,
+        "termRange": {"min": 5, "max": 25},
+        "aprRange": {"min": 6.0, "max": 9.0},
+        "eligibleImprovements": ["solar", "HVAC", "windows", "insulation", "roofing"]
+      },
+      "providers": [
+        {
+          "name": "Ygrene",
+          "website": "https://ygrene.com",
+          "coverageStates": ["CA", "FL", "MO"]
+        },
+        {
+          "name": "Renew Financial",
+          "website": "https://renewfinancial.com",
+          "coverageStates": ["CA"]
+        }
+      ],
+      "warnings": [
+        "PACE liens have priority over mortgage - may affect refinancing",
+        "Required disclosures vary by state",
+        "Not available in all jurisdictions"
+      ]
+    },
+    "PPA": {
+      "name": "Power Purchase Agreement",
+      "type": "SOLAR_LEASE",
+      "applicableTrades": ["SOLAR"],
+      "characteristics": {
+        "customerOwnsSystem": false,
+        "upfrontCost": 0,
+        "paymentType": "Per kWh generated",
+        "typicalEscalator": 2.9,
+        "termYears": 20,
+        "buyoutOptions": ["Year 6", "Year 10", "End of term"]
+      },
+      "bestFor": "Customers who cannot use tax credits (non-profits, low tax liability)"
+    },
+    "LEASE": {
+      "name": "Solar Lease",
+      "type": "SOLAR_LEASE",
+      "applicableTrades": ["SOLAR"],
+      "characteristics": {
+        "customerOwnsSystem": false,
+        "upfrontCost": 0,
+        "paymentType": "Fixed monthly",
+        "typicalEscalator": 2.9,
+        "termYears": 20,
+        "maintenanceIncluded": true
+      }
+    }
+  },
+  "dealerFeeStrategies": {
+    "ABSORB": {
+      "name": "Absorb Dealer Fee",
+      "description": "Contractor pays full dealer fee, customer sees lower payment",
+      "marginImpact": "Reduces margin by dealer fee percentage",
+      "bestFor": "Competitive markets, customer-focused"
+    },
+    "SPLIT": {
+      "name": "Split Dealer Fee",
+      "description": "Split dealer fee 50/50 with customer via price adjustment",
+      "marginImpact": "Reduces margin by half of dealer fee",
+      "bestFor": "Balanced approach"
+    },
+    "PASS_THROUGH": {
+      "name": "Pass Through to Customer",
+      "description": "Add dealer fee to project price, customer bears full cost",
+      "marginImpact": "No margin impact",
+      "bestFor": "Premium services, unique value proposition"
+    }
+  },
+  "financingWorkflows": {
+    "QUOTE_WITH_FINANCING": {
+      "steps": [
+        {"order": 1, "action": "Generate cash price quote"},
+        {"order": 2, "action": "Calculate financed price (cash + dealer fee)"},
+        {"order": 3, "action": "Run soft credit check if customer consents"},
+        {"order": 4, "action": "Present 2-3 financing options with monthly payments"},
+        {"order": 5, "action": "Customer selects option and signs contract"},
+        {"order": 6, "action": "Submit full credit application"},
+        {"order": 7, "action": "Receive loan docs, customer signs"},
+        {"order": 8, "action": "Complete installation"},
+        {"order": 9, "action": "Submit completion certificate"},
+        {"order": 10, "action": "Receive funding (2-5 business days)"}
+      ]
+    }
+  }
+}

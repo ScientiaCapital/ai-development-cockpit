@@ -1,0 +1,482 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-13",
+    "description": "Milestone Payment Structure Templates for Coperniq Instance 388",
+    "instance": 388,
+    "company": "Kipper Energy Solutions"
+  },
+  "milestoneTemplates": {
+    "RESIDENTIAL_SMALL": {
+      "name": "Residential Small Project (Under $10K)",
+      "description": "Standard 50/50 split for small residential jobs",
+      "applicableTrades": ["HVAC", "PLUMBING", "ELECTRICAL"],
+      "projectValueRange": {
+        "min": 0,
+        "max": 10000
+      },
+      "milestones": [
+        {
+          "name": "Deposit",
+          "percentage": 50,
+          "trigger": "CONTRACT_SIGNED",
+          "description": "Due upon contract signing",
+          "invoiceTitle": "Deposit - {{project.title}}"
+        },
+        {
+          "name": "Final Payment",
+          "percentage": 50,
+          "trigger": "JOB_COMPLETE",
+          "description": "Due upon job completion and final inspection",
+          "invoiceTitle": "Final Payment - {{project.title}}"
+        }
+      ],
+      "notes": [
+        "CA/NV: Max deposit 10% or $1,000 (whichever is less)",
+        "NY: Max deposit $500 or 50% (whichever is less)",
+        "MD/VA/PA: Max deposit 33%"
+      ]
+    },
+    "RESIDENTIAL_MEDIUM": {
+      "name": "Residential Medium Project ($10K-$25K)",
+      "description": "Progress payments with rough-in milestone",
+      "applicableTrades": ["HVAC", "PLUMBING", "ELECTRICAL"],
+      "projectValueRange": {
+        "min": 10000,
+        "max": 25000
+      },
+      "milestones": [
+        {
+          "name": "Deposit",
+          "percentage": 30,
+          "trigger": "CONTRACT_SIGNED",
+          "description": "Due upon contract signing"
+        },
+        {
+          "name": "Rough-In Complete",
+          "percentage": 30,
+          "trigger": "PHASE_COMPLETE",
+          "phase": "Rough-In",
+          "description": "Due when equipment delivered and rough-in complete"
+        },
+        {
+          "name": "Trim-Out Complete",
+          "percentage": 30,
+          "trigger": "PHASE_COMPLETE",
+          "phase": "Trim-Out",
+          "description": "Due when installation substantially complete"
+        },
+        {
+          "name": "Final Payment",
+          "percentage": 10,
+          "trigger": "INSPECTION_PASSED",
+          "description": "Due after final inspection approval"
+        }
+      ]
+    },
+    "RESIDENTIAL_LARGE": {
+      "name": "Residential Large Project ($25K+)",
+      "description": "Full milestone schedule with retainage",
+      "applicableTrades": ["HVAC", "PLUMBING", "ELECTRICAL", "SOLAR"],
+      "projectValueRange": {
+        "min": 25000,
+        "max": null
+      },
+      "milestones": [
+        {
+          "name": "Deposit",
+          "percentage": 20,
+          "trigger": "CONTRACT_SIGNED",
+          "description": "Due upon contract signing"
+        },
+        {
+          "name": "Permit Approved",
+          "percentage": 15,
+          "trigger": "PERMIT_APPROVED",
+          "description": "Due when building permit approved"
+        },
+        {
+          "name": "Equipment Delivered",
+          "percentage": 25,
+          "trigger": "EQUIPMENT_DELIVERED",
+          "description": "Due when major equipment arrives on site"
+        },
+        {
+          "name": "Rough-In Complete",
+          "percentage": 20,
+          "trigger": "PHASE_COMPLETE",
+          "phase": "Rough-In"
+        },
+        {
+          "name": "Substantial Completion",
+          "percentage": 15,
+          "trigger": "PHASE_COMPLETE",
+          "phase": "Trim-Out"
+        },
+        {
+          "name": "Retainage Release",
+          "percentage": 5,
+          "trigger": "WARRANTY_PERIOD_START",
+          "holdDays": 30,
+          "description": "Released 30 days after final inspection"
+        }
+      ]
+    },
+    "COMMERCIAL_SMALL": {
+      "name": "Commercial Small Project ($10K-$50K)",
+      "description": "Standard commercial milestone schedule",
+      "applicableTrades": ["HVAC", "PLUMBING", "ELECTRICAL", "FIRE_SAFETY"],
+      "projectValueRange": {
+        "min": 10000,
+        "max": 50000
+      },
+      "paymentTerms": "NET_30",
+      "milestones": [
+        {
+          "name": "Contract Signing",
+          "percentage": 20,
+          "trigger": "CONTRACT_SIGNED"
+        },
+        {
+          "name": "Materials Procurement",
+          "percentage": 30,
+          "trigger": "MATERIALS_ORDERED"
+        },
+        {
+          "name": "Installation Complete",
+          "percentage": 40,
+          "trigger": "INSTALLATION_COMPLETE"
+        },
+        {
+          "name": "Final/Commissioning",
+          "percentage": 10,
+          "trigger": "COMMISSIONING_COMPLETE"
+        }
+      ]
+    },
+    "COMMERCIAL_LARGE": {
+      "name": "Commercial Large Project ($50K-$500K)",
+      "description": "Full commercial milestone with retainage",
+      "applicableTrades": ["HVAC", "PLUMBING", "ELECTRICAL", "FIRE_SAFETY", "LOW_VOLTAGE"],
+      "projectValueRange": {
+        "min": 50000,
+        "max": 500000
+      },
+      "paymentTerms": "NET_30",
+      "milestones": [
+        {
+          "name": "Contract/Mobilization",
+          "percentage": 10,
+          "trigger": "CONTRACT_SIGNED"
+        },
+        {
+          "name": "Engineering/Design",
+          "percentage": 10,
+          "trigger": "DESIGN_APPROVED"
+        },
+        {
+          "name": "Equipment Procurement",
+          "percentage": 30,
+          "trigger": "EQUIPMENT_ORDERED"
+        },
+        {
+          "name": "Installation",
+          "percentage": 30,
+          "trigger": "INSTALLATION_COMPLETE"
+        },
+        {
+          "name": "Commissioning",
+          "percentage": 10,
+          "trigger": "COMMISSIONING_COMPLETE"
+        },
+        {
+          "name": "Retainage",
+          "percentage": 10,
+          "trigger": "WARRANTY_PERIOD_START",
+          "holdDays": 90
+        }
+      ]
+    },
+    "COMMERCIAL_RTU": {
+      "name": "RTU Replacement Project",
+      "description": "Rooftop unit replacement milestone schedule",
+      "applicableTrades": ["HVAC"],
+      "projectValueRange": {
+        "min": 35000,
+        "max": 350000
+      },
+      "milestones": [
+        {
+          "name": "Contract Signing",
+          "percentage": 15,
+          "trigger": "CONTRACT_SIGNED",
+          "description": "Design, load calc, duct design"
+        },
+        {
+          "name": "Equipment Delivery",
+          "percentage": 30,
+          "trigger": "EQUIPMENT_DELIVERED",
+          "description": "RTU on site, crane scheduled"
+        },
+        {
+          "name": "Installation Complete",
+          "percentage": 35,
+          "trigger": "INSTALLATION_COMPLETE",
+          "description": "Unit set, gas/electric connected"
+        },
+        {
+          "name": "Commissioning/Final",
+          "percentage": 15,
+          "trigger": "COMMISSIONING_COMPLETE",
+          "description": "Controls programmed, balancing complete"
+        },
+        {
+          "name": "Retainage",
+          "percentage": 5,
+          "trigger": "WARRANTY_PERIOD_START",
+          "holdDays": 60
+        }
+      ]
+    },
+    "SOLAR_RESIDENTIAL": {
+      "name": "Solar Residential Installation",
+      "description": "Standard residential solar milestone schedule",
+      "applicableTrades": ["SOLAR"],
+      "projectValueRange": {
+        "min": 15000,
+        "max": 100000
+      },
+      "milestones": [
+        {
+          "name": "Deposit",
+          "percentage": 10,
+          "trigger": "CONTRACT_SIGNED",
+          "description": "Site assessment complete, design approved"
+        },
+        {
+          "name": "Permit Approved",
+          "percentage": 30,
+          "trigger": "PERMIT_APPROVED",
+          "description": "Building/electrical permits issued"
+        },
+        {
+          "name": "Installation Complete",
+          "percentage": 40,
+          "trigger": "INSTALLATION_COMPLETE",
+          "description": "Panels, inverter, electrical installed"
+        },
+        {
+          "name": "Inspection Passed",
+          "percentage": 15,
+          "trigger": "INSPECTION_PASSED",
+          "description": "Final inspection by AHJ"
+        },
+        {
+          "name": "PTO Received",
+          "percentage": 5,
+          "trigger": "INTERCONNECTION_APPROVED",
+          "description": "Permission to Operate from utility"
+        }
+      ]
+    },
+    "SOLAR_COMMERCIAL": {
+      "name": "Solar Commercial Installation",
+      "description": "Commercial solar with ITC safe harbor consideration",
+      "applicableTrades": ["SOLAR"],
+      "projectValueRange": {
+        "min": 50000,
+        "max": null
+      },
+      "milestones": [
+        {
+          "name": "Contract/Engineering",
+          "percentage": 10,
+          "trigger": "CONTRACT_SIGNED",
+          "description": "Engineering design, permits filed"
+        },
+        {
+          "name": "Safe Harbor Deposit",
+          "percentage": 5,
+          "trigger": "SAFE_HARBOR_MET",
+          "description": "5% of total project cost - LOCKS IN ITC RATE",
+          "safeHarborDeadline": "2026-06-30",
+          "critical": true
+        },
+        {
+          "name": "Equipment Procurement",
+          "percentage": 30,
+          "trigger": "EQUIPMENT_ORDERED",
+          "description": "Panels, inverters, racking ordered"
+        },
+        {
+          "name": "Installation",
+          "percentage": 35,
+          "trigger": "INSTALLATION_COMPLETE",
+          "description": "System installed and commissioned"
+        },
+        {
+          "name": "Interconnection",
+          "percentage": 15,
+          "trigger": "INTERCONNECTION_APPROVED",
+          "description": "Utility approval and PTO"
+        },
+        {
+          "name": "Retainage",
+          "percentage": 5,
+          "trigger": "WARRANTY_PERIOD_START",
+          "holdDays": 60
+        }
+      ],
+      "taxCreditInfo": {
+        "federalITC": 30,
+        "safeHarborDeadline": "2026-06-30",
+        "safeHarborRequirement": "5% of total project cost must be incurred",
+        "note": "Commercial projects must meet safe harbor by June 30, 2026 to lock in current ITC rate"
+      }
+    },
+    "FIRE_SPRINKLER": {
+      "name": "Fire Sprinkler Installation",
+      "description": "Fire protection system milestone schedule",
+      "applicableTrades": ["FIRE_SAFETY"],
+      "projectValueRange": {
+        "min": 20000,
+        "max": 500000
+      },
+      "milestones": [
+        {
+          "name": "Contract/Design",
+          "percentage": 15,
+          "trigger": "CONTRACT_SIGNED",
+          "description": "Engineering drawings submitted"
+        },
+        {
+          "name": "Permit/Engineering",
+          "percentage": 10,
+          "trigger": "PERMIT_APPROVED",
+          "description": "Fire marshal approval"
+        },
+        {
+          "name": "Materials Procurement",
+          "percentage": 35,
+          "trigger": "MATERIALS_ORDERED",
+          "description": "Pipe, heads, valves on site"
+        },
+        {
+          "name": "Installation",
+          "percentage": 25,
+          "trigger": "INSTALLATION_COMPLETE",
+          "description": "System installed, rough-in complete"
+        },
+        {
+          "name": "Testing/Commissioning",
+          "percentage": 10,
+          "trigger": "COMMISSIONING_COMPLETE",
+          "description": "Hydro test, flow test complete"
+        },
+        {
+          "name": "Retainage",
+          "percentage": 5,
+          "trigger": "WARRANTY_PERIOD_START",
+          "holdDays": 60
+        }
+      ]
+    },
+    "CHILLER_PLANT": {
+      "name": "Chiller Plant Multi-Phase",
+      "description": "Large commercial chiller project (multi-year)",
+      "applicableTrades": ["HVAC"],
+      "projectValueRange": {
+        "min": 500000,
+        "max": null
+      },
+      "milestones": [
+        {
+          "name": "Phase 1: Design/Engineering",
+          "percentage": 12,
+          "trigger": "DESIGN_APPROVED"
+        },
+        {
+          "name": "Phase 1: Permitting",
+          "percentage": 5,
+          "trigger": "PERMIT_APPROVED"
+        },
+        {
+          "name": "Phase 2: Equipment Procurement",
+          "percentage": 25,
+          "trigger": "EQUIPMENT_ORDERED"
+        },
+        {
+          "name": "Phase 2: Delivery",
+          "percentage": 10,
+          "trigger": "EQUIPMENT_DELIVERED"
+        },
+        {
+          "name": "Phase 3: Installation",
+          "percentage": 20,
+          "trigger": "INSTALLATION_COMPLETE"
+        },
+        {
+          "name": "Phase 3: Piping/Electrical",
+          "percentage": 10,
+          "trigger": "PHASE_COMPLETE",
+          "phase": "MEP Rough-In"
+        },
+        {
+          "name": "Phase 4: Commissioning",
+          "percentage": 8,
+          "trigger": "COMMISSIONING_COMPLETE"
+        },
+        {
+          "name": "Phase 4: Final",
+          "percentage": 5,
+          "trigger": "FINAL_ACCEPTANCE"
+        },
+        {
+          "name": "Retainage",
+          "percentage": 5,
+          "trigger": "WARRANTY_PERIOD_START",
+          "holdDays": 90
+        }
+      ]
+    }
+  },
+  "stateDepositLimits": {
+    "CA": {
+      "maxPercentage": 10,
+      "maxDollars": 1000,
+      "rule": "LESSER_OF",
+      "description": "Maximum 10% OR $1,000, whichever is LESS"
+    },
+    "NV": {
+      "maxPercentage": 10,
+      "maxDollars": 1000,
+      "rule": "LESSER_OF"
+    },
+    "NY": {
+      "maxPercentage": 50,
+      "maxDollars": 500,
+      "rule": "LESSER_OF"
+    },
+    "MD": {
+      "maxPercentage": 33,
+      "maxDollars": null,
+      "rule": "PERCENTAGE_ONLY"
+    },
+    "VA": {
+      "maxPercentage": 33,
+      "maxDollars": null,
+      "rule": "PERCENTAGE_ONLY"
+    },
+    "PA": {
+      "maxPercentage": 33,
+      "maxDollars": null,
+      "rule": "PERCENTAGE_ONLY"
+    },
+    "MA": {
+      "maxPercentage": 0,
+      "maxDollars": 0,
+      "rule": "BANNED",
+      "description": "Pre-payment banned on residential contracts"
+    }
+  }
+}

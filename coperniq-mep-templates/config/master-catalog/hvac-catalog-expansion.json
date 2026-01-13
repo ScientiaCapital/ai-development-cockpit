@@ -1,0 +1,777 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-13",
+    "company": "Kipper Energy Solutions",
+    "instance": 388,
+    "description": "HVAC catalog expansion - Phase 1 Priority items",
+    "segments": ["RESIDENTIAL", "COMMERCIAL", "INDUSTRIAL"],
+    "total_items": 75
+  },
+
+  "residential_split_systems": {
+    "description": "Split AC systems by size - CRITICAL GAP",
+    "items": [
+      { "section": "=== RESIDENTIAL SPLIT AC SYSTEMS ===" },
+      {
+        "name": "Split AC System 1.5 Ton 14 SEER",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Goodman",
+        "cost": 2200.00,
+        "price": 3400.00,
+        "code": "HVAC-SPLIT-1.5T",
+        "description": "1.5 ton split system, 14 SEER, R-410A, includes condenser and evaporator coil"
+      },
+      {
+        "name": "Split AC System 2.0 Ton 14 SEER",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Goodman",
+        "cost": 2400.00,
+        "price": 3750.00,
+        "code": "HVAC-SPLIT-2T",
+        "description": "2 ton split system, 14 SEER, R-410A, includes condenser and evaporator coil"
+      },
+      {
+        "name": "Split AC System 2.5 Ton 14 SEER",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Goodman",
+        "cost": 2650.00,
+        "price": 4100.00,
+        "code": "HVAC-SPLIT-2.5T",
+        "description": "2.5 ton split system, 14 SEER, R-410A, includes condenser and evaporator coil"
+      },
+      {
+        "name": "Split AC System 3.0 Ton 14 SEER",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Goodman",
+        "cost": 2900.00,
+        "price": 4500.00,
+        "code": "HVAC-SPLIT-3T",
+        "description": "3 ton split system, 14 SEER, R-410A, includes condenser and evaporator coil"
+      },
+      {
+        "name": "Split AC System 3.5 Ton 14 SEER",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Goodman",
+        "cost": 3150.00,
+        "price": 4900.00,
+        "code": "HVAC-SPLIT-3.5T",
+        "description": "3.5 ton split system, 14 SEER, R-410A, includes condenser and evaporator coil"
+      },
+      {
+        "name": "Split AC System 4.0 Ton 14 SEER",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Goodman",
+        "cost": 3400.00,
+        "price": 5300.00,
+        "code": "HVAC-SPLIT-4T",
+        "description": "4 ton split system, 14 SEER, R-410A, includes condenser and evaporator coil"
+      },
+      {
+        "name": "Split AC System 5.0 Ton 14 SEER",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Goodman",
+        "cost": 3900.00,
+        "price": 6000.00,
+        "code": "HVAC-SPLIT-5T",
+        "description": "5 ton split system, 14 SEER, R-410A, includes condenser and evaporator coil"
+      }
+    ]
+  },
+
+  "residential_furnaces": {
+    "description": "Gas furnaces by BTU size",
+    "items": [
+      { "section": "=== GAS FURNACES ===" },
+      {
+        "name": "Gas Furnace 40,000 BTU 80% AFUE",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Goodman",
+        "cost": 850.00,
+        "price": 1350.00,
+        "code": "HVAC-FURN-40K",
+        "description": "40,000 BTU gas furnace, 80% AFUE, single-stage, upflow/horizontal"
+      },
+      {
+        "name": "Gas Furnace 60,000 BTU 80% AFUE",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Goodman",
+        "cost": 950.00,
+        "price": 1500.00,
+        "code": "HVAC-FURN-60K",
+        "description": "60,000 BTU gas furnace, 80% AFUE, single-stage, upflow/horizontal"
+      },
+      {
+        "name": "Gas Furnace 80,000 BTU 80% AFUE",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Goodman",
+        "cost": 1050.00,
+        "price": 1650.00,
+        "code": "HVAC-FURN-80K",
+        "description": "80,000 BTU gas furnace, 80% AFUE, single-stage, upflow/horizontal"
+      },
+      {
+        "name": "Gas Furnace 100,000 BTU 80% AFUE",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Goodman",
+        "cost": 1150.00,
+        "price": 1800.00,
+        "code": "HVAC-FURN-100K",
+        "description": "100,000 BTU gas furnace, 80% AFUE, two-stage, upflow/horizontal"
+      },
+      {
+        "name": "Gas Furnace 120,000 BTU 80% AFUE",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Goodman",
+        "cost": 1350.00,
+        "price": 2100.00,
+        "code": "HVAC-FURN-120K",
+        "description": "120,000 BTU gas furnace, 80% AFUE, two-stage, upflow/horizontal"
+      },
+      {
+        "name": "Gas Furnace 80,000 BTU 96% AFUE High Efficiency",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Carrier",
+        "cost": 2200.00,
+        "price": 3400.00,
+        "code": "HVAC-FURN-80K-HE",
+        "description": "80,000 BTU condensing furnace, 96% AFUE, modulating, variable speed"
+      },
+      {
+        "name": "Gas Furnace 100,000 BTU 96% AFUE High Efficiency",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Carrier",
+        "cost": 2450.00,
+        "price": 3800.00,
+        "code": "HVAC-FURN-100K-HE",
+        "description": "100,000 BTU condensing furnace, 96% AFUE, modulating, variable speed"
+      }
+    ]
+  },
+
+  "heat_pumps": {
+    "description": "Heat pump systems including cold climate",
+    "items": [
+      { "section": "=== HEAT PUMPS ===" },
+      {
+        "name": "Heat Pump 2.0 Ton 15 SEER",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Goodman",
+        "cost": 2800.00,
+        "price": 4350.00,
+        "code": "HVAC-HP-2T",
+        "description": "2 ton heat pump, 15 SEER/8.5 HSPF, R-410A, cooling and heating"
+      },
+      {
+        "name": "Heat Pump 3.0 Ton 15 SEER",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Goodman",
+        "cost": 3200.00,
+        "price": 4950.00,
+        "code": "HVAC-HP-3T",
+        "description": "3 ton heat pump, 15 SEER/8.5 HSPF, R-410A, cooling and heating"
+      },
+      {
+        "name": "Heat Pump 4.0 Ton 15 SEER",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Goodman",
+        "cost": 3700.00,
+        "price": 5750.00,
+        "code": "HVAC-HP-4T",
+        "description": "4 ton heat pump, 15 SEER/8.5 HSPF, R-410A, cooling and heating"
+      },
+      {
+        "name": "Cold Climate Heat Pump 3.0 Ton",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Mitsubishi",
+        "cost": 5500.00,
+        "price": 8500.00,
+        "code": "HVAC-HP-CC-3T",
+        "description": "3 ton cold climate heat pump, hyper-heating, operates to -13F"
+      },
+      {
+        "name": "Cold Climate Heat Pump 4.0 Ton",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Mitsubishi",
+        "cost": 6500.00,
+        "price": 10000.00,
+        "code": "HVAC-HP-CC-4T",
+        "description": "4 ton cold climate heat pump, hyper-heating, operates to -13F"
+      }
+    ]
+  },
+
+  "mini_splits": {
+    "description": "Ductless mini-split systems",
+    "items": [
+      { "section": "=== MINI-SPLITS ===" },
+      {
+        "name": "Mini-Split 9,000 BTU Single Zone",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Mitsubishi",
+        "cost": 1400.00,
+        "price": 2200.00,
+        "code": "HVAC-MS-9K",
+        "description": "9,000 BTU ductless mini-split, 20 SEER, wall-mount indoor unit"
+      },
+      {
+        "name": "Mini-Split 12,000 BTU Single Zone",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Mitsubishi",
+        "cost": 1650.00,
+        "price": 2600.00,
+        "code": "HVAC-MS-12K",
+        "description": "12,000 BTU ductless mini-split, 20 SEER, wall-mount indoor unit"
+      },
+      {
+        "name": "Mini-Split 18,000 BTU Single Zone",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Mitsubishi",
+        "cost": 2100.00,
+        "price": 3300.00,
+        "code": "HVAC-MS-18K",
+        "description": "18,000 BTU ductless mini-split, 20 SEER, wall-mount indoor unit"
+      },
+      {
+        "name": "Mini-Split 24,000 BTU Single Zone",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Mitsubishi",
+        "cost": 2600.00,
+        "price": 4000.00,
+        "code": "HVAC-MS-24K",
+        "description": "24,000 BTU ductless mini-split, 20 SEER, wall-mount indoor unit"
+      },
+      {
+        "name": "Mini-Split 36,000 BTU Single Zone",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Mitsubishi",
+        "cost": 3200.00,
+        "price": 5000.00,
+        "code": "HVAC-MS-36K",
+        "description": "36,000 BTU ductless mini-split, 18 SEER, wall-mount indoor unit"
+      },
+      {
+        "name": "Multi-Zone Mini-Split 2 Zone",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Mitsubishi",
+        "cost": 3800.00,
+        "price": 5900.00,
+        "code": "HVAC-MS-MZ2",
+        "description": "Multi-zone mini-split, 2 indoor units, 24K BTU outdoor unit"
+      },
+      {
+        "name": "Multi-Zone Mini-Split 4 Zone",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Mitsubishi",
+        "cost": 6500.00,
+        "price": 10000.00,
+        "code": "HVAC-MS-MZ4",
+        "description": "Multi-zone mini-split, 4 indoor units, 42K BTU outdoor unit"
+      }
+    ]
+  },
+
+  "commercial_rtus": {
+    "description": "Rooftop units for commercial buildings",
+    "items": [
+      { "section": "=== COMMERCIAL ROOFTOP UNITS ===" },
+      {
+        "name": "RTU 7.5 Ton Gas/Electric",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Carrier",
+        "cost": 8500.00,
+        "price": 13000.00,
+        "code": "HVAC-RTU-7.5T",
+        "description": "7.5 ton rooftop unit, gas heat/electric cooling, 208-230V 3-phase"
+      },
+      {
+        "name": "RTU 10 Ton Gas/Electric",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Carrier",
+        "cost": 11000.00,
+        "price": 16500.00,
+        "code": "HVAC-RTU-10T",
+        "description": "10 ton rooftop unit, gas heat/electric cooling, 460V 3-phase"
+      },
+      {
+        "name": "RTU 15 Ton Gas/Electric",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Carrier",
+        "cost": 15000.00,
+        "price": 23000.00,
+        "code": "HVAC-RTU-15T",
+        "description": "15 ton rooftop unit, gas heat/electric cooling, 460V 3-phase"
+      },
+      {
+        "name": "RTU 20 Ton Gas/Electric",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Carrier",
+        "cost": 19000.00,
+        "price": 29000.00,
+        "code": "HVAC-RTU-20T",
+        "description": "20 ton rooftop unit, gas heat/electric cooling, 460V 3-phase"
+      },
+      {
+        "name": "RTU 25 Ton Gas/Electric",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Carrier",
+        "cost": 24000.00,
+        "price": 36000.00,
+        "code": "HVAC-RTU-25T",
+        "description": "25 ton rooftop unit, gas heat/electric cooling, 460V 3-phase"
+      }
+    ]
+  },
+
+  "chillers": {
+    "description": "Commercial chillers",
+    "items": [
+      { "section": "=== COMMERCIAL CHILLERS ===" },
+      {
+        "name": "Air-Cooled Chiller 50 Ton",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Trane",
+        "cost": 65000.00,
+        "price": 95000.00,
+        "code": "HVAC-CHILLER-50T",
+        "description": "50 ton air-cooled scroll chiller, R-410A, integrated controls"
+      },
+      {
+        "name": "Air-Cooled Chiller 100 Ton",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Trane",
+        "cost": 115000.00,
+        "price": 170000.00,
+        "code": "HVAC-CHILLER-100T",
+        "description": "100 ton air-cooled screw chiller, R-410A, variable speed"
+      },
+      {
+        "name": "Air-Cooled Chiller 150 Ton",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Trane",
+        "cost": 165000.00,
+        "price": 245000.00,
+        "code": "HVAC-CHILLER-150T",
+        "description": "150 ton air-cooled screw chiller, R-410A, variable speed"
+      },
+      {
+        "name": "Air-Cooled Chiller 200 Ton",
+        "catalog": "MECHANICAL",
+        "type": "PRODUCT",
+        "category": "Commercial HVAC",
+        "manufacturer": "Trane",
+        "cost": 215000.00,
+        "price": 320000.00,
+        "code": "HVAC-CHILLER-200T",
+        "description": "200 ton air-cooled screw chiller, R-410A, variable speed, dual compressor"
+      }
+    ]
+  },
+
+  "commercial_labor": {
+    "description": "Commercial HVAC labor rates",
+    "items": [
+      { "section": "=== COMMERCIAL LABOR RATES ===" },
+      {
+        "name": "Commercial HVAC Tech - Hourly",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Commercial HVAC",
+        "cost": 65.00,
+        "price": 125.00,
+        "code": "HVAC-LABOR-TECH",
+        "description": "Commercial HVAC technician hourly rate, service and repair"
+      },
+      {
+        "name": "Commercial HVAC Install - Hourly",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Commercial Installation",
+        "cost": 75.00,
+        "price": 145.00,
+        "code": "HVAC-LABOR-INSTALL",
+        "description": "Commercial HVAC installation labor, per technician hour"
+      },
+      {
+        "name": "Sheet Metal Fabrication - Hourly",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Commercial Installation",
+        "cost": 85.00,
+        "price": 165.00,
+        "code": "HVAC-LABOR-SHEETMETAL",
+        "description": "Sheet metal fabrication and installation, skilled trade rate"
+      },
+      {
+        "name": "Pipefitter - Hourly",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Commercial Installation",
+        "cost": 90.00,
+        "price": 175.00,
+        "code": "HVAC-LABOR-PIPE",
+        "description": "Pipefitter labor for chilled water, steam, and refrigerant piping"
+      },
+      {
+        "name": "Controls Technician - Hourly",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Controls & Automation",
+        "cost": 85.00,
+        "price": 165.00,
+        "code": "HVAC-LABOR-CONTROLS",
+        "description": "BAS/DDC controls technician, programming and commissioning"
+      },
+      {
+        "name": "TAB Technician - Hourly",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Testing",
+        "cost": 95.00,
+        "price": 185.00,
+        "code": "HVAC-LABOR-TAB",
+        "description": "Testing, adjusting, and balancing technician, certified"
+      }
+    ]
+  },
+
+  "installation_services": {
+    "description": "Installation and commissioning services",
+    "items": [
+      { "section": "=== INSTALLATION SERVICES ===" },
+      {
+        "name": "Residential AC Install - 2 Ton",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Installation",
+        "cost": 1200.00,
+        "price": 2200.00,
+        "code": "HVAC-INST-AC-2T",
+        "description": "Complete 2 ton split system installation, includes lineset and disconnect"
+      },
+      {
+        "name": "Residential AC Install - 3 Ton",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Installation",
+        "cost": 1400.00,
+        "price": 2500.00,
+        "code": "HVAC-INST-AC-3T",
+        "description": "Complete 3 ton split system installation, includes lineset and disconnect"
+      },
+      {
+        "name": "Residential AC Install - 4 Ton",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Installation",
+        "cost": 1600.00,
+        "price": 2800.00,
+        "code": "HVAC-INST-AC-4T",
+        "description": "Complete 4 ton split system installation, includes lineset and disconnect"
+      },
+      {
+        "name": "Residential AC Install - 5 Ton",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Installation",
+        "cost": 1800.00,
+        "price": 3100.00,
+        "code": "HVAC-INST-AC-5T",
+        "description": "Complete 5 ton split system installation, includes lineset and disconnect"
+      },
+      {
+        "name": "Furnace Installation - Standard",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Installation",
+        "cost": 800.00,
+        "price": 1500.00,
+        "code": "HVAC-INST-FURN-STD",
+        "description": "Gas furnace installation, standard replacement, includes venting"
+      },
+      {
+        "name": "Furnace Installation - High Efficiency",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Installation",
+        "cost": 1200.00,
+        "price": 2200.00,
+        "code": "HVAC-INST-FURN-HE",
+        "description": "High efficiency condensing furnace installation, includes PVC venting"
+      },
+      {
+        "name": "Mini-Split Installation - Single Zone",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Installation",
+        "cost": 600.00,
+        "price": 1200.00,
+        "code": "HVAC-INST-MS-1Z",
+        "description": "Single zone mini-split installation, includes lineset and electrical"
+      },
+      {
+        "name": "RTU Installation - Small (5-10 ton)",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Commercial Installation",
+        "cost": 2500.00,
+        "price": 4500.00,
+        "code": "HVAC-INST-RTU-SM",
+        "description": "Rooftop unit installation 5-10 ton, includes rigging and startup"
+      },
+      {
+        "name": "RTU Installation - Medium (10-20 ton)",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Commercial Installation",
+        "cost": 4500.00,
+        "price": 8000.00,
+        "code": "HVAC-INST-RTU-MD",
+        "description": "Rooftop unit installation 10-20 ton, includes crane and startup"
+      },
+      {
+        "name": "RTU Installation - Large (20-30 ton)",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Commercial Installation",
+        "cost": 6500.00,
+        "price": 11500.00,
+        "code": "HVAC-INST-RTU-LG",
+        "description": "Rooftop unit installation 20-30 ton, includes crane and startup"
+      }
+    ]
+  },
+
+  "maintenance_services": {
+    "description": "Maintenance and service agreements",
+    "items": [
+      { "section": "=== MAINTENANCE SERVICES ===" },
+      {
+        "name": "Residential PM Visit - Standard",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Maintenance Agreement",
+        "cost": 65.00,
+        "price": 129.00,
+        "code": "HVAC-PM-RES-STD",
+        "description": "Single system PM visit, filter replacement, coil cleaning, safety check"
+      },
+      {
+        "name": "Residential PM Visit - Comprehensive",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Maintenance Agreement",
+        "cost": 95.00,
+        "price": 189.00,
+        "code": "HVAC-PM-RES-COMP",
+        "description": "Comprehensive system PM, includes blower motor lubrication, electrical check"
+      },
+      {
+        "name": "Commercial PM Visit - per RTU",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Maintenance Agreement",
+        "cost": 150.00,
+        "price": 295.00,
+        "code": "HVAC-PM-COMM-RTU",
+        "description": "Commercial RTU preventive maintenance, quarterly service"
+      },
+      {
+        "name": "Commercial PM Visit - Chiller Annual",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Maintenance Agreement",
+        "cost": 800.00,
+        "price": 1500.00,
+        "code": "HVAC-PM-CHILLER",
+        "description": "Annual chiller maintenance, oil analysis, refrigerant check, tube cleaning"
+      },
+      {
+        "name": "Load Calculation - Residential",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Engineering",
+        "cost": 150.00,
+        "price": 350.00,
+        "code": "HVAC-ENG-LOAD-RES",
+        "description": "Manual J load calculation for residential HVAC sizing"
+      },
+      {
+        "name": "Load Calculation - Commercial",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Engineering",
+        "cost": 500.00,
+        "price": 1200.00,
+        "code": "HVAC-ENG-LOAD-COMM",
+        "description": "Commercial heating and cooling load calculation"
+      }
+    ]
+  },
+
+  "commissioning_services": {
+    "description": "Commissioning and testing services",
+    "items": [
+      { "section": "=== COMMISSIONING & TESTING ===" },
+      {
+        "name": "TAB Services - Small Building",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Testing",
+        "cost": 1500.00,
+        "price": 2800.00,
+        "code": "HVAC-TAB-SM",
+        "description": "Testing, adjusting, and balancing for buildings under 10,000 SF"
+      },
+      {
+        "name": "TAB Services - Medium Building",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Testing",
+        "cost": 3500.00,
+        "price": 6500.00,
+        "code": "HVAC-TAB-MD",
+        "description": "Testing, adjusting, and balancing for buildings 10,000-50,000 SF"
+      },
+      {
+        "name": "TAB Services - Large Building",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Testing",
+        "cost": 7500.00,
+        "price": 14000.00,
+        "code": "HVAC-TAB-LG",
+        "description": "Testing, adjusting, and balancing for buildings 50,000-100,000 SF"
+      },
+      {
+        "name": "Commissioning - Small HVAC System",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Commissioning",
+        "cost": 2000.00,
+        "price": 3800.00,
+        "code": "HVAC-CX-SM",
+        "description": "Functional performance testing for systems under 50 tons"
+      },
+      {
+        "name": "Commissioning - Medium HVAC System",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Commissioning",
+        "cost": 5000.00,
+        "price": 9500.00,
+        "code": "HVAC-CX-MD",
+        "description": "Functional performance testing for systems 50-200 tons"
+      },
+      {
+        "name": "Retro-Commissioning Assessment",
+        "catalog": "MECHANICAL",
+        "type": "SERVICE",
+        "category": "Commissioning",
+        "cost": 3000.00,
+        "price": 5500.00,
+        "code": "HVAC-RCX-ASSESS",
+        "description": "Existing building commissioning assessment and recommendations"
+      }
+    ]
+  },
+
+  "summary": {
+    "total_new_items": 75,
+    "by_category": {
+      "residential_split_systems": 7,
+      "residential_furnaces": 7,
+      "heat_pumps": 5,
+      "mini_splits": 7,
+      "commercial_rtus": 5,
+      "chillers": 4,
+      "commercial_labor": 6,
+      "installation_services": 10,
+      "maintenance_services": 6,
+      "commissioning_services": 6
+    },
+    "by_segment": {
+      "RESIDENTIAL": 35,
+      "COMMERCIAL": 30,
+      "INDUSTRIAL": 10
+    },
+    "by_type": {
+      "PRODUCT": 35,
+      "SERVICE": 28
+    },
+    "notes": [
+      "Pricing based on 2026 market rates",
+      "Equipment prices reflect wholesale distributor pricing",
+      "Labor rates align with prevailing wage guidelines",
+      "All products use major manufacturer pricing (Goodman, Carrier, Trane, Mitsubishi)"
+    ]
+  }
+}

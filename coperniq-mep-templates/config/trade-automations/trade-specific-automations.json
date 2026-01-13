@@ -1,0 +1,595 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-13",
+    "description": "Trade-Specific Automations for Coperniq Instance 388",
+    "instance": 388,
+    "company": "Kipper Energy Solutions"
+  },
+  "tradeAutomations": {
+    "HVAC": {
+      "description": "HVAC-specific workflow automations",
+      "automations": [
+        {
+          "id": "HVAC_SEASONAL_PM_SCHEDULE",
+          "name": "[HVAC] Seasonal PM Auto-Schedule",
+          "description": "Automatically schedule spring AC and fall heating tune-ups",
+          "trigger": {
+            "type": "TIME_BASED",
+            "schedule": [
+              {"month": 3, "week": 1, "taskType": "SPRING_AC_TUNEUP"},
+              {"month": 9, "week": 1, "taskType": "FALL_HEATING_TUNEUP"}
+            ]
+          },
+          "actions": [
+            {
+              "type": "BATCH_CREATE_TASKS",
+              "filter": "serviceAgreement.status == 'ACTIVE' && serviceAgreement.trade == 'HVAC'",
+              "taskTemplate": "{{season}}_TUNEUP",
+              "assignmentLogic": "ZONE_BASED"
+            },
+            {
+              "type": "SEND_BATCH_EMAIL",
+              "template": "PM_SCHEDULING_OUTREACH",
+              "subject": "Time to Schedule Your {{season}} HVAC Tune-Up!"
+            }
+          ]
+        },
+        {
+          "id": "HVAC_REFRIGERANT_TRACKING",
+          "name": "[HVAC] EPA 608 Refrigerant Log",
+          "description": "Auto-create refrigerant tracking entry when R-410A or R-22 used",
+          "trigger": {
+            "type": "FORM_SUBMITTED",
+            "formType": "HVAC_SERVICE_REPORT",
+            "condition": "form.refrigerantAdded > 0"
+          },
+          "actions": [
+            {
+              "type": "CREATE_RECORD",
+              "recordType": "REFRIGERANT_LOG",
+              "fields": {
+                "date": "{{form.submittedDate}}",
+                "technicianId": "{{form.submittedBy}}",
+                "refrigerantType": "{{form.refrigerantType}}",
+                "amountLbs": "{{form.refrigerantAdded}}",
+                "assetId": "{{task.assetId}}",
+                "siteId": "{{task.siteId}}",
+                "serialNumber": "{{asset.serialNumber}}"
+              }
+            },
+            {
+              "type": "CONDITIONAL_ACTION",
+              "condition": "form.refrigerantType == 'R-22' && form.refrigerantAdded > 5",
+              "action": {
+                "type": "SEND_NOTIFICATION",
+                "to": "{{serviceManager.email}}",
+                "subject": "R-22 Usage Alert - Recommend System Replacement",
+                "body": "{{form.refrigerantAdded}} lbs R-22 added to {{asset.name}}. Consider replacement quote."
+              }
+            }
+          ]
+        },
+        {
+          "id": "HVAC_NO_HEAT_EMERGENCY",
+          "name": "[HVAC] No Heat Emergency (<40°F)",
+          "description": "Prioritize and fast-track no-heat calls when weather is cold",
+          "trigger": {
+            "type": "REQUEST_CREATED",
+            "conditions": {
+              "issueType": "NO_HEAT",
+              "weatherCondition": "outsideTemp < 40"
+            }
+          },
+          "actions": [
+            {
+              "type": "UPDATE_PRIORITY",
+              "value": "EMERGENCY"
+            },
+            {
+              "type": "AUTO_ASSIGN",
+              "logic": "FIRST_AVAILABLE_HVAC_TECH"
+            },
+            {
+              "type": "SEND_SMS",
+              "to": "{{request.contact.phone}}",
+              "message": "We understand you have no heat. A technician has been dispatched. ETA: {{eta}}. Stay safe!"
+            },
+            {
+              "type": "ADD_TAG",
+              "tag": "WEATHER_EMERGENCY"
+            }
+          ]
+        },
+        {
+          "id": "HVAC_COMPRESSOR_WARRANTY_CHECK",
+          "name": "[HVAC] Compressor Failure - Warranty Check",
+          "description": "Automatically check warranty status when compressor fails",
+          "trigger": {
+            "type": "FORM_SUBMITTED",
+            "formType": "HVAC_SERVICE_REPORT",
+            "condition": "form.diagnosis CONTAINS 'compressor'"
+          },
+          "actions": [
+            {
+              "type": "CHECK_WARRANTY",
+              "assetId": "{{task.assetId}}",
+              "component": "COMPRESSOR"
+            },
+            {
+              "type": "CONDITIONAL_ACTION",
+              "condition": "asset.warrantyStatus == 'IN_WARRANTY'",
+              "action": {
+                "type": "CREATE_TASK",
+                "fields": {
+                  "title": "Warranty Claim - {{asset.manufacturer}} Compressor",
+                  "assigneeId": "{{warrantyAdmin.id}}",
+                  "priority": "HIGH"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "PLUMBING": {
+      "description": "Plumbing-specific workflow automations",
+      "automations": [
+        {
+          "id": "PLUMBING_BACKFLOW_ANNUAL",
+          "name": "[Plumbing] Backflow Test Annual Reminder",
+          "description": "Schedule annual backflow testing for commercial accounts",
+          "trigger": {
+            "type": "TIME_BASED",
+            "condition": "asset.type == 'BACKFLOW_DEVICE' && asset.lastTestDate + 11 months == today"
+          },
+          "actions": [
+            {
+              "type": "SEND_EMAIL",
+              "to": "{{asset.site.contact.email}}",
+              "template": "BACKFLOW_TEST_DUE",
+              "subject": "Annual Backflow Test Due - {{asset.site.name}}"
+            },
+            {
+              "type": "CREATE_TASK",
+              "fields": {
+                "title": "Annual Backflow Test - {{asset.site.name}}",
+                "taskType": "BACKFLOW_CERTIFICATION",
+                "assetId": "{{asset.id}}",
+                "dueDate": "{{asset.certificationDueDate - 14 days}}"
+              }
+            }
+          ]
+        },
+        {
+          "id": "PLUMBING_WATER_HEATER_FLUSH",
+          "name": "[Plumbing] Water Heater Annual Flush",
+          "description": "Remind customers about annual water heater maintenance",
+          "trigger": {
+            "type": "TIME_BASED",
+            "condition": "asset.type == 'WATER_HEATER' && asset.lastServiceDate + 11 months == today"
+          },
+          "actions": [
+            {
+              "type": "SEND_EMAIL",
+              "to": "{{asset.contact.email}}",
+              "template": "WATER_HEATER_MAINTENANCE",
+              "subject": "Time for Your Water Heater Checkup"
+            }
+          ]
+        },
+        {
+          "id": "PLUMBING_SEWER_BACKUP_EMERGENCY",
+          "name": "[Plumbing] Sewer Backup Emergency",
+          "description": "Immediate dispatch for sewer emergencies",
+          "trigger": {
+            "type": "REQUEST_CREATED",
+            "conditions": {
+              "issueType": ["SEWER_BACKUP", "DRAIN_OVERFLOW", "NO_WATER"]
+            }
+          },
+          "actions": [
+            {
+              "type": "UPDATE_PRIORITY",
+              "value": "EMERGENCY"
+            },
+            {
+              "type": "AUTO_ASSIGN",
+              "logic": "NEAREST_AVAILABLE_PLUMBER"
+            },
+            {
+              "type": "SEND_SMS",
+              "to": "{{request.contact.phone}}",
+              "message": "Emergency plumber dispatched. Turn off water at main valve if flooding. ETA: {{eta}}"
+            }
+          ]
+        },
+        {
+          "id": "PLUMBING_CAMERA_INSPECTION_QUOTE",
+          "name": "[Plumbing] Camera Inspection - Auto-Quote Repair",
+          "description": "Generate repair quote from camera inspection findings",
+          "trigger": {
+            "type": "FORM_SUBMITTED",
+            "formType": "CAMERA_INSPECTION_REPORT",
+            "condition": "form.repairRecommended == true"
+          },
+          "actions": [
+            {
+              "type": "CREATE_QUOTE",
+              "fields": {
+                "title": "Drain Repair - {{form.issueFound}} - {{task.site.name}}",
+                "contactId": "{{task.contactId}}",
+                "siteId": "{{task.siteId}}"
+              }
+            },
+            {
+              "type": "ADD_LINE_ITEMS",
+              "source": "{{form.recommendedRepairs}}"
+            },
+            {
+              "type": "SEND_EMAIL",
+              "to": "{{task.contact.email}}",
+              "template": "CAMERA_INSPECTION_QUOTE",
+              "attachVideo": true,
+              "attachQuote": true
+            }
+          ]
+        }
+      ]
+    },
+    "ELECTRICAL": {
+      "description": "Electrical-specific workflow automations",
+      "automations": [
+        {
+          "id": "ELECTRICAL_PANEL_25C_ALERT",
+          "name": "[Electrical] Panel Upgrade - 25C Tax Credit Alert",
+          "description": "Alert customer about 25C tax credit for qualifying panel upgrades",
+          "trigger": {
+            "type": "QUOTE_CREATED",
+            "conditions": {
+              "containsItem": ["ELECTRICAL_PANEL", "MAIN_PANEL", "PANEL_UPGRADE"]
+            }
+          },
+          "actions": [
+            {
+              "type": "ADD_NOTE_TO_QUOTE",
+              "note": "This upgrade may qualify for the 25C Energy Efficient Home Improvement Tax Credit (up to $600). Consult your tax advisor."
+            },
+            {
+              "type": "SEND_EMAIL",
+              "to": "{{quote.contact.email}}",
+              "template": "TAX_CREDIT_INFO_25C"
+            }
+          ]
+        },
+        {
+          "id": "ELECTRICAL_LOAD_CALC_REQUIRED",
+          "name": "[Electrical] Load Calculation Required",
+          "description": "Flag projects requiring NEC load calculation",
+          "trigger": {
+            "type": "PROJECT_CREATED",
+            "conditions": {
+              "projectType": ["PANEL_UPGRADE", "EV_CHARGER_INSTALL", "ADDITION"]
+            }
+          },
+          "actions": [
+            {
+              "type": "CREATE_TASK",
+              "fields": {
+                "title": "NEC Load Calculation - {{project.title}}",
+                "taskType": "ENGINEERING",
+                "assigneeId": "{{engineer.id}}",
+                "dueDate": "{{project.startDate - 7 days}}"
+              }
+            }
+          ]
+        },
+        {
+          "id": "ELECTRICAL_ARC_FAULT_REQUIREMENT",
+          "name": "[Electrical] AFCI Requirement Check",
+          "description": "Alert for AFCI requirements on bedroom/living area circuits",
+          "trigger": {
+            "type": "FORM_SUBMITTED",
+            "formType": "ELECTRICAL_SITE_SURVEY",
+            "condition": "form.workAreas CONTAINS ['BEDROOM', 'LIVING_ROOM', 'DINING_ROOM']"
+          },
+          "actions": [
+            {
+              "type": "ADD_NOTE_TO_PROJECT",
+              "note": "NEC 210.12 requires AFCI protection for dwelling unit bedrooms, living rooms, dining rooms. Verify code year for jurisdiction."
+            }
+          ]
+        },
+        {
+          "id": "ELECTRICAL_EV_CHARGER_PERMIT",
+          "name": "[Electrical] EV Charger - Auto-Generate Permit Application",
+          "description": "Pre-populate permit application for EV charger installs",
+          "trigger": {
+            "type": "QUOTE_APPROVED",
+            "conditions": {
+              "containsItem": ["EV_CHARGER", "LEVEL_2_CHARGER"]
+            }
+          },
+          "actions": [
+            {
+              "type": "CREATE_DOCUMENT",
+              "documentType": "PERMIT_APPLICATION",
+              "template": "EV_CHARGER_PERMIT",
+              "fields": {
+                "projectAddress": "{{project.site.fullAddress}}",
+                "chargerModel": "{{project.equipment.model}}",
+                "circuitSize": "{{project.equipment.circuitSize}}",
+                "panelLocation": "{{project.site.panelLocation}}"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "SOLAR": {
+      "description": "Solar-specific workflow automations",
+      "automations": [
+        {
+          "id": "SOLAR_SAFE_HARBOR_ALERT",
+          "name": "[Solar] Commercial Safe Harbor Deadline Alert",
+          "description": "Alert for commercial projects approaching ITC safe harbor deadline",
+          "trigger": {
+            "type": "TIME_BASED",
+            "condition": "project.type == 'COMMERCIAL' && project.trade == 'SOLAR' && project.status != 'SAFE_HARBOR_MET'"
+          },
+          "actions": [
+            {
+              "type": "CONDITIONAL_ACTION",
+              "conditions": [
+                {
+                  "condition": "2026-06-30 - today <= 90 days",
+                  "action": {
+                    "type": "ADD_TAG",
+                    "tag": "SAFE_HARBOR_90_DAYS"
+                  }
+                },
+                {
+                  "condition": "2026-06-30 - today <= 30 days",
+                  "action": {
+                    "type": "SEND_NOTIFICATION",
+                    "to": ["{{project.assignee.email}}", "{{salesManager.email}}"],
+                    "subject": "URGENT: Safe Harbor Deadline in 30 Days - {{project.title}}",
+                    "priority": "HIGH"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "SOLAR_PTO_TRACKING",
+          "name": "[Solar] PTO Application Tracking",
+          "description": "Track Permission to Operate application status",
+          "trigger": {
+            "type": "TASK_COMPLETED",
+            "conditions": {
+              "taskType": "FINAL_INSPECTION"
+            }
+          },
+          "actions": [
+            {
+              "type": "CREATE_TASK",
+              "fields": {
+                "title": "Submit PTO Application - {{project.title}}",
+                "taskType": "INTERCONNECTION",
+                "assigneeId": "{{interconnectionAdmin.id}}",
+                "dueDate": "{{today + 3 days}}"
+              }
+            },
+            {
+              "type": "UPDATE_PROJECT",
+              "field": "phase",
+              "value": "AWAITING_PTO"
+            }
+          ]
+        },
+        {
+          "id": "SOLAR_PRODUCTION_MONITORING_SETUP",
+          "name": "[Solar] Production Monitoring Setup",
+          "description": "Create monitoring setup task after installation",
+          "trigger": {
+            "type": "PHASE_COMPLETED",
+            "phase": "INSTALLATION"
+          },
+          "actions": [
+            {
+              "type": "CREATE_TASK",
+              "fields": {
+                "title": "Configure Monitoring - {{project.equipment.inverter.manufacturer}}",
+                "taskType": "COMMISSIONING",
+                "dueDate": "{{today + 2 days}}"
+              }
+            }
+          ]
+        },
+        {
+          "id": "SOLAR_PRODUCTION_ALERT",
+          "name": "[Solar] Low Production Alert",
+          "description": "Alert when system production drops below expected",
+          "trigger": {
+            "type": "WEBHOOK",
+            "source": "MONITORING_PLATFORM",
+            "event": "PRODUCTION_ANOMALY"
+          },
+          "actions": [
+            {
+              "type": "CREATE_TASK",
+              "fields": {
+                "title": "Production Issue - {{system.site.name}}",
+                "taskType": "SERVICE_CALL",
+                "priority": "MEDIUM",
+                "description": "Production {{webhook.productionPercent}}% of expected. Check for: {{webhook.possibleCauses}}"
+              }
+            },
+            {
+              "type": "SEND_EMAIL",
+              "to": "{{system.contact.email}}",
+              "template": "PRODUCTION_ALERT",
+              "subject": "Solar System Alert - {{system.site.name}}"
+            }
+          ]
+        }
+      ]
+    },
+    "FIRE_PROTECTION": {
+      "description": "Fire protection-specific workflow automations",
+      "automations": [
+        {
+          "id": "FIRE_NFPA25_QUARTERLY",
+          "name": "[Fire] NFPA 25 Quarterly Inspection Schedule",
+          "description": "Auto-schedule quarterly sprinkler inspections per NFPA 25",
+          "trigger": {
+            "type": "TIME_BASED",
+            "schedule": "QUARTERLY",
+            "condition": "asset.type == 'FIRE_SPRINKLER_SYSTEM'"
+          },
+          "actions": [
+            {
+              "type": "CREATE_TASK",
+              "fields": {
+                "title": "NFPA 25 Quarterly - {{asset.site.name}}",
+                "taskType": "FIRE_INSPECTION",
+                "assetId": "{{asset.id}}",
+                "formTemplate": "NFPA25_QUARTERLY_CHECKLIST"
+              }
+            },
+            {
+              "type": "SEND_EMAIL",
+              "to": "{{asset.site.contact.email}}",
+              "template": "FIRE_INSPECTION_SCHEDULING",
+              "subject": "Quarterly Fire Sprinkler Inspection Due"
+            }
+          ]
+        },
+        {
+          "id": "FIRE_DEFICIENCY_FOLLOWUP",
+          "name": "[Fire] Deficiency Found - Create Repair Quote",
+          "description": "Auto-generate repair quote when inspection finds deficiencies",
+          "trigger": {
+            "type": "FORM_SUBMITTED",
+            "formType": "NFPA25_INSPECTION",
+            "condition": "form.deficienciesFound > 0"
+          },
+          "actions": [
+            {
+              "type": "CREATE_QUOTE",
+              "fields": {
+                "title": "Fire Sprinkler Repairs - {{form.site.name}}",
+                "urgency": "{{form.deficiencySeverity}}"
+              }
+            },
+            {
+              "type": "CONDITIONAL_ACTION",
+              "condition": "form.deficiencySeverity == 'CRITICAL'",
+              "action": {
+                "type": "SEND_NOTIFICATION",
+                "to": ["{{fireManager.email}}", "{{site.contact.email}}"],
+                "subject": "CRITICAL: Fire System Deficiency Requires Immediate Attention"
+              }
+            }
+          ]
+        },
+        {
+          "id": "FIRE_AHJ_REPORT_GENERATION",
+          "name": "[Fire] Auto-Generate AHJ Report",
+          "description": "Generate inspection report for Authority Having Jurisdiction",
+          "trigger": {
+            "type": "TASK_COMPLETED",
+            "conditions": {
+              "taskType": "FIRE_INSPECTION"
+            }
+          },
+          "actions": [
+            {
+              "type": "GENERATE_REPORT",
+              "template": "NFPA25_AHJ_REPORT",
+              "includePhotos": true,
+              "includeDeficiencies": true
+            },
+            {
+              "type": "ATTACH_TO_SITE",
+              "documentType": "COMPLIANCE_REPORT"
+            }
+          ]
+        },
+        {
+          "id": "FIRE_EXTINGUISHER_ANNUAL",
+          "name": "[Fire] Fire Extinguisher Annual Inspection",
+          "description": "Schedule annual fire extinguisher inspections",
+          "trigger": {
+            "type": "TIME_BASED",
+            "condition": "asset.type == 'FIRE_EXTINGUISHER' && asset.lastInspectionDate + 11 months == today"
+          },
+          "actions": [
+            {
+              "type": "BATCH_CREATE_TASKS",
+              "groupBy": "site",
+              "taskTemplate": "FIRE_EXTINGUISHER_INSPECTION"
+            }
+          ]
+        }
+      ]
+    },
+    "LOW_VOLTAGE": {
+      "description": "Low voltage/security system automations",
+      "automations": [
+        {
+          "id": "LV_CAMERA_HEALTH_CHECK",
+          "name": "[LV] Camera System Health Check",
+          "description": "Monthly health check for security camera systems",
+          "trigger": {
+            "type": "TIME_BASED",
+            "schedule": "MONTHLY",
+            "condition": "asset.type == 'SECURITY_CAMERA_SYSTEM'"
+          },
+          "actions": [
+            {
+              "type": "CREATE_TASK",
+              "fields": {
+                "title": "Camera Health Check - {{asset.site.name}}",
+                "taskType": "REMOTE_DIAGNOSTICS"
+              }
+            }
+          ]
+        },
+        {
+          "id": "LV_ACCESS_CONTROL_AUDIT",
+          "name": "[LV] Access Control User Audit",
+          "description": "Quarterly access control credential audit reminder",
+          "trigger": {
+            "type": "TIME_BASED",
+            "schedule": "QUARTERLY",
+            "condition": "asset.type == 'ACCESS_CONTROL_SYSTEM'"
+          },
+          "actions": [
+            {
+              "type": "SEND_EMAIL",
+              "to": "{{asset.site.contact.email}}",
+              "template": "ACCESS_CONTROL_AUDIT_REMINDER",
+              "subject": "Quarterly Access Control Audit - Action Required"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "emailTemplates": {
+    "QUOTE_APPROVED_CONFIRMATION": {
+      "subject": "Great News! Your Project is Confirmed - {{project.title}}",
+      "body": "Dear {{contact.firstName}},\n\nThank you for choosing {{company.name}}!\n\nYour project \"{{project.title}}\" has been confirmed. Here's what happens next:\n\n1. Our team will contact you within 24 hours to schedule the work\n2. You'll receive a deposit invoice shortly\n3. We'll handle all permits and inspections\n\nProject Details:\n- Address: {{site.fullAddress}}\n- Total: ${{project.total}}\n\nIf you have any questions, call us at {{company.phone}}.\n\nThank you for your business!\n\n{{company.name}}"
+    },
+    "PAYMENT_THANK_YOU": {
+      "subject": "Payment Received - Thank You!",
+      "body": "Dear {{contact.firstName}},\n\nWe have received your payment of ${{invoice.amount}} for Invoice #{{invoice.number}}.\n\nThank you for your prompt payment!\n\nIf you have any questions about your project, please don't hesitate to reach out.\n\n{{company.name}}\n{{company.phone}}"
+    },
+    "PM_SCHEDULING_OUTREACH": {
+      "subject": "Time to Schedule Your {{season}} HVAC Tune-Up!",
+      "body": "Dear {{contact.firstName}},\n\nAs part of your {{serviceAgreement.planName}}, it's time to schedule your {{season}} tune-up!\n\nThis visit includes:\n{{serviceAgreement.visitInclusions}}\n\nClick here to schedule: {{schedulingLink}}\n\nOr call us at {{company.phone}}\n\nSee you soon!\n{{company.name}}"
+    }
+  }
+}

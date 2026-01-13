@@ -1,0 +1,583 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-13",
+    "company": "Kipper Energy Solutions",
+    "instance": 388,
+    "description": "Fire Safety catalog expansion - Phase 1 Priority items",
+    "segments": ["RESIDENTIAL", "COMMERCIAL", "INDUSTRIAL"],
+    "total_items": 60
+  },
+
+  "sprinkler_heads": {
+    "description": "Fire sprinkler heads - NFPA 13 compliant",
+    "items": [
+      { "section": "=== SPRINKLER HEADS ===" },
+      {
+        "name": "Sprinkler Head - Pendent 155F",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Tyco",
+        "cost": 8.50,
+        "price": 18.00,
+        "code": "FIRE-SPK-PEND-155",
+        "description": "Standard response pendent sprinkler, 155°F, 5.6K factor, chrome"
+      },
+      {
+        "name": "Sprinkler Head - Pendent 200F",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Tyco",
+        "cost": 9.00,
+        "price": 19.00,
+        "code": "FIRE-SPK-PEND-200",
+        "description": "Standard response pendent sprinkler, 200°F, 5.6K factor, high temp"
+      },
+      {
+        "name": "Sprinkler Head - Upright 155F",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Tyco",
+        "cost": 8.50,
+        "price": 18.00,
+        "code": "FIRE-SPK-UP-155",
+        "description": "Standard response upright sprinkler, 155°F, 5.6K factor"
+      },
+      {
+        "name": "Sprinkler Head - Sidewall 155F",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Tyco",
+        "cost": 15.00,
+        "price": 32.00,
+        "code": "FIRE-SPK-SIDE-155",
+        "description": "Sidewall sprinkler, 155°F, 5.6K factor, residential corridor"
+      },
+      {
+        "name": "Sprinkler Head - Quick Response Pendent",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Tyco",
+        "cost": 12.00,
+        "price": 25.00,
+        "code": "FIRE-SPK-QR-PEND",
+        "description": "Quick response pendent, 155°F, 5.6K, light hazard"
+      },
+      {
+        "name": "Sprinkler Head - Concealed Pendent",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Tyco",
+        "cost": 28.00,
+        "price": 55.00,
+        "code": "FIRE-SPK-CONC",
+        "description": "Concealed pendent sprinkler with cover plate, white"
+      },
+      {
+        "name": "Sprinkler Head - ESFR K14",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Tyco",
+        "cost": 65.00,
+        "price": 125.00,
+        "code": "FIRE-SPK-ESFR-K14",
+        "description": "Early suppression fast response K14, warehouse storage"
+      },
+      {
+        "name": "Sprinkler Head - ESFR K25",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Tyco",
+        "cost": 95.00,
+        "price": 185.00,
+        "code": "FIRE-SPK-ESFR-K25",
+        "description": "Early suppression fast response K25.2, high-piled storage"
+      }
+    ]
+  },
+
+  "fire_valves": {
+    "description": "Fire protection valves and trim",
+    "items": [
+      { "section": "=== VALVES & TRIM ===" },
+      {
+        "name": "OS&Y Gate Valve 4\"",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Tyco",
+        "cost": 285.00,
+        "price": 495.00,
+        "code": "FIRE-VALVE-OSY-4",
+        "description": "Outside stem & yoke gate valve 4\", UL/FM listed"
+      },
+      {
+        "name": "OS&Y Gate Valve 6\"",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Tyco",
+        "cost": 450.00,
+        "price": 795.00,
+        "code": "FIRE-VALVE-OSY-6",
+        "description": "Outside stem & yoke gate valve 6\", UL/FM listed"
+      },
+      {
+        "name": "Butterfly Valve 4\" Grooved",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Victaulic",
+        "cost": 165.00,
+        "price": 295.00,
+        "code": "FIRE-VALVE-BF-4",
+        "description": "Butterfly valve 4\" grooved, UL/FM listed, supervised"
+      },
+      {
+        "name": "Butterfly Valve 6\" Grooved",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Victaulic",
+        "cost": 225.00,
+        "price": 395.00,
+        "code": "FIRE-VALVE-BF-6",
+        "description": "Butterfly valve 6\" grooved, UL/FM listed, supervised"
+      },
+      {
+        "name": "Alarm Check Valve 4\"",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Tyco",
+        "cost": 850.00,
+        "price": 1450.00,
+        "code": "FIRE-VALVE-ACV-4",
+        "description": "Alarm check valve 4\", wet system riser trim"
+      },
+      {
+        "name": "Dry Pipe Valve 4\"",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Tyco",
+        "cost": 2200.00,
+        "price": 3800.00,
+        "code": "FIRE-VALVE-DRY-4",
+        "description": "Dry pipe valve 4\" with trim, parking garage/cold storage"
+      },
+      {
+        "name": "Fire Department Connection - Siamese",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Tyco",
+        "cost": 285.00,
+        "price": 495.00,
+        "code": "FIRE-FDC",
+        "description": "Fire department connection, 2-way siamese, chrome"
+      }
+    ]
+  },
+
+  "fire_alarm_devices": {
+    "description": "Fire alarm detection and notification",
+    "items": [
+      { "section": "=== FIRE ALARM DEVICES ===" },
+      {
+        "name": "Smoke Detector - Addressable",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Notifier",
+        "cost": 45.00,
+        "price": 95.00,
+        "code": "FIRE-DET-SMOKE-ADDR",
+        "description": "Addressable photoelectric smoke detector with base"
+      },
+      {
+        "name": "Heat Detector - Fixed 135F",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Notifier",
+        "cost": 35.00,
+        "price": 75.00,
+        "code": "FIRE-DET-HEAT-135",
+        "description": "Fixed temperature heat detector 135°F, addressable"
+      },
+      {
+        "name": "Heat Detector - Rate of Rise",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Notifier",
+        "cost": 42.00,
+        "price": 85.00,
+        "code": "FIRE-DET-HEAT-ROR",
+        "description": "Rate of rise heat detector with fixed 135°F, addressable"
+      },
+      {
+        "name": "Duct Smoke Detector",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Notifier",
+        "cost": 165.00,
+        "price": 295.00,
+        "code": "FIRE-DET-DUCT",
+        "description": "Duct smoke detector with housing, HVAC shutdown"
+      },
+      {
+        "name": "Horn/Strobe - Wall Mount",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Notifier",
+        "cost": 55.00,
+        "price": 115.00,
+        "code": "FIRE-NOT-HS-WALL",
+        "description": "Horn/strobe combination, wall mount, red, 15/75cd"
+      },
+      {
+        "name": "Horn/Strobe - Ceiling Mount",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Notifier",
+        "cost": 65.00,
+        "price": 135.00,
+        "code": "FIRE-NOT-HS-CEIL",
+        "description": "Horn/strobe combination, ceiling mount, red, 15/75cd"
+      },
+      {
+        "name": "Pull Station - Addressable",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Notifier",
+        "cost": 85.00,
+        "price": 175.00,
+        "code": "FIRE-PULL-ADDR",
+        "description": "Manual pull station, addressable, single action"
+      },
+      {
+        "name": "Fire Alarm Control Panel - Small",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Notifier",
+        "cost": 1800.00,
+        "price": 3200.00,
+        "code": "FIRE-FACP-SM",
+        "description": "Addressable FACP, 127 points, 2 NAC circuits"
+      },
+      {
+        "name": "Fire Alarm Control Panel - Large",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Notifier",
+        "cost": 4500.00,
+        "price": 7500.00,
+        "code": "FIRE-FACP-LG",
+        "description": "Addressable FACP, 318 points, 4 NAC circuits, network capable"
+      }
+    ]
+  },
+
+  "fire_extinguishers": {
+    "description": "Portable fire extinguishers",
+    "items": [
+      { "section": "=== FIRE EXTINGUISHERS ===" },
+      {
+        "name": "Fire Extinguisher 2.5 lb ABC",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Amerex",
+        "cost": 35.00,
+        "price": 75.00,
+        "code": "FIRE-EXT-ABC-2.5",
+        "description": "2.5 lb ABC dry chemical, 1A:10B:C, vehicle/residential"
+      },
+      {
+        "name": "Fire Extinguisher 5 lb ABC",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Amerex",
+        "cost": 55.00,
+        "price": 110.00,
+        "code": "FIRE-EXT-ABC-5",
+        "description": "5 lb ABC dry chemical, 3A:40B:C, office/light commercial"
+      },
+      {
+        "name": "Fire Extinguisher 10 lb ABC",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Amerex",
+        "cost": 75.00,
+        "price": 150.00,
+        "code": "FIRE-EXT-ABC-10",
+        "description": "10 lb ABC dry chemical, 4A:80B:C, industrial/warehouse"
+      },
+      {
+        "name": "Fire Extinguisher 20 lb ABC",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Amerex",
+        "cost": 125.00,
+        "price": 245.00,
+        "code": "FIRE-EXT-ABC-20",
+        "description": "20 lb ABC dry chemical, 10A:120B:C, industrial"
+      },
+      {
+        "name": "Fire Extinguisher 5 lb CO2",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Amerex",
+        "cost": 145.00,
+        "price": 285.00,
+        "code": "FIRE-EXT-CO2-5",
+        "description": "5 lb CO2 extinguisher, 5B:C, electrical/server room"
+      },
+      {
+        "name": "Fire Extinguisher Class K",
+        "catalog": "FIRE_SAFETY",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Amerex",
+        "cost": 185.00,
+        "price": 350.00,
+        "code": "FIRE-EXT-K",
+        "description": "1.6 gallon wet chemical Class K, commercial kitchen"
+      }
+    ]
+  },
+
+  "inspection_services": {
+    "description": "Fire protection inspection and testing - NFPA compliance",
+    "items": [
+      { "section": "=== INSPECTION SERVICES - NFPA 25 ===" },
+      {
+        "name": "Sprinkler Inspection - Annual (Small)",
+        "catalog": "FIRE_SAFETY",
+        "type": "SERVICE",
+        "category": "Fire Protection",
+        "cost": 150.00,
+        "price": 295.00,
+        "code": "FIRE-INSP-SPK-SM",
+        "description": "Annual sprinkler inspection, under 50 heads, NFPA 25"
+      },
+      {
+        "name": "Sprinkler Inspection - Annual (Medium)",
+        "catalog": "FIRE_SAFETY",
+        "type": "SERVICE",
+        "category": "Fire Protection",
+        "cost": 300.00,
+        "price": 595.00,
+        "code": "FIRE-INSP-SPK-MD",
+        "description": "Annual sprinkler inspection, 50-200 heads, NFPA 25"
+      },
+      {
+        "name": "Sprinkler Inspection - Annual (Large)",
+        "catalog": "FIRE_SAFETY",
+        "type": "SERVICE",
+        "category": "Fire Protection",
+        "cost": 500.00,
+        "price": 995.00,
+        "code": "FIRE-INSP-SPK-LG",
+        "description": "Annual sprinkler inspection, 200+ heads, NFPA 25"
+      },
+      {
+        "name": "Sprinkler Inspection - Quarterly",
+        "catalog": "FIRE_SAFETY",
+        "type": "SERVICE",
+        "category": "Fire Protection",
+        "cost": 100.00,
+        "price": 195.00,
+        "code": "FIRE-INSP-SPK-QTR",
+        "description": "Quarterly sprinkler inspection, visual and gauges, NFPA 25"
+      },
+      {
+        "name": "Fire Pump Test - Annual",
+        "catalog": "FIRE_SAFETY",
+        "type": "SERVICE",
+        "category": "Fire Protection",
+        "cost": 350.00,
+        "price": 695.00,
+        "code": "FIRE-TEST-PUMP",
+        "description": "Annual fire pump flow test, churn/no-flow, NFPA 25"
+      },
+      {
+        "name": "Standpipe Flow Test",
+        "catalog": "FIRE_SAFETY",
+        "type": "SERVICE",
+        "category": "Fire Protection",
+        "cost": 250.00,
+        "price": 495.00,
+        "code": "FIRE-TEST-STANDPIPE",
+        "description": "5-year standpipe flow test, NFPA 25"
+      },
+      { "section": "=== FIRE ALARM INSPECTION - NFPA 72 ===" },
+      {
+        "name": "Fire Alarm Inspection - Annual (Small)",
+        "catalog": "FIRE_SAFETY",
+        "type": "SERVICE",
+        "category": "Fire Protection",
+        "cost": 175.00,
+        "price": 350.00,
+        "code": "FIRE-INSP-FA-SM",
+        "description": "Annual fire alarm inspection, under 25 devices, NFPA 72"
+      },
+      {
+        "name": "Fire Alarm Inspection - Annual (Medium)",
+        "catalog": "FIRE_SAFETY",
+        "type": "SERVICE",
+        "category": "Fire Protection",
+        "cost": 350.00,
+        "price": 695.00,
+        "code": "FIRE-INSP-FA-MD",
+        "description": "Annual fire alarm inspection, 25-100 devices, NFPA 72"
+      },
+      {
+        "name": "Fire Alarm Inspection - Annual (Large)",
+        "catalog": "FIRE_SAFETY",
+        "type": "SERVICE",
+        "category": "Fire Protection",
+        "cost": 550.00,
+        "price": 1100.00,
+        "code": "FIRE-INSP-FA-LG",
+        "description": "Annual fire alarm inspection, 100+ devices, NFPA 72"
+      },
+      { "section": "=== FIRE EXTINGUISHER SERVICE - NFPA 10 ===" },
+      {
+        "name": "Fire Extinguisher Inspection - Annual",
+        "catalog": "FIRE_SAFETY",
+        "type": "SERVICE",
+        "category": "Fire Protection",
+        "cost": 8.00,
+        "price": 18.00,
+        "code": "FIRE-INSP-EXT-ANN",
+        "description": "Annual fire extinguisher inspection per unit, NFPA 10"
+      },
+      {
+        "name": "Fire Extinguisher 6-Year Service",
+        "catalog": "FIRE_SAFETY",
+        "type": "SERVICE",
+        "category": "Fire Protection",
+        "cost": 25.00,
+        "price": 55.00,
+        "code": "FIRE-SVC-EXT-6YR",
+        "description": "6-year fire extinguisher maintenance per unit, NFPA 10"
+      },
+      {
+        "name": "Fire Extinguisher Hydro Test (12-Year)",
+        "catalog": "FIRE_SAFETY",
+        "type": "SERVICE",
+        "category": "Fire Protection",
+        "cost": 45.00,
+        "price": 95.00,
+        "code": "FIRE-SVC-EXT-HYDRO",
+        "description": "12-year hydrostatic test per unit, NFPA 10"
+      },
+      {
+        "name": "Fire Extinguisher Recharge - ABC",
+        "catalog": "FIRE_SAFETY",
+        "type": "SERVICE",
+        "category": "Fire Protection",
+        "cost": 15.00,
+        "price": 35.00,
+        "code": "FIRE-RCHG-ABC",
+        "description": "ABC extinguisher recharge per lb, after use or 6-year"
+      },
+      { "section": "=== KITCHEN HOOD - NFPA 96/17A ===" },
+      {
+        "name": "Kitchen Hood Inspection - Semi-Annual",
+        "catalog": "FIRE_SAFETY",
+        "type": "SERVICE",
+        "category": "Fire Protection",
+        "cost": 125.00,
+        "price": 295.00,
+        "code": "FIRE-INSP-HOOD",
+        "description": "Semi-annual kitchen hood suppression inspection, NFPA 96/17A"
+      },
+      {
+        "name": "Kitchen Hood 6-Year Service",
+        "catalog": "FIRE_SAFETY",
+        "type": "SERVICE",
+        "category": "Fire Protection",
+        "cost": 350.00,
+        "price": 695.00,
+        "code": "FIRE-SVC-HOOD-6YR",
+        "description": "6-year kitchen hood suppression service with agent, NFPA 17A"
+      }
+    ]
+  },
+
+  "monitoring_services": {
+    "description": "Fire alarm monitoring - RMR",
+    "items": [
+      { "section": "=== MONITORING SERVICES (RMR) ===" },
+      {
+        "name": "Fire Alarm Monitoring - Monthly",
+        "catalog": "FIRE_SAFETY",
+        "type": "SERVICE",
+        "category": "Monitoring",
+        "cost": 25.00,
+        "price": 49.95,
+        "code": "FIRE-MON-FA-MO",
+        "description": "24/7 fire alarm monitoring, UL listed central station"
+      },
+      {
+        "name": "Sprinkler Monitoring - Monthly",
+        "catalog": "FIRE_SAFETY",
+        "type": "SERVICE",
+        "category": "Monitoring",
+        "cost": 15.00,
+        "price": 29.95,
+        "code": "FIRE-MON-SPK-MO",
+        "description": "Sprinkler waterflow/tamper monitoring, additional supervision"
+      }
+    ]
+  },
+
+  "summary": {
+    "total_new_items": 60,
+    "by_category": {
+      "sprinkler_heads": 8,
+      "fire_valves": 7,
+      "fire_alarm_devices": 9,
+      "fire_extinguishers": 6,
+      "inspection_services": 16,
+      "monitoring_services": 2
+    },
+    "by_segment": {
+      "RESIDENTIAL": 10,
+      "COMMERCIAL": 35,
+      "INDUSTRIAL": 15
+    },
+    "by_type": {
+      "PRODUCT": 30,
+      "SERVICE": 18
+    },
+    "notes": [
+      "All inspections comply with NFPA 25, 72, 10, 96/17A",
+      "Monitoring services create recurring monthly revenue (RMR)",
+      "Fire extinguisher service has 3 revenue cycles: annual, 6-year, 12-year",
+      "Kitchen hood inspection is semi-annual (2x/year revenue)"
+    ]
+  }
+}

@@ -1,0 +1,459 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-13",
+    "company": "Kipper Energy Solutions",
+    "instance": 388,
+    "description": "Low Voltage catalog expansion - Phase 1 Priority items",
+    "segments": ["RESIDENTIAL", "COMMERCIAL", "ENTERPRISE"],
+    "total_items": 50
+  },
+
+  "access_control": {
+    "description": "Access control systems and components",
+    "items": [
+      { "section": "=== ACCESS CONTROL ===" },
+      {
+        "name": "Access Control Panel 2-Door",
+        "catalog": "LOW_VOLTAGE",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Honeywell",
+        "cost": 650.00,
+        "price": 1100.00,
+        "code": "LV-ACC-PNL-2DR",
+        "description": "2-door access control panel, IP-based, expandable"
+      },
+      {
+        "name": "Access Control Panel 8-Door",
+        "catalog": "LOW_VOLTAGE",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Honeywell",
+        "cost": 1800.00,
+        "price": 2950.00,
+        "code": "LV-ACC-PNL-8DR",
+        "description": "8-door access control panel, IP-based, web interface"
+      },
+      {
+        "name": "Card Reader - Proximity",
+        "catalog": "LOW_VOLTAGE",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "HID",
+        "cost": 125.00,
+        "price": 225.00,
+        "code": "LV-ACC-RDR-PROX",
+        "description": "Proximity card reader, indoor, 6\" read range"
+      },
+      {
+        "name": "Card Reader - Mobile Ready",
+        "catalog": "LOW_VOLTAGE",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "HID",
+        "cost": 275.00,
+        "price": 475.00,
+        "code": "LV-ACC-RDR-MOB",
+        "description": "Mobile credential reader, BLE/NFC, OSDP compliant"
+      },
+      {
+        "name": "Electric Strike - Standard",
+        "catalog": "LOW_VOLTAGE",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "HES",
+        "cost": 95.00,
+        "price": 175.00,
+        "code": "LV-ACC-STRIKE",
+        "description": "Electric strike, fail-secure, 12/24VDC"
+      },
+      {
+        "name": "Magnetic Lock 600lb",
+        "catalog": "LOW_VOLTAGE",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "SDC",
+        "cost": 145.00,
+        "price": 265.00,
+        "code": "LV-ACC-MAGLOCK",
+        "description": "Electromagnetic lock 600lb holding force, fail-safe"
+      },
+      {
+        "name": "Smart Lock - Residential",
+        "catalog": "LOW_VOLTAGE",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Yale",
+        "cost": 185.00,
+        "price": 325.00,
+        "code": "LV-ACC-SMART-RES",
+        "description": "Residential smart lock, Z-Wave, keypad and app control"
+      },
+      {
+        "name": "Video Intercom - 2-Wire",
+        "catalog": "LOW_VOLTAGE",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Aiphone",
+        "cost": 350.00,
+        "price": 595.00,
+        "code": "LV-ACC-INTERCOM",
+        "description": "Video intercom system, 2-wire, surface mount station"
+      }
+    ]
+  },
+
+  "video_surveillance": {
+    "description": "Video surveillance cameras and NVRs",
+    "items": [
+      { "section": "=== VIDEO SURVEILLANCE ===" },
+      {
+        "name": "IP Camera 4MP Dome",
+        "catalog": "LOW_VOLTAGE",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Hanwha",
+        "cost": 185.00,
+        "price": 325.00,
+        "code": "LV-CAM-DOME-4MP",
+        "description": "4MP IP dome camera, indoor, IR, WDR, PoE"
+      },
+      {
+        "name": "IP Camera 4MP Bullet",
+        "catalog": "LOW_VOLTAGE",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Hanwha",
+        "cost": 225.00,
+        "price": 395.00,
+        "code": "LV-CAM-BULLET-4MP",
+        "description": "4MP IP bullet camera, outdoor, IR 100ft, PoE"
+      },
+      {
+        "name": "IP Camera 8MP Dome AI",
+        "catalog": "LOW_VOLTAGE",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Hanwha",
+        "cost": 450.00,
+        "price": 795.00,
+        "code": "LV-CAM-DOME-8MP-AI",
+        "description": "8MP AI dome camera, analytics, people counting"
+      },
+      {
+        "name": "PTZ Camera 2MP 30x",
+        "catalog": "LOW_VOLTAGE",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Hanwha",
+        "cost": 1200.00,
+        "price": 1950.00,
+        "code": "LV-CAM-PTZ-30X",
+        "description": "PTZ camera 2MP, 30x optical zoom, outdoor, IR"
+      },
+      {
+        "name": "NVR 16-Channel 8TB",
+        "catalog": "LOW_VOLTAGE",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Hanwha",
+        "cost": 1100.00,
+        "price": 1850.00,
+        "code": "LV-NVR-16CH",
+        "description": "16-channel NVR, 8TB storage, 160Mbps throughput"
+      },
+      {
+        "name": "NVR 32-Channel 16TB",
+        "catalog": "LOW_VOLTAGE",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Hanwha",
+        "cost": 2200.00,
+        "price": 3650.00,
+        "code": "LV-NVR-32CH",
+        "description": "32-channel NVR, 16TB RAID storage, enterprise"
+      }
+    ]
+  },
+
+  "structured_cabling": {
+    "description": "Structured cabling infrastructure",
+    "items": [
+      { "section": "=== STRUCTURED CABLING ===" },
+      {
+        "name": "Cat6 Cable - 1000ft Box",
+        "catalog": "LOW_VOLTAGE",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "Belden",
+        "cost": 175.00,
+        "price": 295.00,
+        "code": "LV-CAT6-1000",
+        "description": "Cat6 UTP cable, 1000ft pullbox, plenum rated"
+      },
+      {
+        "name": "Cat6A Cable - 1000ft Box",
+        "catalog": "LOW_VOLTAGE",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "Belden",
+        "cost": 350.00,
+        "price": 575.00,
+        "code": "LV-CAT6A-1000",
+        "description": "Cat6A UTP cable, 1000ft pullbox, plenum rated, 10Gig"
+      },
+      {
+        "name": "Fiber Cable OM4 12-Strand - per ft",
+        "catalog": "LOW_VOLTAGE",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "Corning",
+        "cost": 1.50,
+        "price": 2.75,
+        "code": "LV-FIBER-OM4-12",
+        "description": "OM4 multimode fiber 12-strand, indoor/outdoor"
+      },
+      {
+        "name": "Fiber Cable OS2 12-Strand - per ft",
+        "catalog": "LOW_VOLTAGE",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "Corning",
+        "cost": 1.75,
+        "price": 3.25,
+        "code": "LV-FIBER-OS2-12",
+        "description": "OS2 singlemode fiber 12-strand, long haul"
+      },
+      {
+        "name": "Patch Panel 24-Port Cat6",
+        "catalog": "LOW_VOLTAGE",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Leviton",
+        "cost": 75.00,
+        "price": 145.00,
+        "code": "LV-PATCH-24-C6",
+        "description": "24-port Cat6 patch panel, 1U, rear cable management"
+      },
+      {
+        "name": "Network Rack 42U",
+        "catalog": "LOW_VOLTAGE",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "APC",
+        "cost": 850.00,
+        "price": 1450.00,
+        "code": "LV-RACK-42U",
+        "description": "42U network rack, 19\" width, locking doors"
+      }
+    ]
+  },
+
+  "audio_visual": {
+    "description": "Audio/Visual systems",
+    "items": [
+      { "section": "=== AUDIO/VISUAL ===" },
+      {
+        "name": "Conference Room Display 65\"",
+        "catalog": "LOW_VOLTAGE",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Samsung",
+        "cost": 850.00,
+        "price": 1450.00,
+        "code": "LV-AV-DISP-65",
+        "description": "65\" commercial display, 4K, 500 nit, 24/7 rated"
+      },
+      {
+        "name": "Conference Room Display 75\"",
+        "catalog": "LOW_VOLTAGE",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Samsung",
+        "cost": 1450.00,
+        "price": 2400.00,
+        "code": "LV-AV-DISP-75",
+        "description": "75\" commercial display, 4K, 500 nit, 24/7 rated"
+      },
+      {
+        "name": "Video Conferencing System",
+        "catalog": "LOW_VOLTAGE",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Poly",
+        "cost": 2500.00,
+        "price": 4200.00,
+        "code": "LV-AV-VIDCONF",
+        "description": "Video conferencing system, 4K camera, speaker bar, hub"
+      },
+      {
+        "name": "Wireless Presentation System",
+        "catalog": "LOW_VOLTAGE",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Barco",
+        "cost": 1200.00,
+        "price": 2000.00,
+        "code": "LV-AV-WIRELESS",
+        "description": "Wireless presentation system, BYOD compatible"
+      },
+      {
+        "name": "Paging Amplifier 60W",
+        "catalog": "LOW_VOLTAGE",
+        "type": "PRODUCT",
+        "category": "Equipment",
+        "manufacturer": "Bogen",
+        "cost": 350.00,
+        "price": 595.00,
+        "code": "LV-AV-PAGE-60W",
+        "description": "60W paging amplifier, 6 zones, telephone paging"
+      }
+    ]
+  },
+
+  "services": {
+    "description": "Low voltage installation and monitoring services",
+    "items": [
+      { "section": "=== INSTALLATION SERVICES ===" },
+      {
+        "name": "Data Drop - Cat6",
+        "catalog": "LOW_VOLTAGE",
+        "type": "SERVICE",
+        "category": "Installation",
+        "cost": 75.00,
+        "price": 175.00,
+        "code": "LV-INST-DROP-C6",
+        "description": "Cat6 data drop, terminated and certified"
+      },
+      {
+        "name": "Data Drop - Cat6A",
+        "catalog": "LOW_VOLTAGE",
+        "type": "SERVICE",
+        "category": "Installation",
+        "cost": 95.00,
+        "price": 225.00,
+        "code": "LV-INST-DROP-C6A",
+        "description": "Cat6A data drop, terminated and certified"
+      },
+      {
+        "name": "Camera Install - Standard",
+        "catalog": "LOW_VOLTAGE",
+        "type": "SERVICE",
+        "category": "Installation",
+        "cost": 125.00,
+        "price": 275.00,
+        "code": "LV-INST-CAM-STD",
+        "description": "IP camera installation, includes mounting and cable"
+      },
+      {
+        "name": "Access Door Install - Complete",
+        "catalog": "LOW_VOLTAGE",
+        "type": "SERVICE",
+        "category": "Installation",
+        "cost": 350.00,
+        "price": 695.00,
+        "code": "LV-INST-DOOR",
+        "description": "Access control door complete, reader, lock, wiring"
+      },
+      {
+        "name": "NVR/Server Install",
+        "catalog": "LOW_VOLTAGE",
+        "type": "SERVICE",
+        "category": "Installation",
+        "cost": 250.00,
+        "price": 495.00,
+        "code": "LV-INST-NVR",
+        "description": "NVR installation and configuration, camera setup"
+      },
+      { "section": "=== MONITORING SERVICES (RMR) ===" },
+      {
+        "name": "Alarm Monitoring - Basic Monthly",
+        "catalog": "LOW_VOLTAGE",
+        "type": "SERVICE",
+        "category": "Monitoring",
+        "cost": 15.00,
+        "price": 39.95,
+        "code": "LV-MON-ALARM-BASIC",
+        "description": "24/7 intrusion alarm monitoring, basic response"
+      },
+      {
+        "name": "Alarm Monitoring - Premium Monthly",
+        "catalog": "LOW_VOLTAGE",
+        "type": "SERVICE",
+        "category": "Monitoring",
+        "cost": 35.00,
+        "price": 89.95,
+        "code": "LV-MON-ALARM-PREM",
+        "description": "24/7 monitoring with video verification, priority response"
+      },
+      {
+        "name": "Video Cloud Storage - per Camera Monthly",
+        "catalog": "LOW_VOLTAGE",
+        "type": "SERVICE",
+        "category": "Monitoring",
+        "cost": 15.00,
+        "price": 35.00,
+        "code": "LV-MON-CLOUD-CAM",
+        "description": "Cloud video storage per camera, 30-day retention"
+      },
+      {
+        "name": "Remote Access Management - Monthly",
+        "catalog": "LOW_VOLTAGE",
+        "type": "SERVICE",
+        "category": "Monitoring",
+        "cost": 25.00,
+        "price": 65.00,
+        "code": "LV-MON-ACCESS",
+        "description": "Remote access control management, credential changes"
+      },
+      { "section": "=== TESTING & CERTIFICATION ===" },
+      {
+        "name": "Cable Certification - per Drop",
+        "catalog": "LOW_VOLTAGE",
+        "type": "SERVICE",
+        "category": "Testing",
+        "cost": 15.00,
+        "price": 35.00,
+        "code": "LV-TEST-CERT",
+        "description": "Fluke cable certification test per drop, printed report"
+      },
+      {
+        "name": "Fiber Test - OTDR per Strand",
+        "catalog": "LOW_VOLTAGE",
+        "type": "SERVICE",
+        "category": "Testing",
+        "cost": 35.00,
+        "price": 75.00,
+        "code": "LV-TEST-OTDR",
+        "description": "OTDR fiber certification per strand, tier 2 testing"
+      }
+    ]
+  },
+
+  "summary": {
+    "total_new_items": 50,
+    "by_category": {
+      "access_control": 8,
+      "video_surveillance": 6,
+      "structured_cabling": 6,
+      "audio_visual": 5,
+      "services": 12
+    },
+    "by_segment": {
+      "RESIDENTIAL": 8,
+      "COMMERCIAL": 30,
+      "ENTERPRISE": 12
+    },
+    "by_type": {
+      "PRODUCT": 25,
+      "SERVICE": 12
+    },
+    "notes": [
+      "Monitoring services generate recurring monthly revenue (RMR)",
+      "Data drops include certification test report",
+      "Cloud storage pricing scales with camera count",
+      "All cameras are NDAA compliant manufacturers"
+    ]
+  }
+}

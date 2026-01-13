@@ -1,0 +1,470 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-13",
+    "company": "Kipper Energy Solutions",
+    "instance": 388,
+    "description": "Roofing catalog expansion - Phase 1 Priority items",
+    "segments": ["RESIDENTIAL", "COMMERCIAL", "INDUSTRIAL"],
+    "total_items": 50
+  },
+
+  "residential_shingles": {
+    "description": "Residential roofing shingles",
+    "items": [
+      { "section": "=== RESIDENTIAL SHINGLES ===" },
+      {
+        "name": "3-Tab Shingle - per square",
+        "catalog": "ROOFING",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "GAF",
+        "cost": 85.00,
+        "price": 145.00,
+        "code": "ROOF-SHNG-3TAB",
+        "description": "3-tab asphalt shingle per square (100 SF), 25-year warranty"
+      },
+      {
+        "name": "Architectural Shingle - per square",
+        "catalog": "ROOFING",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "GAF",
+        "cost": 115.00,
+        "price": 195.00,
+        "code": "ROOF-SHNG-ARCH",
+        "description": "Architectural laminated shingle per square, lifetime warranty"
+      },
+      {
+        "name": "Designer Shingle Premium - per square",
+        "catalog": "ROOFING",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "GAF",
+        "cost": 185.00,
+        "price": 295.00,
+        "code": "ROOF-SHNG-PREM",
+        "description": "Premium designer shingle per square, enhanced curb appeal"
+      },
+      {
+        "name": "Impact Resistant Shingle - per square",
+        "catalog": "ROOFING",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "GAF",
+        "cost": 165.00,
+        "price": 275.00,
+        "code": "ROOF-SHNG-IR",
+        "description": "Class 4 impact resistant shingle, insurance discount eligible"
+      },
+      {
+        "name": "Cool Roof Shingle - per square",
+        "catalog": "ROOFING",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "GAF",
+        "cost": 145.00,
+        "price": 245.00,
+        "code": "ROOF-SHNG-COOL",
+        "description": "Energy Star cool roof shingle, reflective granules"
+      },
+      {
+        "name": "Solar Shingle - GAF Timberline Solar",
+        "catalog": "ROOFING",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "GAF",
+        "cost": 650.00,
+        "price": 1050.00,
+        "code": "ROOF-SHNG-SOLAR",
+        "description": "GAF Timberline Solar shingle per square, integrated PV"
+      }
+    ]
+  },
+
+  "underlayment": {
+    "description": "Roofing underlayment and accessories",
+    "items": [
+      { "section": "=== UNDERLAYMENT ===" },
+      {
+        "name": "Felt Underlayment 15# - roll",
+        "catalog": "ROOFING",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "GAF",
+        "cost": 25.00,
+        "price": 45.00,
+        "code": "ROOF-UL-FELT-15",
+        "description": "15# felt underlayment, 4 squares per roll"
+      },
+      {
+        "name": "Synthetic Underlayment - roll",
+        "catalog": "ROOFING",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "GAF",
+        "cost": 65.00,
+        "price": 115.00,
+        "code": "ROOF-UL-SYNTH",
+        "description": "Synthetic underlayment, 10 squares per roll, walkable"
+      },
+      {
+        "name": "Ice & Water Shield - roll",
+        "catalog": "ROOFING",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "GAF",
+        "cost": 95.00,
+        "price": 165.00,
+        "code": "ROOF-UL-ICE",
+        "description": "Self-adhering ice/water membrane, 2 squares per roll"
+      },
+      {
+        "name": "Starter Strip - bundle",
+        "catalog": "ROOFING",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "GAF",
+        "cost": 35.00,
+        "price": 65.00,
+        "code": "ROOF-STARTER",
+        "description": "Starter strip shingles, 120 LF per bundle"
+      },
+      {
+        "name": "Hip & Ridge Shingles - bundle",
+        "catalog": "ROOFING",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "GAF",
+        "cost": 55.00,
+        "price": 95.00,
+        "code": "ROOF-HIPRIDGE",
+        "description": "Hip and ridge cap shingles, 33 LF per bundle"
+      }
+    ]
+  },
+
+  "commercial_systems": {
+    "description": "Commercial roofing systems",
+    "items": [
+      { "section": "=== COMMERCIAL SINGLE-PLY ===" },
+      {
+        "name": "TPO Membrane 60 mil - per square",
+        "catalog": "ROOFING",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "Carlisle",
+        "cost": 85.00,
+        "price": 145.00,
+        "code": "ROOF-TPO-60",
+        "description": "TPO membrane 60 mil white per square, mechanically attached"
+      },
+      {
+        "name": "TPO Membrane 80 mil - per square",
+        "catalog": "ROOFING",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "Carlisle",
+        "cost": 115.00,
+        "price": 195.00,
+        "code": "ROOF-TPO-80",
+        "description": "TPO membrane 80 mil white per square, premium thickness"
+      },
+      {
+        "name": "EPDM Membrane 60 mil - per square",
+        "catalog": "ROOFING",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "Firestone",
+        "cost": 75.00,
+        "price": 130.00,
+        "code": "ROOF-EPDM-60",
+        "description": "EPDM rubber membrane 60 mil per square, fully adhered"
+      },
+      {
+        "name": "PVC Membrane 60 mil - per square",
+        "catalog": "ROOFING",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "Sika Sarnafil",
+        "cost": 125.00,
+        "price": 215.00,
+        "code": "ROOF-PVC-60",
+        "description": "PVC membrane 60 mil per square, chemical resistant"
+      },
+      { "section": "=== COMMERCIAL INSULATION ===" },
+      {
+        "name": "Polyiso Insulation 2\" - per board",
+        "catalog": "ROOFING",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "Johns Manville",
+        "cost": 18.00,
+        "price": 32.00,
+        "code": "ROOF-INS-ISO-2",
+        "description": "Polyiso roof insulation 2\", 4x8 board, R-12"
+      },
+      {
+        "name": "Polyiso Insulation 3\" - per board",
+        "catalog": "ROOFING",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "Johns Manville",
+        "cost": 26.00,
+        "price": 45.00,
+        "code": "ROOF-INS-ISO-3",
+        "description": "Polyiso roof insulation 3\", 4x8 board, R-18"
+      },
+      {
+        "name": "Tapered Insulation System - per square",
+        "catalog": "ROOFING",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "Johns Manville",
+        "cost": 95.00,
+        "price": 165.00,
+        "code": "ROOF-INS-TAPER",
+        "description": "Tapered insulation system per square, positive drainage"
+      },
+      {
+        "name": "Cover Board HD - per board",
+        "catalog": "ROOFING",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "Johns Manville",
+        "cost": 22.00,
+        "price": 38.00,
+        "code": "ROOF-COVER-HD",
+        "description": "High density cover board 1/2\", 4x8 board"
+      }
+    ]
+  },
+
+  "accessories": {
+    "description": "Roofing accessories and flashing",
+    "items": [
+      { "section": "=== ACCESSORIES ===" },
+      {
+        "name": "Drip Edge - 10ft stick",
+        "catalog": "ROOFING",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "GAF",
+        "cost": 8.00,
+        "price": 16.00,
+        "code": "ROOF-DRIP",
+        "description": "Aluminum drip edge, 10ft stick, color matched"
+      },
+      {
+        "name": "Pipe Boot 2\"",
+        "catalog": "ROOFING",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "Oatey",
+        "cost": 12.00,
+        "price": 25.00,
+        "code": "ROOF-BOOT-2",
+        "description": "Pipe flashing boot 2\", rubber and aluminum"
+      },
+      {
+        "name": "Pipe Boot 3\"",
+        "catalog": "ROOFING",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "Oatey",
+        "cost": 14.00,
+        "price": 28.00,
+        "code": "ROOF-BOOT-3",
+        "description": "Pipe flashing boot 3\", rubber and aluminum"
+      },
+      {
+        "name": "Ridge Vent - 4ft section",
+        "catalog": "ROOFING",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "GAF",
+        "cost": 18.00,
+        "price": 35.00,
+        "code": "ROOF-VENT-RIDGE",
+        "description": "Ridge vent 4ft section, shingle-over style"
+      },
+      {
+        "name": "Roof Drain Assembly 4\"",
+        "catalog": "ROOFING",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "Zurn",
+        "cost": 125.00,
+        "price": 225.00,
+        "code": "ROOF-DRAIN-4",
+        "description": "Commercial roof drain 4\", cast iron, dome strainer"
+      },
+      {
+        "name": "Roof Hatch 30x36",
+        "catalog": "ROOFING",
+        "type": "PRODUCT",
+        "category": "Materials",
+        "manufacturer": "Bilco",
+        "cost": 650.00,
+        "price": 1100.00,
+        "code": "ROOF-HATCH",
+        "description": "Roof access hatch 30\"x36\", steel, insulated"
+      }
+    ]
+  },
+
+  "services": {
+    "description": "Roofing installation and inspection services",
+    "items": [
+      { "section": "=== INSTALLATION SERVICES ===" },
+      {
+        "name": "Shingle Install - per square",
+        "catalog": "ROOFING",
+        "type": "SERVICE",
+        "category": "Installation",
+        "cost": 125.00,
+        "price": 250.00,
+        "code": "ROOF-INST-SHNG",
+        "description": "Shingle installation labor per square, includes felt"
+      },
+      {
+        "name": "Tear-Off - per square",
+        "catalog": "ROOFING",
+        "type": "SERVICE",
+        "category": "Demolition",
+        "cost": 75.00,
+        "price": 150.00,
+        "code": "ROOF-TEAROFF",
+        "description": "Roof tear-off labor per square, includes disposal"
+      },
+      {
+        "name": "TPO Install - per square",
+        "catalog": "ROOFING",
+        "type": "SERVICE",
+        "category": "Commercial Installation",
+        "cost": 185.00,
+        "price": 350.00,
+        "code": "ROOF-INST-TPO",
+        "description": "TPO membrane installation per square, mechanically attached"
+      },
+      {
+        "name": "EPDM Install - per square",
+        "catalog": "ROOFING",
+        "type": "SERVICE",
+        "category": "Commercial Installation",
+        "cost": 165.00,
+        "price": 310.00,
+        "code": "ROOF-INST-EPDM",
+        "description": "EPDM membrane installation per square, fully adhered"
+      },
+      {
+        "name": "Insulation Install - per square",
+        "catalog": "ROOFING",
+        "type": "SERVICE",
+        "category": "Commercial Installation",
+        "cost": 55.00,
+        "price": 110.00,
+        "code": "ROOF-INST-INS",
+        "description": "Roof insulation installation per square, mechanically attached"
+      },
+      { "section": "=== INSPECTION & REPAIR ===" },
+      {
+        "name": "Roof Inspection - Residential",
+        "catalog": "ROOFING",
+        "type": "SERVICE",
+        "category": "Inspection",
+        "cost": 75.00,
+        "price": 175.00,
+        "code": "ROOF-INSP-RES",
+        "description": "Residential roof inspection with photo report"
+      },
+      {
+        "name": "Roof Inspection - Commercial",
+        "catalog": "ROOFING",
+        "type": "SERVICE",
+        "category": "Inspection",
+        "cost": 150.00,
+        "price": 350.00,
+        "code": "ROOF-INSP-COMM",
+        "description": "Commercial roof inspection with core sample option"
+      },
+      {
+        "name": "Leak Repair - Minor",
+        "catalog": "ROOFING",
+        "type": "SERVICE",
+        "category": "Maintenance",
+        "cost": 125.00,
+        "price": 295.00,
+        "code": "ROOF-REP-MINOR",
+        "description": "Minor roof leak repair, single penetration"
+      },
+      {
+        "name": "Leak Repair - Major",
+        "catalog": "ROOFING",
+        "type": "SERVICE",
+        "category": "Maintenance",
+        "cost": 350.00,
+        "price": 750.00,
+        "code": "ROOF-REP-MAJOR",
+        "description": "Major roof leak repair, multiple areas or deck damage"
+      },
+      {
+        "name": "Emergency Tarp Service",
+        "catalog": "ROOFING",
+        "type": "SERVICE",
+        "category": "Maintenance",
+        "cost": 250.00,
+        "price": 595.00,
+        "code": "ROOF-EMERG-TARP",
+        "description": "Emergency roof tarping, storm damage protection"
+      },
+      { "section": "=== INSURANCE SERVICES ===" },
+      {
+        "name": "Insurance Estimate - Xactimate",
+        "catalog": "ROOFING",
+        "type": "SERVICE",
+        "category": "Administrative",
+        "cost": 150.00,
+        "price": 0.00,
+        "code": "ROOF-XACT-EST",
+        "description": "Xactimate insurance estimate, included with job"
+      },
+      {
+        "name": "Insurance Supplement Filing",
+        "catalog": "ROOFING",
+        "type": "SERVICE",
+        "category": "Administrative",
+        "cost": 200.00,
+        "price": 0.00,
+        "code": "ROOF-SUPP-FILE",
+        "description": "Insurance supplement documentation and filing"
+      }
+    ]
+  },
+
+  "summary": {
+    "total_new_items": 50,
+    "by_category": {
+      "residential_shingles": 6,
+      "underlayment": 5,
+      "commercial_systems": 8,
+      "accessories": 6,
+      "services": 12
+    },
+    "by_segment": {
+      "RESIDENTIAL": 25,
+      "COMMERCIAL": 20,
+      "INDUSTRIAL": 5
+    },
+    "by_type": {
+      "PRODUCT": 25,
+      "SERVICE": 12
+    },
+    "notes": [
+      "Solar shingle integration with GAF Timberline Solar",
+      "Insurance services (Xactimate, supplements) included at no charge - builds into job margin",
+      "Impact resistant shingles qualify for insurance discounts in hail-prone areas",
+      "Commercial insulation priced per board for accurate takeoff"
+    ]
+  }
+}

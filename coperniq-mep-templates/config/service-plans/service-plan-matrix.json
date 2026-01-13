@@ -1,0 +1,718 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-13",
+    "description": "Comprehensive Service Plan Matrix for Multi-Trade MEP Contractors",
+    "instance": 388,
+    "company": "Kipper Energy Solutions",
+    "benchmarks": {
+      "attachRate": "25% minimum, 70%+ top performers",
+      "recurringRevenueTarget": "15% of total sales",
+      "retentionRate": "70-80% average",
+      "acquisitionCost": "$250-350 (HVAC)",
+      "valuationPremium": "0.5-1.0x higher for 40%+ service revenue"
+    }
+  },
+  "servicePlans": {
+    "RESIDENTIAL": {
+      "HVAC": {
+        "BRONZE": {
+          "name": "HVAC Bronze Maintenance",
+          "displayName": "Bronze Maintenance Plan",
+          "price": 199,
+          "billingFrequency": "ANNUAL",
+          "monthlyEquivalent": 16.58,
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 2,
+          "visitTypes": ["Spring AC Tune-Up", "Fall Heating Tune-Up"],
+          "discounts": {
+            "parts": 10,
+            "labor": 10,
+            "afterHours": 0
+          },
+          "benefits": {
+            "priorityService": false,
+            "diagnosticWaived": false,
+            "tripChargeWaived": false,
+            "emergencyGuarantee": false
+          },
+          "inclusions": [
+            "Filter inspection",
+            "Thermostat calibration check",
+            "Electrical connection inspection",
+            "Condensate drain flush",
+            "Refrigerant level check (visual)"
+          ],
+          "exclusions": [
+            "Parts and refrigerant",
+            "Emergency/after-hours service",
+            "Duct cleaning",
+            "Indoor air quality equipment"
+          ],
+          "renewalType": "MANUAL",
+          "coperniqStatus": "ACTIVE"
+        },
+        "SILVER": {
+          "name": "HVAC Silver Comfort",
+          "displayName": "Silver Comfort Plan",
+          "price": 349,
+          "billingFrequency": "ANNUAL",
+          "monthlyEquivalent": 29.08,
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 2,
+          "visitTypes": ["Spring AC Tune-Up", "Fall Heating Tune-Up"],
+          "discounts": {
+            "parts": 15,
+            "labor": 15,
+            "afterHours": 10
+          },
+          "benefits": {
+            "priorityService": true,
+            "diagnosticWaived": true,
+            "tripChargeWaived": false,
+            "emergencyGuarantee": false
+          },
+          "inclusions": [
+            "All Bronze inclusions",
+            "Standard 1\" filter included (2/year)",
+            "Refrigerant top-off up to 1 lb",
+            "Priority scheduling (same-day when available)",
+            "No diagnostic fee on service calls"
+          ],
+          "renewalType": "MANUAL",
+          "coperniqStatus": "ACTIVE"
+        },
+        "GOLD": {
+          "name": "HVAC Gold Total Care",
+          "displayName": "Gold Total Care Plan",
+          "price": 499,
+          "billingFrequency": "ANNUAL",
+          "monthlyEquivalent": 41.58,
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 2,
+          "visitTypes": ["Spring AC Tune-Up", "Fall Heating Tune-Up"],
+          "discounts": {
+            "parts": 20,
+            "labor": 20,
+            "afterHours": 25
+          },
+          "benefits": {
+            "priorityService": true,
+            "diagnosticWaived": true,
+            "tripChargeWaived": true,
+            "emergencyGuarantee": true
+          },
+          "inclusions": [
+            "All Silver inclusions",
+            "Premium pleated filter included (4/year)",
+            "Refrigerant top-off up to 2 lbs",
+            "Guaranteed same-day emergency service",
+            "No trip charge on any service call",
+            "Annual duct inspection",
+            "Blower wheel cleaning",
+            "Evaporator coil cleaning"
+          ],
+          "renewalType": "MANUAL",
+          "coperniqStatus": "ACTIVE"
+        }
+      },
+      "PLUMBING": {
+        "HOME_SHIELD": {
+          "name": "Plumbing Home Shield",
+          "displayName": "Home Plumbing Shield",
+          "price": 249,
+          "billingFrequency": "ANNUAL",
+          "monthlyEquivalent": 20.75,
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 1,
+          "visitTypes": ["Annual Plumbing Inspection"],
+          "discounts": {
+            "parts": 15,
+            "labor": 15,
+            "afterHours": 0
+          },
+          "benefits": {
+            "priorityService": true,
+            "diagnosticWaived": false,
+            "tripChargeWaived": false,
+            "emergencyGuarantee": false
+          },
+          "inclusions": [
+            "Annual whole-house plumbing inspection",
+            "Water heater flush & inspection",
+            "All faucet/fixture inspection",
+            "Water pressure test",
+            "Leak detection check",
+            "Priority scheduling",
+            "15% discount on repairs"
+          ],
+          "coperniqStatus": "TODO"
+        }
+      },
+      "ELECTRICAL": {
+        "SAFETY": {
+          "name": "Electrical Safety Plan",
+          "displayName": "Electrical Safety Inspection Plan",
+          "price": 199,
+          "billingFrequency": "ANNUAL",
+          "monthlyEquivalent": 16.58,
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 1,
+          "visitTypes": ["Annual Electrical Safety Inspection"],
+          "discounts": {
+            "parts": 10,
+            "labor": 10,
+            "afterHours": 0
+          },
+          "benefits": {
+            "priorityService": false,
+            "diagnosticWaived": false,
+            "tripChargeWaived": false,
+            "emergencyGuarantee": false
+          },
+          "inclusions": [
+            "Panel inspection and thermal scan",
+            "Outlet/switch testing",
+            "GFCI/AFCI testing",
+            "Smoke/CO detector testing",
+            "Surge protector inspection",
+            "Electrical safety report"
+          ],
+          "coperniqStatus": "TODO"
+        },
+        "GENERATOR": {
+          "name": "Generator Maintenance Plan",
+          "displayName": "Whole-House Generator PM",
+          "price": 349,
+          "billingFrequency": "ANNUAL",
+          "monthlyEquivalent": 29.08,
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 2,
+          "visitTypes": ["Semi-Annual Generator Service"],
+          "discounts": {
+            "parts": 15,
+            "labor": 15,
+            "afterHours": 10
+          },
+          "inclusions": [
+            "Oil and filter change (2x/year)",
+            "Spark plug inspection",
+            "Battery testing",
+            "Load bank test (annual)",
+            "Transfer switch inspection",
+            "Fuel system check",
+            "Priority emergency service"
+          ],
+          "coperniqStatus": "TODO"
+        }
+      },
+      "SOLAR": {
+        "PERFORMANCE_MONITORING": {
+          "name": "Solar Performance Monitoring",
+          "displayName": "Solar Performance Monitoring",
+          "pricingModel": "PER_KW",
+          "pricePerUnit": 15,
+          "minPrice": 150,
+          "billingFrequency": "ANNUAL",
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 0,
+          "monitoringType": "24/7 remote",
+          "inclusions": [
+            "Real-time production monitoring",
+            "Monthly performance reports",
+            "Automatic fault detection",
+            "Priority dispatch on issues",
+            "Annual production guarantee review"
+          ],
+          "alertTypes": ["Production drop", "Inverter fault", "Communication loss"],
+          "coperniqStatus": "TODO"
+        },
+        "CLEANING_PM": {
+          "name": "Solar Panel Cleaning + PM",
+          "displayName": "Solar Cleaning & Maintenance",
+          "price": 299,
+          "billingFrequency": "ANNUAL",
+          "monthlyEquivalent": 24.92,
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 2,
+          "visitTypes": ["Spring Cleaning + Inspection", "Fall Cleaning + Inspection"],
+          "inclusions": [
+            "Panel cleaning (2x/year)",
+            "Visual inspection of all components",
+            "Inverter status check",
+            "Wiring inspection",
+            "Roof penetration check",
+            "Performance report"
+          ],
+          "coperniqStatus": "TODO"
+        }
+      },
+      "FIRE_PROTECTION": {
+        "EXTINGUISHER": {
+          "name": "Fire Extinguisher Inspection",
+          "displayName": "Fire Extinguisher Annual Service",
+          "pricingModel": "PER_UNIT",
+          "pricePerUnit": 25,
+          "minPrice": 75,
+          "billingFrequency": "ANNUAL",
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 1,
+          "complianceStandard": "NFPA 10",
+          "inclusions": [
+            "Visual inspection",
+            "Pressure check",
+            "Tag/label update",
+            "6-year maintenance reminder",
+            "Hydrostatic test reminder (12-year)"
+          ],
+          "coperniqStatus": "TODO"
+        }
+      },
+      "LOW_VOLTAGE": {
+        "SECURITY_MONITORING": {
+          "name": "Security System Monitoring",
+          "displayName": "24/7 Security Monitoring",
+          "price": 299,
+          "billingFrequency": "ANNUAL",
+          "monthlyEquivalent": 24.92,
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 1,
+          "visitTypes": ["Annual System Check"],
+          "inclusions": [
+            "24/7 central station monitoring",
+            "Mobile app access",
+            "Annual system test",
+            "Battery replacement",
+            "Sensor cleaning",
+            "15% discount on additions"
+          ],
+          "coperniqStatus": "TODO"
+        }
+      },
+      "MULTI_TRADE": {
+        "TOTAL_HOME_CARE": {
+          "name": "Total Home Care Bundle",
+          "displayName": "Total Home Care - All Trades",
+          "price": 699,
+          "billingFrequency": "ANNUAL",
+          "monthlyEquivalent": 58.25,
+          "duration": 12,
+          "durationUnit": "months",
+          "tradesIncluded": ["HVAC", "PLUMBING", "ELECTRICAL"],
+          "visitsPerYear": 4,
+          "visitTypes": [
+            "Spring HVAC Tune-Up",
+            "Summer Plumbing Inspection",
+            "Fall Heating Tune-Up",
+            "Winter Electrical Safety"
+          ],
+          "discounts": {
+            "parts": 15,
+            "labor": 15,
+            "afterHours": 15
+          },
+          "benefits": {
+            "priorityService": true,
+            "diagnosticWaived": true,
+            "tripChargeWaived": false,
+            "emergencyGuarantee": false,
+            "singleVendor": true,
+            "singleInvoice": true
+          },
+          "inclusions": [
+            "2 HVAC tune-ups (AC + Heat)",
+            "Annual plumbing inspection",
+            "Water heater flush",
+            "Electrical panel inspection",
+            "GFCI/AFCI testing",
+            "Priority service all trades",
+            "One vendor, one invoice"
+          ],
+          "blueOcean": true,
+          "coperniqStatus": "TODO"
+        },
+        "ENERGY_HOME": {
+          "name": "Energy Home Bundle",
+          "displayName": "Energy Home - Solar + HVAC",
+          "price": 599,
+          "billingFrequency": "ANNUAL",
+          "monthlyEquivalent": 49.92,
+          "duration": 12,
+          "durationUnit": "months",
+          "tradesIncluded": ["SOLAR", "HVAC", "ELECTRICAL"],
+          "visitsPerYear": 3,
+          "visitTypes": [
+            "Solar Panel Cleaning + PM",
+            "HVAC Seasonal Tune-Up",
+            "EV Charger Inspection"
+          ],
+          "inclusions": [
+            "Solar panel cleaning (annual)",
+            "Solar monitoring",
+            "HVAC tune-up (AC or Heat)",
+            "EV charger inspection (if applicable)",
+            "Energy efficiency report",
+            "Priority service"
+          ],
+          "blueOcean": true,
+          "coperniqStatus": "TODO"
+        }
+      }
+    },
+    "COMMERCIAL": {
+      "HVAC": {
+        "BASIC_PM": {
+          "name": "Commercial HVAC Basic PM",
+          "displayName": "Commercial Basic PM",
+          "pricingModel": "PER_TON",
+          "pricePerUnit": 75,
+          "minPrice": 600,
+          "billingFrequency": "ANNUAL",
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 4,
+          "visitTypes": ["Quarterly PM Visit"],
+          "responseSLA": {
+            "standard": 24,
+            "unit": "hours"
+          },
+          "discounts": {
+            "parts": 10,
+            "labor": 10
+          },
+          "inclusions": [
+            "Quarterly filter changes",
+            "Belt inspection/adjustment",
+            "Electrical inspection",
+            "Refrigerant check",
+            "Condensate drain service"
+          ],
+          "coperniqStatus": "TODO"
+        },
+        "FULL_SERVICE": {
+          "name": "Commercial HVAC Full Service",
+          "displayName": "Commercial Full Service",
+          "pricingModel": "PER_TON",
+          "pricePerUnit": 150,
+          "minPrice": 1200,
+          "billingFrequency": "ANNUAL",
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 12,
+          "visitTypes": ["Monthly PM Visit"],
+          "responseSLA": {
+            "standard": 4,
+            "unit": "hours"
+          },
+          "discounts": {
+            "parts": 20,
+            "labor": 20
+          },
+          "benefits": {
+            "emergencyIncluded": true,
+            "afterHoursIncluded": true,
+            "dedicatedTech": false
+          },
+          "inclusions": [
+            "All Basic PM inclusions",
+            "Monthly filter changes",
+            "Coil cleaning (2x/year)",
+            "4-hour emergency response",
+            "After-hours coverage included",
+            "Annual refrigerant analysis"
+          ],
+          "coperniqStatus": "TODO"
+        }
+      },
+      "FIRE_PROTECTION": {
+        "NFPA25_QUARTERLY": {
+          "name": "NFPA 25 Quarterly Inspection",
+          "displayName": "Fire Sprinkler NFPA 25 Quarterly",
+          "pricingModel": "PER_HEAD",
+          "pricePerUnit": 8,
+          "minPrice": 800,
+          "billingFrequency": "ANNUAL",
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 4,
+          "complianceStandard": "NFPA 25",
+          "inclusions": [
+            "Visual inspection of all sprinkler heads",
+            "Control valve inspection",
+            "Alarm device testing",
+            "Water flow test (annual)",
+            "Fire pump test (where applicable)",
+            "Inspection report for AHJ"
+          ],
+          "coperniqStatus": "TODO"
+        }
+      },
+      "ELECTRICAL": {
+        "SAFETY": {
+          "name": "Commercial Electrical Safety",
+          "displayName": "Commercial Electrical PM",
+          "pricingModel": "PER_SQFT",
+          "pricePerUnit": 0.15,
+          "minPrice": 500,
+          "billingFrequency": "ANNUAL",
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 2,
+          "inclusions": [
+            "Thermographic panel scan",
+            "Breaker torque verification",
+            "Emergency lighting test",
+            "Exit sign inspection",
+            "GFCI/AFCI testing",
+            "Electrical room inspection"
+          ],
+          "coperniqStatus": "TODO"
+        }
+      },
+      "SOLAR": {
+        "COMMERCIAL_OM": {
+          "name": "Commercial Solar O&M",
+          "displayName": "Commercial PV O&M",
+          "pricingModel": "PER_KW",
+          "pricePerUnit": 18,
+          "minPrice": 1500,
+          "billingFrequency": "ANNUAL",
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 4,
+          "responseSLA": {
+            "standard": 4,
+            "unit": "hours"
+          },
+          "inclusions": [
+            "24/7 production monitoring",
+            "Quarterly site visits",
+            "Panel cleaning (annual)",
+            "Inverter maintenance",
+            "String-level performance analysis",
+            "Monthly production reports",
+            "4-hour response for alerts"
+          ],
+          "coperniqStatus": "TODO"
+        }
+      }
+    },
+    "PROPERTY_MANAGEMENT": {
+      "MULTI_FAMILY": {
+        "MEP_BUNDLE": {
+          "name": "Multi-Family MEP Bundle",
+          "displayName": "Multi-Family All-Trades Service",
+          "pricingModel": "PER_UNIT",
+          "pricePerUnit": 35,
+          "minUnits": 20,
+          "minPrice": 700,
+          "billingFrequency": "MONTHLY",
+          "duration": 12,
+          "durationUnit": "months",
+          "tradesIncluded": ["HVAC", "PLUMBING", "ELECTRICAL"],
+          "responseSLA": {
+            "standard": 4,
+            "emergency": 2,
+            "unit": "hours"
+          },
+          "benefits": {
+            "afterHoursIncluded": true,
+            "tenantCoordination": true,
+            "unitTurnoverPriority": true,
+            "monthlyReporting": true
+          },
+          "inclusions": [
+            "Quarterly HVAC PM (all units)",
+            "Annual plumbing inspection (common areas)",
+            "24/7 emergency response",
+            "Tenant coordination",
+            "Unit turnover priority",
+            "Monthly reporting"
+          ],
+          "blueOcean": true,
+          "coperniqStatus": "TODO"
+        }
+      },
+      "HOA": {
+        "COMMON_AREA": {
+          "name": "HOA Common Area Service",
+          "displayName": "HOA/Commercial Common Area",
+          "pricingModel": "BASE_PLUS_SQFT",
+          "basePrice": 500,
+          "pricePerSqft": 0.02,
+          "billingFrequency": "MONTHLY",
+          "duration": 12,
+          "durationUnit": "months",
+          "areasIncluded": ["Clubhouse", "Pool equipment", "Common HVAC", "Landscape lighting"],
+          "responseSLA": {
+            "standard": 8,
+            "emergency": 4,
+            "unit": "hours"
+          },
+          "benefits": {
+            "afterHoursEmergencyOnly": true
+          },
+          "blueOcean": true,
+          "coperniqStatus": "TODO"
+        }
+      },
+      "RESTAURANT": {
+        "KITCHEN_PACKAGE": {
+          "name": "Restaurant Kitchen Package",
+          "displayName": "Restaurant All-in-One",
+          "price": 1499,
+          "billingFrequency": "ANNUAL",
+          "duration": 12,
+          "durationUnit": "months",
+          "tradesIncluded": ["HVAC", "FIRE_PROTECTION", "PLUMBING"],
+          "visitsPerYear": 6,
+          "inclusions": [
+            "Quarterly HVAC PM",
+            "Hood exhaust cleaning (2x/year)",
+            "Fire suppression inspection (semi-annual)",
+            "Grease trap service coordination",
+            "Walk-in cooler PM",
+            "Health dept compliance support"
+          ],
+          "blueOcean": true,
+          "coperniqStatus": "TODO"
+        }
+      }
+    },
+    "INDUSTRIAL": {
+      "HVAC": {
+        "CHILLER_PM": {
+          "name": "Industrial Chiller PM",
+          "displayName": "Industrial Chiller Maintenance",
+          "pricingModel": "MONTHLY_RETAINER",
+          "monthlyRetainer": 2500,
+          "billingFrequency": "MONTHLY",
+          "duration": 36,
+          "durationUnit": "months",
+          "responseSLA": {
+            "standard": 4,
+            "critical": 2,
+            "unit": "hours"
+          },
+          "inclusions": [
+            "Weekly system checks",
+            "Monthly PM visits",
+            "Cooling tower maintenance",
+            "Condenser water treatment",
+            "Oil analysis (annual)",
+            "Refrigerant analysis (annual)",
+            "24/7 remote monitoring"
+          ],
+          "coperniqStatus": "TODO"
+        }
+      },
+      "ELECTRICAL": {
+        "CRITICAL_POWER": {
+          "name": "Critical Power Plan",
+          "displayName": "Critical Power Systems",
+          "pricingModel": "MONTHLY_RETAINER",
+          "monthlyRetainer": 3500,
+          "billingFrequency": "MONTHLY",
+          "duration": 36,
+          "durationUnit": "months",
+          "responseSLA": {
+            "standard": 2,
+            "critical": 0.25,
+            "unit": "hours"
+          },
+          "inclusions": [
+            "UPS system maintenance",
+            "Generator PM (monthly)",
+            "Switchgear maintenance",
+            "ATS testing",
+            "Thermography (quarterly)",
+            "Load bank testing (annual)",
+            "15-minute critical response"
+          ],
+          "coperniqStatus": "TODO"
+        }
+      },
+      "SOLAR": {
+        "UTILITY_OM": {
+          "name": "Utility-Scale Solar O&M",
+          "displayName": "Utility Solar O&M",
+          "pricingModel": "PER_KW",
+          "pricePerUnit": 10,
+          "minPrice": 50000,
+          "billingFrequency": "ANNUAL",
+          "duration": 60,
+          "durationUnit": "months",
+          "responseSLA": {
+            "standard": 4,
+            "emergency": 2,
+            "unit": "hours"
+          },
+          "inclusions": [
+            "24/7 SCADA monitoring",
+            "Weekly site inspections",
+            "Monthly vegetation management",
+            "Panel cleaning (as needed)",
+            "Inverter maintenance",
+            "Tracker maintenance (if applicable)",
+            "Substation maintenance",
+            "Performance reporting",
+            "Utility interconnection management"
+          ],
+          "performanceGuarantee": {
+            "availability": 99.0,
+            "penalty": "Per MWh lost"
+          },
+          "coperniqStatus": "TODO"
+        }
+      }
+    }
+  },
+  "buildOrder": {
+    "week1": {
+      "title": "Residential Foundation",
+      "plans": [
+        "RESIDENTIAL.PLUMBING.HOME_SHIELD",
+        "RESIDENTIAL.ELECTRICAL.SAFETY",
+        "RESIDENTIAL.SOLAR.PERFORMANCE_MONITORING",
+        "RESIDENTIAL.FIRE_PROTECTION.EXTINGUISHER",
+        "RESIDENTIAL.MULTI_TRADE.TOTAL_HOME_CARE"
+      ]
+    },
+    "week2": {
+      "title": "Commercial Essentials",
+      "plans": [
+        "COMMERCIAL.HVAC.BASIC_PM",
+        "COMMERCIAL.HVAC.FULL_SERVICE",
+        "COMMERCIAL.FIRE_PROTECTION.NFPA25_QUARTERLY",
+        "COMMERCIAL.ELECTRICAL.SAFETY",
+        "COMMERCIAL.SOLAR.COMMERCIAL_OM"
+      ]
+    },
+    "week3": {
+      "title": "Property Management Bundles",
+      "plans": [
+        "PROPERTY_MANAGEMENT.MULTI_FAMILY.MEP_BUNDLE",
+        "PROPERTY_MANAGEMENT.HOA.COMMON_AREA",
+        "PROPERTY_MANAGEMENT.RESTAURANT.KITCHEN_PACKAGE"
+      ]
+    },
+    "week4": {
+      "title": "Industrial & Specialty",
+      "plans": [
+        "INDUSTRIAL.HVAC.CHILLER_PM",
+        "INDUSTRIAL.ELECTRICAL.CRITICAL_POWER",
+        "INDUSTRIAL.SOLAR.UTILITY_OM"
+      ]
+    }
+  }
+}

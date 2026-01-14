@@ -713,6 +713,143 @@ Returns all custom field definitions configured for the company.
 
 ---
 
+## Catalog Items (Official API - Updated 2026-01-14)
+
+### List Catalog Items
+```http
+GET /v1/catalog-items
+```
+
+### Get Catalog Item
+```http
+GET /v1/catalog-items/{catalogItemId}
+```
+
+**Response Schema:**
+```json
+{
+  "id": 123,
+  "name": "Split AC System 3.0 Ton 16 SEER",
+  "catalog": "MECHANICAL",
+  "type": "PRODUCT",
+  "category": "AIR_CONDITIONER",
+  "manufacturer": "Carrier",
+  "sku": null,
+  "code": "HVAC-AC-3T-16S",
+  "cost": 3200,
+  "price": 4800,
+  "description": null,
+  "image": null,
+  "isArchived": false,
+  "createdById": 456,
+  "createdAt": "2026-01-14T10:00:00Z",
+  "updatedAt": "2026-01-14T10:00:00Z"
+}
+```
+
+### Create Catalog Item
+```http
+POST /v1/catalog-items
+Content-Type: application/json
+```
+
+**Required Fields:**
+| Field | Type | Notes |
+|-------|------|-------|
+| `name` | string | Item name |
+| `type` | enum | `PRODUCT` or `SERVICE` |
+| `category` | enum | ProductCategory or ServiceCategory |
+| `cost` | number | Your cost |
+| `price` | number | Customer price |
+
+**Optional Fields:**
+| Field | Type | Notes |
+|-------|------|-------|
+| `tradeGroup` | enum | MECHANICAL, ELECTRICAL, PLUMBING, LOW_VOLTAGE, ENVELOPE, ENERGY, OTHER |
+| `manufacturer` | string | Required for PRODUCT type |
+| `sku` | string | Stock keeping unit |
+| `code` | string | Item code |
+| `description` | string | Item details |
+
+**Example - Create Product:**
+```bash
+curl -X POST "https://api.coperniq.io/v1/catalog-items" \
+  -H "x-api-key: $COPERNIQ_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Split AC System 3.0 Ton 16 SEER",
+    "type": "PRODUCT",
+    "category": "AIR_CONDITIONER",
+    "tradeGroup": "MECHANICAL",
+    "manufacturer": "Carrier",
+    "cost": 3200,
+    "price": 4800
+  }'
+```
+
+**Example - Create Service:**
+```bash
+curl -X POST "https://api.coperniq.io/v1/catalog-items" \
+  -H "x-api-key: $COPERNIQ_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "HVAC System Commissioning",
+    "type": "SERVICE",
+    "category": "COMMISSIONING",
+    "tradeGroup": "OTHER",
+    "cost": 500,
+    "price": 1200
+  }'
+```
+
+### Update Catalog Item
+```http
+PATCH /v1/catalog-items/{catalogItemId}
+Content-Type: application/json
+```
+
+**Example:**
+```bash
+curl -X PATCH "https://api.coperniq.io/v1/catalog-items/123" \
+  -H "x-api-key: $COPERNIQ_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "price": 5200,
+    "description": "IRA tax credit eligible"
+  }'
+```
+
+### Delete Catalog Item
+```http
+DELETE /v1/catalog-items/{catalogItemId}
+```
+
+### Category Enums
+
+**ProductCategory:**
+- `PV_MODULE`, `INVERTER`, `BATTERY`, `OPTIMIZER` (Solar/Energy)
+- `AIR_CONDITIONER`, `HEAT_PUMP`, `FURNACE`, `BOILER` (HVAC)
+- `ROOFTOP_UNIT_RTU`, `THERMOSTAT` (Commercial HVAC)
+- `ELECTRICAL_PANEL`, `BREAKER`, `WIRE` (Electrical)
+- `OTHER` (catch-all)
+
+**ServiceCategory:**
+- `INSTALLATION`, `MAINTENANCE`, `REPAIR`
+- `COMMISSIONING`, `INSPECTION`
+- `DESIGN`, `ENGINEERING`
+- `OTHER`
+
+**TradeGroup:**
+- `MECHANICAL` - HVAC, refrigeration
+- `ELECTRICAL` - Electrical systems
+- `PLUMBING` - Plumbing systems
+- `LOW_VOLTAGE` - Security, AV, networking
+- `ENVELOPE` - Roofing, insulation
+- `ENERGY` - Solar, battery storage
+- `OTHER` - Services, misc
+
+---
+
 ## Full API Documentation
 
 https://docs.coperniq.io/api-reference
@@ -773,4 +910,4 @@ curl -X POST "https://api.coperniq.io/v1/projects/123/calls" \
 
 ---
 
-*Last updated: 2026-01-13*
+*Last updated: 2026-01-14*

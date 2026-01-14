@@ -432,6 +432,88 @@
             "Annual refrigerant analysis"
           ],
           "coperniqStatus": "TODO"
+        },
+        "RTU_MAINTENANCE": {
+          "name": "RTU Rooftop Unit Maintenance",
+          "displayName": "RTU Quarterly Service",
+          "pricingModel": "PER_UNIT",
+          "pricePerUnit": 450,
+          "minPrice": 900,
+          "billingFrequency": "ANNUAL",
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 4,
+          "visitTypes": ["Quarterly RTU PM"],
+          "responseSLA": {
+            "standard": 8,
+            "unit": "hours"
+          },
+          "inclusions": [
+            "Quarterly filter replacement",
+            "Belt inspection & replacement",
+            "Economizer calibration",
+            "Gas heat exchanger inspection",
+            "Refrigerant charge verification",
+            "Condensate drain cleaning",
+            "Electrical connection check",
+            "Thermostat calibration"
+          ],
+          "complianceStandard": "ASHRAE 180",
+          "coperniqStatus": "TODO"
+        },
+        "VRF_SYSTEM_PM": {
+          "name": "VRF/Mini-Split System PM",
+          "displayName": "VRF Zone System Maintenance",
+          "pricingModel": "PER_ZONE",
+          "pricePerUnit": 125,
+          "minPrice": 750,
+          "billingFrequency": "ANNUAL",
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 2,
+          "visitTypes": ["Semi-Annual VRF PM"],
+          "responseSLA": {
+            "standard": 12,
+            "unit": "hours"
+          },
+          "inclusions": [
+            "Indoor unit filter cleaning/replacement",
+            "Outdoor unit coil cleaning",
+            "Refrigerant piping inspection",
+            "Control wiring inspection",
+            "Zone balance verification",
+            "Remote controller testing",
+            "Error code diagnostic review"
+          ],
+          "coperniqStatus": "TODO"
+        },
+        "BOILER_SERVICE": {
+          "name": "Commercial Boiler Service",
+          "displayName": "Boiler Annual PM",
+          "pricingModel": "PER_UNIT",
+          "pricePerUnit": 1200,
+          "minPrice": 1200,
+          "billingFrequency": "ANNUAL",
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 2,
+          "visitTypes": ["Pre-Season Startup", "Mid-Season Check"],
+          "responseSLA": {
+            "standard": 4,
+            "unit": "hours"
+          },
+          "inclusions": [
+            "Combustion analysis",
+            "Heat exchanger inspection",
+            "Safety control testing",
+            "Low water cutoff test",
+            "Pressure relief valve test",
+            "Burner cleaning & adjustment",
+            "Flame sensor cleaning",
+            "Draft verification"
+          ],
+          "complianceStandard": "ASME CSD-1",
+          "coperniqStatus": "TODO"
         }
       },
       "FIRE_PROTECTION": {
@@ -455,6 +537,110 @@
             "Inspection report for AHJ"
           ],
           "coperniqStatus": "TODO"
+        },
+        "FIRE_ALARM_MONITORING": {
+          "name": "Fire Alarm Monitoring & PM",
+          "displayName": "NFPA 72 Fire Alarm Service",
+          "price": 1200,
+          "billingFrequency": "ANNUAL",
+          "monthlyEquivalent": 100,
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 2,
+          "visitTypes": ["Semi-Annual Inspection"],
+          "complianceStandard": "NFPA 72",
+          "responseSLA": {
+            "standard": 4,
+            "emergency": 2,
+            "unit": "hours"
+          },
+          "inclusions": [
+            "24/7 central station monitoring",
+            "Semi-annual device testing",
+            "Smoke detector sensitivity test",
+            "Battery replacement (annual)",
+            "AHJ inspection coordination",
+            "Panel programming backup",
+            "Device location documentation",
+            "Emergency dispatch coordination"
+          ],
+          "coperniqStatus": "TODO"
+        },
+        "SUPPRESSION_SYSTEM_PM": {
+          "name": "Fire Suppression System PM",
+          "displayName": "Kitchen Hood & Clean Agent PM",
+          "pricingModel": "PER_SYSTEM",
+          "pricePerUnit": 650,
+          "minPrice": 650,
+          "billingFrequency": "ANNUAL",
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 2,
+          "visitTypes": ["Semi-Annual Suppression PM"],
+          "complianceStandard": "NFPA 17A/2001",
+          "systemTypes": ["Kitchen Hood (Wet Chemical)", "Clean Agent (FM-200/Novec)", "Dry Chemical"],
+          "inclusions": [
+            "Agent level verification",
+            "Nozzle inspection & cleaning",
+            "Detection system test",
+            "Manual release test",
+            "Fusible link inspection",
+            "Gas cartridge check",
+            "Hood/duct inspection",
+            "Certification tag update"
+          ],
+          "coperniqStatus": "TODO"
+        },
+        "FIRE_PUMP_TESTING": {
+          "name": "Fire Pump Testing Service",
+          "displayName": "Fire Pump Weekly/Annual Testing",
+          "pricingModel": "MONTHLY_RETAINER",
+          "monthlyRetainer": 350,
+          "billingFrequency": "MONTHLY",
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 52,
+          "visitTypes": ["Weekly Churn Test", "Annual Flow Test"],
+          "complianceStandard": "NFPA 25 Ch. 8",
+          "responseSLA": {
+            "standard": 4,
+            "emergency": 2,
+            "unit": "hours"
+          },
+          "inclusions": [
+            "Weekly no-flow (churn) test",
+            "Monthly pump room inspection",
+            "Annual full-flow test",
+            "Controller inspection",
+            "Transfer switch test",
+            "Jockey pump verification",
+            "Suction/discharge pressure logging",
+            "Test report for AHJ"
+          ],
+          "coperniqStatus": "TODO"
+        },
+        "STANDPIPE_INSPECTION": {
+          "name": "Standpipe & Hose System",
+          "displayName": "Standpipe NFPA 25 Service",
+          "pricingModel": "PER_FLOOR",
+          "pricePerUnit": 150,
+          "minPrice": 600,
+          "billingFrequency": "ANNUAL",
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 4,
+          "visitTypes": ["Quarterly Visual", "Annual Flow Test"],
+          "complianceStandard": "NFPA 25 Ch. 6",
+          "inclusions": [
+            "Quarterly valve inspection",
+            "Hose cabinet inspection",
+            "Fire hose condition check",
+            "Annual hydrostatic test",
+            "PRV flow test (5-year)",
+            "FDC inspection",
+            "Signage verification"
+          ],
+          "coperniqStatus": "TODO"
         }
       },
       "ELECTRICAL": {
@@ -475,6 +661,136 @@
             "Exit sign inspection",
             "GFCI/AFCI testing",
             "Electrical room inspection"
+          ],
+          "coperniqStatus": "TODO"
+        },
+        "GENERATOR_PM": {
+          "name": "Commercial Generator PM",
+          "displayName": "Standby Generator Service",
+          "pricingModel": "PER_KW",
+          "pricePerUnit": 8,
+          "minPrice": 800,
+          "billingFrequency": "ANNUAL",
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 4,
+          "visitTypes": ["Quarterly Generator PM"],
+          "responseSLA": {
+            "standard": 4,
+            "emergency": 2,
+            "unit": "hours"
+          },
+          "inclusions": [
+            "Oil & filter change (annual)",
+            "Fuel filter replacement",
+            "Coolant level check",
+            "Battery load test",
+            "Transfer switch exercise",
+            "Load bank test (annual)",
+            "Block heater verification",
+            "Fuel quality test"
+          ],
+          "complianceStandard": "NFPA 110",
+          "coperniqStatus": "TODO"
+        },
+        "UPS_MAINTENANCE": {
+          "name": "UPS System Maintenance",
+          "displayName": "UPS & Battery PM",
+          "pricingModel": "PER_KVA",
+          "pricePerUnit": 25,
+          "minPrice": 750,
+          "billingFrequency": "ANNUAL",
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 2,
+          "visitTypes": ["Semi-Annual UPS PM"],
+          "responseSLA": {
+            "standard": 4,
+            "unit": "hours"
+          },
+          "inclusions": [
+            "Battery impedance testing",
+            "Capacitor inspection",
+            "Fan filter replacement",
+            "Thermal imaging scan",
+            "Bypass testing",
+            "Runtime verification",
+            "Firmware update review",
+            "Alarm history review"
+          ],
+          "coperniqStatus": "TODO"
+        }
+      },
+      "PLUMBING": {
+        "BACKFLOW_TESTING": {
+          "name": "Backflow Preventer Testing",
+          "displayName": "Annual Backflow Certification",
+          "pricingModel": "PER_DEVICE",
+          "pricePerUnit": 125,
+          "minPrice": 125,
+          "billingFrequency": "ANNUAL",
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 1,
+          "visitTypes": ["Annual Backflow Test"],
+          "complianceStandard": "ASSE 5110",
+          "certificationRequired": true,
+          "inclusions": [
+            "Differential pressure test",
+            "Relief valve test",
+            "Check valve inspection",
+            "Test cock verification",
+            "State/county certification filing",
+            "Test report documentation",
+            "Failed device repair quote"
+          ],
+          "coperniqStatus": "TODO"
+        },
+        "GREASE_INTERCEPTOR": {
+          "name": "Grease Interceptor Service",
+          "displayName": "Commercial Grease Trap PM",
+          "pricingModel": "PER_GALLON",
+          "pricePerUnit": 0.35,
+          "minPrice": 250,
+          "billingFrequency": "MONTHLY",
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 12,
+          "visitTypes": ["Monthly Grease Pumping"],
+          "complianceStandard": "Local FOG Ordinance",
+          "inclusions": [
+            "Grease pumping & disposal",
+            "Interior cleaning",
+            "Baffle inspection",
+            "Flow rate verification",
+            "Manifold inspection report",
+            "Compliance documentation",
+            "Pumping certificate"
+          ],
+          "coperniqStatus": "TODO"
+        },
+        "MEDICAL_GAS": {
+          "name": "Medical Gas System PM",
+          "displayName": "Healthcare Medical Gas Service",
+          "pricingModel": "PER_OUTLET",
+          "pricePerUnit": 45,
+          "minPrice": 1500,
+          "billingFrequency": "ANNUAL",
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 4,
+          "visitTypes": ["Quarterly Medical Gas PM"],
+          "complianceStandard": "NFPA 99",
+          "certificationRequired": true,
+          "inclusions": [
+            "Outlet flow/pressure test",
+            "Zone valve inspection",
+            "Alarm panel testing",
+            "Source equipment PM",
+            "Cross-connection testing",
+            "Gas purity verification",
+            "Pipeline integrity check",
+            "TJC/CMS compliance documentation"
           ],
           "coperniqStatus": "TODO"
         }
@@ -502,6 +818,32 @@
             "String-level performance analysis",
             "Monthly production reports",
             "4-hour response for alerts"
+          ],
+          "coperniqStatus": "TODO"
+        },
+        "CARPORT_CANOPY": {
+          "name": "Solar Carport/Canopy O&M",
+          "displayName": "Carport Solar System PM",
+          "pricingModel": "PER_KW",
+          "pricePerUnit": 22,
+          "minPrice": 2000,
+          "billingFrequency": "ANNUAL",
+          "duration": 12,
+          "durationUnit": "months",
+          "visitsPerYear": 4,
+          "visitTypes": ["Quarterly Carport PM"],
+          "responseSLA": {
+            "standard": 4,
+            "unit": "hours"
+          },
+          "inclusions": [
+            "All Commercial O&M inclusions",
+            "Structural inspection",
+            "EV charger integration check",
+            "Lighting system verification",
+            "Drainage inspection",
+            "Paint/coating inspection",
+            "Bollard/signage check"
           ],
           "coperniqStatus": "TODO"
         }

@@ -118,3 +118,46 @@ python-validator/.env
 .playwright-mcp/
 CLAUDE.md
 LICENSE.md
+
+# ===================================
+# COPERNIQ IP PROTECTION
+# ===================================
+
+# Instance-specific data (contains customer info)
+coperniq-mep-templates/data/
+coperniq-mep-templates/exports/
+coperniq-mep-templates/*.csv
+coperniq-mep-templates/sandbox/__pycache__/
+
+# API tokens and credentials
+*.token
+coperniq_token.json
+**/credentials*.json
+**/*secret*
+
+# Session state with potential sensitive context
+coperniq-mep-templates/progress.txt
+coperniq-mep-templates/session_*.log
+
+# Agent conversation logs (may contain customer data)
+**/agent_logs/
+**/*.conversation.json
+
+# Proprietary prompts (IP - the "secret sauce")
+coperniq-mep-templates/.mcp/agents/*.md
+coperniq-mep-templates/.mcp/gates/*.yaml
+coperniq-mep-templates/config/agent_prompts.yaml
+
+# Local development state
+ralph-loop.local.md
+*.local.md
+*.local.json
+
+# Future integration configs (protected)
+**/integrations/*.json
+**/integrations/*.yaml
+.integration-registry.json
+
+# Source project references (IP protection)
+**/vozlux*
+**/source-projects.md

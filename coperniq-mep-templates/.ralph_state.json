@@ -1,0 +1,178 @@
+{
+  "active": true,
+  "iteration": 0,
+  "max_iterations": 0,
+  "started_at": "2026-01-13T18:23:12.877914",
+  "last_iteration_at": "",
+  "completion_promise": false,
+  "checklist": [
+    {
+      "id": "voice-1",
+      "category": "Voice AI",
+      "description": "Twilio phone number configured",
+      "done": false,
+      "verified_at": null,
+      "notes": null
+    },
+    {
+      "id": "voice-2",
+      "category": "Voice AI",
+      "description": "Inbound call handler working",
+      "done": false,
+      "verified_at": null,
+      "notes": null
+    },
+    {
+      "id": "voice-3",
+      "category": "Voice AI",
+      "description": "Outbound call handler working",
+      "done": false,
+      "verified_at": null,
+      "notes": null
+    },
+    {
+      "id": "voice-4",
+      "category": "Voice AI",
+      "description": "Call disposition logging",
+      "done": false,
+      "verified_at": null,
+      "notes": null
+    },
+    {
+      "id": "voice-5",
+      "category": "Voice AI",
+      "description": "Emergency escalation flow",
+      "done": false,
+      "verified_at": null,
+      "notes": null
+    },
+    {
+      "id": "agent-1",
+      "category": "Agents",
+      "description": "voice-ai agent tested end-to-end",
+      "done": false,
+      "verified_at": null,
+      "notes": null
+    },
+    {
+      "id": "agent-2",
+      "category": "Agents",
+      "description": "dispatch agent tested end-to-end",
+      "done": false,
+      "verified_at": null,
+      "notes": null
+    },
+    {
+      "id": "agent-3",
+      "category": "Agents",
+      "description": "collections agent tested end-to-end",
+      "done": false,
+      "verified_at": null,
+      "notes": null
+    },
+    {
+      "id": "agent-4",
+      "category": "Agents",
+      "description": "pm-scheduler agent tested end-to-end",
+      "done": false,
+      "verified_at": null,
+      "notes": null
+    },
+    {
+      "id": "agent-5",
+      "category": "Agents",
+      "description": "quote-builder agent tested end-to-end",
+      "done": false,
+      "verified_at": null,
+      "notes": null
+    },
+    {
+      "id": "data-1",
+      "category": "Data",
+      "description": "Sample contacts imported",
+      "done": false,
+      "verified_at": null,
+      "notes": null
+    },
+    {
+      "id": "data-2",
+      "category": "Data",
+      "description": "Sample assets created",
+      "done": false,
+      "verified_at": null,
+      "notes": null
+    },
+    {
+      "id": "data-3",
+      "category": "Data",
+      "description": "Sample service plans activated",
+      "done": false,
+      "verified_at": null,
+      "notes": null
+    },
+    {
+      "id": "data-4",
+      "category": "Data",
+      "description": "Sample work orders created",
+      "done": false,
+      "verified_at": null,
+      "notes": null
+    },
+    {
+      "id": "int-1",
+      "category": "Integration",
+      "description": "MCP tools verified against Coperniq API",
+      "done": false,
+      "verified_at": null,
+      "notes": null
+    },
+    {
+      "id": "int-2",
+      "category": "Integration",
+      "description": "Review gates enforced",
+      "done": false,
+      "verified_at": null,
+      "notes": null
+    },
+    {
+      "id": "int-3",
+      "category": "Integration",
+      "description": "Claude Code integration tested",
+      "done": false,
+      "verified_at": null,
+      "notes": null
+    },
+    {
+      "id": "int-4",
+      "category": "Integration",
+      "description": "LangServe chat UI tested",
+      "done": false,
+      "verified_at": null,
+      "notes": null
+    },
+    {
+      "id": "back-1",
+      "category": "Backbone",
+      "description": "Extensible plugin architecture",
+      "done": false,
+      "verified_at": null,
+      "notes": null
+    },
+    {
+      "id": "back-2",
+      "category": "Backbone",
+      "description": "Integration registry (protected)",
+      "done": false,
+      "verified_at": null,
+      "notes": null
+    },
+    {
+      "id": "back-3",
+      "category": "Backbone",
+      "description": "Webhook system for external connections",
+      "done": false,
+      "verified_at": null,
+      "notes": null
+    }
+  ]
+}

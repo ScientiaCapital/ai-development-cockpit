@@ -1,0 +1,302 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-13",
+    "description": "Test definitions for Coperniq MCP agents",
+    "instance": 388
+  },
+
+  "voice_ai_tests": [
+    {
+      "name": "emergency_call_creates_urgent_request",
+      "description": "Emergency calls (NO_HEAT in winter) should create EMERGENCY priority",
+      "input": {
+        "reason": "SERVICE",
+        "issue": "NO_HEAT",
+        "temperature": 20
+      },
+      "expected": {
+        "priority": "EMERGENCY",
+        "sla_hours": 2
+      }
+    },
+    {
+      "name": "standard_call_creates_normal_request",
+      "description": "Non-urgent calls should create NORMAL priority",
+      "input": {
+        "reason": "SERVICE",
+        "issue": "AC_TUNE_UP"
+      },
+      "expected": {
+        "priority": "SCHEDULED",
+        "sla_hours": 168
+      }
+    },
+    {
+      "name": "gas_leak_triggers_immediate_dispatch",
+      "description": "Gas leak should trigger immediate technician dispatch",
+      "input": {
+        "reason": "SERVICE",
+        "issue": "GAS_LEAK"
+      },
+      "expected": {
+        "priority": "EMERGENCY",
+        "immediate_dispatch": true,
+        "after_hours_allowed": true
+      }
+    },
+    {
+      "name": "call_disposition_logged_correctly",
+      "description": "All call outcomes should have valid disposition codes",
+      "input": {
+        "from_number": "+15551234567",
+        "to_number": "+15559876543",
+        "reason": "SERVICE",
+        "disposition": "VISIT_SCHEDULED"
+      },
+      "expected": {
+        "disposition_valid": true,
+        "reason_valid": true
+      }
+    }
+  ],
+
+  "dispatch_tests": [
+    {
+      "name": "matches_trade_to_technician",
+      "description": "HVAC work orders should go to HVAC certified techs",
+      "input": {
+        "trade": "HVAC",
+        "skills_required": ["refrigerant"]
+      },
+      "expected": {
+        "tech_trade": "HVAC",
+        "has_required_skills": true
+      }
+    },
+    {
+      "name": "prioritizes_by_proximity",
+      "description": "Closer technicians should be preferred for same skills",
+      "input": {
+        "job_location": "78701",
+        "available_techs": [
+          {"id": 1, "zip": "78704", "distance_miles": 3},
+          {"id": 2, "zip": "78745", "distance_miles": 12}
+        ]
+      },
+      "expected": {
+        "selected_tech_id": 1,
+        "reason": "proximity"
+      }
+    },
+    {
+      "name": "respects_sla_deadline",
+      "description": "Emergency jobs dispatched within SLA window",
+      "input": {
+        "priority": "EMERGENCY",
+        "created_at": "2026-01-13T10:00:00Z"
+      },
+      "expected": {
+        "dispatch_by": "2026-01-13T12:00:00Z",
+        "sla_hours": 2
+      }
+    }
+  ],
+
+  "collections_tests": [
+    {
+      "name": "0_30_days_email_only",
+      "description": "Invoices 0-30 days get email reminder only",
+      "input": {
+        "days_overdue": 15,
+        "amount": 500
+      },
+      "expected": {
+        "action": "email",
+        "phone_call": false
+      }
+    },
+    {
+      "name": "31_60_days_phone_call",
+      "description": "Invoices 31-60 days get phone call",
+      "input": {
+        "days_overdue": 45,
+        "amount": 1000
+      },
+      "expected": {
+        "action": "phone_call",
+        "tone": "concerned_checkin"
+      }
+    },
+    {
+      "name": "90_plus_final_notice",
+      "description": "Invoices 90+ days get final notice",
+      "input": {
+        "days_overdue": 95,
+        "amount": 2500
+      },
+      "expected": {
+        "action": "final_notice",
+        "payment_plan_offered": true,
+        "escalate_to_manager": true
+      }
+    }
+  ],
+
+  "pm_scheduler_tests": [
+    {
+      "name": "spring_ac_tuneup_march_may",
+      "description": "AC tune-ups scheduled in spring months",
+      "input": {
+        "service_plan": "HVAC_BRONZE",
+        "current_month": 3
+      },
+      "expected": {
+        "pm_type": "AC_TUNEUP",
+        "scheduled_in_window": true,
+        "window": "March-May"
+      }
+    },
+    {
+      "name": "fall_furnace_check_sep_nov",
+      "description": "Furnace checks scheduled in fall months",
+      "input": {
+        "service_plan": "HVAC_BRONZE",
+        "current_month": 10
+      },
+      "expected": {
+        "pm_type": "FURNACE_SAFETY",
+        "scheduled_in_window": true,
+        "window": "September-November"
+      }
+    },
+    {
+      "name": "commercial_nfpa_quarterly",
+      "description": "Commercial fire NFPA25 quarterly visits",
+      "input": {
+        "service_plan": "COMMERCIAL_FIRE_NFPA25",
+        "current_quarter": 1
+      },
+      "expected": {
+        "visits_per_year": 4,
+        "frequency": "quarterly",
+        "compliance_required": true
+      }
+    },
+    {
+      "name": "contract_renewal_60_days_warning",
+      "description": "Contracts get renewal notice 60 days before expiry",
+      "input": {
+        "contract_end_date": "2026-03-15",
+        "check_date": "2026-01-14"
+      },
+      "expected": {
+        "days_until_expiry": 60,
+        "renewal_notice_sent": true
+      }
+    }
+  ],
+
+  "quote_builder_tests": [
+    {
+      "name": "service_plan_discount_applied",
+      "description": "Gold plan customers get 20% discount",
+      "input": {
+        "customer_plan": "GOLD",
+        "parts_total": 100,
+        "labor_total": 200
+      },
+      "expected": {
+        "parts_discount": 20,
+        "labor_discount": 40,
+        "total_discount": 60
+      }
+    },
+    {
+      "name": "good_better_best_options",
+      "description": "Quotes include 3 options",
+      "input": {
+        "repair_type": "AC_NOT_COOLING",
+        "diagnosis": "capacitor_failure"
+      },
+      "expected": {
+        "options_count": 3,
+        "option_names": ["GOOD", "BETTER", "BEST"],
+        "best_includes_service_plan": true
+      }
+    },
+    {
+      "name": "parts_markup_calculated",
+      "description": "Parts markup follows tiered structure",
+      "input": {
+        "part_cost": 300
+      },
+      "expected": {
+        "markup_percent": 60,
+        "selling_price": 480
+      }
+    }
+  ],
+
+  "data_quality_tests": [
+    {
+      "name": "project_requires_title",
+      "description": "Projects must have title",
+      "input": {
+        "client_id": 123
+      },
+      "expected": {
+        "valid": false,
+        "missing_field": "title"
+      }
+    },
+    {
+      "name": "phone_format_validated",
+      "description": "Phone numbers must be E.164 format",
+      "input": {
+        "phone": "5551234567"
+      },
+      "expected": {
+        "valid": false,
+        "message": "Phone must be +1XXXXXXXXXX format"
+      }
+    },
+    {
+      "name": "call_disposition_enum_validated",
+      "description": "Call dispositions must be valid enum values",
+      "input": {
+        "disposition": "INVALID_VALUE"
+      },
+      "expected": {
+        "valid": false,
+        "valid_values": ["VISIT_SCHEDULED", "INFO_PROVIDED", "ISSUE_RESOLVED", "FOLLOW_UP", "ESCALATION", "NO_ACTION", "UNRESPONSIVE", "OTHER"]
+      }
+    }
+  ],
+
+  "review_gate_tests": [
+    {
+      "name": "api_key_scan_catches_secrets",
+      "description": "Pre-deploy gate catches exposed API keys",
+      "input": {
+        "file_content": "COPERNIQ_API_KEY=sk-ant-12345"
+      },
+      "expected": {
+        "gate_passed": false,
+        "blocking_check": "api_key_scan"
+      }
+    },
+    {
+      "name": "test_coverage_enforced",
+      "description": "Pre-deploy requires 80% coverage",
+      "input": {
+        "coverage_percent": 75
+      },
+      "expected": {
+        "gate_passed": false,
+        "blocking_check": "test_coverage",
+        "minimum_required": 80
+      }
+    }
+  ]
+}

@@ -29,6 +29,7 @@ import {
 } from 'lucide-react';
 import { cn, getStatusColor } from '@/lib/utils';
 import { getAgents, getDashboardStats } from '@/lib/api';
+import { InstanceSelector } from '@/components/InstanceSelector';
 import type { Agent, DashboardStats, QuickAction, TradeName } from '@/types';
 import styles from './Sidebar.module.css';
 
@@ -194,10 +195,28 @@ export default function Sidebar({
 }: SidebarProps) {
   const [selectedTeam, setSelectedTeam] = useState<TeamId | 'all'>('all');
   const [stats, setStats] = useState<DashboardStats>({
-    activeCalls: 0,
+    // Operational
     openWorkOrders: 0,
     scheduledToday: 0,
     completedToday: 0,
+    completedThisWeek: 0,
+    // Financial
+    revenueToday: 0,
+    revenueThisWeek: 0,
+    revenueThisMonth: 0,
+    arOver30Days: 0,
+    // Efficiency
+    firstTimeFixRate: 85,
+    avgResponseTime: 2.4,
+    techUtilization: 78,
+    // Pipeline
+    activeProjects: 0,
+    pendingEstimates: 0,
+    openServiceCalls: 0,
+    // Inventory
+    catalogItemCount: 0,
+    lowStockItems: 0,
+    activeCalls: 0,
   });
 
   useEffect(() => {
@@ -250,7 +269,7 @@ export default function Sidebar({
         {!collapsed && (
           <div className={styles.logoText}>
             <h1>Kipper Energy</h1>
-            <span>Instance 388</span>
+            <span>Multi-Trade AI</span>
           </div>
         )}
         <button
@@ -261,6 +280,13 @@ export default function Sidebar({
           {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
         </button>
       </div>
+
+      {/* Instance Selector - Switch between Coperniq instances */}
+      {!collapsed && (
+        <div className={styles.instanceSelector}>
+          <InstanceSelector />
+        </div>
+      )}
 
       {/* Team Tabs - Energy+MEP, Low Voltage, Fire & Safety, Roofing */}
       {!collapsed && (
@@ -348,11 +374,14 @@ export default function Sidebar({
                   {isSelected && !collapsed && (
                     <MessageSquare size={14} className={styles.chatIndicator} />
                   )}
-                  <div
-                    className={styles.statusDot}
-                    style={{ background: getStatusColor(agent.status) }}
-                    title={agent.status}
-                  />
+                  {/* Green dot only shows for selected agent */}
+                  {isSelected && (
+                    <div
+                      className={styles.statusDot}
+                      style={{ background: '#22c55e' }}
+                      title="Active"
+                    />
+                  )}
                 </div>
               </button>
             );
@@ -389,27 +418,33 @@ export default function Sidebar({
         </div>
       )}
 
-      {/* Stats Grid */}
+      {/* KPI Dashboard - 4 Key Metrics for C&I Contractors */}
       <div className={cn(styles.section, styles.statsSection)}>
         {!collapsed && <div className={styles.sectionTitle}>Today</div>}
         <div className={cn(styles.statsGrid, collapsed && styles.statsCollapsed)}>
-          <div className={styles.statCard} title="Active Calls">
-            <div className={styles.statValue}>{stats.activeCalls}</div>
-            {!collapsed && <div className={styles.statLabel}>Active Calls</div>}
-          </div>
           <div className={styles.statCard} title="Open Work Orders">
             <div className={styles.statValue}>{stats.openWorkOrders}</div>
             {!collapsed && <div className={styles.statLabel}>Open WOs</div>}
           </div>
+          <div className={styles.statCard} title="Active Projects">
+            <div className={styles.statValue}>{stats.activeProjects}</div>
+            {!collapsed && <div className={styles.statLabel}>Projects</div>}
+          </div>
           {!collapsed && (
             <>
-              <div className={styles.statCard}>
-                <div className={styles.statValue}>{stats.scheduledToday}</div>
-                <div className={styles.statLabel}>Scheduled</div>
+              <div className={styles.statCard} title="Revenue This Week">
+                <div className={styles.statValue}>
+                  ${stats.revenueThisWeek >= 1000
+                    ? `${(stats.revenueThisWeek / 1000).toFixed(0)}k`
+                    : stats.revenueThisWeek}
+                </div>
+                <div className={styles.statLabel}>Rev/Week</div>
               </div>
-              <div className={styles.statCard}>
-                <div className={styles.statValue}>{stats.completedToday}</div>
-                <div className={styles.statLabel}>Completed</div>
+              <div className={styles.statCard} title="First-Time Fix Rate">
+                <div className={cn(styles.statValue, stats.firstTimeFixRate >= 80 ? styles.statGood : styles.statWarn)}>
+                  {stats.firstTimeFixRate}%
+                </div>
+                <div className={styles.statLabel}>FTF Rate</div>
               </div>
             </>
           )}

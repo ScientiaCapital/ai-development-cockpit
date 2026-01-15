@@ -100,10 +100,10 @@
   --transition-slow: 350ms ease;
 
   /* Layout */
-  --sidebar-width: 280px;
+  --sidebar-width: 260px;
   --sidebar-collapsed: 72px;
   --header-height: 64px;
-  --panel-width: 320px;
+  --panel-width: 420px;
 }
 
 /* Reset & Base Styles */

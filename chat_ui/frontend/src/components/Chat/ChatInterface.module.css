@@ -112,6 +112,120 @@
   margin-bottom: var(--space-6);
 }
 
+/* Trade Emoji in Welcome */
+.tradeEmoji {
+  font-size: 40px;
+  line-height: 1;
+}
+
+/* Trade Selector Pills */
+.tradePills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  justify-content: center;
+  max-width: 700px;
+  margin-bottom: var(--space-6);
+}
+
+.tradePill {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.tradePill:hover {
+  background: var(--bg-elevated);
+  border-color: var(--pill-color, var(--color-primary));
+  color: var(--text-primary);
+}
+
+.tradePillActive {
+  background: var(--pill-color, var(--color-primary));
+  border-color: var(--pill-color, var(--color-primary));
+  color: white;
+  font-weight: var(--font-weight-medium);
+}
+
+.tradePillActive:hover {
+  background: var(--pill-color, var(--color-primary));
+  color: white;
+}
+
+/* Quick Actions Grid */
+.quickActions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+  max-width: 600px;
+  width: 100%;
+  margin-bottom: var(--space-4);
+}
+
+.quickActionBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.quickActionBtn:hover {
+  background: var(--bg-elevated);
+  border-color: var(--color-primary);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.quickActionIcon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.quickActionLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+}
+
+/* Or Divider */
+.orDivider {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.orDivider::before,
+.orDivider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-default);
+}
+
+.orDivider span {
+  padding: 0 var(--space-3);
+}
+
+/* Legacy suggestions - keep for backward compat */
 .suggestions {
   display: flex;
   flex-wrap: wrap;
@@ -257,6 +371,73 @@
   background: var(--bg-base);
 }
 
+/* Image Preview */
+.imagePreview {
+  margin-bottom: var(--space-2);
+  animation: slideInUp 0.2s ease;
+}
+
+.imagePreviewContent {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-elevated);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+}
+
+.imagePreviewName {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.imagePreviewClose {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-surface);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.imagePreviewClose:hover {
+  background: var(--color-error);
+  color: white;
+}
+
+/* Attach Button */
+.attachBtn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.attachBtn:hover:not(:disabled) {
+  background: var(--bg-elevated);
+  color: var(--color-primary);
+}
+
+.attachBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .inputContainer {
   display: flex;
   align-items: center;
@@ -316,6 +497,14 @@
   color: var(--text-muted);
   border-top: 1px solid var(--border-default);
   background: var(--bg-surface);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.footerPowered {
+  color: var(--color-primary);
+  font-weight: 500;
 }
 
 /* Animations */
@@ -373,5 +562,90 @@
 
   .suggestionBtn {
     justify-content: center;
+  }
+
+  /* Mobile trade pills */
+  .tradePills {
+    gap: var(--space-1);
+  }
+
+  .tradePill {
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--font-size-xs);
+  }
+
+  /* Mobile quick actions - stack vertically */
+  .quickActions {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+  }
+
+  .quickActionBtn {
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: var(--space-3);
+  }
+
+  .quickActionIcon {
+    font-size: 20px;
+  }
+}
+
+/* Voice Controls */
+.voiceControls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-top: 1px solid var(--border-default);
+  margin-top: var(--space-2);
+}
+
+.voiceSettingsBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.voiceSettingsBtn:hover {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border-color: var(--color-primary);
+}
+
+/* Modal Overlay */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Mobile voice controls */
+@media (max-width: 768px) {
+  .voiceControls {
+    padding: var(--space-3) 0;
   }
 }

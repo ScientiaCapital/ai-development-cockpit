@@ -27,14 +27,41 @@ import {
   Wifi,
   AlertTriangle,
   Home,
+  ExternalLink,
+  Camera,
+  History,
+  ClipboardList,
+  Package,
+  Search,
+  X,
 } from 'lucide-react';
 import { cn, getStatusColor, formatRelativeTime, getTradeColor } from '@/lib/utils';
 import { getWorkOrders, updateWorkOrderStatus } from '@/lib/api';
-import type { WorkOrder, WorkOrderStatus, WorkOrderPriority, TradeName } from '@/types';
+import type { WorkOrder, WorkOrderStatus, WorkOrderPriority, TradeName, OrderType } from '@/types';
 import styles from './WorkOrdersPanel.module.css';
 
 // Extended trade types for full team coverage
 type ExtendedTrade = TradeName | 'Low Voltage' | 'Roofing' | 'General';
+
+// Infer order type from work order characteristics (for backward compatibility)
+const inferOrderType = (wo: WorkOrder): OrderType => {
+  // If explicitly set, use it
+  if (wo.orderType) return wo.orderType;
+
+  // Heuristics based on typical field service patterns:
+  // - Field orders: created by technician (has technicianId but no scheduledDate initially)
+  // - Office orders: admin/billing tasks (titles containing callback, billing, quote, etc.)
+  // - Work orders: everything else (standard dispatched jobs)
+
+  const title = wo.title.toLowerCase();
+  const officeKeywords = ['callback', 'billing', 'invoice', 'quote', 'estimate', 'follow-up', 'admin', 'office'];
+  const fieldKeywords = ['found issue', 'discovered', 'additional work', 'add-on', 'while on-site'];
+
+  if (fieldKeywords.some(kw => title.includes(kw))) return 'field';
+  if (officeKeywords.some(kw => title.includes(kw))) return 'office';
+
+  return 'work'; // Default: standard work order
+};
 
 // Trade icon mapping - all teams
 const tradeIconMap: Record<string, React.ElementType> = {
@@ -118,6 +145,11 @@ export default function WorkOrdersPanel({
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  // Order type toggles - each can be shown/hidden independently
+  const [showWorkOrders, setShowWorkOrders] = useState(true);
+  const [showOfficeOrders, setShowOfficeOrders] = useState(true);
+  const [showFieldOrders, setShowFieldOrders] = useState(true);
 
   useEffect(() => {
     fetchWorkOrders();
@@ -169,13 +201,34 @@ export default function WorkOrdersPanel({
     setExpandedCard(prev => prev === id ? null : id);
   };
 
-  // Filter by both status and trade
+  // Filter by status, trade, search query, AND order type toggles
   const filteredWorkOrders = workOrders.filter((wo) => {
     const matchesStatus = statusFilter === 'all' || wo.status === statusFilter;
     const woTrade = wo.trade as string; // Allow comparison with extended trades
     const matchesTrade = selectedTrade === 'all' || woTrade === selectedTrade || woTrade === 'General';
-    return matchesStatus && matchesTrade;
+    const searchLower = searchQuery.toLowerCase();
+    const matchesSearch = searchQuery === '' ||
+      wo.title.toLowerCase().includes(searchLower) ||
+      wo.customer?.toLowerCase().includes(searchLower) ||
+      wo.address?.toLowerCase().includes(searchLower) ||
+      wo.technicianName?.toLowerCase().includes(searchLower);
+
+    // Order type filtering - check which toggles are enabled
+    const orderType = inferOrderType(wo);
+    const matchesOrderType =
+      (orderType === 'work' && showWorkOrders) ||
+      (orderType === 'office' && showOfficeOrders) ||
+      (orderType === 'field' && showFieldOrders);
+
+    return matchesStatus && matchesTrade && matchesSearch && matchesOrderType;
   });
+
+  // Order type counts (for toggle badges)
+  const orderTypeCounts = {
+    work: workOrders.filter(wo => inferOrderType(wo) === 'work' && wo.status !== 'completed').length,
+    office: workOrders.filter(wo => inferOrderType(wo) === 'office' && wo.status !== 'completed').length,
+    field: workOrders.filter(wo => inferOrderType(wo) === 'field' && wo.status !== 'completed').length,
+  };
 
   // Status counts (filtered by trade if selected)
   const tradeFilteredOrders = selectedTrade === 'all'
@@ -199,8 +252,8 @@ export default function WorkOrdersPanel({
   if (collapsed) {
     return (
       <aside className={cn(styles.panel, styles.collapsed)}>
-        <div className={styles.collapsedIcon} title="Work Orders">
-          <FileText size={20} />
+        <div className={styles.collapsedIcon} title="Schedule / Dispatch">
+          <Calendar size={20} />
           {statusCounts.pending + statusCounts.in_progress > 0 && (
             <span className={styles.badge}>
               {statusCounts.pending + statusCounts.in_progress}
@@ -216,8 +269,8 @@ export default function WorkOrdersPanel({
       {/* Header */}
       <div className={styles.header}>
         <div className={styles.headerTitle}>
-          <FileText size={20} />
-          <span>Work Orders</span>
+          <Calendar size={20} />
+          <span>Schedule / Dispatch</span>
         </div>
         <button
           className={styles.refreshBtn}
@@ -226,6 +279,58 @@ export default function WorkOrdersPanel({
           title="Refresh"
         >
           <RefreshCw size={16} className={isLoading ? styles.spinning : ''} />
+        </button>
+      </div>
+
+      {/* Search Bar */}
+      <div className={styles.searchBar}>
+        <Search size={16} className={styles.searchIcon} />
+        <input
+          type="text"
+          placeholder="Search work orders, customers, addresses..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className={styles.searchInput}
+        />
+        {searchQuery && (
+          <button
+            className={styles.clearSearch}
+            onClick={() => setSearchQuery('')}
+            title="Clear search"
+          >
+            <X size={14} />
+          </button>
+        )}
+      </div>
+
+      {/* Order Type Toggles */}
+      <div className={styles.orderTypeToggles}>
+        <button
+          className={cn(styles.orderTypeToggle, showWorkOrders && styles.active)}
+          onClick={() => setShowWorkOrders(!showWorkOrders)}
+          title="Work Orders - Scheduled service jobs dispatched from office"
+        >
+          <Wrench size={14} />
+          <span>Work Orders</span>
+          <span className={styles.toggleCount}>{orderTypeCounts.work}</span>
+        </button>
+        <button
+          className={cn(styles.orderTypeToggle, showOfficeOrders && styles.active)}
+          onClick={() => setShowOfficeOrders(!showOfficeOrders)}
+          title="Office Orders - Admin, callbacks, billing, estimates"
+        >
+          <FileText size={14} />
+          <span>Office</span>
+          <span className={styles.toggleCount}>{orderTypeCounts.office}</span>
+        </button>
+        <button
+          className={cn(styles.orderTypeToggle, showFieldOrders && styles.active)}
+          onClick={() => setShowFieldOrders(!showFieldOrders)}
+          title="Field Orders - Tech-created orders discovered on-site"
+        >
+          <UserPlus size={14} />
+          <span>Field</span>
+          <span className={styles.toggleCount}>{orderTypeCounts.field}</span>
         </button>
       </div>
 
@@ -350,43 +455,203 @@ export default function WorkOrdersPanel({
                   <ChevronRight size={16} className={styles.chevron} />
                 </div>
 
-                {/* Action Buttons - Shown when expanded */}
-                {isExpanded && actions.length > 0 && (
-                  <div className={styles.cardActions}>
-                    {actions.map((action) => {
-                      const ActionIcon = action.icon;
-                      return (
-                        <button
-                          key={action.nextStatus}
-                          className={cn(
-                            styles.actionBtn,
-                            action.nextStatus === 'completed' && styles.success,
-                            action.nextStatus === 'in_progress' && styles.primary
-                          )}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleStatusChange(workOrder.id, action.nextStatus);
-                          }}
-                          disabled={isUpdating}
-                        >
-                          <ActionIcon size={14} />
-                          <span>{action.label}</span>
-                        </button>
-                      );
-                    })}
-                    {/* Chat about this work order */}
-                    {onChatAboutWorkOrder && (
-                      <button
-                        className={styles.chatBtn}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onChatAboutWorkOrder(workOrder);
-                        }}
-                        title="Chat about this work order"
-                      >
-                        <MessageSquare size={14} />
-                      </button>
+                {/* Expanded Field Briefing */}
+                {isExpanded && (
+                  <div className={styles.expandedContent}>
+                    {/* Quick Actions Row */}
+                    {actions.length > 0 && (
+                      <div className={styles.cardActions}>
+                        {actions.map((action) => {
+                          const ActionIcon = action.icon;
+                          return (
+                            <button
+                              key={action.nextStatus}
+                              className={cn(
+                                styles.actionBtn,
+                                action.nextStatus === 'completed' && styles.success,
+                                action.nextStatus === 'in_progress' && styles.primary
+                              )}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleStatusChange(workOrder.id, action.nextStatus);
+                              }}
+                              disabled={isUpdating}
+                            >
+                              <ActionIcon size={14} />
+                              <span>{action.label}</span>
+                            </button>
+                          );
+                        })}
+                        {onChatAboutWorkOrder && (
+                          <button
+                            className={styles.chatBtn}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onChatAboutWorkOrder(workOrder);
+                            }}
+                            title="Chat about this work order"
+                          >
+                            <MessageSquare size={14} />
+                          </button>
+                        )}
+                      </div>
                     )}
+
+                    {/* Field Briefing Sections */}
+                    <div className={styles.fieldBriefing}>
+                      {/* 📍 Location + Map */}
+                      {workOrder.address && (
+                        <div className={styles.briefingSection}>
+                          <div className={styles.briefingHeader}>
+                            <MapPin size={14} />
+                            <span>Location</span>
+                          </div>
+                          <div className={styles.briefingContent}>
+                            <p>{workOrder.address}</p>
+                            <a
+                              href={`https://maps.google.com/?q=${encodeURIComponent(workOrder.address)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={styles.mapLink}
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <ExternalLink size={12} />
+                              Open in Maps
+                            </a>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* 👤 Customer Contact (tap to call) */}
+                      <div className={styles.briefingSection}>
+                        <div className={styles.briefingHeader}>
+                          <User size={14} />
+                          <span>Customer Contact</span>
+                        </div>
+                        <div className={styles.briefingContent}>
+                          <p className={styles.customerName}>{workOrder.customer || 'Unknown'}</p>
+                          {workOrder.customerPhone && (
+                            <a
+                              href={`tel:${workOrder.customerPhone}`}
+                              className={styles.phoneLink}
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <Phone size={12} />
+                              {workOrder.customerPhone}
+                            </a>
+                          )}
+                          {workOrder.customerEmail && (
+                            <a
+                              href={`mailto:${workOrder.customerEmail}`}
+                              className={styles.emailLink}
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              {workOrder.customerEmail}
+                            </a>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* 🔧 Equipment at Site */}
+                      <div className={styles.briefingSection}>
+                        <div className={styles.briefingHeader}>
+                          <Package size={14} />
+                          <span>Equipment</span>
+                        </div>
+                        <div className={styles.briefingContent}>
+                          {workOrder.equipment && workOrder.equipment.length > 0 ? (
+                            <ul className={styles.equipmentList}>
+                              {workOrder.equipment.map((eq: string, idx: number) => (
+                                <li key={idx}>{eq}</li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p className={styles.noData}>No equipment recorded</p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* 📋 Forms & Checklists */}
+                      <div className={styles.briefingSection}>
+                        <div className={styles.briefingHeader}>
+                          <ClipboardList size={14} />
+                          <span>Forms</span>
+                        </div>
+                        <div className={styles.briefingContent}>
+                          {workOrder.forms && workOrder.forms.length > 0 ? (
+                            <ul className={styles.formsList}>
+                              {workOrder.forms.map((form: { name: string; status: string }, idx: number) => (
+                                <li key={idx} className={cn(styles.formItem, form.status === 'completed' && styles.formDone)}>
+                                  {form.status === 'completed' ? <CheckCircle2 size={12} /> : <Clock size={12} />}
+                                  {form.name}
+                                </li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p className={styles.noData}>No forms assigned</p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* 📸 Photos */}
+                      <div className={styles.briefingSection}>
+                        <div className={styles.briefingHeader}>
+                          <Camera size={14} />
+                          <span>Photos</span>
+                        </div>
+                        <div className={styles.briefingContent}>
+                          {workOrder.photos && workOrder.photos.length > 0 ? (
+                            <div className={styles.photoGrid}>
+                              {workOrder.photos.slice(0, 4).map((photo: string, idx: number) => (
+                                <div key={idx} className={styles.photoThumb}>
+                                  <img src={photo} alt={`Photo ${idx + 1}`} />
+                                </div>
+                              ))}
+                              {workOrder.photos.length > 4 && (
+                                <div className={styles.morePhotos}>+{workOrder.photos.length - 4}</div>
+                              )}
+                            </div>
+                          ) : (
+                            <p className={styles.noData}>No photos yet</p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* 📜 Service History */}
+                      <div className={styles.briefingSection}>
+                        <div className={styles.briefingHeader}>
+                          <History size={14} />
+                          <span>History</span>
+                        </div>
+                        <div className={styles.briefingContent}>
+                          {workOrder.serviceHistory && workOrder.serviceHistory.length > 0 ? (
+                            <ul className={styles.historyList}>
+                              {workOrder.serviceHistory.slice(0, 3).map((entry: { date: string; description: string }, idx: number) => (
+                                <li key={idx}>
+                                  <span className={styles.historyDate}>{entry.date}</span>
+                                  <span className={styles.historyDesc}>{entry.description}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p className={styles.noData}>First visit</p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Description/Notes */}
+                      {workOrder.description && (
+                        <div className={styles.briefingSection}>
+                          <div className={styles.briefingHeader}>
+                            <FileText size={14} />
+                            <span>Notes</span>
+                          </div>
+                          <div className={styles.briefingContent}>
+                            <p className={styles.description}>{workOrder.description}</p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>

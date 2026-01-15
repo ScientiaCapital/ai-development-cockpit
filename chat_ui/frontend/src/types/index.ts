@@ -51,19 +51,30 @@ export interface ChatResponse {
 export type WorkOrderStatus = 'pending' | 'scheduled' | 'in_progress' | 'completed' | 'cancelled';
 export type WorkOrderPriority = 'low' | 'normal' | 'high' | 'urgent';
 export type TradeName = 'HVAC' | 'Plumbing' | 'Electrical' | 'Solar' | 'Fire Protection';
+// Order Type - distinguishes dispatch source/workflow
+export type OrderType = 'work' | 'office' | 'field';
 
 export interface WorkOrder {
   id: string;
   title: string;
+  description?: string;
   status: WorkOrderStatus;
   priority: WorkOrderPriority;
   trade: TradeName;
+  orderType: OrderType; // work=dispatched, office=admin, field=tech-created
   customer: string;
+  customerPhone?: string;
+  customerEmail?: string;
   address?: string;
   scheduledDate?: string;
   createdAt: string;
   technicianId?: string;
   technicianName?: string;
+  equipment?: string[];
+  notes?: string;
+  forms?: { name: string; status: string }[];
+  photos?: string[];
+  serviceHistory?: { date: string; description: string }[];
 }
 
 // Contact Types
@@ -114,12 +125,36 @@ export interface QuickAction {
   query: string;
 }
 
-// Stats Types
+// Stats Types - Industry-Relevant KPIs for C&I/Industrial MEP Contractors
 export interface DashboardStats {
-  activeCalls: number;
+  // Operational KPIs
   openWorkOrders: number;
   scheduledToday: number;
   completedToday: number;
+  completedThisWeek: number;
+
+  // Financial KPIs
+  revenueToday: number;
+  revenueThisWeek: number;
+  revenueThisMonth: number;
+  arOver30Days: number;
+
+  // Efficiency KPIs (critical for field service)
+  firstTimeFixRate: number; // % - target >80%
+  avgResponseTime: number; // hours
+  techUtilization: number; // % - target 75-85%
+
+  // Pipeline KPIs
+  activeProjects: number;
+  pendingEstimates: number;
+  openServiceCalls: number;
+
+  // Inventory
+  catalogItemCount: number;
+  lowStockItems: number;
+
+  // Legacy (for backward compat)
+  activeCalls?: number;
 }
 
 // API Response Types

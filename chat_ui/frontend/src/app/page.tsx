@@ -1,10 +1,14 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { Menu, X, Phone, FileText } from 'lucide-react';
+import { Menu, X, Phone, FileText, Users, FolderKanban, Inbox } from 'lucide-react';
 import { Sidebar } from '@/components/Sidebar';
 import { ChatInterface } from '@/components/Chat';
 import { WorkOrdersPanel } from '@/components/WorkOrders';
+import { CustomerLookup } from '@/components/Customers/CustomerLookup';
+import { ProjectsPanel } from '@/components/Projects/ProjectsPanel';
+import { RequestsPanel } from '@/components/Requests/RequestsPanel';
+import { SchedulePanel } from '@/components/Schedule';
 import { VoiceAIPanel } from '@/components/VoiceAI';
 import { cn } from '@/lib/utils';
 import type { Agent } from '@/types';
@@ -13,7 +17,7 @@ import styles from './page.module.css';
 export default function HomePage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [rightPanelView, setRightPanelView] = useState<'workorders' | 'voiceai' | null>('workorders');
+  const [rightPanelView, setRightPanelView] = useState<'workorders' | 'schedule' | 'customers' | 'projects' | 'requests' | 'voiceai' | null>('schedule');
   const [quickActionMessage, setQuickActionMessage] = useState<string | undefined>();
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
 
@@ -38,7 +42,7 @@ export default function HomePage() {
     setSidebarOpen((prev) => !prev);
   }, []);
 
-  const toggleRightPanel = useCallback((view: 'workorders' | 'voiceai') => {
+  const toggleRightPanel = useCallback((view: 'workorders' | 'schedule' | 'customers' | 'projects' | 'requests' | 'voiceai') => {
     setRightPanelView((prev) => (prev === view ? null : view));
   }, []);
 
@@ -66,6 +70,13 @@ export default function HomePage() {
             <Phone size={20} />
           </button>
           <button
+            className={cn(styles.panelToggle, rightPanelView === 'customers' && styles.active)}
+            onClick={() => toggleRightPanel('customers')}
+            aria-label="Customers"
+          >
+            <Users size={20} />
+          </button>
+          <button
             className={cn(styles.panelToggle, rightPanelView === 'workorders' && styles.active)}
             onClick={() => toggleRightPanel('workorders')}
             aria-label="Work Orders"
@@ -88,6 +99,8 @@ export default function HomePage() {
       <div className={cn(styles.sidebarWrapper, sidebarOpen && styles.open)}>
         <Sidebar
           onQuickAction={handleQuickAction}
+          onSelectAgent={handleSelectAgent}
+          selectedAgent={selectedAgent}
           collapsed={sidebarCollapsed}
           onToggleCollapse={handleToggleSidebar}
         />
@@ -107,10 +120,49 @@ export default function HomePage() {
         />
       </main>
 
-      {/* Right Panel - Work Orders */}
-      {rightPanelView === 'workorders' && (
-        <div className={styles.rightPanel}>
-          <WorkOrdersPanel />
+      {/* Right Panel Container */}
+      {(rightPanelView === 'workorders' || rightPanelView === 'schedule' || rightPanelView === 'customers' || rightPanelView === 'projects' || rightPanelView === 'requests') && (
+        <div className={styles.rightPanelContainer}>
+          {/* Panel Tabs */}
+          <div className={styles.panelTabs}>
+            <button
+              className={cn(styles.panelTabBtn, rightPanelView === 'schedule' && styles.activeTab)}
+              onClick={() => setRightPanelView('schedule')}
+            >
+              <FileText size={16} />
+              <span>Schedule</span>
+            </button>
+            <button
+              className={cn(styles.panelTabBtn, rightPanelView === 'requests' && styles.activeTab)}
+              onClick={() => setRightPanelView('requests')}
+            >
+              <Inbox size={16} />
+              <span>Requests</span>
+            </button>
+            <button
+              className={cn(styles.panelTabBtn, rightPanelView === 'customers' && styles.activeTab)}
+              onClick={() => setRightPanelView('customers')}
+            >
+              <Users size={16} />
+              <span>Customers</span>
+            </button>
+            <button
+              className={cn(styles.panelTabBtn, rightPanelView === 'projects' && styles.activeTab)}
+              onClick={() => setRightPanelView('projects')}
+            >
+              <FolderKanban size={16} />
+              <span>Projects</span>
+            </button>
+          </div>
+
+          {/* Panel Content */}
+          <div className={styles.rightPanel}>
+            {rightPanelView === 'schedule' && <SchedulePanel />}
+            {rightPanelView === 'workorders' && <WorkOrdersPanel />}
+            {rightPanelView === 'requests' && <RequestsPanel />}
+            {rightPanelView === 'customers' && <CustomerLookup />}
+            {rightPanelView === 'projects' && <ProjectsPanel />}
+          </div>
         </div>
       )}
     </div>

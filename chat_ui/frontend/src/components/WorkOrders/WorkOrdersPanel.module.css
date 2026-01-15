@@ -99,6 +99,118 @@
   animation: spin 1s linear infinite;
 }
 
+/* Search Bar */
+.searchBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  margin: 0 var(--space-3);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.searchBar:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-light);
+}
+
+.searchIcon {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.searchInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+}
+
+.searchInput::placeholder {
+  color: var(--text-muted);
+}
+
+.clearSearch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: var(--bg-hover);
+  border-radius: var(--radius-full);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.clearSearch:hover {
+  background: var(--bg-active);
+  color: var(--text-primary);
+}
+
+/* Order Type Toggles - Work Orders / Office / Field */
+.orderTypeToggles {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border-default);
+}
+
+.orderTypeToggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  flex: 1;
+  justify-content: center;
+}
+
+.orderTypeToggle:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+}
+
+.orderTypeToggle.active {
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.orderTypeToggle span:first-of-type {
+  white-space: nowrap;
+}
+
+.toggleCount {
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  background: var(--bg-overlay);
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.orderTypeToggle.active .toggleCount {
+  background: var(--color-primary);
+  color: white;
+}
+
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
@@ -238,12 +350,12 @@
   opacity: 0.9;
 }
 
-/* Work Order Card */
+/* Work Order Card - Compact for high density */
 .workOrderCard {
   background: var(--bg-elevated);
   border: 1px solid var(--border-default);
-  border-radius: var(--radius-md);
-  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
   cursor: pointer;
   transition: all var(--transition-fast);
 }
@@ -257,8 +369,8 @@
 .cardHeader {
   display: flex;
   align-items: flex-start;
-  gap: var(--space-3);
-  margin-bottom: var(--space-3);
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
 }
 
 .tradeIcon {
@@ -510,4 +622,225 @@
   .panel.open {
     transform: translateX(0);
   }
+}
+
+/* ============================================================================
+   Field Briefing - Expanded Work Order Details
+   ============================================================================ */
+
+.expandedContent {
+  margin-top: var(--space-2);
+}
+
+.fieldBriefing {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border-default);
+}
+
+.briefingSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.briefingHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+}
+
+.briefingHeader svg {
+  color: var(--color-primary);
+}
+
+.briefingContent {
+  padding-left: var(--space-5);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+}
+
+.briefingContent p {
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Map Link */
+.mapLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-primary);
+  border-radius: var(--radius-sm);
+  color: white;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  transition: opacity var(--transition-fast);
+}
+
+.mapLink:hover {
+  opacity: 0.9;
+}
+
+/* Customer Contact */
+.customerName {
+  font-weight: var(--font-weight-medium);
+}
+
+.phoneLink,
+.emailLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-top: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  background: #22c55e;
+  border-radius: var(--radius-sm);
+  color: white;
+  font-size: var(--font-size-xs);
+  text-decoration: none;
+  transition: opacity var(--transition-fast);
+}
+
+.phoneLink:hover,
+.emailLink:hover {
+  opacity: 0.9;
+}
+
+.emailLink {
+  background: var(--color-primary);
+  display: block;
+  width: fit-content;
+}
+
+/* Equipment List */
+.equipmentList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.equipmentList li {
+  padding: var(--space-2);
+  background: var(--bg-elevated);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+}
+
+/* Forms List */
+.formsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.formItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  background: var(--bg-elevated);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.formItem svg {
+  color: var(--text-muted);
+}
+
+.formItem.formDone {
+  color: var(--text-primary);
+}
+
+.formItem.formDone svg {
+  color: #22c55e;
+}
+
+/* Photo Grid */
+.photoGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-2);
+}
+
+.photoThumb {
+  aspect-ratio: 1;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--bg-elevated);
+}
+
+.photoThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.morePhotos {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-muted);
+}
+
+/* History List */
+.historyList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.historyList li {
+  display: flex;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+}
+
+.historyDate {
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+  min-width: 60px;
+}
+
+.historyDesc {
+  color: var(--text-secondary);
+}
+
+/* No Data State */
+.noData {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: var(--font-size-sm);
+}
+
+/* Description */
+.description {
+  white-space: pre-wrap;
+  color: var(--text-secondary);
+  line-height: 1.5;
 }

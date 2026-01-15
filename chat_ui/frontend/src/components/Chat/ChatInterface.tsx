@@ -39,7 +39,6 @@ export default function ChatInterface({ initialMessage, onClear }: ChatInterface
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [conversationId, setConversationId] = useState(() => `chat_${Date.now()}`);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -84,19 +83,20 @@ export default function ChatInterface({ initialMessage, onClear }: ChatInterface
     setIsLoading(true);
 
     try {
-      const response = await sendChatMessage(text, conversationId);
+      // Build conversation history for context
+      const history = messages.map(m => ({
+        role: m.role as 'user' | 'assistant',
+        content: m.content,
+      }));
 
-      // Update conversation ID if new
-      if (response.conversationId) {
-        setConversationId(response.conversationId);
-      }
+      const response = await sendChatMessage(text, history);
 
-      // Add assistant message
+      // Add assistant message from Claude
       const assistantMessage: ChatMessage = {
         id: generateId(),
         role: 'assistant',
-        content: response.response,
-        timestamp: response.timestamp,
+        content: response.message?.content || 'No response received',
+        timestamp: new Date().toISOString(),
       };
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
@@ -117,7 +117,6 @@ export default function ChatInterface({ initialMessage, onClear }: ChatInterface
 
   const handleClear = () => {
     setMessages([]);
-    setConversationId(`chat_${Date.now()}`);
     onClear?.();
     inputRef.current?.focus();
   };

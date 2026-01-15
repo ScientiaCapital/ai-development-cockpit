@@ -30,14 +30,21 @@ export interface ChatMessage {
 }
 
 export interface ChatRequest {
-  message: string;
-  conversationId?: string;
+  messages: { role: 'user' | 'assistant'; content: string }[];
+  model?: 'claude-opus-4.5' | 'claude-sonnet-4.5' | 'claude-haiku-4.5';
+  sessionId?: string;
 }
 
 export interface ChatResponse {
-  response: string;
-  conversationId: string;
-  timestamp: string;
+  message: {
+    role: 'assistant';
+    content: string;
+  };
+  usage?: {
+    input_tokens: number;
+    output_tokens: number;
+  };
+  model?: string;
 }
 
 // Work Order Types

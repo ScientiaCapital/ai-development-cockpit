@@ -1,6 +1,0 @@
-export { BaseAgent } from './BaseAgent'
-export { CodeArchitect } from './CodeArchitect'
-export { BackendDeveloper } from './BackendDeveloper'
-export { FrontendDeveloper } from './FrontendDeveloper'
-export { Tester } from './Tester'
-export { DevOpsEngineer } from './DevOpsEngineer'

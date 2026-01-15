@@ -1,23 +1,50 @@
 # Coperniq MEP Template Inventory
 
-**Updated**: 2026-01-14 (RALPH LOOP Expansion)
-**Status**: 🎉 PRODUCTION READY - 70+ Forms Built
+**Updated**: 2026-01-14 (CRITICAL AUDIT)
+**Status**: ⚠️ WORKFLOW CONFIGURATION REQUIRED - Forms/WOs Complete
 
 ---
 
 ## Summary
 
-| Metric | Count |
-|--------|-------|
-| Forms Built | 70+ |
-| Field Work Orders | 22 |
-| Project Workflows | 13 |
-| Request Workflows | 9 |
-| Payment Structures | 15 |
-| Automations | 9 |
-| **TOTAL TEMPLATES** | **138+** |
+| Metric | Count | Status |
+|--------|-------|--------|
+| Forms Built | 70+ | ✅ Complete |
+| Field Work Orders | 22 | ✅ Complete |
+| Project Workflows | 13 | ⚠️ 7 need phase config |
+| Request Workflows | 9 | ❌ ALL need stage config |
+| Payment Structures | 15 | ✅ Complete |
+| Automations | 9 | ✅ Complete |
+| **TOTAL TEMPLATES** | **138+** | **⚠️ Workflows need config** |
 
-**Last Audit**: 2026-01-14 - RALPH LOOP expansion added 18 Industrial/C&I/Commercial forms.
+**Last Audit**: 2026-01-14 - Deep audit revealed 16 workflows are shells (have phases but no templates linked).
+
+---
+
+## ⚠️ CRITICAL: Workflow Configuration Status
+
+### Project Workflows (7 need fixing)
+| Workflow | Issue | Fix Required |
+|----------|-------|--------------|
+| [KES] Commercial Project | Payment only | Add forms/WOs to phases |
+| [KES] K-12 Schools | Payment only | Add forms/WOs to phases |
+| [KES] Government/Municipal | Payment only | Add forms/WOs to phases |
+| [KES] Industrial/Utility | Payment only | Add forms/WOs to phases |
+| [KES] Roofing | Payment only | Add forms/WOs to phases |
+| [KES] Low Voltage | **EMPTY** | Add ALL templates to ALL phases |
+| [KES] Fire & Safety | Payment only | Add forms/WOs to phases |
+
+### Request Workflows (ALL 9 need fixing)
+ALL Request Workflows have stage names defined but **0 templates linked**:
+- [KES] Sales Pipeline
+- [KES] HVAC Sales Pipeline
+- [KES] Solar Sales Pipeline
+- [KES] Service Agreement Sales
+- [KES] Plumbing Sales Pipeline
+- [KES] Electrical Sales Pipeline
+- [KES] Fire Protection Sales Pipeline
+- [KES] Emergency Service Request
+- [KES] Commercial/Industrial Request
 
 ---
 

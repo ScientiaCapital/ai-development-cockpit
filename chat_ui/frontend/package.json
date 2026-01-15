@@ -1,0 +1,66 @@
+{
+  "name": "kipper-energy-chat",
+  "version": "2.0.0",
+  "private": true,
+  "description": "SaaS-level secure chat UI for Kipper Energy Solutions MEP contractor",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "lint:security": "eslint --config .eslintrc.security.json .",
+    "audit": "npm audit --audit-level=high",
+    "audit:fix": "npm audit fix",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "16.1.2",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "@radix-ui/react-avatar": "^1.1.2",
+    "@radix-ui/react-dialog": "^1.1.4",
+    "@radix-ui/react-dropdown-menu": "^2.1.4",
+    "@radix-ui/react-scroll-area": "^1.2.2",
+    "@radix-ui/react-separator": "^1.1.1",
+    "@radix-ui/react-slot": "^1.1.1",
+    "@radix-ui/react-tooltip": "^1.1.6",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.469.0",
+    "tailwind-merge": "^2.6.0",
+    "tailwindcss-animate": "^1.0.7",
+    "graphql": "^16.9.0",
+    "graphql-request": "^7.1.2",
+    "zod": "^3.24.1",
+    "dompurify": "^3.2.3",
+    "isomorphic-dompurify": "^2.20.0",
+    "uuid": "^11.0.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "@types/react": "^19.0.6",
+    "@types/react-dom": "^19.0.3",
+    "@types/dompurify": "^3.0.5",
+    "@types/uuid": "^10.0.0",
+    "typescript": "^5.7.3",
+    "tailwindcss": "^4.0.3",
+    "@tailwindcss/postcss": "^4.0.3",
+    "postcss": "^8.5.1",
+    "eslint": "^9.18.0",
+    "eslint-config-next": "16.1.2",
+    "eslint-plugin-security": "^3.0.1",
+    "@typescript-eslint/eslint-plugin": "^8.21.0",
+    "@typescript-eslint/parser": "^8.21.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "overrides": {
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "resolutions": {
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  }
+}

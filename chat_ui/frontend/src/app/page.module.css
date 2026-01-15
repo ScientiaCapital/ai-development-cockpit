@@ -1,0 +1,255 @@
+/* ============================================================================
+   Main Page Layout Styles
+   Modern 3-column layout with responsive design
+   ============================================================================ */
+
+.layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg-base);
+}
+
+/* Sidebar Wrapper */
+.sidebarWrapper {
+  flex-shrink: 0;
+  z-index: var(--z-sticky);
+}
+
+/* Main Content Area */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  position: relative;
+}
+
+/* Voice AI Floating Panel */
+.voiceAIFloating {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  z-index: var(--z-dropdown);
+  width: 360px;
+  max-height: calc(100vh - var(--space-8));
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  border-radius: var(--radius-lg);
+}
+
+/* Right Panel */
+.rightPanel {
+  flex-shrink: 0;
+}
+
+/* Mobile Header - Hidden on Desktop */
+.mobileHeader {
+  display: none;
+}
+
+/* Mobile Overlay */
+.overlay {
+  display: none;
+}
+
+/* ============================================================================
+   Responsive Design
+   ============================================================================ */
+
+/* Tablet: Hide right panel, show floating voice AI */
+@media (max-width: 1200px) {
+  .rightPanel {
+    display: none;
+  }
+
+  .voiceAIFloating {
+    width: 320px;
+  }
+}
+
+/* Mobile: Show mobile header, sidebar becomes drawer */
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  /* Mobile Header */
+  .mobileHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    padding: 0 var(--space-4);
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border-default);
+    flex-shrink: 0;
+    z-index: var(--z-sticky);
+  }
+
+  .menuBtn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .menuBtn:hover {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+  }
+
+  .mobileTitle {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .logoIcon {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: white;
+  }
+
+  .mobileActions {
+    display: flex;
+    gap: var(--space-1);
+  }
+
+  .panelToggle {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .panelToggle:hover {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+  }
+
+  .panelToggle.active {
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+  }
+
+  /* Overlay */
+  .overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: calc(var(--z-sticky) - 1);
+    animation: fadeIn 0.2s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Sidebar as Drawer */
+  .sidebarWrapper {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    transform: translateX(-100%);
+    transition: transform var(--transition-normal);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .sidebarWrapper.open {
+    transform: translateX(0);
+  }
+
+  /* Main Content */
+  .main {
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* Voice AI Panel */
+  .voiceAIFloating {
+    position: fixed;
+    top: 64px;
+    right: var(--space-2);
+    width: calc(100% - var(--space-4));
+    max-width: 360px;
+    max-height: calc(100vh - 80px);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .mobileHeader {
+    padding: 0 var(--space-3);
+  }
+
+  .mobileTitle span:last-child {
+    display: none;
+  }
+
+  .voiceAIFloating {
+    width: calc(100% - var(--space-4));
+    max-width: none;
+    right: var(--space-2);
+    left: var(--space-2);
+  }
+}
+
+/* ============================================================================
+   Dark Mode Enhancements
+   ============================================================================ */
+
+/* Subtle gradient background for visual interest */
+.layout::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(
+      ellipse 80% 50% at 50% -20%,
+      rgba(59, 130, 246, 0.08),
+      transparent
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Ensure content is above gradient */
+.sidebarWrapper,
+.main,
+.rightPanel,
+.mobileHeader {
+  position: relative;
+  z-index: 1;
+}
+
+.voiceAIFloating {
+  z-index: var(--z-dropdown);
+}

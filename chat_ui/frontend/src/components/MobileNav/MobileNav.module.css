@@ -1,0 +1,124 @@
+/* ============================================================================
+   Mobile Navigation Component Styles
+   Bottom tab navigation for mobile devices
+   ============================================================================ */
+
+.nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-default);
+  padding: var(--space-2) var(--space-4);
+  padding-bottom: max(var(--space-2), env(safe-area-inset-bottom));
+  z-index: var(--z-sticky);
+}
+
+@media (max-width: 768px) {
+  .nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+}
+
+.navItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2);
+  background: transparent;
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  min-width: 64px;
+}
+
+.navItem:hover {
+  color: var(--text-secondary);
+}
+
+.navItem.active {
+  color: var(--color-primary);
+}
+
+.navItem.active .iconWrapper {
+  background: var(--color-primary-light);
+}
+
+.iconWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  transition: background var(--transition-fast);
+}
+
+.badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 var(--space-1);
+  background: var(--color-error);
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.label {
+  font-size: 10px;
+  font-weight: var(--font-weight-medium);
+}
+
+/* Animation for active state */
+.navItem.active .iconWrapper {
+  animation: bounceIn 0.3s ease;
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Landscape mode adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+  .nav {
+    height: 56px;
+    padding: var(--space-1) var(--space-4);
+  }
+
+  .navItem {
+    flex-direction: row;
+    gap: var(--space-2);
+  }
+
+  .iconWrapper {
+    width: auto;
+    height: auto;
+  }
+
+  .label {
+    font-size: var(--font-size-xs);
+  }
+}

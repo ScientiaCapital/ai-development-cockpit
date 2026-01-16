@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { Menu, X, Phone, FileText, Users, FolderKanban, Inbox, Receipt } from 'lucide-react';
+import { Menu, X, Phone, FileText, Users, FolderKanban, Inbox, Receipt, Camera } from 'lucide-react';
 import { Sidebar } from '@/components/Sidebar';
 import { ChatInterface } from '@/components/Chat';
 import { WorkOrdersPanel } from '@/components/WorkOrders';
@@ -11,6 +11,7 @@ import { RequestsPanel } from '@/components/Requests/RequestsPanel';
 import { SchedulePanel } from '@/components/Schedule';
 import { InvoicesPanel } from '@/components/Invoices';
 import { VoiceAIPanel } from '@/components/VoiceAI';
+import { VisionPanel } from '@/components/Vision';
 import { cn } from '@/lib/utils';
 import type { Agent } from '@/types';
 import styles from './page.module.css';
@@ -18,9 +19,10 @@ import styles from './page.module.css';
 export default function HomePage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [rightPanelView, setRightPanelView] = useState<'workorders' | 'schedule' | 'customers' | 'projects' | 'requests' | 'invoices' | 'voiceai' | null>('schedule');
+  const [rightPanelView, setRightPanelView] = useState<'workorders' | 'schedule' | 'customers' | 'projects' | 'requests' | 'invoices' | 'voiceai' | 'vision' | null>('schedule');
   const [quickActionMessage, setQuickActionMessage] = useState<string | undefined>();
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
+  const [triggerVoiceSettings, setTriggerVoiceSettings] = useState(false);
 
   const handleQuickAction = useCallback((query: string) => {
     setQuickActionMessage(query);
@@ -28,11 +30,35 @@ export default function HomePage() {
     setTimeout(() => setQuickActionMessage(undefined), 100);
   }, []);
 
+  // Handle agent selection with agent-specific actions
   const handleSelectAgent = useCallback((agent: Agent) => {
     setSelectedAgent(agent);
-    // Send initial greeting when selecting agent
-    setQuickActionMessage(`I'd like to work with ${agent.name}. ${agent.description}`);
-    setTimeout(() => setQuickActionMessage(undefined), 100);
+
+    // Agent-specific actions based on agent ID
+    switch (agent.id) {
+      case 'voice-ai':
+        // Voice AI → Open voice settings modal
+        setTriggerVoiceSettings(true);
+        break;
+      case 'vision-ai':
+        // Vision Inspector → Open vision panel with VLM/OCR upload
+        setRightPanelView('vision');
+        break;
+      case 'dispatch':
+        // Smart Dispatch → Send to chat for routing logic
+        setQuickActionMessage(`I'd like to work with ${agent.name}. Help me dispatch technicians efficiently.`);
+        setTimeout(() => setQuickActionMessage(undefined), 100);
+        break;
+      default:
+        // Other agents → Send greeting to chat
+        setQuickActionMessage(`I'd like to work with ${agent.name}. ${agent.description}`);
+        setTimeout(() => setQuickActionMessage(undefined), 100);
+    }
+  }, []);
+
+  // Reset voice settings trigger after modal closes
+  const handleVoiceSettingsClosed = useCallback(() => {
+    setTriggerVoiceSettings(false);
   }, []);
 
   const handleToggleSidebar = useCallback(() => {
@@ -118,11 +144,13 @@ export default function HomePage() {
         <ChatInterface
           initialMessage={quickActionMessage}
           onClear={() => {}}
+          triggerVoiceSettings={triggerVoiceSettings}
+          onVoiceSettingsClosed={handleVoiceSettingsClosed}
         />
       </main>
 
       {/* Right Panel Container */}
-      {(rightPanelView === 'workorders' || rightPanelView === 'schedule' || rightPanelView === 'customers' || rightPanelView === 'projects' || rightPanelView === 'requests' || rightPanelView === 'invoices') && (
+      {(rightPanelView === 'workorders' || rightPanelView === 'schedule' || rightPanelView === 'customers' || rightPanelView === 'projects' || rightPanelView === 'requests' || rightPanelView === 'invoices' || rightPanelView === 'vision') && (
         <div className={styles.rightPanelContainer}>
           {/* Panel Tabs */}
           <div className={styles.panelTabs}>
@@ -171,6 +199,7 @@ export default function HomePage() {
             {rightPanelView === 'customers' && <CustomerLookup />}
             {rightPanelView === 'projects' && <ProjectsPanel />}
             {rightPanelView === 'invoices' && <InvoicesPanel />}
+            {rightPanelView === 'vision' && <VisionPanel />}
           </div>
         </div>
       )}

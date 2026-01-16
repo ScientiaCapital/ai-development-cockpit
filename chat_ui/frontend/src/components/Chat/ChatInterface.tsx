@@ -246,6 +246,19 @@ export default function ChatInterface({
     }
   }, []);
 
+  // External trigger to open voice settings (from Voice AI agent button)
+  useEffect(() => {
+    if (triggerVoiceSettings) {
+      setShowVoiceSettings(true);
+    }
+  }, [triggerVoiceSettings]);
+
+  // Handle voice settings close with callback
+  const handleVoiceSettingsClose = useCallback(() => {
+    setShowVoiceSettings(false);
+    onVoiceSettingsClosed?.();
+  }, [onVoiceSettingsClosed]);
+
   const handleQuickAction = (action: QuickAction) => {
     handleSend(action.prompt);
   };
@@ -478,13 +491,13 @@ export default function ChatInterface({
 
       {/* Voice Settings Modal */}
       {showVoiceSettings && (
-        <div className={styles.modalOverlay} onClick={() => setShowVoiceSettings(false)}>
+        <div className={styles.modalOverlay} onClick={handleVoiceSettingsClose}>
           <div onClick={(e) => e.stopPropagation()}>
             <VoiceSettings
               currentVoiceId={currentVoiceId}
               currentEmotion={currentEmotion}
               onVoiceChange={handleVoiceChange}
-              onClose={() => setShowVoiceSettings(false)}
+              onClose={handleVoiceSettingsClose}
             />
           </div>
         </div>

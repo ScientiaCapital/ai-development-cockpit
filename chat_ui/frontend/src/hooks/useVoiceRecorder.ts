@@ -227,16 +227,21 @@ export function useVoiceRecorder(options: VoiceRecorderOptions) {
     }
   }, [state.isRecording, stopRecording]);
 
-  // Handle CAPS LOCK for toggle mode
+  // Handle CAPS LOCK for toggle mode - use actual keyboard state
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // CapsLock toggle mode - check actual CapsLock state after keypress
       if (state.mode === 'toggle' && e.key === 'CapsLock') {
-        capsLockRef.current = !capsLockRef.current;
-        if (capsLockRef.current) {
-          startRecording();
-        } else {
-          stopRecording();
-        }
+        // Small delay to let the CapsLock state update
+        setTimeout(() => {
+          const capsLockOn = e.getModifierState?.('CapsLock') ?? false;
+          // Toggle based on actual state - CapsLock ON = recording
+          if (capsLockOn && !state.isRecording) {
+            startRecording();
+          } else if (!capsLockOn && state.isRecording) {
+            stopRecording();
+          }
+        }, 50);
       }
 
       // Push-to-talk with spacebar
@@ -260,7 +265,7 @@ export function useVoiceRecorder(options: VoiceRecorderOptions) {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, [state.mode, startRecording, stopRecording]);
+  }, [state.mode, state.isRecording, startRecording, stopRecording]);
 
   // Cleanup on unmount
   useEffect(() => {

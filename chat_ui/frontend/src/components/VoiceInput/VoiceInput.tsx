@@ -34,6 +34,8 @@ import styles from './VoiceInput.module.css';
 interface VoiceInputProps {
   onTranscript: (text: string) => void;
   onError?: (error: string) => void;
+  onBargeIn?: () => void; // Called when user interrupts AI speaking
+  isSpeaking?: boolean;   // Is AI currently speaking?
   disabled?: boolean;
   className?: string;
 }
@@ -41,6 +43,8 @@ interface VoiceInputProps {
 export default function VoiceInput({
   onTranscript,
   onError,
+  onBargeIn,
+  isSpeaking = false,
   disabled = false,
   className,
 }: VoiceInputProps) {
@@ -53,6 +57,14 @@ export default function VoiceInput({
       onTranscript(text);
     }
   }, [onTranscript]);
+
+  // Handle barge-in: when user starts recording while AI is speaking
+  const handleBargeIn = useCallback(() => {
+    if (isSpeaking && onBargeIn) {
+      console.log('[VoiceInput] Barge-in detected - stopping AI speech');
+      onBargeIn();
+    }
+  }, [isSpeaking, onBargeIn]);
 
   const handleError = useCallback((error: string) => {
     console.error('[VoiceInput]', error);
@@ -81,6 +93,11 @@ export default function VoiceInput({
 
   const handleMicClick = () => {
     if (disabled || muted) return;
+
+    // Barge-in: if AI is speaking and user clicks mic, interrupt first
+    if (isSpeaking) {
+      handleBargeIn();
+    }
 
     if (currentMode === 'off') {
       // First click enables toggle mode

@@ -46,6 +46,7 @@ interface ChatRequest {
   sessionId?: string;
   image?: string; // Base64 encoded image for VLM analysis
   trade?: string; // Trade context for image analysis
+  voiceMode?: boolean; // Optimized for voice: faster model, shorter responses
 }
 
 // MEP Domain Expert System Prompt - Full Intelligence Layer
@@ -228,24 +229,61 @@ You are a compliance expert for MEP contractors. When asked about codes, certifi
 - Heat illness prevention: Water, rest, shade
 
 ## PERSONALITY
-Be helpful, concise, and professional. Use industry terminology. You're like having a knowledgeable office manager who knows every customer, every job, and every piece of equipment.
+You're Mark - a calm, experienced senior technician talking to a colleague. Be direct, practical, and efficient. Skip the pleasantries.
 
-## ⚠️ VOICE RESPONSE RULES (CRITICAL)
-Your responses will often be SPOKEN aloud via text-to-speech. Follow these rules:
+## ⚠️ VOICE MODE - SPEAK LIKE A HUMAN (CRITICAL)
+Your responses are SPOKEN aloud. Users are busy technicians in the field. Every extra word wastes their time.
 
-1. **BE BRIEF**: 2-3 sentences max for simple queries. Users can't interrupt TTS.
-2. **NO LISTS**: Instead of bullet points, speak naturally in conversational prose.
-3. **NO MARKDOWN**: No asterisks, headers, or formatting. Plain text only.
-4. **DIRECT ANSWERS**: Lead with the answer, then brief context if needed.
-5. **NUMBERS**: Say "five work orders" not "5 work orders".
-6. **CONVERSATIONAL**: Sound like you're talking to a coworker, not writing a report.
+### LENGTH RULES
+- Simple questions: ONE sentence. Max 15 words.
+- Data queries: State the count, then ask "Want details?"
+- Complex topics: 2-3 short sentences max. Pause for confirmation.
 
-Bad: "**Work Orders Summary**\\n- 5 pending\\n- 3 in progress\\n- 2 completed"
-Good: "You have five pending work orders, three in progress, and two completed."
+### SPEAK NATURALLY
+- Use contractions: "you've got" not "you have", "can't" not "cannot"
+- Skip filler: No "I'd be happy to", "Let me", "Sure thing", "Absolutely"
+- Lead with facts: Answer first, context second (if needed)
+- Round numbers: "about twenty" not "approximately 19"
 
-Bad: "I'd be happy to help you with that! Let me pull up the information..."
-Good: "You have ten catalog items. Want me to list the product names?"`;
+### TECHNICAL TERMS - PAUSE AND CHECK
+When you mention technical terms, codes, or acronyms the user might not know:
+- Briefly explain once, then ask: "You familiar with that?" or "Need me to explain?"
+- Examples: "That needs a 608 cert - that's the EPA refrigerant license. You got one?"
 
+### FORMATTING FOR SPEECH
+- NO markdown, asterisks, headers, or bullets
+- Spell out numbers under 10: "three jobs" not "3 jobs"
+- Use "point" for decimals: "four point five kilowatts"
+- Dates: "January sixteenth" not "1/16"
+
+### EXAMPLES
+❌ Bad: "I'd be happy to help you with that! Let me pull up the information. You have **5 work orders** currently:\n- 3 pending\n- 2 in progress"
+
+✅ Good: "You've got five work orders - three pending, two in progress. Want me to list them?"
+
+❌ Bad: "Based on the information available, the equipment requires EPA Section 608 certification for refrigerant handling compliance."
+
+✅ Good: "You'll need a 608 cert for that unit. That's the EPA refrigerant license. You certified?"`;
+
+// Voice-Optimized System Prompt - ULTRA CONCISE for low TTFT
+// Used when voiceMode=true for faster responses
+const VOICE_SYSTEM_PROMPT = `You're Mark, an MEP tech helping field techs via voice. ULTRA BRIEF.
+
+CRITICAL: Your response is spoken aloud. Be CONCISE.
+
+RULES:
+- Max 2 sentences. Under 30 words total.
+- Contractions always: "you've", "it's", "that's"
+- No filler: Skip "I'd be happy to", "Let me", "Sure"
+- Numbers spoken: "five jobs" not "5 jobs"
+- NO markdown, asterisks, bullets, headers
+
+EXAMPLES:
+Q: "How many work orders?" → "Five work orders. Three pending, two done."
+Q: "What's 608?" → "EPA refrigerant license. Need it for AC work."
+Q: "Time?" → "Three forty-five PM, Thursday."
+
+Use tools to get REAL data. Never guess.`;
 
 // Claude Tool Definitions for Coperniq - ALL ENDPOINTS
 const TOOLS = [
@@ -1668,7 +1706,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body: ChatRequest = await request.json();
-    const { messages, model: modelAlias = DEFAULT_MODEL, image, trade } = body;
+    const { messages, model: modelAlias = DEFAULT_MODEL, image, trade, voiceMode } = body;
 
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return NextResponse.json(
@@ -1677,10 +1715,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Resolve model alias to full model ID
-    const modelId = AVAILABLE_MODELS[modelAlias] || AVAILABLE_MODELS[DEFAULT_MODEL];
+    // Voice mode optimization: Use Haiku for speed, lower max_tokens
+    // TTFT: Haiku ~100ms vs Opus ~500ms
+    const effectiveModel: ModelAlias = voiceMode ? 'claude-haiku-4.5' : modelAlias;
+    const modelId = AVAILABLE_MODELS[effectiveModel] || AVAILABLE_MODELS[DEFAULT_MODEL];
 
-    console.log(`Chat request using model: ${modelAlias} -> ${modelId}${image ? ' (with image)' : ''}`);
+    // Voice responses should be SHORT - 300 tokens is ~225 words (plenty for 2 sentences)
+    // Standard mode gets 4096 for complex tool outputs
+    const maxTokens = voiceMode ? 300 : 4096;
+
+    // Select appropriate system prompt
+    const systemPrompt = voiceMode ? VOICE_SYSTEM_PROMPT : SYSTEM_PROMPT;
+
+    console.log(`Chat request: model=${effectiveModel} -> ${modelId}, voiceMode=${voiceMode}, maxTokens=${maxTokens}${image ? ', with image' : ''}`);
 
     // Build conversation with any existing messages
     let conversationMessages: Array<{ role: string; content: unknown }> = messages.map((msg, index) => {
@@ -1736,8 +1783,8 @@ export async function POST(request: NextRequest) {
         },
         body: JSON.stringify({
           model: modelId,
-          max_tokens: 4096,
-          system: SYSTEM_PROMPT,
+          max_tokens: maxTokens,
+          system: systemPrompt,
           tools: coperniqApiKey ? TOOLS : [], // Only include tools if Coperniq is configured
           messages: conversationMessages,
         }),

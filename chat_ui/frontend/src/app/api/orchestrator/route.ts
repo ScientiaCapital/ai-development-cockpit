@@ -32,8 +32,8 @@ const MODELS = {
   qwen_vl_fast: 'qwen/qwen-2.5-vl-7b-instruct',  // Fast VLM
   gemini_flash: 'google/gemini-flash-1.5',        // Alternative VLM
 
-  // Voice (via Cartesia)
-  cartesia_sonic: 'sonic-english',                // TTS - English model with low latency
+  // Voice (via Cartesia Sonic 3)
+  cartesia_sonic: 'sonic-3',                      // TTS - Sonic 3 model with emotion/speed controls
 
   // STT (via Deepgram or AssemblyAI)
   deepgram_nova: 'nova-2',                        // STT - best accuracy, real-time
@@ -85,18 +85,17 @@ export const MODEL_OPTIONS = {
   ],
 };
 
-// Voice emotion options for Cartesia Sonic
-// Valid emotion levels: lowest, low, (omit=moderate), high, highest
-// NOTE: "medium" is NOT a valid level - use high or omit for moderate
-// Speed range: [-1.0, 1.0] where 0 is NORMAL, negative=slower, positive=faster
-// Labels: "slowest", "slow", "normal", "fast", "fastest"
-const VOICE_EMOTIONS: Record<string, { speed: string | number; emotion: string[] }> = {
-  neutral: { speed: 'normal', emotion: [] },
-  happy: { speed: 'normal', emotion: ['positivity:high', 'curiosity:high'] },
-  professional: { speed: -0.05, emotion: ['positivity'] }, // slightly slower for clarity
-  urgent: { speed: 0.15, emotion: ['surprise:high'] }, // slightly faster for urgency
-  calm: { speed: -0.15, emotion: ['positivity:low'] }, // slower for calm delivery
-  empathetic: { speed: -0.1, emotion: ['positivity', 'sadness:low'] }, // gentle pace
+// Voice emotion options for Cartesia Sonic 3
+// Speed range: 0.6 to 1.5 (multiplier, where 1.0 = normal speed)
+// Emotion: single string from ~50 options: neutral, angry, excited, content, sad, scared, etc.
+// Source: https://docs.cartesia.ai/build-with-cartesia/sonic-3/volume-speed-emotion
+const VOICE_EMOTIONS: Record<string, { speed: number; emotion: string }> = {
+  neutral: { speed: 1.0, emotion: 'neutral' },           // Default natural speech
+  happy: { speed: 1.0, emotion: 'excited' },             // Upbeat, energetic
+  professional: { speed: 0.9, emotion: 'content' },      // Calm, assured (slightly slower for clarity)
+  urgent: { speed: 1.15, emotion: 'angry' },             // Fast, intense
+  calm: { speed: 0.85, emotion: 'content' },             // Slow, relaxed
+  empathetic: { speed: 0.88, emotion: 'sad' },           // Gentle, understanding
 };
 
 // Trade-specific system prompts for context
@@ -203,7 +202,7 @@ async function routeToCartesia(
     headers: {
       'Content-Type': 'application/json',
       'X-API-Key': apiKey,
-      'Cartesia-Version': '2024-06-10',
+      'Cartesia-Version': '2025-04-16',
     },
     body: JSON.stringify({
       model_id: MODELS.cartesia_sonic,
@@ -211,15 +210,17 @@ async function routeToCartesia(
       voice: {
         mode: 'id',
         id: voiceId || 'a0e99841-438c-4a64-b679-ae501e7d6091', // Default professional voice
-        __experimental_controls: {
-          speed: emotionConfig.speed,
-          emotion: emotionConfig.emotion,
-        },
+      },
+      // Sonic 3 controls: speed (0.6-1.5), emotion (single string)
+      // Docs: https://docs.cartesia.ai/build-with-cartesia/sonic-3/volume-speed-emotion
+      generation_config: {
+        speed: emotionConfig.speed,
+        emotion: emotionConfig.emotion,
       },
       output_format: {
         container: 'mp3',
         encoding: 'mp3',
-        sample_rate: 24000,
+        sample_rate: 44100,  // Standard MP3 sample rate for browser playback
       },
     }),
   });

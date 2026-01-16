@@ -10,6 +10,9 @@ import { getCoperniqApiKey, getInstanceInfo, INSTANCE_HEADER } from '@/lib/coper
 
 const COPERNIQ_API_URL = 'https://api.coperniq.io/v1';
 
+// Cache TTL: 60 seconds to prevent rate limiting
+const CACHE_TTL = 60;
+
 // Coperniq uses "Tasks" not "WorkOrders" - this maps to their schema
 interface CoperniqTask {
   id: string;
@@ -45,6 +48,7 @@ export async function GET(request: NextRequest) {
   try {
     // Coperniq uses /requests for work orders (verified endpoint)
     // Also fetch /projects for context
+    // Add caching to prevent rate limiting (429 errors)
     const [requestsRes, projectsRes] = await Promise.all([
       fetch(`${COPERNIQ_API_URL}/requests`, {
         method: 'GET',
@@ -52,6 +56,7 @@ export async function GET(request: NextRequest) {
           'x-api-key': apiKey,
           'Content-Type': 'application/json',
         },
+        next: { revalidate: CACHE_TTL }, // Cache for 60 seconds
       }),
       fetch(`${COPERNIQ_API_URL}/projects`, {
         method: 'GET',
@@ -59,6 +64,7 @@ export async function GET(request: NextRequest) {
           'x-api-key': apiKey,
           'Content-Type': 'application/json',
         },
+        next: { revalidate: CACHE_TTL }, // Cache for 60 seconds
       }),
     ]);
 

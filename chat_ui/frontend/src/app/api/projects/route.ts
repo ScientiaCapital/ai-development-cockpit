@@ -10,6 +10,9 @@ import { getCoperniqApiKey, getInstanceInfo, INSTANCE_HEADER } from '@/lib/coper
 
 const COPERNIQ_API_URL = 'https://api.coperniq.io/v1';
 
+// Cache TTL: 60 seconds to prevent rate limiting
+const CACHE_TTL = 60;
+
 // Coperniq Project schema
 interface CoperniqProject {
   id: number;
@@ -83,6 +86,7 @@ export async function GET(request: NextRequest) {
         'x-api-key': apiKey,
         'Content-Type': 'application/json',
       },
+      next: { revalidate: CACHE_TTL }, // Cache for 60 seconds
     });
 
     if (!projectsRes.ok) {

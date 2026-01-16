@@ -36,9 +36,11 @@ async function fetchApi<T>(
 }
 
 // Chat API - sends messages array to Claude
+// voiceMode=true uses Haiku + shorter max_tokens for faster TTFT
 export async function sendChatMessage(
   message: string,
-  conversationHistory: { role: 'user' | 'assistant'; content: string }[] = []
+  conversationHistory: { role: 'user' | 'assistant'; content: string }[] = [],
+  voiceMode: boolean = false
 ): Promise<ChatResponse> {
   // Build messages array with history + new message
   const messages = [
@@ -46,7 +48,10 @@ export async function sendChatMessage(
     { role: 'user' as const, content: message },
   ];
 
-  const request: ChatRequest = { messages };
+  const request: ChatRequest & { voiceMode?: boolean } = { messages };
+  if (voiceMode) {
+    request.voiceMode = true;
+  }
   return fetchApi<ChatResponse>('/chat', {
     method: 'POST',
     body: JSON.stringify(request),
@@ -385,26 +390,187 @@ export async function speakText(
   });
 }
 
+// Track voice warming state to avoid redundant warm-up calls
+let voiceWarmedForId: string | null = null;
+let voiceWarmingPromise: Promise<void> | null = null;
+
+/**
+ * Warm up the TTS voice to eliminate cold-start latency
+ * Makes a quick TTS request that primes Cartesia's model for the voice.
+ * Saves 100-200ms on the first real TTS request.
+ *
+ * @param voiceId - Voice ID to warm up
+ * @param emotion - Emotion preset to use
+ */
+export async function warmVoice(
+  voiceId: string = 'a0e99841-438c-4a64-b679-ae501e7d6091',
+  emotion: string = 'professional'
+): Promise<void> {
+  // Already warmed for this voice - skip
+  if (voiceWarmedForId === voiceId) {
+    console.log('[TTS] Voice already warmed:', voiceId.slice(0, 8));
+    return;
+  }
+
+  // Warming in progress - wait for it
+  if (voiceWarmingPromise) {
+    console.log('[TTS] Voice warming in progress, waiting...');
+    return voiceWarmingPromise;
+  }
+
+  console.log('[TTS] Warming voice:', voiceId.slice(0, 8));
+  const startTime = performance.now();
+
+  voiceWarmingPromise = (async () => {
+    try {
+      // Generate a tiny phrase to prime the model
+      // Using "." keeps it minimal while still warming the voice
+      await speakText('.', voiceId, emotion);
+      voiceWarmedForId = voiceId;
+      console.log(`[TTS] Voice warmed in ${Math.round(performance.now() - startTime)}ms`);
+    } catch (error) {
+      console.warn('[TTS] Voice warming failed (non-critical):', error);
+      // Don't throw - warming failure shouldn't block the app
+    } finally {
+      voiceWarmingPromise = null;
+    }
+  })();
+
+  return voiceWarmingPromise;
+}
+
+/**
+ * Reset voice warming state (call when voice settings change significantly)
+ */
+export function resetVoiceWarming(): void {
+  voiceWarmedForId = null;
+  voiceWarmingPromise = null;
+}
+
+// Track current audio for interrupt capability
+let currentAudio: HTMLAudioElement | null = null;
+
+/**
+ * Stop any currently playing audio
+ */
+export function stopAudio(): void {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+  }
+}
+
+/**
+ * Check if audio is currently playing
+ */
+export function isAudioPlaying(): boolean {
+  return currentAudio !== null && !currentAudio.paused;
+}
+
 /**
  * Play audio from base64 encoded data
  * @param base64Audio - Base64 encoded audio
  * @returns Promise that resolves when playback completes
  */
 export function playAudio(base64Audio: string): Promise<void> {
+  // Stop any currently playing audio
+  stopAudio();
+
   return new Promise((resolve, reject) => {
     try {
       const audio = new Audio(`data:audio/mp3;base64,${base64Audio}`);
-      audio.onended = () => resolve();
-      audio.onerror = (e) => reject(e);
-      audio.play().catch(reject);
+      currentAudio = audio;
+
+      audio.onended = () => {
+        currentAudio = null;
+        resolve();
+      };
+      audio.onerror = (e) => {
+        currentAudio = null;
+        reject(e);
+      };
+      audio.play().catch((err) => {
+        currentAudio = null;
+        reject(err);
+      });
     } catch (error) {
+      currentAudio = null;
       reject(error);
     }
   });
 }
 
 /**
- * Speak text using TTS and play it
+ * Clean text for TTS - remove markdown and special characters
+ */
+function cleanTextForTTS(text: string): string {
+  return text
+    // Remove markdown headers (# ## ### etc)
+    .replace(/^#{1,6}\s*/gm, '')
+    // Remove bold/italic markers (* ** _ __)
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\*([^*]+)\*/g, '$1')
+    .replace(/__([^_]+)__/g, '$1')
+    .replace(/_([^_]+)_/g, '$1')
+    // Remove code blocks and inline code
+    .replace(/```[\s\S]*?```/g, 'code block')
+    .replace(/`([^`]+)`/g, '$1')
+    // Remove bullet points
+    .replace(/^[\s]*[-*•]\s*/gm, '')
+    // Remove numbered lists formatting
+    .replace(/^\d+\.\s*/gm, '')
+    // Remove links [text](url) -> text
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    // Remove emoji sequences that sound weird
+    .replace(/:[a-z_]+:/g, '')
+    // Clean up multiple spaces/newlines
+    .replace(/\n{2,}/g, '. ')
+    .replace(/\n/g, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+}
+
+/**
+ * Split text into speakable chunks (sentences)
+ * Keeps chunks reasonably sized for fast TTS generation
+ */
+function splitIntoChunks(text: string, maxChunkLength: number = 200): string[] {
+  // Split on sentence boundaries
+  const sentenceRegex = /[.!?]+\s+/g;
+  const sentences: string[] = [];
+  let lastIndex = 0;
+  let match;
+
+  while ((match = sentenceRegex.exec(text)) !== null) {
+    sentences.push(text.slice(lastIndex, match.index + match[0].length).trim());
+    lastIndex = match.index + match[0].length;
+  }
+
+  // Add remaining text
+  if (lastIndex < text.length) {
+    sentences.push(text.slice(lastIndex).trim());
+  }
+
+  // Combine very short sentences, split very long ones
+  const chunks: string[] = [];
+  let currentChunk = '';
+
+  for (const sentence of sentences) {
+    if (currentChunk.length + sentence.length < maxChunkLength) {
+      currentChunk += (currentChunk ? ' ' : '') + sentence;
+    } else {
+      if (currentChunk) chunks.push(currentChunk);
+      currentChunk = sentence;
+    }
+  }
+  if (currentChunk) chunks.push(currentChunk);
+
+  return chunks.filter(c => c.length > 0);
+}
+
+/**
+ * Speak text using TTS and play it - with chunked streaming for faster response
  * @param text - Text to speak
  * @param voiceId - Optional voice ID
  * @param emotion - Voice emotion
@@ -414,11 +580,45 @@ export async function speakAndPlay(
   voiceId?: string,
   emotion: string = 'professional'
 ): Promise<void> {
-  const response = await speakText(text, voiceId, emotion);
-  if (response.success && response.audio) {
-    await playAudio(response.audio);
-  } else {
-    console.error('[TTS] Failed to generate speech:', response.error);
+  // Clean text for natural speech (remove markdown, etc.)
+  const cleanText = cleanTextForTTS(text);
+
+  // For short text, just play directly
+  if (cleanText.length < 150) {
+    const response = await speakText(cleanText, voiceId, emotion);
+    if (response.success && response.audio) {
+      await playAudio(response.audio);
+    } else {
+      console.error('[TTS] Failed to generate speech:', response.error);
+    }
+    return;
+  }
+
+  // For longer text, chunk and stream
+  const chunks = splitIntoChunks(cleanText);
+  console.log(`[TTS] Streaming ${chunks.length} chunks`);
+
+  // Pre-fetch all chunks in parallel
+  const audioQueue: Promise<TTSResponse>[] = chunks.map(chunk =>
+    speakText(chunk, voiceId, emotion)
+  );
+
+  // Play chunks sequentially as they're ready
+  for (let i = 0; i < chunks.length; i++) {
+    // Check if audio was stopped (user interrupted)
+    if (currentAudio === null && i > 0) {
+      console.log('[TTS] Playback stopped by user');
+      break;
+    }
+
+    try {
+      const response = await audioQueue[i];
+      if (response.success && response.audio) {
+        await playAudio(response.audio);
+      }
+    } catch (error) {
+      console.error(`[TTS] Chunk ${i} failed:`, error);
+    }
   }
 }
 

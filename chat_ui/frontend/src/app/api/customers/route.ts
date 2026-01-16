@@ -10,6 +10,9 @@ import { getCoperniqApiKey, getInstanceInfo, INSTANCE_HEADER } from '@/lib/coper
 
 const COPERNIQ_API_URL = 'https://api.coperniq.io/v1';
 
+// Cache TTL: 60 seconds to prevent rate limiting
+const CACHE_TTL = 60;
+
 // Coperniq Client schema
 interface CoperniqClient {
   id: number;
@@ -63,12 +66,14 @@ export async function GET(request: NextRequest) {
 
   try {
     // Coperniq uses /clients for customers
+    // Add Next.js caching to prevent rate limiting
     const clientsRes = await fetch(`${COPERNIQ_API_URL}/clients`, {
       method: 'GET',
       headers: {
         'x-api-key': apiKey,
         'Content-Type': 'application/json',
       },
+      next: { revalidate: CACHE_TTL }, // Cache for 60 seconds
     });
 
     if (!clientsRes.ok) {
@@ -93,7 +98,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       customers,
       source: 'coperniq',
       instance: {
@@ -103,6 +108,9 @@ export async function GET(request: NextRequest) {
       },
       total: customers.length,
     });
+    // Add cache headers to prevent rate limiting
+    response.headers.set('Cache-Control', `public, s-maxage=${CACHE_TTL}, stale-while-revalidate=${CACHE_TTL * 2}`);
+    return response;
   } catch (error) {
     console.error(`Coperniq API error (instance ${instanceId}):`, error);
 

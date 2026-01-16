@@ -16,7 +16,7 @@ import {
   VolumeX,
 } from 'lucide-react';
 import { cn, generateId, formatMessageTime } from '@/lib/utils';
-import { sendChatMessage, sendChatMessageWithImage, speakAndPlay } from '@/lib/api';
+import { sendChatMessage, sendChatMessageWithImage, speakAndPlay, stopAudio, warmVoice, resetVoiceWarming } from '@/lib/api';
 import { getAgentById, DEFAULT_QUICK_ACTIONS, TRADE_AGENTS, type QuickAction, type TradeAgent } from '@/lib/trade-agents';
 import type { ChatMessage } from '@/types';
 import styles from './ChatInterface.module.css';
@@ -49,7 +49,13 @@ export default function ChatInterface({
   const [showVoiceSettings, setShowVoiceSettings] = useState(false);
   const [currentVoiceId, setCurrentVoiceId] = useState('a0e99841-438c-4a64-b679-ae501e7d6091'); // Mark (Professional)
   const [currentEmotion, setCurrentEmotion] = useState('professional');
-  const [voiceEnabled, setVoiceEnabled] = useState(false); // TTS on/off
+  const [voiceEnabled, setVoiceEnabled] = useState(() => {
+    // Load from localStorage on mount (syncs with VoiceAIPanel)
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('voiceEnabled') === 'true';
+    }
+    return false;
+  }); // TTS on/off
   const [isSpeaking, setIsSpeaking] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -156,6 +162,7 @@ export default function ChatInterface({
       }));
 
       // Use different API based on whether image is attached
+      // Pass voiceMode=true when voice is enabled for faster TTFT (Haiku + 300 tokens)
       const response = imageToSend
         ? await sendChatMessageWithImage(
             text || 'Analyze this image and tell me what you see. Extract equipment details if relevant.',
@@ -163,7 +170,7 @@ export default function ChatInterface({
             history,
             activeTrade || 'general'
           )
-        : await sendChatMessage(text, history);
+        : await sendChatMessage(text, history, voiceEnabled);
 
       // Add assistant message from Claude
       const responseText = response.message?.content || 'No response received';
@@ -245,6 +252,15 @@ export default function ChatInterface({
       }
     }
   }, []);
+
+  // VOICE WARMING: Pre-initialize TTS when voice is enabled
+  // This eliminates 100-200ms cold-start latency on first TTS request
+  useEffect(() => {
+    if (voiceEnabled && currentVoiceId) {
+      // Warm the voice in background - don't await
+      warmVoice(currentVoiceId, currentEmotion);
+    }
+  }, [voiceEnabled, currentVoiceId, currentEmotion]);
 
   // External trigger to open voice settings (from Voice AI agent button)
   useEffect(() => {
@@ -464,18 +480,39 @@ export default function ChatInterface({
 
         {/* Voice Input Controls */}
         <div className={styles.voiceControls}>
-          {/* Voice Output Toggle - Enable TTS responses */}
+          {/* Voice Output Toggle - Enable TTS responses / Stop speaking */}
           <button
-            className={cn(styles.voiceToggleBtn, voiceEnabled && styles.voiceToggleActive)}
-            onClick={() => setVoiceEnabled(!voiceEnabled)}
-            title={voiceEnabled ? 'Disable voice responses' : 'Enable voice responses'}
-            aria-label={voiceEnabled ? 'Disable voice responses' : 'Enable voice responses'}
+            className={cn(
+              styles.voiceToggleBtn,
+              voiceEnabled && styles.voiceToggleActive,
+              isSpeaking && styles.voiceToggleSpeaking
+            )}
+            onClick={() => {
+              if (isSpeaking) {
+                // Stop current speech
+                stopAudio();
+                setIsSpeaking(false);
+              } else {
+                // Toggle voice enabled and sync to localStorage
+                const newState = !voiceEnabled;
+                setVoiceEnabled(newState);
+                localStorage.setItem('voiceEnabled', String(newState));
+              }
+            }}
+            title={isSpeaking ? 'Stop speaking' : voiceEnabled ? 'Disable voice responses' : 'Enable voice responses'}
+            aria-label={isSpeaking ? 'Stop speaking' : voiceEnabled ? 'Disable voice responses' : 'Enable voice responses'}
           >
-            {voiceEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
+            {isSpeaking ? <VolumeX size={18} className={styles.speakingIcon} /> : voiceEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
           </button>
           <VoiceInput
             onTranscript={handleVoiceTranscript}
             onError={(err) => console.error('Voice error:', err)}
+            onBargeIn={() => {
+              // User interrupted AI - stop speaking immediately
+              stopAudio();
+              setIsSpeaking(false);
+            }}
+            isSpeaking={isSpeaking}
             disabled={isLoading}
           />
           <button

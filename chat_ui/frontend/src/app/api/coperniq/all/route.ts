@@ -14,11 +14,11 @@ import { getCoperniqApiKey, getInstanceInfo, INSTANCE_HEADER } from '@/lib/coper
 const COPERNIQ_API_URL = 'https://api.coperniq.io/v1';
 
 // Delay between API calls to avoid rate limiting (ms)
-// Coperniq has aggressive rate limits - 500ms is safer
-const REQUEST_DELAY = 500;
+// Coperniq has VERY aggressive rate limits - need at least 1 second
+const REQUEST_DELAY = 1000;
 
-// Cache the response for 60 seconds
-const CACHE_TTL = 60;
+// Cache the response for 5 minutes to minimize API calls
+const CACHE_TTL = 300;
 
 // Simple delay helper
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));

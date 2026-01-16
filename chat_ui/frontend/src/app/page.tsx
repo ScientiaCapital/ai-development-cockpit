@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { Menu, X, Phone, FileText, Users, FolderKanban, Inbox } from 'lucide-react';
+import { Menu, X, Phone, FileText, Users, FolderKanban, Inbox, Receipt } from 'lucide-react';
 import { Sidebar } from '@/components/Sidebar';
 import { ChatInterface } from '@/components/Chat';
 import { WorkOrdersPanel } from '@/components/WorkOrders';
@@ -9,6 +9,7 @@ import { CustomerLookup } from '@/components/Customers/CustomerLookup';
 import { ProjectsPanel } from '@/components/Projects/ProjectsPanel';
 import { RequestsPanel } from '@/components/Requests/RequestsPanel';
 import { SchedulePanel } from '@/components/Schedule';
+import { InvoicesPanel } from '@/components/Invoices';
 import { VoiceAIPanel } from '@/components/VoiceAI';
 import { cn } from '@/lib/utils';
 import type { Agent } from '@/types';
@@ -17,7 +18,7 @@ import styles from './page.module.css';
 export default function HomePage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [rightPanelView, setRightPanelView] = useState<'workorders' | 'schedule' | 'customers' | 'projects' | 'requests' | 'voiceai' | null>('schedule');
+  const [rightPanelView, setRightPanelView] = useState<'workorders' | 'schedule' | 'customers' | 'projects' | 'requests' | 'invoices' | 'voiceai' | null>('schedule');
   const [quickActionMessage, setQuickActionMessage] = useState<string | undefined>();
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
 
@@ -42,7 +43,7 @@ export default function HomePage() {
     setSidebarOpen((prev) => !prev);
   }, []);
 
-  const toggleRightPanel = useCallback((view: 'workorders' | 'schedule' | 'customers' | 'projects' | 'requests' | 'voiceai') => {
+  const toggleRightPanel = useCallback((view: 'workorders' | 'schedule' | 'customers' | 'projects' | 'requests' | 'invoices' | 'voiceai') => {
     setRightPanelView((prev) => (prev === view ? null : view));
   }, []);
 
@@ -121,7 +122,7 @@ export default function HomePage() {
       </main>
 
       {/* Right Panel Container */}
-      {(rightPanelView === 'workorders' || rightPanelView === 'schedule' || rightPanelView === 'customers' || rightPanelView === 'projects' || rightPanelView === 'requests') && (
+      {(rightPanelView === 'workorders' || rightPanelView === 'schedule' || rightPanelView === 'customers' || rightPanelView === 'projects' || rightPanelView === 'requests' || rightPanelView === 'invoices') && (
         <div className={styles.rightPanelContainer}>
           {/* Panel Tabs */}
           <div className={styles.panelTabs}>
@@ -153,6 +154,13 @@ export default function HomePage() {
               <FolderKanban size={16} />
               <span>Projects</span>
             </button>
+            <button
+              className={cn(styles.panelTabBtn, rightPanelView === 'invoices' && styles.activeTab)}
+              onClick={() => setRightPanelView('invoices')}
+            >
+              <Receipt size={16} />
+              <span>Invoices</span>
+            </button>
           </div>
 
           {/* Panel Content */}
@@ -162,6 +170,7 @@ export default function HomePage() {
             {rightPanelView === 'requests' && <RequestsPanel />}
             {rightPanelView === 'customers' && <CustomerLookup />}
             {rightPanelView === 'projects' && <ProjectsPanel />}
+            {rightPanelView === 'invoices' && <InvoicesPanel />}
           </div>
         </div>
       )}

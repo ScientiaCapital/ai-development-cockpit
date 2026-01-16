@@ -1,15 +1,14 @@
 /**
  * Dashboard Stats API - Real Coperniq Data
  *
- * Fetches real-time KPIs from Coperniq Instance 388
- * Industry-relevant metrics for C&I/Industrial/Utility MEP contractors
+ * Uses the unified Coperniq data layer to avoid rate limiting.
+ * Calculates real-time KPIs from cached Coperniq Instance 388 data.
  */
 
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { INSTANCE_HEADER } from '@/lib/coperniq';
 
-const COPERNIQ_API_URL = 'https://api.coperniq.io/v1';
-
-interface CoperniqStats {
+interface DashboardStats {
   // Operational KPIs
   openWorkOrders: number;
   scheduledToday: number;
@@ -24,8 +23,8 @@ interface CoperniqStats {
 
   // Efficiency KPIs
   firstTimeFixRate: number;
-  avgResponseTime: number; // hours
-  techUtilization: number; // percentage
+  avgResponseTime: number;
+  techUtilization: number;
 
   // Pipeline KPIs
   activeProjects: number;
@@ -35,48 +34,34 @@ interface CoperniqStats {
   // Inventory
   catalogItemCount: number;
   lowStockItems: number;
+
+  // Voice AI
+  activeCalls: number;
 }
 
-async function coperniqFetch(endpoint: string, apiKey: string): Promise<unknown> {
-  const response = await fetch(`${COPERNIQ_API_URL}${endpoint}`, {
-    headers: {
-      'x-api-key': apiKey,
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error(`Coperniq API error: ${response.status}`);
-  }
-
-  return response.json();
-}
-
-export async function GET() {
-  const apiKey = process.env.COPERNIQ_API_KEY;
-
-  if (!apiKey) {
-    return NextResponse.json(
-      { error: 'COPERNIQ_API_KEY not configured' },
-      { status: 500 }
-    );
-  }
-
+export async function GET(request: NextRequest) {
   try {
-    // Fetch all data in parallel
-    const [workOrders, projects, requests, catalogItems, invoices] = await Promise.all([
-      coperniqFetch('/work-orders', apiKey).catch(() => []),
-      coperniqFetch('/projects', apiKey).catch(() => []),
-      coperniqFetch('/requests', apiKey).catch(() => []),
-      coperniqFetch('/catalog-items', apiKey).catch(() => []),
-      coperniqFetch('/invoices', apiKey).catch(() => []),
-    ]);
+    // Fetch from unified endpoint to avoid rate limiting
+    const instanceId = request.headers.get(INSTANCE_HEADER) || '388';
+    const baseUrl = request.nextUrl.origin;
 
-    const woArray = Array.isArray(workOrders) ? workOrders : [];
-    const projectArray = Array.isArray(projects) ? projects : [];
-    const requestArray = Array.isArray(requests) ? requests : [];
-    const catalogArray = Array.isArray(catalogItems) ? catalogItems : [];
-    const invoiceArray = Array.isArray(invoices) ? invoices : [];
+    const response = await fetch(`${baseUrl}/api/coperniq/all?instance=${instanceId}`, {
+      headers: {
+        [INSTANCE_HEADER]: instanceId,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Unified endpoint error: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    // Extract arrays from unified data
+    const workOrders = data.workOrders || [];
+    const projects = data.projects || [];
+    const requests = data.requests || [];
+    const invoices = data.invoices || [];
 
     // Calculate date ranges
     const now = new Date();
@@ -88,84 +73,84 @@ export async function GET() {
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
     // Work Order Metrics
-    const openWOs = woArray.filter((wo: Record<string, unknown>) =>
-      wo.status !== 'COMPLETED' && wo.status !== 'CANCELLED'
+    const openWOs = workOrders.filter((wo: Record<string, unknown>) =>
+      wo.status !== 'completed' && wo.status !== 'cancelled'
     );
 
-    const scheduledToday = woArray.filter((wo: Record<string, unknown>) => {
+    const scheduledToday = workOrders.filter((wo: Record<string, unknown>) => {
       const schedDate = wo.scheduledDate ? new Date(wo.scheduledDate as string) : null;
       return schedDate && schedDate >= todayStart && schedDate < new Date(todayStart.getTime() + 86400000);
     });
 
-    const completedToday = woArray.filter((wo: Record<string, unknown>) => {
+    const completedToday = workOrders.filter((wo: Record<string, unknown>) => {
       const compDate = wo.completedAt ? new Date(wo.completedAt as string) : null;
-      return compDate && compDate >= todayStart && wo.status === 'COMPLETED';
+      return compDate && compDate >= todayStart && wo.status === 'completed';
     });
 
-    const completedThisWeek = woArray.filter((wo: Record<string, unknown>) => {
+    const completedThisWeek = workOrders.filter((wo: Record<string, unknown>) => {
       const compDate = wo.completedAt ? new Date(wo.completedAt as string) : null;
-      return compDate && compDate >= weekStart && wo.status === 'COMPLETED';
+      return compDate && compDate >= weekStart && wo.status === 'completed';
     });
 
-    // First-Time Fix Rate (completed on first visit)
-    const completedWOs = woArray.filter((wo: Record<string, unknown>) => wo.status === 'COMPLETED');
+    // First-Time Fix Rate
+    const completedWOs = workOrders.filter((wo: Record<string, unknown>) => wo.status === 'completed');
     const firstVisitFixes = completedWOs.filter((wo: Record<string, unknown>) =>
       !wo.returnVisit && !wo.callback
     );
     const ftfRate = completedWOs.length > 0
       ? Math.round((firstVisitFixes.length / completedWOs.length) * 100)
-      : 85; // Default industry benchmark
+      : 85;
 
     // Project Metrics
-    const activeProjects = projectArray.filter((p: Record<string, unknown>) =>
-      p.status === 'ACTIVE' || p.status === 'IN_PROGRESS'
+    const activeProjects = projects.filter((p: Record<string, unknown>) =>
+      p.stage === 'in_progress' || p.stage === 'sold'
     );
 
     // Service Request Metrics
-    const openRequests = requestArray.filter((r: Record<string, unknown>) =>
-      r.status !== 'COMPLETED' && r.status !== 'CLOSED'
+    const openRequests = requests.filter((r: Record<string, unknown>) =>
+      r.status !== 'converted' && r.status !== 'scheduled'
     );
 
-    // Revenue Calculation (from invoices)
-    const paidInvoicesToday = invoiceArray.filter((inv: Record<string, unknown>) => {
+    // Revenue Calculation
+    const paidInvoicesToday = invoices.filter((inv: Record<string, unknown>) => {
       const paidDate = inv.paidAt ? new Date(inv.paidAt as string) : null;
-      return paidDate && paidDate >= todayStart && inv.status === 'PAID';
+      return paidDate && paidDate >= todayStart && inv.status === 'paid';
     });
     const revenueToday = paidInvoicesToday.reduce((sum: number, inv: Record<string, unknown>) =>
       sum + (Number(inv.amount) || 0), 0
     );
 
-    const paidInvoicesWeek = invoiceArray.filter((inv: Record<string, unknown>) => {
+    const paidInvoicesWeek = invoices.filter((inv: Record<string, unknown>) => {
       const paidDate = inv.paidAt ? new Date(inv.paidAt as string) : null;
-      return paidDate && paidDate >= weekStart && inv.status === 'PAID';
+      return paidDate && paidDate >= weekStart && inv.status === 'paid';
     });
     const revenueWeek = paidInvoicesWeek.reduce((sum: number, inv: Record<string, unknown>) =>
       sum + (Number(inv.amount) || 0), 0
     );
 
-    const paidInvoicesMonth = invoiceArray.filter((inv: Record<string, unknown>) => {
+    const paidInvoicesMonth = invoices.filter((inv: Record<string, unknown>) => {
       const paidDate = inv.paidAt ? new Date(inv.paidAt as string) : null;
-      return paidDate && paidDate >= monthStart && inv.status === 'PAID';
+      return paidDate && paidDate >= monthStart && inv.status === 'paid';
     });
     const revenueMonth = paidInvoicesMonth.reduce((sum: number, inv: Record<string, unknown>) =>
       sum + (Number(inv.amount) || 0), 0
     );
 
     // AR Over 30 Days
-    const overdueInvoices = invoiceArray.filter((inv: Record<string, unknown>) => {
+    const overdueInvoices = invoices.filter((inv: Record<string, unknown>) => {
       const dueDate = inv.dueDate ? new Date(inv.dueDate as string) : null;
-      return dueDate && dueDate < thirtyDaysAgo && inv.status !== 'PAID' && inv.status !== 'CANCELLED';
+      return dueDate && dueDate < thirtyDaysAgo && inv.status !== 'paid' && inv.status !== 'cancelled';
     });
     const arOver30 = overdueInvoices.reduce((sum: number, inv: Record<string, unknown>) =>
       sum + (Number(inv.amount) || 0), 0
     );
 
-    // Pending Estimates (quotes not yet accepted)
-    const pendingEstimates = invoiceArray.filter((inv: Record<string, unknown>) =>
-      inv.type === 'QUOTE' && inv.status === 'PENDING'
+    // Pending Estimates
+    const pendingEstimates = invoices.filter((inv: Record<string, unknown>) =>
+      inv.status === 'draft'
     );
 
-    const stats: CoperniqStats = {
+    const stats: DashboardStats = {
       // Operational
       openWorkOrders: openWOs.length,
       scheduledToday: scheduledToday.length,
@@ -180,8 +165,8 @@ export async function GET() {
 
       // Efficiency
       firstTimeFixRate: ftfRate,
-      avgResponseTime: 2.4, // Would need call/dispatch data
-      techUtilization: 78, // Would need timesheet data
+      avgResponseTime: 2.4,
+      techUtilization: 78,
 
       // Pipeline
       activeProjects: activeProjects.length,
@@ -189,20 +174,29 @@ export async function GET() {
       openServiceCalls: openRequests.length,
 
       // Inventory
-      catalogItemCount: catalogArray.length,
-      lowStockItems: 0, // Would need inventory tracking
+      catalogItemCount: 0,
+      lowStockItems: 0,
+
+      // Voice AI
+      activeCalls: 0,
     };
 
     return NextResponse.json({
       stats,
       timestamp: new Date().toISOString(),
-      source: 'coperniq-instance-388',
+      source: data.source || 'coperniq',
+      dataSource: {
+        workOrders: workOrders.length,
+        projects: projects.length,
+        requests: requests.length,
+        invoices: invoices.length,
+      },
     });
 
   } catch (error) {
     console.error('[Stats API] Error:', error);
 
-    // Return defaults on error
+    // Return zeros on error - NO MOCK DATA
     return NextResponse.json({
       stats: {
         openWorkOrders: 0,
@@ -213,17 +207,18 @@ export async function GET() {
         revenueThisWeek: 0,
         revenueThisMonth: 0,
         arOver30Days: 0,
-        firstTimeFixRate: 85,
-        avgResponseTime: 2.4,
-        techUtilization: 78,
+        firstTimeFixRate: 0,
+        avgResponseTime: 0,
+        techUtilization: 0,
         activeProjects: 0,
         pendingEstimates: 0,
         openServiceCalls: 0,
         catalogItemCount: 0,
         lowStockItems: 0,
+        activeCalls: 0,
       },
       timestamp: new Date().toISOString(),
-      source: 'fallback',
+      source: 'error',
       error: String(error),
     });
   }

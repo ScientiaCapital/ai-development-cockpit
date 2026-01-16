@@ -596,18 +596,61 @@ const TOOLS = [
   // ═══════════════════════════════════════════════════════════════════════════
   {
     name: 'update_work_order',
-    description: 'Update an existing work order.',
+    description: 'Update an existing work order. Use to change status, assign technicians, add notes, update schedule.',
     input_schema: {
       type: 'object',
       properties: {
         workOrderId: { type: 'number', description: 'Work order ID' },
         title: { type: 'string', description: 'New title' },
         description: { type: 'string', description: 'New description' },
-        status: { type: 'string', description: 'New status' },
+        status: { type: 'string', enum: ['pending', 'scheduled', 'in_progress', 'completed', 'cancelled'], description: 'New status' },
         priority: { type: 'string', enum: ['low', 'medium', 'high', 'urgent'] },
         scheduledDate: { type: 'string', description: 'Scheduled date (ISO 8601)' },
+        assigneeId: { type: 'number', description: 'User/technician ID to assign to this work order' },
+        notes: { type: 'string', description: 'Notes or comments to add to the work order' },
       },
       required: ['workOrderId'],
+    },
+  },
+  {
+    name: 'assign_technician',
+    description: 'Assign a technician to a work order. Shortcut for update_work_order with assignee.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        workOrderId: { type: 'number', description: 'Work order ID' },
+        technicianId: { type: 'number', description: 'Technician/user ID' },
+        scheduledDate: { type: 'string', description: 'Optional: Scheduled date (ISO 8601)' },
+      },
+      required: ['workOrderId', 'technicianId'],
+    },
+  },
+  {
+    name: 'convert_request_to_work_order',
+    description: 'Convert a service request into a work order. Creates a work order linked to the request.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        requestId: { type: 'number', description: 'Service request ID to convert' },
+        title: { type: 'string', description: 'Work order title (defaults to request title)' },
+        priority: { type: 'string', enum: ['low', 'medium', 'high', 'urgent'], description: 'Work order priority' },
+        assigneeId: { type: 'number', description: 'Optional: Technician to assign' },
+        scheduledDate: { type: 'string', description: 'Optional: Scheduled date' },
+      },
+      required: ['requestId'],
+    },
+  },
+  {
+    name: 'add_work_order_note',
+    description: 'Add a note or comment to an existing work order.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        workOrderId: { type: 'number', description: 'Work order ID' },
+        note: { type: 'string', description: 'Note content to add' },
+        isInternal: { type: 'boolean', description: 'Whether note is internal only (default: false)' },
+      },
+      required: ['workOrderId', 'note'],
     },
   },
   {
@@ -1252,6 +1295,87 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>,
           body: JSON.stringify(updateData),
         });
         return JSON.stringify({ success: true, work_order: result });
+      }
+
+      case 'assign_technician': {
+        const { workOrderId, technicianId, scheduledDate } = toolInput;
+        const updateData: Record<string, unknown> = { assigneeId: technicianId };
+        if (scheduledDate) updateData.scheduledDate = scheduledDate;
+        if (!updateData.status) updateData.status = 'scheduled'; // Auto-set to scheduled when assigning
+
+        const result = await coperniqFetch(`/work-orders/${workOrderId}`, apiKey, {
+          method: 'PATCH',
+          body: JSON.stringify(updateData),
+        });
+        return JSON.stringify({ success: true, work_order: result, message: 'Technician assigned successfully' });
+      }
+
+      case 'convert_request_to_work_order': {
+        const { requestId, title, priority, assigneeId, scheduledDate } = toolInput;
+
+        // First, get the request details
+        const requestData = await coperniqFetch(`/requests/${requestId}`, apiKey) as Record<string, unknown>;
+
+        // Create work order from request data
+        const workOrderData: Record<string, unknown> = {
+          title: title || requestData.title || `Work Order from Request #${requestId}`,
+          description: requestData.description || '',
+          priority: priority || requestData.priority || 'medium',
+          requestId: requestId, // Link to original request
+        };
+
+        if (assigneeId) workOrderData.assigneeId = assigneeId;
+        if (scheduledDate) {
+          workOrderData.scheduledDate = scheduledDate;
+          workOrderData.status = 'scheduled';
+        }
+
+        // Create the work order
+        const workOrder = await coperniqFetch(`/requests/${requestId}/work-orders`, apiKey, {
+          method: 'POST',
+          body: JSON.stringify(workOrderData),
+        });
+
+        // Update request status to 'converted'
+        try {
+          await coperniqFetch(`/requests/${requestId}`, apiKey, {
+            method: 'PATCH',
+            body: JSON.stringify({ status: 'converted' }),
+          });
+        } catch {
+          // Request status update is optional
+        }
+
+        return JSON.stringify({
+          success: true,
+          work_order: workOrder,
+          message: `Created work order from request #${requestId}`
+        });
+      }
+
+      case 'add_work_order_note': {
+        const { workOrderId, note, isInternal } = toolInput;
+
+        // Try to add note via comments/notes endpoint, fallback to updating description
+        try {
+          const result = await coperniqFetch(`/work-orders/${workOrderId}/notes`, apiKey, {
+            method: 'POST',
+            body: JSON.stringify({ content: note, isInternal: isInternal || false }),
+          });
+          return JSON.stringify({ success: true, note: result });
+        } catch {
+          // Fallback: Append to description
+          const workOrder = await coperniqFetch(`/work-orders/${workOrderId}`, apiKey) as Record<string, unknown>;
+          const existingDesc = String(workOrder.description || '');
+          const timestamp = new Date().toISOString();
+          const newDesc = `${existingDesc}\n\n[Note - ${timestamp}]: ${note}`;
+
+          const result = await coperniqFetch(`/work-orders/${workOrderId}`, apiKey, {
+            method: 'PATCH',
+            body: JSON.stringify({ description: newDesc }),
+          });
+          return JSON.stringify({ success: true, work_order: result, message: 'Note added to description' });
+        }
       }
 
       case 'delete_work_order': {

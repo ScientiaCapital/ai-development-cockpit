@@ -117,12 +117,18 @@ export interface VoiceCall {
 }
 
 // Quick Action Types
+export type QuickActionType = 'chat' | 'panel' | 'modal' | 'vision';
+export type PanelViewType = 'workorders' | 'schedule' | 'customers' | 'projects' | 'requests' | 'invoices' | 'vision';
+
 export interface QuickAction {
   id: string;
   icon: string;
   label: string;
   description?: string;
   query: string;
+  actionType?: QuickActionType;  // Default: 'chat'
+  panelView?: PanelViewType;      // For actionType: 'panel'
+  filter?: string;                // Optional filter for panel views
 }
 
 // Stats Types - Industry-Relevant KPIs for C&I/Industrial MEP Contractors

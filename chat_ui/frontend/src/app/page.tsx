@@ -61,6 +61,11 @@ export default function HomePage() {
     setTriggerVoiceSettings(false);
   }, []);
 
+  // Handle panel changes from quick actions
+  const handlePanelChange = useCallback((panel: 'workorders' | 'schedule' | 'customers' | 'projects' | 'requests' | 'invoices' | 'vision') => {
+    setRightPanelView(panel);
+  }, []);
+
   const handleToggleSidebar = useCallback(() => {
     setSidebarCollapsed((prev) => !prev);
   }, []);
@@ -127,6 +132,7 @@ export default function HomePage() {
         <Sidebar
           onQuickAction={handleQuickAction}
           onSelectAgent={handleSelectAgent}
+          onPanelChange={handlePanelChange}
           selectedAgent={selectedAgent}
           collapsed={sidebarCollapsed}
           onToggleCollapse={handleToggleSidebar}

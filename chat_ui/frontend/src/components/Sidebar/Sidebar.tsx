@@ -89,10 +89,10 @@ const teamAgents: Record<TeamId | 'all', Agent[]> = {
 // Team-specific quick actions - asset-centric for self-performing contractors
 const teamQuickActions: Record<TeamId | 'all', QuickAction[]> = {
   'all': [
-    { id: 'new-wo', icon: 'FileText', label: 'New Work Order', query: 'Create a new work order' },
-    { id: 'dispatch', icon: 'Truck', label: 'Dispatch Tech', query: 'Dispatch a technician to a job' },
-    { id: 'emergency', icon: 'Phone', label: '🚨 Emergency', query: 'I have an emergency service call' },
-    { id: 'asset-lookup', icon: 'Camera', label: 'ID Asset', query: 'Identify this equipment from photo' },
+    { id: 'new-wo', icon: 'FileText', label: 'New Work Order', query: 'Create a new work order for an upcoming job', actionType: 'chat' },
+    { id: 'requests', icon: 'ClipboardList', label: 'Service Requests', query: 'Show service requests', actionType: 'panel', panelView: 'requests' },
+    { id: 'dispatch', icon: 'Truck', label: 'Dispatch Tech', query: 'Dispatch a technician to a job', actionType: 'chat' },
+    { id: 'asset-lookup', icon: 'Camera', label: 'ID Asset', query: 'Identify this equipment from photo', actionType: 'vision' },
   ],
   'HVAC': [
     { id: 'heat-pump', icon: 'Flame', label: 'Heat Pump', query: 'Diagnose heat pump issue' },
@@ -181,6 +181,7 @@ const iconMap: Record<string, React.ElementType> = {
 interface SidebarProps {
   onQuickAction?: (query: string) => void;
   onSelectAgent?: (agent: Agent) => void;
+  onPanelChange?: (panel: 'workorders' | 'schedule' | 'customers' | 'projects' | 'requests' | 'invoices' | 'vision') => void;
   selectedAgent?: Agent | null;
   collapsed?: boolean;
   onToggleCollapse?: () => void;
@@ -189,6 +190,7 @@ interface SidebarProps {
 export default function Sidebar({
   onQuickAction,
   onSelectAgent,
+  onPanelChange,
   selectedAgent,
   collapsed = false,
   onToggleCollapse,
@@ -403,11 +405,30 @@ export default function Sidebar({
           <div className={styles.quickActions}>
             {currentQuickActions.map((action) => {
               const IconComponent = getIcon(action.icon);
+              const handleActionClick = () => {
+                switch (action.actionType) {
+                  case 'panel':
+                    if (action.panelView) {
+                      onPanelChange?.(action.panelView);
+                    }
+                    break;
+                  case 'vision':
+                    onPanelChange?.('vision');
+                    break;
+                  case 'modal':
+                    // Future: Open modal for creating work orders
+                    onQuickAction?.(action.query);
+                    break;
+                  case 'chat':
+                  default:
+                    onQuickAction?.(action.query);
+                }
+              };
               return (
                 <button
                   key={action.id}
                   className={styles.actionBtn}
-                  onClick={() => onQuickAction?.(action.query)}
+                  onClick={handleActionClick}
                 >
                   <IconComponent size={16} />
                   <span>{action.label}</span>

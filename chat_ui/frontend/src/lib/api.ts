@@ -135,9 +135,11 @@ export async function getAgents(): Promise<{ agents: Agent[] }> {
   return fetchApi<{ agents: Agent[] }>('/agents');
 }
 
-// Work Orders API
+// Work Orders API - uses unified cache to avoid rate limiting
 export async function getWorkOrders(): Promise<{ work_orders: WorkOrder[] }> {
-  return fetchApi<{ work_orders: WorkOrder[] }>('/work-orders');
+  // Use unified data layer to avoid 429 rate limiting
+  const { getWorkOrdersFromCache } = await import('./coperniqData');
+  return getWorkOrdersFromCache();
 }
 
 // Update Work Order Status - syncs to Coperniq Instance 388
@@ -182,10 +184,11 @@ export interface Customer {
   totalRevenue?: number;
 }
 
-// Customers API - maps to Coperniq /clients
+// Customers API - uses unified cache to avoid rate limiting
 export async function getCustomers(search?: string): Promise<{ customers: Customer[]; total: number }> {
-  const params = search ? `?search=${encodeURIComponent(search)}` : '';
-  return fetchApi<{ customers: Customer[]; total: number }>(`/customers${params}`);
+  // Use unified data layer to avoid 429 rate limiting
+  const { getCustomersFromCache } = await import('./coperniqData');
+  return getCustomersFromCache(search);
 }
 
 // Project type for Projects panel
@@ -214,18 +217,33 @@ export interface ProjectStageCounts {
   complete: number;
 }
 
-// Projects API - maps to Coperniq /projects
+// Projects API - uses unified cache to avoid rate limiting
 export async function getProjects(stage?: string): Promise<{
   projects: Project[];
   total: number;
   stageCounts: ProjectStageCounts;
 }> {
-  const params = stage && stage !== 'all' ? `?stage=${encodeURIComponent(stage)}` : '';
-  return fetchApi<{
-    projects: Project[];
-    total: number;
-    stageCounts: ProjectStageCounts;
-  }>(`/projects${params}`);
+  // Use unified data layer to avoid 429 rate limiting
+  const { getProjectsFromCache } = await import('./coperniqData');
+  const result = await getProjectsFromCache(stage);
+
+  // Calculate stage counts from cached data
+  const { getCoperniqData } = await import('./coperniqData');
+  const allData = await getCoperniqData();
+  const allProjects = allData.projects;
+
+  return {
+    projects: result.projects,
+    total: result.total,
+    stageCounts: {
+      all: allProjects.length,
+      lead: allProjects.filter(p => p.stage === 'lead').length,
+      proposal: allProjects.filter(p => p.stage === 'proposal').length,
+      sold: allProjects.filter(p => p.stage === 'sold').length,
+      in_progress: allProjects.filter(p => p.stage === 'in_progress').length,
+      complete: allProjects.filter(p => p.stage === 'complete').length,
+    },
+  };
 }
 
 // ServiceRequest type for Service Requests panel
@@ -253,18 +271,31 @@ export interface PriorityCounts {
   low: number;
 }
 
-// Service Requests API - maps to Coperniq /requests
+// Service Requests API - uses unified cache to avoid rate limiting
 export async function getRequests(priority?: string): Promise<{
   requests: ServiceRequest[];
   total: number;
   priorityCounts: PriorityCounts;
 }> {
-  const params = priority && priority !== 'all' ? `?priority=${encodeURIComponent(priority)}` : '';
-  return fetchApi<{
-    requests: ServiceRequest[];
-    total: number;
-    priorityCounts: PriorityCounts;
-  }>(`/requests${params}`);
+  // Use unified data layer to avoid 429 rate limiting
+  const { getRequestsFromCache, getCoperniqData } = await import('./coperniqData');
+  const result = await getRequestsFromCache(priority);
+
+  // Calculate priority counts from cached data
+  const allData = await getCoperniqData();
+  const allRequests = allData.requests;
+
+  return {
+    requests: result.requests,
+    total: result.total,
+    priorityCounts: {
+      all: allRequests.length,
+      emergency: allRequests.filter(r => r.priority === 'emergency').length,
+      high: allRequests.filter(r => r.priority === 'high').length,
+      normal: allRequests.filter(r => r.priority === 'normal').length,
+      low: allRequests.filter(r => r.priority === 'low').length,
+    },
+  };
 }
 
 // Invoice type for Invoices panel
@@ -301,7 +332,7 @@ export interface AgingBuckets {
   days90Plus: number;
 }
 
-// Invoices API - maps to Coperniq /invoices
+// Invoices API - uses unified cache to avoid rate limiting
 export async function getInvoices(status?: string): Promise<{
   invoices: Invoice[];
   total: number;
@@ -309,14 +340,51 @@ export async function getInvoices(status?: string): Promise<{
   agingBuckets: AgingBuckets;
   totalOutstanding: number;
 }> {
-  const params = status && status !== 'all' ? `?status=${encodeURIComponent(status)}` : '';
-  return fetchApi<{
-    invoices: Invoice[];
-    total: number;
-    statusCounts: InvoiceStatusCounts;
-    agingBuckets: AgingBuckets;
-    totalOutstanding: number;
-  }>(`/invoices${params}`);
+  // Use unified data layer to avoid 429 rate limiting
+  const { getInvoicesFromCache, getCoperniqData } = await import('./coperniqData');
+  const result = await getInvoicesFromCache(status);
+
+  // Calculate counts from cached data
+  const allData = await getCoperniqData();
+  const allInvoices = allData.invoices;
+
+  // Calculate aging buckets
+  const now = new Date();
+  const agingBuckets: AgingBuckets = { current: 0, days30: 0, days60: 0, days90Plus: 0 };
+  let totalOutstanding = 0;
+
+  allInvoices.forEach(inv => {
+    if (inv.status === 'paid' || inv.status === 'cancelled') return;
+    const amount = inv.total || 0;
+    totalOutstanding += amount;
+
+    if (!inv.dueDate) {
+      agingBuckets.current += amount;
+      return;
+    }
+
+    const dueDate = new Date(inv.dueDate);
+    const daysPast = Math.floor((now.getTime() - dueDate.getTime()) / (1000 * 60 * 60 * 24));
+
+    if (daysPast <= 0) agingBuckets.current += amount;
+    else if (daysPast <= 30) agingBuckets.days30 += amount;
+    else if (daysPast <= 60) agingBuckets.days60 += amount;
+    else agingBuckets.days90Plus += amount;
+  });
+
+  return {
+    invoices: result.invoices,
+    total: result.total,
+    statusCounts: {
+      all: allInvoices.length,
+      draft: allInvoices.filter(i => i.status === 'draft').length,
+      sent: allInvoices.filter(i => i.status === 'sent').length,
+      paid: allInvoices.filter(i => i.status === 'paid').length,
+      overdue: allInvoices.filter(i => i.status === 'overdue').length,
+    },
+    agingBuckets,
+    totalOutstanding,
+  };
 }
 
 // Assets API

@@ -48,12 +48,15 @@ export async function GET(request: NextRequest) {
   const errors: string[] = [];
 
   // Helper to fetch from Coperniq with error handling
+  // Note: apiKey is guaranteed to be defined here due to the early return above
+  const validApiKey = apiKey as string;
+
   async function fetchCoperniq(endpoint: string, name: string) {
     try {
       const res = await fetch(`${COPERNIQ_API_URL}${endpoint}`, {
         method: 'GET',
         headers: {
-          'x-api-key': apiKey,
+          'x-api-key': validApiKey,
           'Content-Type': 'application/json',
         },
         next: { revalidate: CACHE_TTL },
@@ -101,11 +104,12 @@ export async function GET(request: NextRequest) {
 
   // 4. Work Orders (combines requests + projects for schedule view)
   // Already have the data, just transform differently
-  results.workOrders = [
+  const workOrders = [
     ...(requests ? transformRequestsToWorkOrders(requests) : []),
     ...(projects ? transformProjectsToWorkOrders(projects) : []),
   ];
-  results.workOrdersCount = results.workOrders.length;
+  results.workOrders = workOrders;
+  results.workOrdersCount = workOrders.length;
 
   // 5. Invoices - Coperniq may use /invoices or /financial-documents
   // Try invoices first
@@ -132,9 +136,11 @@ export async function GET(request: NextRequest) {
 }
 
 // Transform functions (simplified versions)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyRecord = Record<string, any>;
 
-function transformClients(clients: unknown[]): unknown[] {
-  return clients.map((client: Record<string, unknown>) => ({
+function transformClients(clients: AnyRecord[]): AnyRecord[] {
+  return clients.map((client) => ({
     id: `client-${client.id}`,
     name: client.title || client.name || 'Unknown',
     email: client.email,
@@ -145,8 +151,8 @@ function transformClients(clients: unknown[]): unknown[] {
   }));
 }
 
-function transformProjects(projects: unknown[]): unknown[] {
-  return projects.map((proj: Record<string, unknown>) => ({
+function transformProjects(projects: AnyRecord[]): AnyRecord[] {
+  return projects.map((proj) => ({
     id: `proj-${proj.id}`,
     title: proj.title || 'Untitled Project',
     customer: (proj.client as Record<string, unknown>)?.name || 'Unassigned',
@@ -159,8 +165,8 @@ function transformProjects(projects: unknown[]): unknown[] {
   }));
 }
 
-function transformRequests(requests: unknown[]): unknown[] {
-  return requests.map((req: Record<string, unknown>) => ({
+function transformRequests(requests: AnyRecord[]): AnyRecord[] {
+  return requests.map((req) => ({
     id: `request-${req.id}`,
     title: req.title || req.subject || 'Service Request',
     description: req.description,
@@ -173,8 +179,8 @@ function transformRequests(requests: unknown[]): unknown[] {
   }));
 }
 
-function transformRequestsToWorkOrders(requests: unknown[]): unknown[] {
-  return requests.map((req: Record<string, unknown>) => ({
+function transformRequestsToWorkOrders(requests: AnyRecord[]): AnyRecord[] {
+  return requests.map((req) => ({
     id: `req-${req.id}`,
     title: req.title || 'Service Request',
     status: mapStatus(req.status as string),
@@ -189,8 +195,8 @@ function transformRequestsToWorkOrders(requests: unknown[]): unknown[] {
   }));
 }
 
-function transformProjectsToWorkOrders(projects: unknown[]): unknown[] {
-  return projects.map((proj: Record<string, unknown>) => ({
+function transformProjectsToWorkOrders(projects: AnyRecord[]): AnyRecord[] {
+  return projects.map((proj) => ({
     id: `proj-${proj.id}`,
     title: proj.title || 'Untitled Project',
     status: mapProjectStatusToWorkOrder(proj.status as string, proj.stage as string),
@@ -205,8 +211,8 @@ function transformProjectsToWorkOrders(projects: unknown[]): unknown[] {
   }));
 }
 
-function transformInvoices(invoices: unknown[]): unknown[] {
-  return invoices.map((inv: Record<string, unknown>) => ({
+function transformInvoices(invoices: AnyRecord[]): AnyRecord[] {
+  return invoices.map((inv) => ({
     id: `inv-${inv.id}`,
     invoiceNumber: inv.invoiceNumber || inv.number || `INV-${inv.id}`,
     customer: (inv.client as Record<string, unknown>)?.name || 'Unknown',
@@ -219,7 +225,7 @@ function transformInvoices(invoices: unknown[]): unknown[] {
 
 // Helper functions
 
-function formatAddress(obj: Record<string, unknown>): string {
+function formatAddress(obj: AnyRecord): string {
   const parts = [];
   if (obj.address && Array.isArray(obj.address)) {
     parts.push(...obj.address);

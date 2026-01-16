@@ -33,7 +33,7 @@ const MODELS = {
   gemini_flash: 'google/gemini-flash-1.5',        // Alternative VLM
 
   // Voice (via Cartesia)
-  cartesia_sonic: 'sonic-3',                      // TTS - 40ms latency
+  cartesia_sonic: 'sonic-english',                // TTS - English model with low latency
 
   // STT (via Deepgram or AssemblyAI)
   deepgram_nova: 'nova-2',                        // STT - best accuracy, real-time
@@ -85,14 +85,18 @@ export const MODEL_OPTIONS = {
   ],
 };
 
-// Voice emotion options for Cartesia Sonic 3
-const VOICE_EMOTIONS = {
+// Voice emotion options for Cartesia Sonic
+// Valid emotion levels: lowest, low, (omit=moderate), high, highest
+// NOTE: "medium" is NOT a valid level - use high or omit for moderate
+// Speed range: [-1.0, 1.0] where 0 is NORMAL, negative=slower, positive=faster
+// Labels: "slowest", "slow", "normal", "fast", "fastest"
+const VOICE_EMOTIONS: Record<string, { speed: string | number; emotion: string[] }> = {
   neutral: { speed: 'normal', emotion: [] },
-  happy: { speed: 'normal', emotion: ['positivity:high', 'curiosity:medium'] },
-  professional: { speed: 'normal', emotion: ['positivity:medium'] },
-  urgent: { speed: 'fast', emotion: ['surprise:medium'] },
-  calm: { speed: 'slow', emotion: ['positivity:low'] },
-  empathetic: { speed: 'slow', emotion: ['positivity:medium', 'sadness:low'] },
+  happy: { speed: 'normal', emotion: ['positivity:high', 'curiosity:high'] },
+  professional: { speed: -0.05, emotion: ['positivity'] }, // slightly slower for clarity
+  urgent: { speed: 0.15, emotion: ['surprise:high'] }, // slightly faster for urgency
+  calm: { speed: -0.15, emotion: ['positivity:low'] }, // slower for calm delivery
+  empathetic: { speed: -0.1, emotion: ['positivity', 'sadness:low'] }, // gentle pace
 };
 
 // Trade-specific system prompts for context
@@ -231,6 +235,7 @@ async function routeToCartesia(
 
 /**
  * Route to Deepgram (STT) - Real-time streaming capable
+ * Supports webm/opus audio from browser MediaRecorder
  */
 async function routeToDeepgram(audioBase64: string): Promise<string> {
   const apiKey = process.env.DEEPGRAM_API_KEY;
@@ -238,7 +243,19 @@ async function routeToDeepgram(audioBase64: string): Promise<string> {
 
   const audioBuffer = Buffer.from(audioBase64, 'base64');
 
-  const response = await fetch(`${DEEPGRAM_API_URL}?model=${MODELS.deepgram_nova}&smart_format=true&punctuate=true`, {
+  // Log audio info for debugging
+  console.log('[Deepgram] Audio buffer size:', audioBuffer.length, 'bytes');
+
+  // Deepgram params: model, smart_format, punctuate
+  // For webm/opus from browser, we let Deepgram auto-detect the encoding
+  const params = new URLSearchParams({
+    model: MODELS.deepgram_nova,
+    smart_format: 'true',
+    punctuate: 'true',
+    language: 'en',
+  });
+
+  const response = await fetch(`${DEEPGRAM_API_URL}?${params}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'audio/webm',
@@ -249,11 +266,14 @@ async function routeToDeepgram(audioBase64: string): Promise<string> {
 
   if (!response.ok) {
     const error = await response.text();
+    console.error('[Deepgram] Error response:', error);
     throw new Error(`Deepgram API error: ${response.status} - ${error}`);
   }
 
   const data = await response.json();
-  return data.results?.channels?.[0]?.alternatives?.[0]?.transcript || '';
+  const transcript = data.results?.channels?.[0]?.alternatives?.[0]?.transcript || '';
+  console.log('[Deepgram] Transcript:', transcript);
+  return transcript;
 }
 
 /**

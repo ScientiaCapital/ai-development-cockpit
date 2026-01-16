@@ -12,9 +12,11 @@ import {
   X,
   Image as ImageIcon,
   Settings,
+  Volume2,
+  VolumeX,
 } from 'lucide-react';
 import { cn, generateId, formatMessageTime } from '@/lib/utils';
-import { sendChatMessage, sendChatMessageWithImage } from '@/lib/api';
+import { sendChatMessage, sendChatMessageWithImage, speakAndPlay } from '@/lib/api';
 import { getAgentById, DEFAULT_QUICK_ACTIONS, TRADE_AGENTS, type QuickAction, type TradeAgent } from '@/lib/trade-agents';
 import type { ChatMessage } from '@/types';
 import styles from './ChatInterface.module.css';
@@ -26,9 +28,18 @@ interface ChatInterfaceProps {
   onClear?: () => void;
   selectedTrade?: string;
   onTradeChange?: (trade: string) => void;
+  triggerVoiceSettings?: boolean;  // External trigger to open voice settings
+  onVoiceSettingsClosed?: () => void;  // Callback when voice settings closes
 }
 
-export default function ChatInterface({ initialMessage, onClear, selectedTrade, onTradeChange }: ChatInterfaceProps) {
+export default function ChatInterface({
+  initialMessage,
+  onClear,
+  selectedTrade,
+  onTradeChange,
+  triggerVoiceSettings,
+  onVoiceSettingsClosed,
+}: ChatInterfaceProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -38,6 +49,8 @@ export default function ChatInterface({ initialMessage, onClear, selectedTrade, 
   const [showVoiceSettings, setShowVoiceSettings] = useState(false);
   const [currentVoiceId, setCurrentVoiceId] = useState('a0e99841-438c-4a64-b679-ae501e7d6091'); // Mark (Professional)
   const [currentEmotion, setCurrentEmotion] = useState('professional');
+  const [voiceEnabled, setVoiceEnabled] = useState(false); // TTS on/off
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -153,13 +166,26 @@ export default function ChatInterface({ initialMessage, onClear, selectedTrade, 
         : await sendChatMessage(text, history);
 
       // Add assistant message from Claude
+      const responseText = response.message?.content || 'No response received';
       const assistantMessage: ChatMessage = {
         id: generateId(),
         role: 'assistant',
-        content: response.message?.content || 'No response received',
+        content: responseText,
         timestamp: new Date().toISOString(),
       };
       setMessages((prev) => [...prev, assistantMessage]);
+
+      // Speak the response if voice is enabled
+      if (voiceEnabled && responseText) {
+        setIsSpeaking(true);
+        try {
+          await speakAndPlay(responseText, currentVoiceId, currentEmotion);
+        } catch (error) {
+          console.error('[TTS] Failed to speak response:', error);
+        } finally {
+          setIsSpeaking(false);
+        }
+      }
     } catch (error) {
       // Add error message
       const errorMessage: ChatMessage = {
@@ -192,6 +218,8 @@ export default function ChatInterface({ initialMessage, onClear, selectedTrade, 
   // Handle voice transcript from VoiceInput
   const handleVoiceTranscript = useCallback((text: string) => {
     if (text.trim()) {
+      // Enable voice responses when user speaks
+      setVoiceEnabled(true);
       handleSend(text);
     }
   }, []);
@@ -423,6 +451,15 @@ export default function ChatInterface({ initialMessage, onClear, selectedTrade, 
 
         {/* Voice Input Controls */}
         <div className={styles.voiceControls}>
+          {/* Voice Output Toggle - Enable TTS responses */}
+          <button
+            className={cn(styles.voiceToggleBtn, voiceEnabled && styles.voiceToggleActive)}
+            onClick={() => setVoiceEnabled(!voiceEnabled)}
+            title={voiceEnabled ? 'Disable voice responses' : 'Enable voice responses'}
+            aria-label={voiceEnabled ? 'Disable voice responses' : 'Enable voice responses'}
+          >
+            {voiceEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
+          </button>
           <VoiceInput
             onTranscript={handleVoiceTranscript}
             onError={(err) => console.error('Voice error:', err)}

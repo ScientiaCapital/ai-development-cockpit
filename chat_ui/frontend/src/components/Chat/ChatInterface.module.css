@@ -622,6 +622,37 @@
   border-color: var(--color-primary);
 }
 
+/* Voice Output Toggle Button */
+.voiceToggleBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.voiceToggleBtn:hover {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border-color: var(--color-primary);
+}
+
+.voiceToggleActive {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.voiceToggleActive:hover {
+  background: rgba(34, 197, 94, 0.25);
+}
+
 /* Modal Overlay */
 .modalOverlay {
   position: fixed;

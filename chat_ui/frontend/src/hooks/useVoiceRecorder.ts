@@ -132,7 +132,18 @@ export function useVoiceRecorder(options: VoiceRecorderOptions) {
         setRecordingState('processing');
 
         const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm' });
+        console.log('[VoiceRecorder] Audio blob size:', audioBlob.size, 'bytes, chunks:', chunksRef.current.length);
+
+        // Check if we have enough audio data
+        if (audioBlob.size < 1000) {
+          console.warn('[VoiceRecorder] Audio too short, skipping transcription');
+          onError('Recording too short - please speak for at least 1 second');
+          setRecordingState('idle');
+          return;
+        }
+
         const base64 = await blobToBase64(audioBlob);
+        console.log('[VoiceRecorder] Base64 length:', base64.length);
 
         // Send to STT API
         try {
@@ -147,6 +158,7 @@ export function useVoiceRecorder(options: VoiceRecorderOptions) {
           });
 
           const data = await response.json();
+          console.log('[VoiceRecorder] STT response:', data.success, data.text?.substring(0, 50));
 
           if (data.success && data.text) {
             setState(prev => ({
@@ -159,6 +171,7 @@ export function useVoiceRecorder(options: VoiceRecorderOptions) {
             onError(data.error || 'Failed to transcribe audio');
           }
         } catch (err) {
+          console.error('[VoiceRecorder] Transcription error:', err);
           onError(`Transcription failed: ${err}`);
         }
 

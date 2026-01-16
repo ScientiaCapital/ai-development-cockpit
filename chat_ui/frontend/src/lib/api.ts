@@ -349,6 +349,79 @@ export async function getDashboardStats(): Promise<DashboardStats> {
   }
 }
 
+// ============================================================================
+// Voice TTS - Convert text to speech using Cartesia Sonic 3
+// ============================================================================
+
+export interface TTSResponse {
+  success: boolean;
+  audio?: string; // base64 encoded mp3
+  format?: string;
+  model?: string;
+  emotion?: string;
+  error?: string;
+}
+
+/**
+ * Convert text to speech using Cartesia Sonic 3
+ * @param text - Text to speak
+ * @param voiceId - Cartesia voice ID
+ * @param emotion - Voice emotion (neutral, happy, professional, urgent, calm, empathetic)
+ * @returns Base64 audio data
+ */
+export async function speakText(
+  text: string,
+  voiceId?: string,
+  emotion: string = 'professional'
+): Promise<TTSResponse> {
+  return fetchApi<TTSResponse>('/orchestrator', {
+    method: 'POST',
+    body: JSON.stringify({
+      route: 'voice_tts',
+      text,
+      voice: voiceId,
+      voiceEmotion: emotion,
+    }),
+  });
+}
+
+/**
+ * Play audio from base64 encoded data
+ * @param base64Audio - Base64 encoded audio
+ * @returns Promise that resolves when playback completes
+ */
+export function playAudio(base64Audio: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    try {
+      const audio = new Audio(`data:audio/mp3;base64,${base64Audio}`);
+      audio.onended = () => resolve();
+      audio.onerror = (e) => reject(e);
+      audio.play().catch(reject);
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
+/**
+ * Speak text using TTS and play it
+ * @param text - Text to speak
+ * @param voiceId - Optional voice ID
+ * @param emotion - Voice emotion
+ */
+export async function speakAndPlay(
+  text: string,
+  voiceId?: string,
+  emotion: string = 'professional'
+): Promise<void> {
+  const response = await speakText(text, voiceId, emotion);
+  if (response.success && response.audio) {
+    await playAudio(response.audio);
+  } else {
+    console.error('[TTS] Failed to generate speech:', response.error);
+  }
+}
+
 // WebSocket connection for real-time chat
 export function createChatWebSocket(
   onMessage: (message: { role: string; content: string; timestamp: string }) => void,

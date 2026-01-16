@@ -53,6 +53,9 @@ const SYSTEM_PROMPT = `You are an AI assistant for Kipper Energy Solutions, a ME
 
 ## YOUR SUPERPOWERS (40+ Tools)
 
+### ⏰ System Utilities - Real-Time Info
+- get_current_time: ALWAYS use this to get the current date, time, day of week, and business hours
+
 ### 📋 Work Orders - Full Control
 - get_work_orders: Query all work orders, filter by status/trade
 - get_project_work_orders: Work orders for a specific project
@@ -126,6 +129,7 @@ const SYSTEM_PROMPT = `You are an AI assistant for Kipper Energy Solutions, a ME
 ALWAYS use tools to get REAL data. Never guess. Never say "I don't have access."
 
 Examples:
+- "What time is it?" → get_current_time (ALWAYS use this for time/date questions)
 - "Show me today's work orders" → get_work_orders
 - "What equipment do we have?" → get_catalog_items
 - "Find John's contact info" → get_clients or get_contacts
@@ -224,10 +228,44 @@ You are a compliance expert for MEP contractors. When asked about codes, certifi
 - Heat illness prevention: Water, rest, shade
 
 ## PERSONALITY
-Be helpful, concise, and professional. Use industry terminology. You're like having a knowledgeable office manager who knows every customer, every job, and every piece of equipment.`;
+Be helpful, concise, and professional. Use industry terminology. You're like having a knowledgeable office manager who knows every customer, every job, and every piece of equipment.
+
+## ⚠️ VOICE RESPONSE RULES (CRITICAL)
+Your responses will often be SPOKEN aloud via text-to-speech. Follow these rules:
+
+1. **BE BRIEF**: 2-3 sentences max for simple queries. Users can't interrupt TTS.
+2. **NO LISTS**: Instead of bullet points, speak naturally in conversational prose.
+3. **NO MARKDOWN**: No asterisks, headers, or formatting. Plain text only.
+4. **DIRECT ANSWERS**: Lead with the answer, then brief context if needed.
+5. **NUMBERS**: Say "five work orders" not "5 work orders".
+6. **CONVERSATIONAL**: Sound like you're talking to a coworker, not writing a report.
+
+Bad: "**Work Orders Summary**\\n- 5 pending\\n- 3 in progress\\n- 2 completed"
+Good: "You have five pending work orders, three in progress, and two completed."
+
+Bad: "I'd be happy to help you with that! Let me pull up the information..."
+Good: "You have ten catalog items. Want me to list the product names?"`;
+
 
 // Claude Tool Definitions for Coperniq - ALL ENDPOINTS
 const TOOLS = [
+  // ═══════════════════════════════════════════════════════════════════════════
+  // SYSTEM UTILITIES (Real-time info)
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    name: 'get_current_time',
+    description: 'Get the current date, time, and timezone. Use this to answer questions about what time/day it is, calculate SLAs, schedule appointments, or determine business hours.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        timezone: {
+          type: 'string',
+          description: 'Optional timezone (e.g., "America/Los_Angeles", "America/New_York"). Defaults to server timezone.',
+        },
+      },
+    },
+  },
+
   // ═══════════════════════════════════════════════════════════════════════════
   // WORK ORDERS
   // ═══════════════════════════════════════════════════════════════════════════
@@ -969,6 +1007,57 @@ async function coperniqFetch(
 async function executeTool(toolName: string, toolInput: Record<string, unknown>, apiKey: string): Promise<string> {
   try {
     switch (toolName) {
+      // ═══════════════════════════════════════════════════════════════════════
+      // SYSTEM UTILITIES (Real-time info)
+      // ═══════════════════════════════════════════════════════════════════════
+      case 'get_current_time': {
+        const now = new Date();
+        const timezone = toolInput.timezone as string || Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+        // Format date/time for the requested timezone
+        const formatter = new Intl.DateTimeFormat('en-US', {
+          timeZone: timezone,
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true,
+        });
+
+        const dateFormatter = new Intl.DateTimeFormat('en-US', {
+          timeZone: timezone,
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        });
+
+        const timeFormatter = new Intl.DateTimeFormat('en-US', {
+          timeZone: timezone,
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false,
+        });
+
+        return JSON.stringify({
+          formatted: formatter.format(now),
+          date: dateFormatter.format(now),
+          time: timeFormatter.format(now),
+          timezone: timezone,
+          iso: now.toISOString(),
+          timestamp: now.getTime(),
+          dayOfWeek: new Intl.DateTimeFormat('en-US', { timeZone: timezone, weekday: 'long' }).format(now),
+          isWeekend: [0, 6].includes(now.getDay()),
+          businessHours: {
+            isOpen: now.getHours() >= 7 && now.getHours() < 18 && ![0, 6].includes(now.getDay()),
+            opensAt: '7:00 AM',
+            closesAt: '6:00 PM',
+          },
+        });
+      }
+
       // ═══════════════════════════════════════════════════════════════════════
       // WORK ORDERS
       // ═══════════════════════════════════════════════════════════════════════

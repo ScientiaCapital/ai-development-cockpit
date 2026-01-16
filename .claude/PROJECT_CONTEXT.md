@@ -1,9 +1,44 @@
 # ai-development-cockpit
 
-**Branch**: main | **Updated**: 2026-01-14 (CRITICAL AUDIT FINDINGS)
-**Sprint**: APP26 Template Building - Instance 388 (Kipper Energy Solutions)
+**Branch**: main | **Updated**: 2026-01-16
+**Sprint**: Chat UI Agent Actions + Vision Inspector
 
 ## Status
+
+**✅ CHAT UI AGENT ACTIONS COMPLETE** - All AI agent buttons now perform appropriate actions instead of just sending chat messages. Vision Inspector panel created with VLM/OCR capabilities.
+
+## Done (This Session - 2026-01-16)
+
+**Agent-Specific Actions Wired**:
+1. ✅ Voice AI agent → Opens Voice Settings modal (Cartesia voices)
+2. ✅ Vision Inspector agent → Opens Vision panel with VLM/OCR modes
+3. ✅ Smart Dispatch agent → Sends contextual chat message
+
+**Quick Action Panel Routing**:
+4. ✅ Service Requests button → Opens Requests panel directly (11 live from Coperniq)
+5. ✅ ID Asset button → Opens Vision Inspector panel
+6. ✅ New Work Order → AI-guided creation via chat
+7. ✅ Dispatch Tech → Chat-based dispatch workflow
+
+**Vision Inspector Panel Created**:
+8. ✅ 4 analysis modes: Equipment ID, OCR Extract, Blueprint, General
+9. ✅ Drag & drop file upload with preview
+10. ✅ VLM analysis via /api/orchestrator route
+11. ✅ Results display with copy functionality
+
+**Type System Updates**:
+12. ✅ Added QuickActionType: 'chat' | 'panel' | 'modal' | 'vision'
+13. ✅ Added PanelViewType for right panel views
+14. ✅ Updated QuickAction interface with actionType, panelView, filter
+
+**Commits Pushed (3)**:
+- 075493c feat: Quick action panel routing + Coperniq operations
+- 5b790f0 feat: Agent-specific actions + Vision Inspector panel
+- a604b1c feat: Voice AI wiring + agent action handlers
+
+---
+
+## Previous Status (2026-01-14)
 
 **⚠️ CRITICAL AUDIT FINDINGS - WORKFLOWS NEED CONFIGURATION**
 

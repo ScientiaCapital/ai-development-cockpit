@@ -1,0 +1,43 @@
+{
+  "name": "@coperniq/mcp-server",
+  "version": "1.0.0",
+  "description": "MCP Server for Coperniq - AI tools for MEP contractors",
+  "main": "dist/index.js",
+  "type": "module",
+  "bin": {
+    "coperniq-mcp": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "dev:server": "tsx watch src/server.ts",
+    "start": "node dist/index.js",
+    "start:server": "node dist/server.js",
+    "inspect": "npx @anthropic-ai/mcp-inspector tsx src/index.ts",
+    "docker:build": "docker build -t coperniq-mcp-server .",
+    "docker:run": "docker run -p 8080:8080 -e COPERNIQ_API_KEY=$COPERNIQ_API_KEY coperniq-mcp-server"
+  },
+  "keywords": [
+    "mcp",
+    "coperniq",
+    "mep",
+    "hvac",
+    "plumbing",
+    "electrical",
+    "solar",
+    "field-service"
+  ],
+  "author": "Kipper Energy Solutions",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

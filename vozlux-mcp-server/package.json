@@ -1,0 +1,45 @@
+{
+  "name": "@coperniq/vozlux-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP Server for Vozlux - AI Voice Pipeline for MEP Contractors (TTS, STT, LLM)",
+  "main": "dist/index.js",
+  "type": "module",
+  "bin": {
+    "vozlux-mcp": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "dev:server": "tsx watch src/server.ts",
+    "start": "node dist/index.js",
+    "start:server": "node dist/server.js",
+    "inspect": "npx @anthropic-ai/mcp-inspector tsx src/index.ts",
+    "docker:build": "docker build -t vozlux-mcp-server .",
+    "docker:run": "docker run -p 8082:8082 -e CARTESIA_API_KEY=$CARTESIA_API_KEY -e DEEPGRAM_API_KEY=$DEEPGRAM_API_KEY vozlux-mcp-server"
+  },
+  "keywords": [
+    "mcp",
+    "vozlux",
+    "voice",
+    "tts",
+    "stt",
+    "cartesia",
+    "deepgram",
+    "mep",
+    "coperniq",
+    "field-service"
+  ],
+  "author": "Kipper Energy Solutions",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

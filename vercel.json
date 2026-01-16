@@ -1,8 +1,0 @@
-{
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "nextjs",
-  "buildCommand": "cd chat_ui/frontend && npm install && npm run build",
-  "outputDirectory": "chat_ui/frontend/.next",
-  "installCommand": "cd chat_ui/frontend && npm install",
-  "devCommand": "cd chat_ui/frontend && npm run dev"
-}

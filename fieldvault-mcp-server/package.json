@@ -1,0 +1,47 @@
+{
+  "name": "@coperniq/fieldvault-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP Server for FieldVault - AI blueprint analysis, VLM, OCR for MEP contractors",
+  "main": "dist/index.js",
+  "type": "module",
+  "bin": {
+    "fieldvault-mcp": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "dev:server": "tsx watch src/server.ts",
+    "start": "node dist/index.js",
+    "start:server": "node dist/server.js",
+    "inspect": "npx @anthropic-ai/mcp-inspector tsx src/index.ts",
+    "docker:build": "docker build -t fieldvault-mcp-server .",
+    "docker:run": "docker run -p 8081:8081 -e OPENROUTER_API_KEY=$OPENROUTER_API_KEY fieldvault-mcp-server"
+  },
+  "keywords": [
+    "mcp",
+    "fieldvault",
+    "vlm",
+    "ocr",
+    "blueprint",
+    "takeoff",
+    "mep",
+    "hvac",
+    "plumbing",
+    "electrical",
+    "solar"
+  ],
+  "author": "Kipper Energy Solutions",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "openai": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

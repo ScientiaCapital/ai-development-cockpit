@@ -1,0 +1,67 @@
+# RunPod Serverless Configuration
+# Coperniq MCP Server - AI Tools for MEP Contractors
+
+name: coperniq-mcp-server
+version: 1.0.0
+
+# Serverless Endpoint Configuration
+serverless:
+  # GPU not needed - this is an API proxy
+  gpu: false
+
+  # Container configuration
+  container:
+    image: tmk74/coperniq-mcp-server:latest
+    port: 8080
+
+  # Environment variables (set in RunPod dashboard)
+  env:
+    - COPERNIQ_API_KEY  # Required - Coperniq API access
+    - NODE_ENV=production
+
+  # Scaling configuration
+  scaling:
+    min_workers: 0        # Scale to zero when idle
+    max_workers: 10       # Max concurrent instances
+    idle_timeout: 60      # Seconds before scaling down
+
+  # Resource limits (CPU-only workload)
+  resources:
+    cpu: 1
+    memory: 512Mi
+
+# Health check
+healthcheck:
+  path: /health
+  interval: 30s
+  timeout: 10s
+
+# API Endpoints exposed
+endpoints:
+  - path: /health
+    method: GET
+    description: Health check
+
+  - path: /tools
+    method: GET
+    description: List all available Coperniq tools
+
+  - path: /execute
+    method: POST
+    description: Execute a Coperniq tool
+    body:
+      tool: string      # Tool name (e.g., "get_work_orders")
+      args: object      # Tool arguments
+
+  - path: /runsync
+    method: POST
+    description: RunPod native endpoint format
+    body:
+      input:
+        tool: string
+        args: object
+
+# Pricing Notes (for business model)
+# - Coperniq API calls: ~$0.001 per call
+# - RunPod serverless: ~$0.0002/sec when running
+# - Suggested pricing: $0.01 per API call or $99/month unlimited

@@ -8,6 +8,18 @@ import twilio from 'twilio';
 const getBaseUrl = () => process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://kipper-energy-solutions.vercel.app';
 const ttsUrl = (text: string) => `${getBaseUrl()}/api/twilio/tts?text=${encodeURIComponent(text)}&voice=male`;
 
+// Trade display names for voice
+const TRADE_DISPLAY_NAMES: Record<string, string> = {
+  hvac: 'HVAC',
+  plumbing: 'plumbing',
+  electrical: 'electrical',
+  solar: 'solar',
+  low_voltage: 'low voltage',
+  roofing: 'roofing',
+  fire_safety: 'fire safety',
+  general: '',
+};
+
 export async function POST(request: NextRequest) {
   const VoiceResponse = twilio.twiml.VoiceResponse;
   const twiml = new VoiceResponse();
@@ -15,8 +27,9 @@ export async function POST(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const trade = searchParams.get('trade') || 'general';
+    const tradeName = TRADE_DISPLAY_NAMES[trade] || trade.replace('_', ' ');
 
-    twiml.play(ttsUrl(`I'm connecting you with our ${trade === 'general' ? '' : trade + ' '}team now. Please hold.`));
+    twiml.play(ttsUrl(`I'm connecting you with our ${tradeName ? tradeName + ' ' : ''}team now. Please hold.`));
 
     twiml.dial({
       callerId: process.env.TWILIO_PHONE_NUMBER,

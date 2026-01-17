@@ -1,0 +1,71 @@
+{
+  "laborRates": {
+    "hvac": {
+      "standard": 95.00,
+      "overtime": 142.50,
+      "emergency": 190.00,
+      "apprentice": 55.00
+    },
+    "plumbing": {
+      "standard": 95.00,
+      "overtime": 142.50,
+      "emergency": 190.00,
+      "apprentice": 55.00
+    },
+    "electrical": {
+      "standard": 100.00,
+      "overtime": 150.00,
+      "emergency": 200.00,
+      "apprentice": 60.00
+    },
+    "solar": {
+      "standard": 85.00,
+      "overtime": 127.50,
+      "emergency": 170.00,
+      "apprentice": 50.00
+    },
+    "low_voltage": {
+      "standard": 75.00,
+      "overtime": 112.50,
+      "emergency": 150.00,
+      "apprentice": 45.00
+    },
+    "fire_safety": {
+      "standard": 90.00,
+      "overtime": 135.00,
+      "emergency": 180.00,
+      "apprentice": 50.00
+    },
+    "roofing": {
+      "standard": 75.00,
+      "overtime": 112.50,
+      "emergency": 150.00,
+      "apprentice": 45.00
+    }
+  },
+  "materialMarkup": {
+    "default": 0.35,
+    "residential": 0.35,
+    "commercial": 0.25,
+    "emergency": 0.50
+  },
+  "minimumCharges": {
+    "serviceCall": 95.00,
+    "diagnostic": 149.00,
+    "emergencyDispatch": 195.00
+  },
+  "catalogItemIds": {
+    "labor": {
+      "hvac": null,
+      "plumbing": null,
+      "electrical": null,
+      "solar": null,
+      "low_voltage": null,
+      "fire_safety": null,
+      "roofing": null
+    },
+    "serviceCall": null,
+    "diagnostic": null
+  },
+  "_comment": "catalogItemIds will be populated once labor items are created in Coperniq catalog. Set null to auto-create or prompt user."
+}

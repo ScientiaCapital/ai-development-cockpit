@@ -1,0 +1,1536 @@
+{
+  "source": "pre-seeded",
+  "instance": {
+    "id": 388,
+    "name": "KES",
+    "type": "production"
+  },
+  "timestamp": "2026-01-16T16:39:08Z",
+  "seededAt": "2026-01-16T16:39:08Z",
+  "rawClients": [
+    {
+      "id": 724896,
+      "createdAt": "2026-01-13T18:30:22.371-06:00",
+      "updatedAt": "2026-01-15T11:02:21.409-06:00",
+      "title": "[HVAC] RTU Replacement - Wilson Commercial",
+      "description": null,
+      "address": [
+        "555 Research Blvd 78752"
+      ],
+      "geoLocation": [
+        "30.3470092,-97.71244779999999"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://maps.googleapis.com/maps/api/streetview?size=1000x300&location=30.3470092,-97.71244779999999&key=REVOKED_KEY",
+      "isActive": true,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "city": "Austin",
+      "zipcode": "78752",
+      "state": "TX",
+      "street": "555 Research Boulevard",
+      "owner": null,
+      "lastActivity": "2026-01-15T11:02:21.924-06:00",
+      "number": 65,
+      "clientType": "COMMERCIAL",
+      "createdBy": {
+        "id": 13845
+      },
+      "custom": {}
+    },
+    {
+      "id": 724883,
+      "createdAt": "2026-01-13T18:30:15.019-06:00",
+      "updatedAt": "2026-01-15T11:01:52.692-06:00",
+      "title": "Anderson Medical Clinic",
+      "description": null,
+      "address": [
+        "444 Medical Pkwy 23320"
+      ],
+      "geoLocation": [
+        "36.7445453,-76.24904409999999"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://maps.googleapis.com/maps/api/streetview?size=1000x300&location=36.7445453,-76.24904409999999&key=REVOKED_KEY",
+      "isActive": true,
+      "primaryEmail": "anderson.clinic@email.com",
+      "primaryPhone": "+15125551008",
+      "city": "Chesapeake",
+      "zipcode": "23320",
+      "state": "VA",
+      "street": "444 Medical Parkway",
+      "owner": null,
+      "lastActivity": "2026-01-15T11:01:52.984-06:00",
+      "number": 58,
+      "clientType": "COMMERCIAL",
+      "createdBy": {
+        "id": 13845
+      },
+      "custom": {}
+    },
+    {
+      "id": 724882,
+      "createdAt": "2026-01-13T18:30:14.037-06:00",
+      "updatedAt": "2026-01-15T11:01:43.001-06:00",
+      "title": "Garcia Auto Shop",
+      "description": null,
+      "address": [
+        "222 Industrial Blvd 37167"
+      ],
+      "geoLocation": [
+        "35.9776304,-86.57125909999999"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://maps.googleapis.com/maps/api/streetview?size=1000x300&location=35.9776304,-86.57125909999999&key=REVOKED_KEY",
+      "isActive": true,
+      "primaryEmail": "garcia.auto@email.com",
+      "primaryPhone": "+15125551007",
+      "city": "Smyrna",
+      "zipcode": "37167",
+      "state": "TN",
+      "street": "222 Industrial Boulevard",
+      "owner": null,
+      "lastActivity": "2026-01-15T11:01:43.287-06:00",
+      "number": 57,
+      "clientType": "COMMERCIAL",
+      "createdBy": {
+        "id": 13845
+      },
+      "custom": {}
+    },
+    {
+      "id": 724898,
+      "createdAt": "2026-01-13T18:30:23.096-06:00",
+      "updatedAt": "2026-01-13T18:30:23.096-06:00",
+      "title": "[Fire] Sprinkler Inspection - Davis PM",
+      "description": null,
+      "address": [
+        "789 Downtown Blvd Suite 100 36609"
+      ],
+      "geoLocation": [
+        "30.673478,-88.14014410000001"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://maps.googleapis.com/maps/api/streetview?size=1000x300&location=30.673478,-88.14014410000001&key=REVOKED_KEY",
+      "isActive": true,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "city": "Mobile",
+      "zipcode": "36609",
+      "state": "AL",
+      "street": "789 Downtowner Boulevard",
+      "owner": null,
+      "lastActivity": "2026-01-13T18:30:25.5-06:00",
+      "number": 66,
+      "clientType": "RESIDENTIAL",
+      "createdBy": {
+        "id": 13845
+      },
+      "custom": {}
+    },
+    {
+      "id": 724894,
+      "createdAt": "2026-01-13T18:30:21.597-06:00",
+      "updatedAt": "2026-01-13T18:30:21.597-06:00",
+      "title": "[Solar] 8kW Residential - Thompson",
+      "description": null,
+      "address": [
+        "888 Lakeway Dr 65680"
+      ],
+      "geoLocation": [
+        "36.6803377,-93.0613454"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": null,
+      "isActive": true,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "city": "Kissee Mills",
+      "zipcode": "65680",
+      "state": "MO",
+      "street": "888 Lakeway",
+      "owner": null,
+      "lastActivity": "2026-01-13T18:30:23.095-06:00",
+      "number": 64,
+      "clientType": "RESIDENTIAL",
+      "createdBy": {
+        "id": 13845
+      },
+      "custom": {}
+    },
+    {
+      "id": 724892,
+      "createdAt": "2026-01-13T18:30:20.175-06:00",
+      "updatedAt": "2026-01-13T18:30:20.175-06:00",
+      "title": "Water Heater Leaking",
+      "description": null,
+      "address": [
+        "888 Lakeway Dr 65680"
+      ],
+      "geoLocation": [
+        "36.6803377,-93.0613454"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": null,
+      "isActive": true,
+      "primaryEmail": "thompson.home@email.com",
+      "primaryPhone": "+15125551006",
+      "city": "Kissee Mills",
+      "zipcode": "65680",
+      "state": "MO",
+      "street": "888 Lakeway",
+      "owner": null,
+      "lastActivity": "2026-01-13T18:31:02.004-06:00",
+      "number": 63,
+      "clientType": "RESIDENTIAL",
+      "createdBy": {
+        "id": 13845
+      },
+      "custom": {}
+    },
+    {
+      "id": 724890,
+      "createdAt": "2026-01-13T18:30:19.225-06:00",
+      "updatedAt": "2026-01-13T18:30:19.225-06:00",
+      "title": "PM Visit - Quarterly HVAC",
+      "description": null,
+      "address": [
+        "555 Research Blvd 78752"
+      ],
+      "geoLocation": [
+        "30.3470092,-97.71244779999999"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://maps.googleapis.com/maps/api/streetview?size=1000x300&location=30.3470092,-97.71244779999999&key=REVOKED_KEY",
+      "isActive": true,
+      "primaryEmail": "wilson.comm@email.com",
+      "primaryPhone": "+15125551005",
+      "city": "Austin",
+      "zipcode": "78752",
+      "state": "TX",
+      "street": "555 Research Boulevard",
+      "owner": null,
+      "lastActivity": "2026-01-13T18:31:02.504-06:00",
+      "number": 62,
+      "clientType": "RESIDENTIAL",
+      "createdBy": {
+        "id": 13845
+      },
+      "custom": {}
+    },
+    {
+      "id": 724888,
+      "createdAt": "2026-01-13T18:30:18.32-06:00",
+      "updatedAt": "2026-01-13T18:30:18.32-06:00",
+      "title": "Kitchen Hood Not Working",
+      "description": null,
+      "address": [
+        "321 Congress Ave 46208"
+      ],
+      "geoLocation": [
+        "39.8120954,-86.1646646"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://maps.googleapis.com/maps/api/streetview?size=1000x300&location=39.8120954,-86.1646646&key=REVOKED_KEY",
+      "isActive": true,
+      "primaryEmail": "martinez.group@email.com",
+      "primaryPhone": "+15125551004",
+      "city": "Indianapolis",
+      "zipcode": "46208",
+      "state": "IN",
+      "street": "321 Congress Avenue",
+      "owner": null,
+      "lastActivity": "2026-01-13T18:31:03.004-06:00",
+      "number": 61,
+      "clientType": "RESIDENTIAL",
+      "createdBy": {
+        "id": 13845
+      },
+      "custom": {}
+    },
+    {
+      "id": 724886,
+      "createdAt": "2026-01-13T18:30:17.262-06:00",
+      "updatedAt": "2026-01-13T18:30:17.262-06:00",
+      "title": "Furnace Making Strange Noise",
+      "description": null,
+      "address": [
+        "456 Cedar Park Blvd 43551"
+      ],
+      "geoLocation": [
+        "41.5599354,-83.5458444"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://maps.googleapis.com/maps/api/streetview?size=1000x300&location=41.5599354,-83.5458444&key=REVOKED_KEY",
+      "isActive": true,
+      "primaryEmail": "smith.family@email.com",
+      "primaryPhone": "+15125551002",
+      "city": "Perrysburg Township",
+      "zipcode": "43551",
+      "state": "OH",
+      "street": "Cedar Park Boulevard",
+      "owner": null,
+      "lastActivity": "2026-01-13T18:30:19.119-06:00",
+      "number": 60,
+      "clientType": "RESIDENTIAL",
+      "createdBy": {
+        "id": 13845
+      },
+      "custom": {}
+    },
+    {
+      "id": 724884,
+      "createdAt": "2026-01-13T18:30:16.379-06:00",
+      "updatedAt": "2026-01-13T18:30:16.379-06:00",
+      "title": "AC Not Cooling - Emergency",
+      "description": null,
+      "address": [
+        "123 Oak Hill Dr 30016"
+      ],
+      "geoLocation": [
+        "33.5562745,-83.94460839999999"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://maps.googleapis.com/maps/api/streetview?size=1000x300&location=33.5562745,-83.94460839999999&key=REVOKED_KEY",
+      "isActive": true,
+      "primaryEmail": "johnson@email.com",
+      "primaryPhone": "+15125551001",
+      "city": "Covington",
+      "zipcode": "30016",
+      "state": "GA",
+      "street": "123 Oak Hill Drive",
+      "owner": null,
+      "lastActivity": "2026-01-13T18:30:19.119-06:00",
+      "number": 59,
+      "clientType": "RESIDENTIAL",
+      "createdBy": {
+        "id": 13845
+      },
+      "custom": {}
+    },
+    {
+      "id": 724881,
+      "createdAt": "2026-01-13T18:30:13.199-06:00",
+      "updatedAt": "2026-01-13T18:30:13.199-06:00",
+      "title": "Thompson Residence",
+      "description": null,
+      "address": [
+        "888 Lakeway Dr 65680"
+      ],
+      "geoLocation": [
+        "36.6803377,-93.0613454"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": null,
+      "isActive": true,
+      "primaryEmail": "thompson.home@email.com",
+      "primaryPhone": "+15125551006",
+      "city": "Kissee Mills",
+      "zipcode": "65680",
+      "state": "MO",
+      "street": "888 Lakeway",
+      "owner": null,
+      "lastActivity": "2026-01-13T18:30:13.658-06:00",
+      "number": 56,
+      "clientType": "RESIDENTIAL",
+      "createdBy": {
+        "id": 13845
+      },
+      "custom": {}
+    },
+    {
+      "id": 724880,
+      "createdAt": "2026-01-13T18:30:12.424-06:00",
+      "updatedAt": "2026-01-13T18:30:12.424-06:00",
+      "title": "Wilson Commercial Properties",
+      "description": null,
+      "address": [
+        "555 Research Blvd 78752"
+      ],
+      "geoLocation": [
+        "30.3470092,-97.71244779999999"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://maps.googleapis.com/maps/api/streetview?size=1000x300&location=30.3470092,-97.71244779999999&key=REVOKED_KEY",
+      "isActive": true,
+      "primaryEmail": "wilson.comm@email.com",
+      "primaryPhone": "+15125551005",
+      "city": "Austin",
+      "zipcode": "78752",
+      "state": "TX",
+      "street": "555 Research Boulevard",
+      "owner": null,
+      "lastActivity": "2026-01-13T18:30:13.159-06:00",
+      "number": 55,
+      "clientType": "RESIDENTIAL",
+      "createdBy": {
+        "id": 13845
+      },
+      "custom": {}
+    },
+    {
+      "id": 724879,
+      "createdAt": "2026-01-13T18:30:11.51-06:00",
+      "updatedAt": "2026-01-13T18:30:11.51-06:00",
+      "title": "Martinez Restaurant Group",
+      "description": null,
+      "address": [
+        "321 Congress Ave 46208"
+      ],
+      "geoLocation": [
+        "39.8120954,-86.1646646"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://maps.googleapis.com/maps/api/streetview?size=1000x300&location=39.8120954,-86.1646646&key=REVOKED_KEY",
+      "isActive": true,
+      "primaryEmail": "martinez.group@email.com",
+      "primaryPhone": "+15125551004",
+      "city": "Indianapolis",
+      "zipcode": "46208",
+      "state": "IN",
+      "street": "321 Congress Avenue",
+      "owner": null,
+      "lastActivity": "2026-01-13T18:30:12.161-06:00",
+      "number": 54,
+      "clientType": "RESIDENTIAL",
+      "createdBy": {
+        "id": 13845
+      },
+      "custom": {}
+    },
+    {
+      "id": 724878,
+      "createdAt": "2026-01-13T18:30:10.436-06:00",
+      "updatedAt": "2026-01-13T18:30:10.436-06:00",
+      "title": "Davis Property Management",
+      "description": null,
+      "address": [
+        "789 Downtown Blvd Suite 100 36609"
+      ],
+      "geoLocation": [
+        "30.673478,-88.14014410000001"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://maps.googleapis.com/maps/api/streetview?size=1000x300&location=30.673478,-88.14014410000001&key=REVOKED_KEY",
+      "isActive": true,
+      "primaryEmail": "davis.pm@email.com",
+      "primaryPhone": "+15125551003",
+      "city": "Mobile",
+      "zipcode": "36609",
+      "state": "AL",
+      "street": "789 Downtowner Boulevard",
+      "owner": null,
+      "lastActivity": "2026-01-13T18:30:11.161-06:00",
+      "number": 53,
+      "clientType": "RESIDENTIAL",
+      "createdBy": {
+        "id": 13845
+      },
+      "custom": {}
+    },
+    {
+      "id": 724877,
+      "createdAt": "2026-01-13T18:30:09.45-06:00",
+      "updatedAt": "2026-01-13T18:30:09.45-06:00",
+      "title": "Smith Family Home",
+      "description": null,
+      "address": [
+        "456 Cedar Park Blvd 43551"
+      ],
+      "geoLocation": [
+        "41.5599354,-83.5458444"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://maps.googleapis.com/maps/api/streetview?size=1000x300&location=41.5599354,-83.5458444&key=REVOKED_KEY",
+      "isActive": true,
+      "primaryEmail": "smith.family@email.com",
+      "primaryPhone": "+15125551002",
+      "city": "Perrysburg Township",
+      "zipcode": "43551",
+      "state": "OH",
+      "street": "Cedar Park Boulevard",
+      "owner": null,
+      "lastActivity": "2026-01-13T18:30:10.158-06:00",
+      "number": 52,
+      "clientType": "RESIDENTIAL",
+      "createdBy": {
+        "id": 13845
+      },
+      "custom": {}
+    },
+    {
+      "id": 724876,
+      "createdAt": "2026-01-13T18:30:08.531-06:00",
+      "updatedAt": "2026-01-13T18:30:08.531-06:00",
+      "title": "Johnson Residence",
+      "description": null,
+      "address": [
+        "123 Oak Hill Dr 30016"
+      ],
+      "geoLocation": [
+        "33.5562745,-83.94460839999999"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://maps.googleapis.com/maps/api/streetview?size=1000x300&location=33.5562745,-83.94460839999999&key=REVOKED_KEY",
+      "isActive": true,
+      "primaryEmail": "johnson@email.com",
+      "primaryPhone": "+15125551001",
+      "city": "Covington",
+      "zipcode": "30016",
+      "state": "GA",
+      "street": "123 Oak Hill Drive",
+      "owner": null,
+      "lastActivity": "2026-01-13T18:30:09.002-06:00",
+      "number": 51,
+      "clientType": "RESIDENTIAL",
+      "createdBy": {
+        "id": 13845
+      },
+      "custom": {}
+    },
+    {
+      "id": 724370,
+      "createdAt": "2026-01-12T23:30:22.591-06:00",
+      "updatedAt": "2026-01-12T23:30:22.591-06:00",
+      "title": "SMS Request - +15125559999",
+      "description": null,
+      "address": [
+        ""
+      ],
+      "geoLocation": [
+        null,
+        null
+      ],
+      "imageUrl": null,
+      "streetViewUrl": null,
+      "isActive": true,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "city": null,
+      "zipcode": null,
+      "state": null,
+      "street": null,
+      "owner": null,
+      "lastActivity": "2026-01-13T08:54:36.941-06:00",
+      "number": 50,
+      "clientType": "RESIDENTIAL",
+      "createdBy": {
+        "id": 13845
+      },
+      "custom": {}
+    },
+    {
+      "id": 724369,
+      "createdAt": "2026-01-12T23:30:21.657-06:00",
+      "updatedAt": "2026-01-12T23:30:21.657-06:00",
+      "title": "SMS Contact +15125559999",
+      "description": null,
+      "address": null,
+      "geoLocation": null,
+      "imageUrl": null,
+      "streetViewUrl": null,
+      "isActive": true,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "city": null,
+      "zipcode": null,
+      "state": null,
+      "street": null,
+      "owner": null,
+      "lastActivity": "2026-01-12T23:30:21.846-06:00",
+      "number": 49,
+      "clientType": "RESIDENTIAL",
+      "createdBy": {
+        "id": 13845
+      },
+      "custom": {}
+    },
+    {
+      "id": 724362,
+      "createdAt": "2026-01-12T23:03:40.586-06:00",
+      "updatedAt": "2026-01-12T23:03:40.586-06:00",
+      "title": "Solar Panel Installation Quote",
+      "description": null,
+      "address": [
+        ""
+      ],
+      "geoLocation": [
+        null,
+        null
+      ],
+      "imageUrl": null,
+      "streetViewUrl": null,
+      "isActive": true,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "city": null,
+      "zipcode": null,
+      "state": null,
+      "street": null,
+      "owner": null,
+      "lastActivity": "2026-01-12T23:03:42.126-06:00",
+      "number": 48,
+      "clientType": "RESIDENTIAL",
+      "createdBy": {
+        "id": 13845
+      },
+      "custom": {}
+    },
+    {
+      "id": 724360,
+      "createdAt": "2026-01-12T23:03:40.049-06:00",
+      "updatedAt": "2026-01-12T23:03:40.049-06:00",
+      "title": "Plumbing Leak Repair",
+      "description": null,
+      "address": [
+        ""
+      ],
+      "geoLocation": [
+        null,
+        null
+      ],
+      "imageUrl": null,
+      "streetViewUrl": null,
+      "isActive": true,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "city": null,
+      "zipcode": null,
+      "state": null,
+      "street": null,
+      "owner": null,
+      "lastActivity": "2026-01-12T23:03:42.127-06:00",
+      "number": 47,
+      "clientType": "RESIDENTIAL",
+      "createdBy": {
+        "id": 13845
+      },
+      "custom": {}
+    }
+  ],
+  "rawProjects": [
+    {
+      "id": 724258,
+      "createdAt": "2026-01-12T20:04:25.115-06:00",
+      "updatedAt": "2026-01-12T20:04:25.656377-06:00",
+      "title": "Test Job - Integration Test",
+      "description": "This is a test job created by the integration test",
+      "address": [
+        "123 Test Street, Austin, TX 78701"
+      ],
+      "siteId": 273555,
+      "geoLocation": [
+        "30.2738825,-97.76432559999999"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://coperniq-databank.s3.us-west-1.wasabisys.com/388-13845-273555-streetViewUrl-1768269865322.jpg",
+      "isActive": true,
+      "companyId": 388,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "status": "ACTIVE",
+      "createdById": 13845,
+      "phaseInstanceId": null,
+      "trades": [
+        "Solar"
+      ],
+      "city": "Austin",
+      "zipcode": "78703",
+      "state": "TX",
+      "street": "1611 West 5th Street",
+      "phaseInstance": null,
+      "owner": null,
+      "salesRep": null,
+      "jurisdiction": {
+        "id": 27349,
+        "name": "Austin city",
+        "uuid": "0de25c9b-3be5-4783-ae37-d92b5fdc996f"
+      },
+      "lastActivity": "2026-01-12T20:04:27.005-06:00",
+      "workflowId": null,
+      "phaseId": null,
+      "clientId": 724257,
+      "number": 1,
+      "value": null,
+      "size": null,
+      "custom": {}
+    },
+    {
+      "id": 724280,
+      "createdAt": "2026-01-12T20:28:23.167-06:00",
+      "updatedAt": "2026-01-12T20:28:23.788273-06:00",
+      "title": "[HVAC] AC Replacement - Johnson",
+      "description": "Replace aging 15-year-old AC system with new high-efficiency unit",
+      "address": [
+        "123 Oak Street 46360"
+      ],
+      "siteId": 273574,
+      "geoLocation": [
+        "41.7148389,-86.8906919"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://coperniq-databank.s3.us-west-1.wasabisys.com/388-13845-273574-streetViewUrl-1768271303435.jpg",
+      "isActive": true,
+      "companyId": 388,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "status": "ACTIVE",
+      "createdById": 13845,
+      "phaseInstanceId": null,
+      "trades": [
+        "Solar"
+      ],
+      "city": "Michigan City",
+      "zipcode": "46360",
+      "state": "IN",
+      "street": "123 Oak Street",
+      "phaseInstance": null,
+      "owner": null,
+      "salesRep": null,
+      "jurisdiction": {
+        "id": 27350,
+        "name": "Michigan City city",
+        "uuid": "60864e8e-1462-4ff0-8b40-e650db078fbd"
+      },
+      "lastActivity": "2026-01-12T20:28:24.847-06:00",
+      "workflowId": null,
+      "phaseId": null,
+      "clientId": 724279,
+      "number": 2,
+      "value": null,
+      "size": null,
+      "custom": {}
+    },
+    {
+      "id": 724282,
+      "createdAt": "2026-01-12T20:28:23.886-06:00",
+      "updatedAt": "2026-01-12T20:28:24.68879-06:00",
+      "title": "[Solar] 8kW Rooftop Installation - Smith",
+      "description": "Install 8kW solar panel system with battery backup",
+      "address": [
+        "456 Maple Avenue"
+      ],
+      "siteId": 273575,
+      "geoLocation": [
+        "32.8132762,-96.8248151"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://coperniq-databank.s3.us-west-1.wasabisys.com/388-13845-273575-streetViewUrl-1768271304255.jpg",
+      "isActive": true,
+      "companyId": 388,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "status": "ACTIVE",
+      "createdById": 13845,
+      "phaseInstanceId": null,
+      "trades": [
+        "Solar"
+      ],
+      "city": "Dallas",
+      "zipcode": null,
+      "state": "TX",
+      "street": "Maple Avenue",
+      "phaseInstance": null,
+      "owner": null,
+      "salesRep": null,
+      "jurisdiction": {
+        "id": 27351,
+        "name": "Dallas city",
+        "uuid": "8e411fa6-8fa8-4382-b803-9c3475271f1d"
+      },
+      "lastActivity": "2026-01-12T20:28:26.849-06:00",
+      "workflowId": null,
+      "phaseId": null,
+      "clientId": 724281,
+      "number": 3,
+      "value": null,
+      "size": null,
+      "custom": {}
+    },
+    {
+      "id": 724284,
+      "createdAt": "2026-01-12T20:28:24.567-06:00",
+      "updatedAt": "2026-01-12T20:28:25.15163-06:00",
+      "title": "[HVAC] RTU Maintenance Contract - Davis",
+      "description": "Quarterly maintenance for 4 rooftop units",
+      "address": [
+        "789 Business Park Dr 36066"
+      ],
+      "siteId": 273576,
+      "geoLocation": [
+        "32.4872818,-86.41156629999999"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://coperniq-databank.s3.us-west-1.wasabisys.com/388-13845-273576-streetViewUrl-1768271304781.jpg",
+      "isActive": true,
+      "companyId": 388,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "status": "ACTIVE",
+      "createdById": 13845,
+      "phaseInstanceId": null,
+      "trades": [
+        "Solar"
+      ],
+      "city": "Prattville",
+      "zipcode": "36066",
+      "state": "AL",
+      "street": "789 Business Park Drive",
+      "phaseInstance": null,
+      "owner": null,
+      "salesRep": null,
+      "jurisdiction": {
+        "id": 27352,
+        "name": "Prattville city",
+        "uuid": "9d4de68a-3a11-43c6-b675-e97ef424e69f"
+      },
+      "lastActivity": "2026-01-12T20:28:26.85-06:00",
+      "workflowId": null,
+      "phaseId": null,
+      "clientId": 724283,
+      "number": 4,
+      "value": null,
+      "size": null,
+      "custom": {}
+    },
+    {
+      "id": 724286,
+      "createdAt": "2026-01-12T20:28:25.256-06:00",
+      "updatedAt": "2026-01-12T20:28:25.802447-06:00",
+      "title": "[HVAC] Kitchen Hood & Makeup Air - Martinez",
+      "description": "Install commercial kitchen exhaust hood with makeup air unit",
+      "address": [
+        "321 Main Street 12758"
+      ],
+      "siteId": 273577,
+      "geoLocation": [
+        "41.88595,-74.8396216"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://coperniq-databank.s3.us-west-1.wasabisys.com/388-13845-273577-streetViewUrl-1768271305462.jpg",
+      "isActive": true,
+      "companyId": 388,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "status": "ACTIVE",
+      "createdById": 13845,
+      "phaseInstanceId": null,
+      "trades": [
+        "Solar"
+      ],
+      "city": "Livingston Manor",
+      "zipcode": "12758",
+      "state": "NY",
+      "street": "321 Main Street",
+      "phaseInstance": null,
+      "owner": null,
+      "salesRep": null,
+      "jurisdiction": {
+        "id": 27353,
+        "name": "Rockland town",
+        "uuid": "b5b5119a-064b-4200-becd-b332d92cd825"
+      },
+      "lastActivity": "2026-01-12T20:28:27.352-06:00",
+      "workflowId": null,
+      "phaseId": null,
+      "clientId": 724285,
+      "number": 5,
+      "value": null,
+      "size": null,
+      "custom": {}
+    },
+    {
+      "id": 724290,
+      "createdAt": "2026-01-12T20:28:26.694-06:00",
+      "updatedAt": "2026-01-12T20:28:26.694-06:00",
+      "title": "[HVAC] Duct Sealing & Insulation - Anderson",
+      "description": "Seal and insulate existing ductwork to improve efficiency",
+      "address": [
+        "888 Pine Lane 43230"
+      ],
+      "siteId": 273579,
+      "geoLocation": [
+        "40.0037089,-82.8475668"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": null,
+      "isActive": true,
+      "companyId": 388,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "status": "ACTIVE",
+      "createdById": 13845,
+      "phaseInstanceId": null,
+      "trades": [
+        "Solar"
+      ],
+      "city": "Gahanna",
+      "zipcode": "43230",
+      "state": "OH",
+      "street": "888 Pinewood Ln",
+      "phaseInstance": null,
+      "owner": null,
+      "salesRep": null,
+      "jurisdiction": {
+        "id": 27355,
+        "name": "Gahanna city",
+        "uuid": "654dbff0-bc22-4a75-8e12-e18d472d4197"
+      },
+      "lastActivity": "2026-01-12T20:28:28.849-06:00",
+      "workflowId": null,
+      "phaseId": null,
+      "clientId": 724289,
+      "number": 7,
+      "value": null,
+      "size": null,
+      "custom": {}
+    },
+    {
+      "id": 724288,
+      "createdAt": "2026-01-12T20:28:25.942-06:00",
+      "updatedAt": "2026-01-12T20:28:27.021798-06:00",
+      "title": "[Controls] BMS Upgrade - Wilson",
+      "description": "Upgrade building management system to modern IoT-enabled controls",
+      "address": [
+        "555 Corporate Blvd"
+      ],
+      "siteId": 273578,
+      "geoLocation": [
+        "30.4257628,-91.121577"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://coperniq-databank.s3.us-west-1.wasabisys.com/388-13845-273578-streetViewUrl-1768271306210.jpg",
+      "isActive": true,
+      "companyId": 388,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "status": "ACTIVE",
+      "createdById": 13845,
+      "phaseInstanceId": null,
+      "trades": [
+        "Solar"
+      ],
+      "city": "Baton Rouge",
+      "zipcode": null,
+      "state": "LA",
+      "street": "Corporate Boulevard",
+      "phaseInstance": null,
+      "owner": null,
+      "salesRep": null,
+      "jurisdiction": {
+        "id": 27354,
+        "name": "Baton Rouge city",
+        "uuid": "bc5a6111-74b9-4bcf-9b48-493ab2417e50"
+      },
+      "lastActivity": "2026-01-12T20:28:28.848-06:00",
+      "workflowId": null,
+      "phaseId": null,
+      "clientId": 724287,
+      "number": 6,
+      "value": null,
+      "size": null,
+      "custom": {}
+    },
+    {
+      "id": 724292,
+      "createdAt": "2026-01-12T20:28:29.068-06:00",
+      "updatedAt": "2026-01-12T20:28:29.068-06:00",
+      "title": "[Electrical] Panel Upgrade + EV Charger - Garcia",
+      "description": "Upgrade to 200A panel and install Level 2 EV charger",
+      "address": [
+        "222 Cedar Court 48656"
+      ],
+      "siteId": 273580,
+      "geoLocation": [
+        "44.3652622,-84.4184961"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": null,
+      "isActive": true,
+      "companyId": 388,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "status": "ACTIVE",
+      "createdById": 13845,
+      "phaseInstanceId": null,
+      "trades": [
+        "Solar"
+      ],
+      "city": "St. Helen",
+      "zipcode": "48656",
+      "state": "MI",
+      "street": "Lila Street",
+      "phaseInstance": null,
+      "owner": null,
+      "salesRep": null,
+      "jurisdiction": {
+        "id": 27356,
+        "name": "Roscommon County",
+        "uuid": "92e774d2-5cd7-47d7-be68-3129db09e967"
+      },
+      "lastActivity": "2026-01-12T20:28:30.851-06:00",
+      "workflowId": null,
+      "phaseId": null,
+      "clientId": 724291,
+      "number": 8,
+      "value": null,
+      "size": null,
+      "custom": {}
+    },
+    {
+      "id": 724294,
+      "createdAt": "2026-01-12T20:28:29.75-06:00",
+      "updatedAt": "2026-01-12T20:28:29.75-06:00",
+      "title": "[HVAC] Annual Service Agreement - Thompson",
+      "description": "Comprehensive annual service agreement for all HVAC equipment",
+      "address": [
+        "1000 Healthcare Way 20774"
+      ],
+      "siteId": 273581,
+      "geoLocation": [
+        "38.9034503,-76.8439329"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": null,
+      "isActive": true,
+      "companyId": 388,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "status": "ACTIVE",
+      "createdById": 13845,
+      "phaseInstanceId": null,
+      "trades": [
+        "Solar"
+      ],
+      "city": "Lake Arbor",
+      "zipcode": "20774",
+      "state": "MD",
+      "street": "Healthcare Way",
+      "phaseInstance": null,
+      "owner": null,
+      "salesRep": null,
+      "jurisdiction": {
+        "id": 27357,
+        "name": "Prince George's County",
+        "uuid": "b479fdb5-bbe4-4e66-b6ff-b09f862fd600"
+      },
+      "lastActivity": "2026-01-12T20:28:30.85-06:00",
+      "workflowId": null,
+      "phaseId": null,
+      "clientId": 724293,
+      "number": 9,
+      "value": null,
+      "size": null,
+      "custom": {}
+    },
+    {
+      "id": 724331,
+      "createdAt": "2026-01-12T22:57:16.682-06:00",
+      "updatedAt": "2026-01-12T22:57:17.246581-06:00",
+      "title": "AC Replacement - Johnson",
+      "description": "Replace aging 15-year-old AC unit with new high-efficiency system. 5-ton capacity needed. HVAC trade.",
+      "address": [
+        "123 Oak Street, Austin, TX 78701"
+      ],
+      "siteId": 273607,
+      "geoLocation": [
+        "30.2169262,-97.9706677"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://coperniq-databank.s3.us-west-1.wasabisys.com/388-13845-273607-streetViewUrl-1768280236869.jpg",
+      "isActive": true,
+      "companyId": 388,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "status": "ACTIVE",
+      "createdById": 13845,
+      "phaseInstanceId": null,
+      "trades": [
+        "Solar"
+      ],
+      "city": null,
+      "zipcode": "78737",
+      "state": "TX",
+      "street": "Southwest Oaks",
+      "phaseInstance": null,
+      "owner": null,
+      "salesRep": null,
+      "jurisdiction": {
+        "id": 27359,
+        "name": "Travis County",
+        "uuid": "6e09d648-b844-4109-8eaa-dc01ae27e75b"
+      },
+      "lastActivity": "2026-01-12T22:57:18.655-06:00",
+      "workflowId": null,
+      "phaseId": null,
+      "clientId": 724330,
+      "number": 10,
+      "value": null,
+      "size": null,
+      "custom": {}
+    },
+    {
+      "id": 724333,
+      "createdAt": "2026-01-12T22:57:17.455-06:00",
+      "updatedAt": "2026-01-12T22:57:17.973779-06:00",
+      "title": "Commercial HVAC Upgrade",
+      "description": "Upgrade building HVAC system for improved efficiency. Multiple zones. HVAC trade.",
+      "address": [
+        "789 Congress Ave, Austin, TX 78701"
+      ],
+      "siteId": 273608,
+      "geoLocation": [
+        "30.2550898,-97.7470077"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://coperniq-databank.s3.us-west-1.wasabisys.com/388-13845-273608-streetViewUrl-1768280237608.jpg",
+      "isActive": true,
+      "companyId": 388,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "status": "ON_HOLD",
+      "createdById": 13845,
+      "phaseInstanceId": null,
+      "trades": [
+        "Solar"
+      ],
+      "city": "Austin",
+      "zipcode": "78704",
+      "state": "TX",
+      "street": "789 Congress Avenue",
+      "phaseInstance": null,
+      "owner": null,
+      "salesRep": null,
+      "jurisdiction": {
+        "id": 27349,
+        "name": "Austin city",
+        "uuid": "0de25c9b-3be5-4783-ae37-d92b5fdc996f"
+      },
+      "lastActivity": "2026-01-12T22:57:19.154-06:00",
+      "workflowId": null,
+      "phaseId": null,
+      "clientId": 724332,
+      "number": 11,
+      "value": null,
+      "size": null,
+      "custom": {}
+    },
+    {
+      "id": 724335,
+      "createdAt": "2026-01-12T22:57:18.301-06:00",
+      "updatedAt": "2026-01-12T22:57:18.858427-06:00",
+      "title": "Solar Installation - Smith",
+      "description": "12kW solar panel installation with battery backup. Roof assessment completed. SOLAR trade.",
+      "address": [
+        "456 Maple Ave, Austin, TX 78702"
+      ],
+      "siteId": 273609,
+      "geoLocation": [
+        "30.2774825,-97.7156103"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://coperniq-databank.s3.us-west-1.wasabisys.com/388-13845-273609-streetViewUrl-1768280238434.jpg",
+      "isActive": true,
+      "companyId": 388,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "status": "ACTIVE",
+      "createdById": 13845,
+      "phaseInstanceId": null,
+      "trades": [
+        "Solar"
+      ],
+      "city": "Austin",
+      "zipcode": "78702",
+      "state": "TX",
+      "street": "Maple Avenue",
+      "phaseInstance": null,
+      "owner": null,
+      "salesRep": null,
+      "jurisdiction": {
+        "id": 27349,
+        "name": "Austin city",
+        "uuid": "0de25c9b-3be5-4783-ae37-d92b5fdc996f"
+      },
+      "lastActivity": "2026-01-12T22:57:20.656-06:00",
+      "workflowId": null,
+      "phaseId": null,
+      "clientId": 724334,
+      "number": 12,
+      "value": null,
+      "size": null,
+      "custom": {}
+    },
+    {
+      "id": 724337,
+      "createdAt": "2026-01-12T22:57:18.994-06:00",
+      "updatedAt": "2026-01-12T22:57:18.994-06:00",
+      "title": "Commercial Solar Array",
+      "description": "50kW commercial solar installation. ROI analysis completed. SOLAR trade.",
+      "address": [
+        "500 Innovation Blvd, Austin, TX 78758"
+      ],
+      "siteId": 273610,
+      "geoLocation": [
+        "30.3841037,-97.7284266"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": null,
+      "isActive": true,
+      "companyId": 388,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "status": "ACTIVE",
+      "createdById": 13845,
+      "phaseInstanceId": null,
+      "trades": [
+        "Solar"
+      ],
+      "city": "Austin",
+      "zipcode": "78758",
+      "state": "TX",
+      "street": "Innovation Boulevard",
+      "phaseInstance": null,
+      "owner": null,
+      "salesRep": null,
+      "jurisdiction": {
+        "id": 27349,
+        "name": "Austin city",
+        "uuid": "0de25c9b-3be5-4783-ae37-d92b5fdc996f"
+      },
+      "lastActivity": "2026-01-12T22:57:20.655-06:00",
+      "workflowId": null,
+      "phaseId": null,
+      "clientId": 724336,
+      "number": 13,
+      "value": null,
+      "size": null,
+      "custom": {}
+    },
+    {
+      "id": 724339,
+      "createdAt": "2026-01-12T22:57:19.688-06:00",
+      "updatedAt": "2026-01-12T22:57:20.186458-06:00",
+      "title": "Panel Upgrade - Garcia",
+      "description": "Upgrade from 100A to 200A panel. EV charger prep included. ELECTRICAL trade.",
+      "address": [
+        "321 Elm Street, Austin, TX 78703"
+      ],
+      "siteId": 273611,
+      "geoLocation": [
+        "30.2793472,-97.7579089"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://coperniq-databank.s3.us-west-1.wasabisys.com/388-13845-273611-streetViewUrl-1768280239828.jpg",
+      "isActive": true,
+      "companyId": 388,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "status": "COMPLETED",
+      "createdById": 13845,
+      "phaseInstanceId": null,
+      "trades": [
+        "Solar"
+      ],
+      "city": "Austin",
+      "zipcode": "78703",
+      "state": "TX",
+      "street": "Elm Street",
+      "phaseInstance": null,
+      "owner": null,
+      "salesRep": null,
+      "jurisdiction": {
+        "id": 27349,
+        "name": "Austin city",
+        "uuid": "0de25c9b-3be5-4783-ae37-d92b5fdc996f"
+      },
+      "lastActivity": "2026-01-12T22:57:22.656-06:00",
+      "workflowId": null,
+      "phaseId": null,
+      "clientId": 724338,
+      "number": 14,
+      "value": null,
+      "size": null,
+      "custom": {}
+    },
+    {
+      "id": 724341,
+      "createdAt": "2026-01-12T22:57:20.475-06:00",
+      "updatedAt": "2026-01-12T22:57:21.111986-06:00",
+      "title": "Office Electrical Retrofit",
+      "description": "LED lighting retrofit and smart controls installation. ELECTRICAL trade.",
+      "address": [
+        "789 Congress Ave, Austin, TX 78701"
+      ],
+      "siteId": 273612,
+      "geoLocation": [
+        "30.2550898,-97.7470077"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://coperniq-databank.s3.us-west-1.wasabisys.com/388-13845-273612-streetViewUrl-1768280240741.jpg",
+      "isActive": true,
+      "companyId": 388,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "status": "ACTIVE",
+      "createdById": 13845,
+      "phaseInstanceId": null,
+      "trades": [
+        "Solar"
+      ],
+      "city": "Austin",
+      "zipcode": "78704",
+      "state": "TX",
+      "street": "789 Congress Avenue",
+      "phaseInstance": null,
+      "owner": null,
+      "salesRep": null,
+      "jurisdiction": {
+        "id": 27349,
+        "name": "Austin city",
+        "uuid": "0de25c9b-3be5-4783-ae37-d92b5fdc996f"
+      },
+      "lastActivity": "2026-01-12T22:57:23.157-06:00",
+      "workflowId": null,
+      "phaseId": null,
+      "clientId": 724340,
+      "number": 15,
+      "value": null,
+      "size": null,
+      "custom": {}
+    },
+    {
+      "id": 724343,
+      "createdAt": "2026-01-12T22:57:21.193-06:00",
+      "updatedAt": "2026-01-12T22:57:21.717675-06:00",
+      "title": "Water Heater Replacement",
+      "description": "Replace tank water heater with tankless system. Gas line modification. PLUMBING trade.",
+      "address": [
+        "123 Oak Street, Austin, TX 78701"
+      ],
+      "siteId": 273613,
+      "geoLocation": [
+        "30.2169262,-97.9706677"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://coperniq-databank.s3.us-west-1.wasabisys.com/388-13845-273613-streetViewUrl-1768280241394.jpg",
+      "isActive": true,
+      "companyId": 388,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "status": "ACTIVE",
+      "createdById": 13845,
+      "phaseInstanceId": null,
+      "trades": [
+        "Solar"
+      ],
+      "city": null,
+      "zipcode": "78737",
+      "state": "TX",
+      "street": "Southwest Oaks",
+      "phaseInstance": null,
+      "owner": null,
+      "salesRep": null,
+      "jurisdiction": {
+        "id": 27359,
+        "name": "Travis County",
+        "uuid": "6e09d648-b844-4109-8eaa-dc01ae27e75b"
+      },
+      "lastActivity": "2026-01-12T22:57:23.24-06:00",
+      "workflowId": null,
+      "phaseId": null,
+      "clientId": 724342,
+      "number": 16,
+      "value": null,
+      "size": null,
+      "custom": {}
+    },
+    {
+      "id": 724345,
+      "createdAt": "2026-01-12T22:57:21.909-06:00",
+      "updatedAt": "2026-01-12T22:57:21.909-06:00",
+      "title": "Commercial Restroom Renovation",
+      "description": "Restroom renovation with low-flow fixtures and sensor faucets. PLUMBING trade.",
+      "address": [
+        "500 Innovation Blvd, Austin, TX 78758"
+      ],
+      "siteId": 273614,
+      "geoLocation": [
+        "30.3841037,-97.7284266"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": null,
+      "isActive": true,
+      "companyId": 388,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "status": "ON_HOLD",
+      "createdById": 13845,
+      "phaseInstanceId": null,
+      "trades": [
+        "Solar"
+      ],
+      "city": "Austin",
+      "zipcode": "78758",
+      "state": "TX",
+      "street": "Innovation Boulevard",
+      "phaseInstance": null,
+      "owner": null,
+      "salesRep": null,
+      "jurisdiction": {
+        "id": 27349,
+        "name": "Austin city",
+        "uuid": "0de25c9b-3be5-4783-ae37-d92b5fdc996f"
+      },
+      "lastActivity": "2026-01-12T22:57:24.657-06:00",
+      "workflowId": null,
+      "phaseId": null,
+      "clientId": 724344,
+      "number": 17,
+      "value": null,
+      "size": null,
+      "custom": {}
+    },
+    {
+      "id": 724347,
+      "createdAt": "2026-01-12T22:57:22.602-06:00",
+      "updatedAt": "2026-01-12T22:57:23.135101-06:00",
+      "title": "EMERGENCY - No Heat",
+      "description": "Furnace failure. Customer without heat. Priority response needed. HVAC emergency.",
+      "address": [
+        "456 Maple Ave, Austin, TX 78702"
+      ],
+      "siteId": 273615,
+      "geoLocation": [
+        "30.2774825,-97.7156103"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": "https://coperniq-databank.s3.us-west-1.wasabisys.com/388-13845-273615-streetViewUrl-1768280242799.jpg",
+      "isActive": true,
+      "companyId": 388,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "status": "ACTIVE",
+      "createdById": 13845,
+      "phaseInstanceId": null,
+      "trades": [
+        "Solar"
+      ],
+      "city": "Austin",
+      "zipcode": "78702",
+      "state": "TX",
+      "street": "Maple Avenue",
+      "phaseInstance": null,
+      "owner": null,
+      "salesRep": null,
+      "jurisdiction": {
+        "id": 27349,
+        "name": "Austin city",
+        "uuid": "0de25c9b-3be5-4783-ae37-d92b5fdc996f"
+      },
+      "lastActivity": "2026-01-12T22:57:24.658-06:00",
+      "workflowId": null,
+      "phaseId": null,
+      "clientId": 724346,
+      "number": 18,
+      "value": null,
+      "size": null,
+      "custom": {}
+    },
+    {
+      "id": 724349,
+      "createdAt": "2026-01-12T22:57:23.294-06:00",
+      "updatedAt": "2026-01-12T22:57:23.294-06:00",
+      "title": "Annual Maintenance Contract",
+      "description": "Quarterly maintenance for all building systems. GENERAL trade.",
+      "address": [
+        "500 Innovation Blvd, Austin, TX 78758"
+      ],
+      "siteId": 273616,
+      "geoLocation": [
+        "30.3841037,-97.7284266"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": null,
+      "isActive": true,
+      "companyId": 388,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "status": "ACTIVE",
+      "createdById": 13845,
+      "phaseInstanceId": null,
+      "trades": [
+        "Solar"
+      ],
+      "city": "Austin",
+      "zipcode": "78758",
+      "state": "TX",
+      "street": "Innovation Boulevard",
+      "phaseInstance": null,
+      "owner": null,
+      "salesRep": null,
+      "jurisdiction": {
+        "id": 27349,
+        "name": "Austin city",
+        "uuid": "0de25c9b-3be5-4783-ae37-d92b5fdc996f"
+      },
+      "lastActivity": "2026-01-12T22:57:25.156-06:00",
+      "workflowId": null,
+      "phaseId": null,
+      "clientId": 724348,
+      "number": 19,
+      "value": null,
+      "size": null,
+      "custom": {}
+    },
+    {
+      "id": 724895,
+      "createdAt": "2026-01-13T18:30:21.494-06:00",
+      "updatedAt": "2026-01-13T18:30:21.494-06:00",
+      "title": "[Solar] 8kW Residential - Thompson",
+      "description": "8kW rooftop solar installation. South-facing roof. Enphase microinverters.",
+      "address": [
+        "888 Lakeway Dr 65680"
+      ],
+      "siteId": 273960,
+      "geoLocation": [
+        "36.6803377,-93.0613454"
+      ],
+      "imageUrl": null,
+      "streetViewUrl": null,
+      "isActive": true,
+      "companyId": 388,
+      "primaryEmail": null,
+      "primaryPhone": null,
+      "status": "ACTIVE",
+      "createdById": 13845,
+      "phaseInstanceId": null,
+      "trades": [
+        "Solar"
+      ],
+      "city": "Kissee Mills",
+      "zipcode": "65680",
+      "state": "MO",
+      "street": "888 Lakeway",
+      "phaseInstance": null,
+      "owner": null,
+      "salesRep": null,
+      "jurisdiction": {
+        "id": 27367,
+        "name": "Taney County",
+        "uuid": "cd55e579-7d88-464a-a193-02a6d19546f1"
+      },
+      "lastActivity": "2026-01-13T18:30:23.095-06:00",
+      "workflowId": null,
+      "phaseId": null,
+      "clientId": 724894,
+      "number": 20,
+      "value": null,
+      "size": null,
+      "custom": {}
+    }
+  ],
+  "clientsCount": 20,
+  "projectsCount": 20,
+  "workOrdersCount": 20
+}

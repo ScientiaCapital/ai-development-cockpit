@@ -8,11 +8,15 @@ import twilio from 'twilio';
 const getBaseUrl = () => process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://kipper-energy-solutions.vercel.app';
 const ttsUrl = (text: string) => `${getBaseUrl()}/api/twilio/tts?text=${encodeURIComponent(text)}&voice=male`;
 
+// Trade-specific confirmation scripts - All 7 trades
 const SCRIPTS: Record<string, string> = {
-  hvac: `Thank you for those details. I'm creating a service request for our HVAC team. Would you like to schedule a same-day appointment?`,
-  plumbing: `Got it. I'm logging this for our plumbing team. Would you prefer same-day service or a specific time?`,
-  electrical: `Understood. I'm creating a request for our electrical team. When would you like us to come out?`,
-  solar: `Perfect. I'll have our solar specialist follow up. Do you have a preferred time for a callback?`,
+  hvac: `Thank you for those details. I'm creating a service request for Mark Thompson and our HVAC team. Would you like to schedule a same-day appointment?`,
+  plumbing: `Got it. I'm logging this for Carlos Rodriguez and our plumbing team. Would you prefer same-day service or a specific time?`,
+  electrical: `Understood. I'm creating a request for David Kim and our electrical team. When would you like us to come out?`,
+  solar: `Perfect. I'll have Jennifer Lee, our solar specialist, follow up. Do you have a preferred time for a callback?`,
+  low_voltage: `Thank you for the details. I'm creating a service request for Alex Turner, our low voltage specialist. When works best for a site visit?`,
+  roofing: `Got it. I'm logging this for James Miller and our roofing team. Would you like a same-day inspection or a scheduled appointment?`,
+  fire_safety: `Understood. I'm creating a request for Patricia Williams, our fire safety specialist. Do you need an annual inspection or is this more urgent?`,
   general: `Thank you. I'll have the right specialist contact you. Is there a best time to reach you?`,
   fallback: `I'll have our team call you back shortly. Thank you for calling Kipper Energy Solutions.`,
 };

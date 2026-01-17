@@ -135,9 +135,66 @@ FinancialDocument: title, type, status, amount, issueDate, dueDate, recordId, cl
 
 | Endpoint | Purpose |
 |----------|---------|
+| `https://api.coperniq.io/v1` | REST API (primary) |
 | `https://coperniq.dev/project-service/graphql` | Main GraphQL API |
 | `https://coperniq.dev/project-service/graphql-read` | Read-only GraphQL |
 | Instance: 388 | Production instance |
+
+---
+
+## ⚠️ CRITICAL: Coperniq API Rate Limits
+
+**Coperniq has VERY aggressive rate limits. This section is MANDATORY reading.**
+
+### Empirical Findings (2026-01-16)
+
+| Delay | Result |
+|-------|--------|
+| Parallel (0ms) | ❌ HTTP 429 immediately |
+| 200ms between requests | ❌ HTTP 429 |
+| 500ms between requests | ❌ HTTP 429 |
+| **1000ms between requests** | ✅ Works (recommended minimum) |
+
+### Required Pattern
+
+**NEVER make parallel Coperniq API calls.** Always use sequential requests with delays:
+
+```typescript
+// ❌ WRONG - will get rate limited
+const [clients, projects] = await Promise.all([
+  fetch('/v1/clients'),
+  fetch('/v1/projects'),
+]);
+
+// ✅ CORRECT - sequential with 1000ms delay
+const clients = await fetch('/v1/clients');
+await new Promise(r => setTimeout(r, 1000));
+const projects = await fetch('/v1/projects');
+```
+
+### Unified Endpoint Solution
+
+The app uses `/api/coperniq/all` which:
+1. Makes sequential API calls with 1000ms delays
+2. Caches results for 5 minutes (300 seconds)
+3. Prevents frontend from hitting Coperniq directly
+
+**All dashboard components should use this unified endpoint, NOT individual Coperniq endpoints.**
+
+### Rate Limit Recovery
+
+- Coperniq doesn't return standard rate limit headers (`X-RateLimit-*`)
+- Recovery time is unclear (observed 5-15 minutes)
+- Once rate limited from Vercel IPs, all endpoints return 429
+- Local testing may work while Vercel is rate-limited (different IPs)
+
+### Configuration
+
+```
+REQUEST_DELAY = 1000;  // ms between Coperniq calls (DO NOT REDUCE)
+CACHE_TTL = 300;       // 5 minutes server-side cache
+FRONTEND_CACHE = 30;   // 30 seconds client-side cache
+```
 
 ---
 

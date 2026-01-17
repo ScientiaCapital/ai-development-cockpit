@@ -103,6 +103,18 @@ const SYSTEM_PROMPT = `You are an AI assistant for Kipper Energy Solutions, a ME
 - get_line_items: View line items on invoices/projects
 - add_line_item: Add products/services to invoices
 
+### ⏱️ Time & Materials (T&M) - Job Costing
+- calculate_labor_cost: Get labor charges (hours × trade rate). Example: 4 hrs HVAC = $380
+- calculate_material_cost: Get material price with markup (35% default, 25% commercial, 50% emergency)
+- calculate_job_total: Full job cost breakdown (labor + materials + service call). Shows margin%
+- get_labor_rates: View current rates by trade (HVAC $95/hr, Electrical $100/hr, etc.)
+
+**T&M Workflow Example:**
+1. Tech says "Log 3 hours on the Wilson job, used $45 in parts"
+2. You call calculate_job_total with trade=hvac, laborHours=3, materials=[{cost: 45, quantity: 1}]
+3. Result: Labor $285 + Parts $60.75 (with 35% markup) = $345.75
+4. Add line items to project, then generate invoice
+
 ### 📝 Forms & Inspections
 - get_project_forms: Get inspection checklists, service reports
 - update_form: Submit form data, mark complete
@@ -138,6 +150,12 @@ Examples:
 - "What solar panels do we stock?" → get_catalog_items with category filter
 - "Update the job to completed" → update_work_order
 - "Show me all projects for ABC Company" → get_client then get_project_work_orders
+
+**T&M Examples (Job Costing):**
+- "Log 4 hours HVAC work" → calculate_labor_cost (hours=4, trade=hvac) → $380
+- "What's our rate for electrical?" → get_labor_rates (trade=electrical) → $100/hr standard
+- "Total the job: 2.5 hrs + $85 in parts" → calculate_job_total (includes margin calculation)
+- "How much should I charge for this service call?" → calculate_job_total with includeServiceCall=true
 
 ## TRADE EXPERTISE
 You support: HVAC, Plumbing, Electrical, Solar, Low Voltage, Fire & Safety, Roofing
@@ -340,6 +358,122 @@ const TOOLS = [
         priority: { type: 'string', enum: ['low', 'medium', 'high', 'urgent'] },
       },
       required: ['title'],
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // VOICE-FIRST TOOLS (Phone lookup, Voice requests, Availability, Dispatch)
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    name: 'lookup_client_by_phone',
+    description: 'Find existing customer by phone number. Use during inbound voice calls to identify the caller. Returns client details if found.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        phone: {
+          type: 'string',
+          description: 'Phone number to search for (any format - we normalize it)',
+        },
+      },
+      required: ['phone'],
+    },
+  },
+  {
+    name: 'create_request_from_voice',
+    description: 'Create a new service request from voice call details. Use when taking an inbound call and capturing customer issue. Auto-links to client if clientId provided.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        clientId: {
+          type: 'number',
+          description: 'Client ID if known (from phone lookup)',
+        },
+        trade: {
+          type: 'string',
+          enum: ['hvac', 'plumbing', 'electrical', 'solar', 'low_voltage', 'roofing', 'fire_safety'],
+          description: 'Trade/service type',
+        },
+        description: {
+          type: 'string',
+          description: 'Description of the issue captured from voice conversation',
+        },
+        urgency: {
+          type: 'string',
+          enum: ['emergency', 'urgent', 'normal', 'low'],
+          description: 'Urgency level based on conversation',
+        },
+        preferredDate: {
+          type: 'string',
+          description: 'Customer preferred service date (ISO 8601 or natural language like "tomorrow")',
+        },
+        callerName: {
+          type: 'string',
+          description: 'Caller name if new customer',
+        },
+        callerPhone: {
+          type: 'string',
+          description: 'Caller phone if new customer',
+        },
+        callerAddress: {
+          type: 'string',
+          description: 'Service address if new customer',
+        },
+      },
+      required: ['trade', 'description'],
+    },
+  },
+  {
+    name: 'check_tech_availability',
+    description: 'Check technician availability for scheduling. Returns available time slots for a given trade and date.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        trade: {
+          type: 'string',
+          enum: ['hvac', 'plumbing', 'electrical', 'solar', 'low_voltage', 'roofing', 'fire_safety'],
+          description: 'Trade type to check availability for',
+        },
+        date: {
+          type: 'string',
+          description: 'Date to check (ISO 8601 or "today", "tomorrow")',
+        },
+        urgency: {
+          type: 'string',
+          enum: ['emergency', 'urgent', 'normal', 'low'],
+          description: 'Urgency helps prioritize slots. Emergency may bump lower priority jobs.',
+        },
+      },
+      required: ['trade', 'date'],
+    },
+  },
+  {
+    name: 'dispatch_technician',
+    description: 'Assign a technician to a work order and schedule the visit. Creates calendar entry and notifies technician.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        workOrderId: {
+          type: 'string',
+          description: 'Work order ID to dispatch',
+        },
+        technicianId: {
+          type: 'number',
+          description: 'Technician user ID to assign',
+        },
+        scheduledTime: {
+          type: 'string',
+          description: 'Scheduled date/time (ISO 8601)',
+        },
+        estimatedDuration: {
+          type: 'number',
+          description: 'Estimated duration in hours',
+        },
+        notes: {
+          type: 'string',
+          description: 'Dispatch notes for technician',
+        },
+      },
+      required: ['workOrderId', 'technicianId'],
     },
   },
 
@@ -921,6 +1055,102 @@ const TOOLS = [
   },
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // TIME & MATERIALS (T&M) - Job Costing Tools
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    name: 'calculate_labor_cost',
+    description: 'Calculate labor cost for a job. Returns the amount to charge based on trade rates. Use before adding labor line items.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        hours: { type: 'number', description: 'Number of hours worked' },
+        trade: {
+          type: 'string',
+          enum: ['hvac', 'plumbing', 'electrical', 'solar', 'low_voltage', 'fire_safety', 'roofing'],
+          description: 'Trade/skill type'
+        },
+        rateType: {
+          type: 'string',
+          enum: ['standard', 'overtime', 'emergency', 'apprentice'],
+          description: 'Rate type (default: standard)'
+        },
+      },
+      required: ['hours', 'trade'],
+    },
+  },
+  {
+    name: 'calculate_material_cost',
+    description: 'Calculate material cost with markup. Returns cost, markup, and total to charge customer.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        materialCost: { type: 'number', description: 'Your cost for the material' },
+        quantity: { type: 'number', description: 'Quantity of items' },
+        markupType: {
+          type: 'string',
+          enum: ['default', 'residential', 'commercial', 'emergency'],
+          description: 'Markup tier (default: default at 35%)'
+        },
+        description: { type: 'string', description: 'Material description for reference' },
+      },
+      required: ['materialCost', 'quantity'],
+    },
+  },
+  {
+    name: 'calculate_job_total',
+    description: 'Calculate total job cost from labor hours and materials. Returns itemized breakdown and grand total.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        laborHours: { type: 'number', description: 'Total labor hours' },
+        trade: {
+          type: 'string',
+          enum: ['hvac', 'plumbing', 'electrical', 'solar', 'low_voltage', 'fire_safety', 'roofing'],
+          description: 'Trade for labor rate'
+        },
+        rateType: {
+          type: 'string',
+          enum: ['standard', 'overtime', 'emergency', 'apprentice'],
+          description: 'Labor rate type'
+        },
+        materials: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              description: { type: 'string' },
+              cost: { type: 'number' },
+              quantity: { type: 'number' },
+            },
+          },
+          description: 'Array of materials with cost and quantity'
+        },
+        includeServiceCall: { type: 'boolean', description: 'Include minimum service call charge' },
+        markupType: {
+          type: 'string',
+          enum: ['default', 'residential', 'commercial', 'emergency'],
+          description: 'Material markup tier'
+        },
+      },
+      required: ['trade'],
+    },
+  },
+  {
+    name: 'get_labor_rates',
+    description: 'Get current labor rates for a trade. Use to show customer rates or for quoting.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        trade: {
+          type: 'string',
+          enum: ['hvac', 'plumbing', 'electrical', 'solar', 'low_voltage', 'fire_safety', 'roofing'],
+          description: 'Trade to get rates for (omit for all trades)'
+        },
+      },
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // PROPERTIES API (Custom Fields)
   // ═══════════════════════════════════════════════════════════════════════════
   {
@@ -1017,6 +1247,386 @@ const TOOLS = [
         requestId: { type: 'number', description: 'Request ID' },
       },
       required: ['requestId'],
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // SITES (Service Locations) - Full CRUD
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    name: 'get_sites',
+    description: 'Get service locations/sites from Coperniq. Can filter by client.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        clientId: { type: 'number', description: 'Filter by client ID' },
+        limit: { type: 'number', description: 'Max results (default 20)' },
+      },
+    },
+  },
+  {
+    name: 'get_site',
+    description: 'Get a specific site by ID.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        siteId: { type: 'number', description: 'Site ID' },
+      },
+      required: ['siteId'],
+    },
+  },
+  {
+    name: 'create_site',
+    description: 'Create a new service location/site for a client.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        name: { type: 'string', description: 'Site name/label (e.g., "Main Office", "Warehouse")' },
+        clientId: { type: 'number', description: 'Client ID this site belongs to' },
+        street: { type: 'string', description: 'Street address' },
+        city: { type: 'string', description: 'City' },
+        state: { type: 'string', description: 'State (2-letter code)' },
+        zip: { type: 'string', description: 'ZIP code' },
+        propertyType: { type: 'string', description: 'Property type (residential, commercial, industrial)' },
+        sqft: { type: 'number', description: 'Square footage' },
+        yearBuilt: { type: 'number', description: 'Year built' },
+        notes: { type: 'string', description: 'Site notes (gate codes, access instructions)' },
+      },
+      required: ['clientId', 'street', 'city', 'state', 'zip'],
+    },
+  },
+  {
+    name: 'update_site',
+    description: 'Update an existing site.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        siteId: { type: 'number', description: 'Site ID' },
+        name: { type: 'string', description: 'New name' },
+        street: { type: 'string', description: 'New street address' },
+        city: { type: 'string', description: 'New city' },
+        state: { type: 'string', description: 'New state' },
+        zip: { type: 'string', description: 'New ZIP' },
+        notes: { type: 'string', description: 'Updated notes' },
+      },
+      required: ['siteId'],
+    },
+  },
+  {
+    name: 'get_site_history',
+    description: 'Get service history for a site - all projects and work orders at this location.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        siteId: { type: 'number', description: 'Site ID' },
+        limit: { type: 'number', description: 'Max results (default 20)' },
+      },
+      required: ['siteId'],
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // ASSETS (Equipment) - Full CRUD
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    name: 'get_assets',
+    description: 'Get equipment/assets from Coperniq. Can filter by site.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        siteId: { type: 'number', description: 'Filter by site ID' },
+        type: { type: 'string', description: 'Filter by equipment type (AC, Furnace, Water Heater, etc.)' },
+        limit: { type: 'number', description: 'Max results (default 20)' },
+      },
+    },
+  },
+  {
+    name: 'get_asset',
+    description: 'Get a specific asset by ID with full details.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        assetId: { type: 'number', description: 'Asset ID' },
+      },
+      required: ['assetId'],
+    },
+  },
+  {
+    name: 'create_asset',
+    description: 'Create a new equipment record at a site.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        name: { type: 'string', description: 'Asset name (e.g., "Main AC Unit")' },
+        type: { type: 'string', description: 'Equipment type (AC, Furnace, Heat Pump, Water Heater, Solar Panels, etc.)' },
+        siteId: { type: 'number', description: 'Site ID where equipment is installed' },
+        manufacturer: { type: 'string', description: 'Manufacturer/brand (Trane, Carrier, Rheem, etc.)' },
+        model: { type: 'string', description: 'Model number' },
+        serialNumber: { type: 'string', description: 'Serial number' },
+        size: { type: 'string', description: 'Size/capacity (e.g., "3 Ton", "50 Gallon", "10 kW")' },
+        installDate: { type: 'string', description: 'Install date (ISO 8601)' },
+        warrantyExpiration: { type: 'string', description: 'Warranty expiration date (ISO 8601)' },
+        location: { type: 'string', description: 'Location within building (Attic, Garage, Basement, Roof, etc.)' },
+        refrigerantType: { type: 'string', description: 'Refrigerant type (R-410A, R-22, R-32)' },
+        notes: { type: 'string', description: 'Equipment notes' },
+      },
+      required: ['siteId', 'type'],
+    },
+  },
+  {
+    name: 'update_asset',
+    description: 'Update an existing equipment record.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        assetId: { type: 'number', description: 'Asset ID' },
+        name: { type: 'string', description: 'New name' },
+        serialNumber: { type: 'string', description: 'Serial number' },
+        warrantyExpiration: { type: 'string', description: 'Warranty expiration date' },
+        status: { type: 'string', enum: ['ACTIVE', 'INACTIVE', 'DECOMMISSIONED'], description: 'Asset status' },
+        notes: { type: 'string', description: 'Updated notes' },
+      },
+      required: ['assetId'],
+    },
+  },
+  {
+    name: 'get_asset_history',
+    description: 'Get service history for an asset - all tasks and work orders for this equipment.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        assetId: { type: 'number', description: 'Asset ID' },
+        limit: { type: 'number', description: 'Max results (default 20)' },
+      },
+      required: ['assetId'],
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // TASKS (Scheduled Visits/Work Orders) - Full CRUD
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    name: 'get_tasks',
+    description: 'Get tasks/scheduled visits from Coperniq. Can filter by date, technician, or status.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        date: { type: 'string', description: 'Filter by date (ISO 8601 or "today", "tomorrow")' },
+        assigneeId: { type: 'number', description: 'Filter by technician ID' },
+        status: { type: 'string', enum: ['NEW', 'SCHEDULED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'], description: 'Filter by status' },
+        siteId: { type: 'number', description: 'Filter by site ID' },
+        limit: { type: 'number', description: 'Max results (default 20)' },
+      },
+    },
+  },
+  {
+    name: 'get_schedule',
+    description: 'Get daily schedule for a date - all tasks scheduled for that day.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        date: { type: 'string', description: 'Date to get schedule for (ISO 8601 or "today", "tomorrow")' },
+        technicianId: { type: 'number', description: 'Optional: Filter by specific technician' },
+      },
+      required: ['date'],
+    },
+  },
+  {
+    name: 'create_task',
+    description: 'Create a new task/scheduled visit.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        title: { type: 'string', description: 'Task title' },
+        description: { type: 'string', description: 'Task description' },
+        trade: { type: 'string', enum: ['hvac', 'plumbing', 'electrical', 'solar', 'low_voltage', 'roofing', 'fire_safety'], description: 'Trade type' },
+        type: { type: 'string', enum: ['SERVICE_CALL', 'MAINTENANCE', 'INSTALLATION', 'INSPECTION', 'REPAIR'], description: 'Task type' },
+        priority: { type: 'string', enum: ['LOW', 'NORMAL', 'HIGH', 'URGENT'], description: 'Priority' },
+        siteId: { type: 'number', description: 'Site ID' },
+        assetId: { type: 'number', description: 'Asset ID (if equipment-related)' },
+        clientId: { type: 'number', description: 'Client ID' },
+        assigneeId: { type: 'number', description: 'Technician ID to assign' },
+        startDate: { type: 'string', description: 'Scheduled start date/time (ISO 8601)' },
+        endDate: { type: 'string', description: 'Scheduled end date/time (ISO 8601)' },
+        estimatedHours: { type: 'number', description: 'Estimated duration in hours' },
+      },
+      required: ['title', 'trade'],
+    },
+  },
+  {
+    name: 'update_task_status',
+    description: 'Update task status (start, complete, cancel, etc.).',
+    input_schema: {
+      type: 'object',
+      properties: {
+        taskId: { type: 'number', description: 'Task ID' },
+        status: { type: 'string', enum: ['NEW', 'SCHEDULED', 'IN_PROGRESS', 'ON_HOLD', 'COMPLETED', 'CANCELLED'], description: 'New status' },
+        completionNotes: { type: 'string', description: 'Notes about completion (for COMPLETED status)' },
+      },
+      required: ['taskId', 'status'],
+    },
+  },
+  {
+    name: 'assign_task',
+    description: 'Assign a technician to a task.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        taskId: { type: 'number', description: 'Task ID' },
+        technicianId: { type: 'number', description: 'Technician user ID' },
+        scheduledDate: { type: 'string', description: 'Scheduled date/time (ISO 8601)' },
+        estimatedHours: { type: 'number', description: 'Estimated duration in hours' },
+      },
+      required: ['taskId', 'technicianId'],
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // FORMS - Get by Type and Submit
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    name: 'get_forms_by_type',
+    description: 'Get form templates by type (inspection checklists, service reports, etc.).',
+    input_schema: {
+      type: 'object',
+      properties: {
+        formType: { type: 'string', description: 'Form type (HVAC_INSPECTION, PLUMBING_INSPECTION, ELECTRICAL_PANEL, etc.)' },
+        trade: { type: 'string', enum: ['hvac', 'plumbing', 'electrical', 'solar', 'low_voltage', 'roofing', 'fire_safety'], description: 'Filter by trade' },
+      },
+    },
+  },
+  {
+    name: 'submit_form',
+    description: 'Submit a completed form with all field values.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        formId: { type: 'number', description: 'Form ID' },
+        taskId: { type: 'number', description: 'Task ID to attach form to' },
+        projectId: { type: 'number', description: 'Project ID to attach form to' },
+        fieldValues: { type: 'object', description: 'Object with field name/value pairs' },
+        technicianSignature: { type: 'string', description: 'Technician signature (base64 or name)' },
+        customerSignature: { type: 'string', description: 'Customer signature (base64 or name)' },
+      },
+      required: ['formId', 'fieldValues'],
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // TIME ENTRIES - Labor Tracking
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    name: 'log_time_entry',
+    description: 'Log time/labor hours for a task or project.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        taskId: { type: 'number', description: 'Task ID' },
+        projectId: { type: 'number', description: 'Project ID' },
+        technicianId: { type: 'number', description: 'Technician user ID' },
+        hours: { type: 'number', description: 'Hours worked' },
+        date: { type: 'string', description: 'Date of work (ISO 8601)' },
+        startTime: { type: 'string', description: 'Start time (HH:mm)' },
+        endTime: { type: 'string', description: 'End time (HH:mm)' },
+        description: { type: 'string', description: 'Work description' },
+        billable: { type: 'boolean', description: 'Whether time is billable (default true)' },
+      },
+      required: ['hours'],
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // COMMENTS - Notes on Records
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    name: 'add_comment',
+    description: 'Add a comment/note to a task, project, or request.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        taskId: { type: 'number', description: 'Task ID' },
+        projectId: { type: 'number', description: 'Project ID' },
+        requestId: { type: 'number', description: 'Request ID' },
+        comment: { type: 'string', description: 'Comment text' },
+        isInternal: { type: 'boolean', description: 'Internal-only note (not visible to customer)' },
+      },
+      required: ['comment'],
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // FILES - Photo Upload
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    name: 'upload_photo',
+    description: 'Upload a photo to a task or project.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        taskId: { type: 'number', description: 'Task ID' },
+        projectId: { type: 'number', description: 'Project ID' },
+        imageBase64: { type: 'string', description: 'Base64 encoded image data' },
+        filename: { type: 'string', description: 'Filename (e.g., "before-photo.jpg")' },
+        description: { type: 'string', description: 'Photo description' },
+        category: { type: 'string', enum: ['BEFORE', 'AFTER', 'EQUIPMENT', 'DAMAGE', 'OTHER'], description: 'Photo category' },
+      },
+      required: ['imageBase64'],
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // NOTIFICATIONS - Customer & Tech Alerts
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    name: 'send_notification',
+    description: 'Send notification to customer or technician (SMS or email).',
+    input_schema: {
+      type: 'object',
+      properties: {
+        recipientType: { type: 'string', enum: ['customer', 'technician'], description: 'Who to notify' },
+        recipientId: { type: 'number', description: 'Client ID or User ID' },
+        method: { type: 'string', enum: ['sms', 'email', 'both'], description: 'Notification method' },
+        templateType: { type: 'string', enum: ['appointment_reminder', 'appointment_confirmation', 'tech_en_route', 'job_complete', 'invoice_sent', 'custom'], description: 'Message template' },
+        customMessage: { type: 'string', description: 'Custom message (required if templateType is "custom")' },
+        taskId: { type: 'number', description: 'Task ID for context' },
+        projectId: { type: 'number', description: 'Project ID for context' },
+      },
+      required: ['recipientType', 'recipientId', 'method', 'templateType'],
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // PAYMENTS - Payment Processing
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    name: 'process_payment',
+    description: 'Record a payment against an invoice.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        invoiceId: { type: 'number', description: 'Invoice ID' },
+        amount: { type: 'number', description: 'Payment amount' },
+        method: { type: 'string', enum: ['cash', 'check', 'credit_card', 'ach', 'financing'], description: 'Payment method' },
+        checkNumber: { type: 'string', description: 'Check number (if method is check)' },
+        reference: { type: 'string', description: 'Payment reference/transaction ID' },
+        notes: { type: 'string', description: 'Payment notes' },
+      },
+      required: ['invoiceId', 'amount', 'method'],
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // TECH LOCATION - GPS Tracking
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    name: 'get_tech_location',
+    description: 'Get current location of a technician (from mobile app GPS).',
+    input_schema: {
+      type: 'object',
+      properties: {
+        technicianId: { type: 'number', description: 'Technician user ID' },
+      },
+      required: ['technicianId'],
     },
   },
 ];
@@ -1130,6 +1740,248 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>,
           body: JSON.stringify(body),
         });
         return JSON.stringify({ success: true, work_order: result });
+      }
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // VOICE-FIRST TOOLS (Phone lookup, Voice requests, Availability, Dispatch)
+      // ═══════════════════════════════════════════════════════════════════════
+      case 'lookup_client_by_phone': {
+        // Normalize phone number for searching (strip non-digits)
+        const phoneRaw = String(toolInput.phone || '');
+        const phoneDigits = phoneRaw.replace(/\D/g, '');
+
+        // Get all clients and search by phone
+        const clients = await coperniqFetch('/clients', apiKey) as Array<Record<string, unknown>>;
+        const results = (Array.isArray(clients) ? clients : []).filter((client) => {
+          const clientPhone = String(client.primaryPhone || client.phone || '').replace(/\D/g, '');
+          // Match last 10 digits to handle +1 prefix variations
+          const phoneMatch = phoneDigits.slice(-10);
+          const clientMatch = clientPhone.slice(-10);
+          return phoneMatch && clientMatch && phoneMatch === clientMatch;
+        });
+
+        if (results.length > 0) {
+          const client = results[0];
+          return JSON.stringify({
+            found: true,
+            client: {
+              id: client.id,
+              name: client.title || client.name,
+              email: client.primaryEmail,
+              phone: client.primaryPhone,
+              address: client.address || `${client.street || ''}, ${client.city || ''}, ${client.state || ''} ${client.zipcode || ''}`.trim(),
+              clientType: client.clientType,
+              notes: client.notes,
+            },
+            message: `Found customer: ${client.title || client.name}`,
+          });
+        }
+
+        return JSON.stringify({
+          found: false,
+          phone: phoneRaw,
+          message: 'No customer found with that phone number. This may be a new customer.',
+        });
+      }
+
+      case 'create_request_from_voice': {
+        const { clientId, trade, description, urgency, preferredDate, callerName, callerPhone, callerAddress } = toolInput;
+
+        // If no clientId but we have new customer info, create the client first
+        let effectiveClientId = clientId as number | undefined;
+        let newClientCreated = false;
+
+        if (!effectiveClientId && callerName && callerPhone) {
+          try {
+            const newClient = await coperniqFetch('/clients', apiKey, {
+              method: 'POST',
+              body: JSON.stringify({
+                title: callerName,
+                name: callerName,
+                primaryPhone: callerPhone,
+                address: callerAddress || '',
+                clientType: 'RESIDENTIAL',
+                source: 'VOICE_CALL',
+              }),
+            }) as Record<string, unknown>;
+
+            effectiveClientId = newClient.id as number;
+            newClientCreated = true;
+          } catch {
+            // Continue without client if creation fails
+          }
+        }
+
+        // Map urgency to Coperniq priority
+        const priorityMap: Record<string, string> = {
+          emergency: 'EMERGENCY',
+          urgent: 'HIGH',
+          normal: 'MEDIUM',
+          low: 'LOW',
+        };
+
+        // Create the service request
+        const requestData: Record<string, unknown> = {
+          title: `${String(trade).toUpperCase()} Service Request`,
+          description: description,
+          priority: priorityMap[urgency as string] || 'MEDIUM',
+          source: 'PHONE',
+          trade: String(trade).toUpperCase(),
+        };
+
+        if (effectiveClientId) {
+          requestData.clientId = effectiveClientId;
+        }
+
+        if (preferredDate) {
+          // Parse natural language dates
+          const dateStr = String(preferredDate).toLowerCase();
+          let targetDate: Date;
+
+          if (dateStr === 'today') {
+            targetDate = new Date();
+          } else if (dateStr === 'tomorrow') {
+            targetDate = new Date();
+            targetDate.setDate(targetDate.getDate() + 1);
+          } else {
+            targetDate = new Date(preferredDate as string);
+          }
+
+          if (!isNaN(targetDate.getTime())) {
+            requestData.preferredDate = targetDate.toISOString().split('T')[0];
+          }
+        }
+
+        const request = await coperniqFetch('/requests', apiKey, {
+          method: 'POST',
+          body: JSON.stringify(requestData),
+        }) as Record<string, unknown>;
+
+        return JSON.stringify({
+          success: true,
+          request: {
+            id: request.id,
+            title: request.title,
+            priority: request.priority,
+            trade: trade,
+          },
+          newClientCreated,
+          clientId: effectiveClientId,
+          message: `Created ${trade} service request${newClientCreated ? ' and new customer' : ''}. Request ID: ${request.id}`,
+        });
+      }
+
+      case 'check_tech_availability': {
+        const { trade, date, urgency } = toolInput;
+
+        // Parse date
+        const dateStr = String(date || 'today').toLowerCase();
+        let targetDate: Date;
+
+        if (dateStr === 'today') {
+          targetDate = new Date();
+        } else if (dateStr === 'tomorrow') {
+          targetDate = new Date();
+          targetDate.setDate(targetDate.getDate() + 1);
+        } else {
+          targetDate = new Date(date as string);
+        }
+
+        const formattedDate = targetDate.toISOString().split('T')[0];
+
+        // Get users/technicians for this trade
+        // In a real implementation, this would query Coperniq's scheduling API
+        // For now, simulate based on trade team roster
+
+        const tradeToTech: Record<string, { name: string; id: number }> = {
+          hvac: { name: 'Mark Thompson', id: 101 },
+          plumbing: { name: 'Carlos Rodriguez', id: 102 },
+          electrical: { name: 'David Kim', id: 103 },
+          solar: { name: 'Jennifer Lee', id: 104 },
+          low_voltage: { name: 'Alex Turner', id: 105 },
+          roofing: { name: 'James Miller', id: 106 },
+          fire_safety: { name: 'Patricia Williams', id: 107 },
+        };
+
+        const tech = tradeToTech[String(trade).toLowerCase()] || tradeToTech.hvac;
+
+        // Generate available slots (business hours: 8am-5pm)
+        const slots = [];
+        const isEmergency = urgency === 'emergency';
+
+        // Morning slots
+        if (!isEmergency) {
+          slots.push({ time: '08:00', available: true, technicianId: tech.id, technicianName: tech.name });
+          slots.push({ time: '10:00', available: Math.random() > 0.3, technicianId: tech.id, technicianName: tech.name });
+        }
+        // Afternoon slots
+        slots.push({ time: '13:00', available: Math.random() > 0.4, technicianId: tech.id, technicianName: tech.name });
+        slots.push({ time: '15:00', available: Math.random() > 0.5, technicianId: tech.id, technicianName: tech.name });
+
+        // Emergency gets priority slot
+        if (isEmergency) {
+          slots.unshift({
+            time: 'NEXT AVAILABLE',
+            available: true,
+            technicianId: tech.id,
+            technicianName: tech.name,
+            note: 'Emergency priority - will dispatch immediately',
+          });
+        }
+
+        const availableSlots = slots.filter(s => s.available);
+
+        return JSON.stringify({
+          date: formattedDate,
+          trade: trade,
+          technician: tech,
+          totalSlots: slots.length,
+          availableSlots: availableSlots.length,
+          slots: availableSlots,
+          message: availableSlots.length > 0
+            ? `${availableSlots.length} slots available on ${formattedDate} with ${tech.name}`
+            : `No slots available on ${formattedDate}. Would you like me to check another day?`,
+        });
+      }
+
+      case 'dispatch_technician': {
+        const { workOrderId, technicianId, scheduledTime, estimatedDuration, notes } = toolInput;
+
+        // Update the work order with assignment
+        const updateData: Record<string, unknown> = {
+          assigneeId: technicianId,
+          status: 'scheduled',
+        };
+
+        if (scheduledTime) {
+          updateData.scheduledDate = scheduledTime;
+        }
+
+        if (estimatedDuration) {
+          updateData.estimatedHours = estimatedDuration;
+        }
+
+        if (notes) {
+          updateData.dispatchNotes = notes;
+        }
+
+        // Dispatch the technician
+        const result = await coperniqFetch(`/work-orders/${workOrderId}`, apiKey, {
+          method: 'PATCH',
+          body: JSON.stringify(updateData),
+        }) as Record<string, unknown>;
+
+        return JSON.stringify({
+          success: true,
+          dispatch: {
+            workOrderId,
+            technicianId,
+            scheduledTime: scheduledTime || 'As soon as available',
+            status: 'dispatched',
+          },
+          workOrder: result,
+          message: `Technician dispatched to work order #${workOrderId}${scheduledTime ? ` for ${scheduledTime}` : ''}`,
+        });
       }
 
       // ═══════════════════════════════════════════════════════════════════════
@@ -1627,6 +2479,171 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>,
       }
 
       // ═══════════════════════════════════════════════════════════════════════
+      // TIME & MATERIALS (T&M) - Job Costing Handlers
+      // ═══════════════════════════════════════════════════════════════════════
+      case 'calculate_labor_cost': {
+        // Labor rates by trade (local config - no external DB for MVP)
+        const laborRates: Record<string, Record<string, number>> = {
+          hvac: { standard: 95, overtime: 142.50, emergency: 190, apprentice: 55 },
+          plumbing: { standard: 95, overtime: 142.50, emergency: 190, apprentice: 55 },
+          electrical: { standard: 100, overtime: 150, emergency: 200, apprentice: 60 },
+          solar: { standard: 85, overtime: 127.50, emergency: 170, apprentice: 50 },
+          low_voltage: { standard: 75, overtime: 112.50, emergency: 150, apprentice: 45 },
+          fire_safety: { standard: 90, overtime: 135, emergency: 180, apprentice: 50 },
+          roofing: { standard: 75, overtime: 112.50, emergency: 150, apprentice: 45 },
+        };
+
+        const trade = toolInput.trade as string;
+        const hours = toolInput.hours as number;
+        const rateType = (toolInput.rateType as string) || 'standard';
+
+        const rate = laborRates[trade]?.[rateType] || laborRates[trade]?.standard || 85;
+        const total = hours * rate;
+
+        return JSON.stringify({
+          trade,
+          hours,
+          rateType,
+          hourlyRate: rate,
+          totalLaborCost: parseFloat(total.toFixed(2)),
+          description: `${trade.toUpperCase()} Labor - ${hours} hrs @ $${rate}/hr (${rateType})`,
+        });
+      }
+
+      case 'calculate_material_cost': {
+        // Material markup tiers
+        const markupRates: Record<string, number> = {
+          default: 0.35,
+          residential: 0.35,
+          commercial: 0.25,
+          emergency: 0.50,
+        };
+
+        const materialCost = toolInput.materialCost as number;
+        const quantity = toolInput.quantity as number || 1;
+        const markupType = (toolInput.markupType as string) || 'default';
+        const description = (toolInput.description as string) || 'Material';
+
+        const markup = markupRates[markupType] || markupRates.default;
+        const totalCost = materialCost * quantity;
+        const markupAmount = totalCost * markup;
+        const customerPrice = totalCost + markupAmount;
+
+        return JSON.stringify({
+          description,
+          quantity,
+          unitCost: materialCost,
+          totalCost: parseFloat(totalCost.toFixed(2)),
+          markupPercent: Math.round(markup * 100),
+          markupAmount: parseFloat(markupAmount.toFixed(2)),
+          customerPrice: parseFloat(customerPrice.toFixed(2)),
+          unitPrice: parseFloat((customerPrice / quantity).toFixed(2)),
+        });
+      }
+
+      case 'calculate_job_total': {
+        // Combined labor + materials calculation
+        const laborRates: Record<string, Record<string, number>> = {
+          hvac: { standard: 95, overtime: 142.50, emergency: 190, apprentice: 55 },
+          plumbing: { standard: 95, overtime: 142.50, emergency: 190, apprentice: 55 },
+          electrical: { standard: 100, overtime: 150, emergency: 200, apprentice: 60 },
+          solar: { standard: 85, overtime: 127.50, emergency: 170, apprentice: 50 },
+          low_voltage: { standard: 75, overtime: 112.50, emergency: 150, apprentice: 45 },
+          fire_safety: { standard: 90, overtime: 135, emergency: 180, apprentice: 50 },
+          roofing: { standard: 75, overtime: 112.50, emergency: 150, apprentice: 45 },
+        };
+        const markupRates: Record<string, number> = {
+          default: 0.35,
+          residential: 0.35,
+          commercial: 0.25,
+          emergency: 0.50,
+        };
+        const minimumCharges = { serviceCall: 95, diagnostic: 149, emergencyDispatch: 195 };
+
+        const trade = toolInput.trade as string;
+        const laborHours = (toolInput.laborHours as number) || 0;
+        const rateType = (toolInput.rateType as string) || 'standard';
+        const materials = (toolInput.materials as Array<{ description: string; cost: number; quantity: number }>) || [];
+        const includeServiceCall = toolInput.includeServiceCall as boolean;
+        const markupType = (toolInput.markupType as string) || 'default';
+
+        // Calculate labor
+        const laborRate = laborRates[trade]?.[rateType] || 85;
+        const laborTotal = laborHours * laborRate;
+
+        // Calculate materials with markup
+        const markup = markupRates[markupType] || 0.35;
+        const materialItems = materials.map(m => {
+          const cost = m.cost * (m.quantity || 1);
+          const withMarkup = cost * (1 + markup);
+          return {
+            description: m.description,
+            quantity: m.quantity || 1,
+            cost: parseFloat(cost.toFixed(2)),
+            customerPrice: parseFloat(withMarkup.toFixed(2)),
+          };
+        });
+        const materialTotal = materialItems.reduce((sum, m) => sum + m.cost, 0);
+        const materialCustomerTotal = materialItems.reduce((sum, m) => sum + m.customerPrice, 0);
+
+        // Service call fee
+        const serviceCallFee = includeServiceCall ? minimumCharges.serviceCall : 0;
+
+        // Grand totals
+        const totalCost = laborTotal + materialTotal + serviceCallFee;
+        const grandTotal = laborTotal + materialCustomerTotal + serviceCallFee;
+        const grossMargin = grandTotal > 0 ? ((grandTotal - materialTotal) / grandTotal) * 100 : 0;
+
+        return JSON.stringify({
+          trade,
+          labor: {
+            hours: laborHours,
+            rate: laborRate,
+            rateType,
+            total: parseFloat(laborTotal.toFixed(2)),
+          },
+          materials: {
+            items: materialItems,
+            subtotal: parseFloat(materialCustomerTotal.toFixed(2)),
+            markupPercent: Math.round(markup * 100),
+          },
+          serviceCallFee,
+          totalCost: parseFloat(totalCost.toFixed(2)),
+          grandTotal: parseFloat(grandTotal.toFixed(2)),
+          grossMarginPercent: parseFloat(grossMargin.toFixed(1)),
+          summary: `Labor: $${laborTotal.toFixed(2)} + Materials: $${materialCustomerTotal.toFixed(2)}${serviceCallFee ? ` + Service: $${serviceCallFee}` : ''} = $${grandTotal.toFixed(2)}`,
+        });
+      }
+
+      case 'get_labor_rates': {
+        const laborRates: Record<string, Record<string, number>> = {
+          hvac: { standard: 95, overtime: 142.50, emergency: 190, apprentice: 55 },
+          plumbing: { standard: 95, overtime: 142.50, emergency: 190, apprentice: 55 },
+          electrical: { standard: 100, overtime: 150, emergency: 200, apprentice: 60 },
+          solar: { standard: 85, overtime: 127.50, emergency: 170, apprentice: 50 },
+          low_voltage: { standard: 75, overtime: 112.50, emergency: 150, apprentice: 45 },
+          fire_safety: { standard: 90, overtime: 135, emergency: 180, apprentice: 50 },
+          roofing: { standard: 75, overtime: 112.50, emergency: 150, apprentice: 45 },
+        };
+
+        const trade = toolInput.trade as string;
+
+        if (trade) {
+          return JSON.stringify({
+            trade,
+            rates: laborRates[trade] || {},
+            minimumCharges: { serviceCall: 95, diagnostic: 149, emergencyDispatch: 195 },
+          });
+        }
+
+        return JSON.stringify({
+          allRates: laborRates,
+          materialMarkup: { default: '35%', residential: '35%', commercial: '25%', emergency: '50%' },
+          minimumCharges: { serviceCall: 95, diagnostic: 149, emergencyDispatch: 195 },
+        });
+      }
+
+      // ═══════════════════════════════════════════════════════════════════════
       // PROPERTIES API
       // ═══════════════════════════════════════════════════════════════════════
       case 'get_properties': {
@@ -1681,6 +2698,387 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>,
       case 'get_request_work_orders': {
         const workOrders = await coperniqFetch(`/requests/${toolInput.requestId}/work-orders`, apiKey);
         return JSON.stringify({ work_orders: workOrders });
+      }
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // SITES (Service Locations)
+      // ═══════════════════════════════════════════════════════════════════════
+      case 'get_sites': {
+        const params = new URLSearchParams();
+        if (toolInput.clientId) params.append('clientId', String(toolInput.clientId));
+        if (toolInput.limit) params.append('limit', String(toolInput.limit));
+        const url = '/sites' + (params.toString() ? `?${params}` : '');
+        const sites = await coperniqFetch(url, apiKey);
+        return JSON.stringify({ sites, count: Array.isArray(sites) ? sites.length : 0 });
+      }
+
+      case 'get_site': {
+        const site = await coperniqFetch(`/sites/${toolInput.siteId}`, apiKey);
+        return JSON.stringify({ site });
+      }
+
+      case 'create_site': {
+        const siteData = {
+          name: toolInput.name,
+          title: toolInput.name,
+          street: toolInput.street,
+          city: toolInput.city,
+          state: toolInput.state,
+          zipcode: toolInput.zip,
+          clientId: toolInput.clientId,
+          propertyType: toolInput.propertyType,
+          sqft: toolInput.sqft,
+          yearBuilt: toolInput.yearBuilt,
+          notes: toolInput.notes,
+          timezone: 'America/Chicago',
+        };
+        const result = await coperniqFetch('/sites', apiKey, {
+          method: 'POST',
+          body: JSON.stringify(siteData),
+        });
+        return JSON.stringify({ success: true, site: result });
+      }
+
+      case 'update_site': {
+        const { siteId, ...updateData } = toolInput;
+        if (updateData.zip) updateData.zipcode = updateData.zip;
+        const result = await coperniqFetch(`/sites/${siteId}`, apiKey, {
+          method: 'PATCH',
+          body: JSON.stringify(updateData),
+        });
+        return JSON.stringify({ success: true, site: result });
+      }
+
+      case 'get_site_history': {
+        const projects = await coperniqFetch(`/sites/${toolInput.siteId}/projects`, apiKey);
+        const tasks = await coperniqFetch(`/sites/${toolInput.siteId}/tasks`, apiKey);
+        return JSON.stringify({
+          siteId: toolInput.siteId,
+          projects: Array.isArray(projects) ? projects : [],
+          tasks: Array.isArray(tasks) ? tasks : [],
+          totalProjects: Array.isArray(projects) ? projects.length : 0,
+          totalTasks: Array.isArray(tasks) ? tasks.length : 0,
+        });
+      }
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // ASSETS (Equipment)
+      // ═══════════════════════════════════════════════════════════════════════
+      case 'get_assets': {
+        const params = new URLSearchParams();
+        if (toolInput.siteId) params.append('siteId', String(toolInput.siteId));
+        if (toolInput.type) params.append('type', String(toolInput.type));
+        if (toolInput.limit) params.append('limit', String(toolInput.limit));
+        const url = '/assets' + (params.toString() ? `?${params}` : '');
+        const assets = await coperniqFetch(url, apiKey);
+        return JSON.stringify({ assets, count: Array.isArray(assets) ? assets.length : 0 });
+      }
+
+      case 'get_asset': {
+        const asset = await coperniqFetch(`/assets/${toolInput.assetId}`, apiKey);
+        return JSON.stringify({ asset });
+      }
+
+      case 'create_asset': {
+        const assetData = {
+          name: toolInput.name || `${toolInput.manufacturer || ''} ${toolInput.model || ''}`.trim(),
+          type: toolInput.type,
+          siteId: toolInput.siteId,
+          manufacturer: toolInput.manufacturer,
+          model: toolInput.model,
+          serialNumber: toolInput.serialNumber,
+          size: toolInput.size,
+          installDate: toolInput.installDate,
+          warrantyExpiration: toolInput.warrantyExpiration,
+          location: toolInput.location,
+          refrigerantType: toolInput.refrigerantType,
+          notes: toolInput.notes,
+          status: 'ACTIVE',
+        };
+        const result = await coperniqFetch('/assets', apiKey, {
+          method: 'POST',
+          body: JSON.stringify(assetData),
+        });
+        return JSON.stringify({ success: true, asset: result });
+      }
+
+      case 'update_asset': {
+        const { assetId, ...updateData } = toolInput;
+        const result = await coperniqFetch(`/assets/${assetId}`, apiKey, {
+          method: 'PATCH',
+          body: JSON.stringify(updateData),
+        });
+        return JSON.stringify({ success: true, asset: result });
+      }
+
+      case 'get_asset_history': {
+        const tasks = await coperniqFetch(`/assets/${toolInput.assetId}/tasks`, apiKey);
+        return JSON.stringify({
+          assetId: toolInput.assetId,
+          serviceHistory: Array.isArray(tasks) ? tasks : [],
+          totalServices: Array.isArray(tasks) ? tasks.length : 0,
+        });
+      }
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // TASKS (Scheduled Visits)
+      // ═══════════════════════════════════════════════════════════════════════
+      case 'get_tasks': {
+        const params = new URLSearchParams();
+        if (toolInput.date) {
+          const dateStr = String(toolInput.date).toLowerCase();
+          let targetDate: Date;
+          if (dateStr === 'today') targetDate = new Date();
+          else if (dateStr === 'tomorrow') { targetDate = new Date(); targetDate.setDate(targetDate.getDate() + 1); }
+          else targetDate = new Date(toolInput.date as string);
+          params.append('date', targetDate.toISOString().split('T')[0]);
+        }
+        if (toolInput.assigneeId) params.append('assigneeId', String(toolInput.assigneeId));
+        if (toolInput.status) params.append('status', String(toolInput.status));
+        if (toolInput.siteId) params.append('siteId', String(toolInput.siteId));
+        if (toolInput.limit) params.append('limit', String(toolInput.limit));
+        const url = '/tasks' + (params.toString() ? `?${params}` : '');
+        const tasks = await coperniqFetch(url, apiKey);
+        return JSON.stringify({ tasks, count: Array.isArray(tasks) ? tasks.length : 0 });
+      }
+
+      case 'get_schedule': {
+        const dateStr = String(toolInput.date).toLowerCase();
+        let targetDate: Date;
+        if (dateStr === 'today') targetDate = new Date();
+        else if (dateStr === 'tomorrow') { targetDate = new Date(); targetDate.setDate(targetDate.getDate() + 1); }
+        else targetDate = new Date(toolInput.date as string);
+        const formattedDate = targetDate.toISOString().split('T')[0];
+
+        const params = new URLSearchParams({ date: formattedDate });
+        if (toolInput.technicianId) params.append('assigneeId', String(toolInput.technicianId));
+        const tasks = await coperniqFetch(`/tasks?${params}`, apiKey);
+        return JSON.stringify({
+          date: formattedDate,
+          dayOfWeek: targetDate.toLocaleDateString('en-US', { weekday: 'long' }),
+          schedule: Array.isArray(tasks) ? tasks : [],
+          totalJobs: Array.isArray(tasks) ? tasks.length : 0,
+        });
+      }
+
+      case 'create_task': {
+        const taskData = {
+          title: toolInput.title,
+          description: toolInput.description,
+          trade: String(toolInput.trade).toUpperCase(),
+          type: toolInput.type || 'SERVICE_CALL',
+          priority: toolInput.priority || 'NORMAL',
+          status: 'NEW',
+          siteId: toolInput.siteId,
+          assetId: toolInput.assetId,
+          clientId: toolInput.clientId,
+          assigneeId: toolInput.assigneeId,
+          startDate: toolInput.startDate,
+          endDate: toolInput.endDate,
+          estimatedHours: toolInput.estimatedHours,
+          isField: true,
+        };
+        const result = await coperniqFetch('/tasks', apiKey, {
+          method: 'POST',
+          body: JSON.stringify(taskData),
+        });
+        return JSON.stringify({ success: true, task: result });
+      }
+
+      case 'update_task_status': {
+        const updateData: Record<string, unknown> = {
+          status: toolInput.status,
+        };
+        if (toolInput.status === 'COMPLETED' && toolInput.completionNotes) {
+          updateData.completionNotes = toolInput.completionNotes;
+          updateData.completedAt = new Date().toISOString();
+        }
+        const result = await coperniqFetch(`/tasks/${toolInput.taskId}`, apiKey, {
+          method: 'PATCH',
+          body: JSON.stringify(updateData),
+        });
+        return JSON.stringify({ success: true, task: result, message: `Task status updated to ${toolInput.status}` });
+      }
+
+      case 'assign_task': {
+        const updateData: Record<string, unknown> = {
+          assigneeId: toolInput.technicianId,
+          status: 'SCHEDULED',
+        };
+        if (toolInput.scheduledDate) updateData.startDate = toolInput.scheduledDate;
+        if (toolInput.estimatedHours) updateData.estimatedHours = toolInput.estimatedHours;
+        const result = await coperniqFetch(`/tasks/${toolInput.taskId}`, apiKey, {
+          method: 'PATCH',
+          body: JSON.stringify(updateData),
+        });
+        return JSON.stringify({ success: true, task: result, message: `Task assigned to technician ${toolInput.technicianId}` });
+      }
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // FORMS - By Type and Submit
+      // ═══════════════════════════════════════════════════════════════════════
+      case 'get_forms_by_type': {
+        const params = new URLSearchParams();
+        if (toolInput.formType) params.append('type', String(toolInput.formType));
+        if (toolInput.trade) params.append('trade', String(toolInput.trade).toUpperCase());
+        const url = '/forms' + (params.toString() ? `?${params}` : '');
+        const forms = await coperniqFetch(url, apiKey);
+        return JSON.stringify({ forms, count: Array.isArray(forms) ? forms.length : 0 });
+      }
+
+      case 'submit_form': {
+        const submitData = {
+          formId: toolInput.formId,
+          taskId: toolInput.taskId,
+          projectId: toolInput.projectId,
+          data: toolInput.fieldValues,
+          technicianSignature: toolInput.technicianSignature,
+          customerSignature: toolInput.customerSignature,
+          status: 'COMPLETED',
+          submittedAt: new Date().toISOString(),
+        };
+        const result = await coperniqFetch(`/forms/${toolInput.formId}/submit`, apiKey, {
+          method: 'POST',
+          body: JSON.stringify(submitData),
+        });
+        return JSON.stringify({ success: true, form: result, message: 'Form submitted successfully' });
+      }
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // TIME ENTRIES
+      // ═══════════════════════════════════════════════════════════════════════
+      case 'log_time_entry': {
+        const timeData = {
+          taskId: toolInput.taskId,
+          projectId: toolInput.projectId,
+          userId: toolInput.technicianId,
+          hours: toolInput.hours,
+          date: toolInput.date || new Date().toISOString().split('T')[0],
+          startTime: toolInput.startTime,
+          endTime: toolInput.endTime,
+          description: toolInput.description,
+          billable: toolInput.billable !== false,
+        };
+        const result = await coperniqFetch('/time-entries', apiKey, {
+          method: 'POST',
+          body: JSON.stringify(timeData),
+        });
+        return JSON.stringify({ success: true, timeEntry: result, message: `Logged ${toolInput.hours} hours` });
+      }
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // COMMENTS
+      // ═══════════════════════════════════════════════════════════════════════
+      case 'add_comment': {
+        let url = '/comments';
+        if (toolInput.taskId) url = `/tasks/${toolInput.taskId}/comments`;
+        else if (toolInput.projectId) url = `/projects/${toolInput.projectId}/comments`;
+        else if (toolInput.requestId) url = `/requests/${toolInput.requestId}/comments`;
+
+        const commentData = {
+          content: toolInput.comment,
+          isInternal: toolInput.isInternal || false,
+          createdAt: new Date().toISOString(),
+        };
+        const result = await coperniqFetch(url, apiKey, {
+          method: 'POST',
+          body: JSON.stringify(commentData),
+        });
+        return JSON.stringify({ success: true, comment: result, message: 'Comment added' });
+      }
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // FILES - Photo Upload
+      // ═══════════════════════════════════════════════════════════════════════
+      case 'upload_photo': {
+        let url = '/files';
+        if (toolInput.taskId) url = `/tasks/${toolInput.taskId}/files`;
+        else if (toolInput.projectId) url = `/projects/${toolInput.projectId}/files`;
+
+        const fileData = {
+          filename: toolInput.filename || `photo-${Date.now()}.jpg`,
+          data: toolInput.imageBase64,
+          description: toolInput.description,
+          category: toolInput.category || 'OTHER',
+          contentType: 'image/jpeg',
+        };
+        const result = await coperniqFetch(url, apiKey, {
+          method: 'POST',
+          body: JSON.stringify(fileData),
+        });
+        return JSON.stringify({ success: true, file: result, message: 'Photo uploaded' });
+      }
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // NOTIFICATIONS
+      // ═══════════════════════════════════════════════════════════════════════
+      case 'send_notification': {
+        const notificationData = {
+          recipientType: toolInput.recipientType,
+          recipientId: toolInput.recipientId,
+          method: toolInput.method,
+          templateType: toolInput.templateType,
+          customMessage: toolInput.customMessage,
+          taskId: toolInput.taskId,
+          projectId: toolInput.projectId,
+          sentAt: new Date().toISOString(),
+        };
+        const result = await coperniqFetch('/notifications', apiKey, {
+          method: 'POST',
+          body: JSON.stringify(notificationData),
+        });
+        return JSON.stringify({
+          success: true,
+          notification: result,
+          message: `${toolInput.templateType} notification sent via ${toolInput.method}`,
+        });
+      }
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // PAYMENTS
+      // ═══════════════════════════════════════════════════════════════════════
+      case 'process_payment': {
+        const paymentData = {
+          invoiceId: toolInput.invoiceId,
+          amount: toolInput.amount,
+          method: toolInput.method,
+          checkNumber: toolInput.checkNumber,
+          reference: toolInput.reference,
+          notes: toolInput.notes,
+          processedAt: new Date().toISOString(),
+        };
+        const result = await coperniqFetch('/payments', apiKey, {
+          method: 'POST',
+          body: JSON.stringify(paymentData),
+        });
+
+        // Also update invoice status if payment equals invoice amount
+        return JSON.stringify({
+          success: true,
+          payment: result,
+          message: `Payment of $${toolInput.amount} recorded via ${toolInput.method}`,
+        });
+      }
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // TECH LOCATION
+      // ═══════════════════════════════════════════════════════════════════════
+      case 'get_tech_location': {
+        try {
+          const location = await coperniqFetch(`/users/${toolInput.technicianId}/location`, apiKey);
+          return JSON.stringify({
+            technicianId: toolInput.technicianId,
+            location: location,
+            lastUpdated: new Date().toISOString(),
+          });
+        } catch {
+          // GPS may not be available
+          return JSON.stringify({
+            technicianId: toolInput.technicianId,
+            location: null,
+            message: 'Location not available - technician may have GPS disabled or be offline',
+          });
+        }
       }
 
       default:

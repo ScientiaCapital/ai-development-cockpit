@@ -18,35 +18,44 @@ const ttsUrl = (text: string, voice: 'male' | 'female' = 'male') => {
   return `${getBaseUrl()}/api/twilio/tts?text=${encodeURIComponent(text)}&voice=${voice}`;
 };
 
-// Trade routing keywords
+// Trade routing keywords - All 7 trades
 const TRADE_KEYWORDS = {
   hvac: ['hvac', 'air conditioning', 'ac', 'heating', 'furnace', 'heat pump', 'thermostat', 'cold', 'hot', 'temperature', 'cooling', 'vent', 'duct', 'refrigerant'],
   plumbing: ['plumbing', 'plumber', 'leak', 'pipe', 'water', 'drain', 'clog', 'toilet', 'faucet', 'sink', 'shower', 'water heater', 'sewer', 'backflow'],
-  electrical: ['electrical', 'electrician', 'outlet', 'circuit', 'breaker', 'panel', 'wire', 'light', 'power', 'voltage', 'spark', 'switch', 'socket'],
-  solar: ['solar', 'panel', 'inverter', 'battery', 'energy', 'power generation', 'roof mount', 'sun'],
-  emergency: ['emergency', 'urgent', 'gas leak', 'flooding', 'fire', 'no heat', 'no power', 'safety', 'dangerous'],
+  electrical: ['electrical', 'electrician', 'outlet', 'circuit', 'breaker', 'panel', 'wire', 'light', 'power', 'voltage', 'spark', 'switch', 'socket', 'ev charger', 'generator'],
+  solar: ['solar', 'panel', 'inverter', 'battery', 'energy', 'power generation', 'roof mount', 'sun', 'photovoltaic', 'pv'],
+  low_voltage: ['low voltage', 'security', 'camera', 'cameras', 'cctv', 'alarm', 'access control', 'network', 'cabling', 'cat6', 'cat5', 'intercom', 'doorbell', 'audio', 'video', 'av'],
+  roofing: ['roofing', 'roof', 'shingle', 'shingles', 'gutter', 'gutters', 'flashing', 'roof leak', 'storm damage', 'hail', 'metal roof', 'flat roof', 'tpo', 'epdm'],
+  fire_safety: ['fire', 'sprinkler', 'fire alarm', 'extinguisher', 'fire suppression', 'hood system', 'kitchen hood', 'emergency light', 'exit light', 'nfpa', 'fire protection'],
+  emergency: ['emergency', 'urgent', 'gas leak', 'flooding', 'no heat', 'no power', 'safety', 'dangerous', 'immediate'],
 };
 
-// Digit to trade mapping for IVR
+// Digit to trade mapping for IVR - All 7 trades
 const DIGIT_TO_TRADE: Record<string, string> = {
   '1': 'hvac',
   '2': 'plumbing',
   '3': 'electrical',
   '4': 'solar',
+  '5': 'low_voltage',
+  '6': 'roofing',
+  '7': 'fire_safety',
   '0': 'emergency',
 };
 
-// Voice scripts
+// Voice scripts - All 7 trades with Kipper team references
 const SCRIPTS = {
   welcome: `Thank you for calling Kipper Energy Solutions. My name is Mark, and I'm your AI assistant.`,
-  ivr: `Press 1 for HVAC. Press 2 for Plumbing. Press 3 for Electrical. Press 4 for Solar. Press 0 for emergencies. Or simply describe your issue.`,
+  ivr: `Press 1 for HVAC. Press 2 for Plumbing. Press 3 for Electrical. Press 4 for Solar. Press 5 for Low Voltage and Security. Press 6 for Roofing. Press 7 for Fire Safety. Press 0 for emergencies. Or simply describe your issue.`,
   noInput: `I didn't catch that. Let me transfer you to our team.`,
-  hvac: `I understand you need help with heating or cooling. Can you tell me more about the issue?`,
-  plumbing: `I understand you have a plumbing concern. Is this a leak, drain issue, or water heater problem?`,
-  electrical: `I hear you have an electrical issue. Safety first - are you seeing sparks or smelling burning?`,
-  solar: `Great, I can help with solar questions. Are you interested in a new installation or service?`,
+  hvac: `I understand you need help with heating or cooling. Our HVAC lead, Mark Thompson, and his team can help. Can you tell me more about the issue?`,
+  plumbing: `I understand you have a plumbing concern. Carlos Rodriguez, our master plumber, is available. Is this a leak, drain issue, or water heater problem?`,
+  electrical: `I hear you have an electrical issue. David Kim, our master electrician, will help. Safety first - are you seeing sparks or smelling burning?`,
+  solar: `Great, I can help with solar questions. Jennifer Lee, our solar specialist, handles all installations and service. Are you interested in a new installation or service?`,
+  low_voltage: `I can help with low voltage and security systems. Alex Turner specializes in security cameras, access control, and network cabling. What do you need help with?`,
+  roofing: `I understand you have a roofing concern. James Miller leads our roofing team. Is this an inspection, repair, or storm damage assessment?`,
+  fire_safety: `I can help with fire protection services. Patricia Williams is our NICET-certified fire safety specialist. Do you need an inspection, alarm testing, or sprinkler service?`,
   emergency: `This is being treated as an emergency. I'm notifying our dispatch team now.`,
-  general: `I'd be happy to help. Are you calling about HVAC, plumbing, electrical, or solar?`,
+  general: `I'd be happy to help. Are you calling about HVAC, plumbing, electrical, solar, low voltage, roofing, or fire safety?`,
   transfer: `I'm connecting you with our team now. Please hold.`,
 };
 

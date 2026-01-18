@@ -1,138 +1,59 @@
-# MEP Template Package for YC SaaS Companies
+# Coperniq MEP Templates
 
-**Product:** Pre-built MEP (Mechanical, Electrical, Plumbing) templates for field service SaaS platforms
-
-**Target Customers:** YC-backed SaaS companies serving:
-- HVAC contractors
-- Plumbing companies
-- Electrical contractors
-- Fire protection services
-- General MEP contractors
+> **64 production-ready form templates** for MEP contractors.
+> Built as Sr. BDR at Coperniq to understand the product deeply and serve customers better.
 
 ---
 
-## The Problem
+## What It Does
 
-Every field service SaaS (ServiceTitan, Housecall Pro, Jobber, Coperniq, etc.) needs MEP-specific:
-- Inspection forms and checklists
-- Work order templates
-- Service agreement structures
-- Equipment catalogs
-- Price books
+- **64 YAML form templates** across 14 trade categories (HVAC, Plumbing, Electrical, Solar, Fire Protection)
+- **GTM vertical configs** with exact Coperniq GraphQL type alignment
+- **Service plan templates** for recurring revenue structures
+- **Work order templates** for service calls, PM visits, installations
 
-**Building these from scratch takes 6-12 months and deep industry knowledge.**
+## Why I Built This
 
----
+As Sr. BDR at Coperniq, I needed to deeply understand our product and the contractors we serve. Building these templates gave me:
+- Hands-on experience with Coperniq's data model (4,037 GraphQL types)
+- Deep understanding of MEP contractor workflows and pain points
+- Technical credibility when talking to prospects
+- Ability to demo real industry templates instead of generic examples
 
-## Our Solution
+## Quick Start
 
-We've already done the work:
-- **15+ form templates** (HVAC, Plumbing, Electrical, Fire Protection)
-- **10+ work order templates** (service calls, PM visits, installs)
-- **Service plan structures** (monthly, quarterly, annual)
-- **Equipment catalogs** (manufacturer data, warranty info)
-- **Price books** (labor rates, materials, markups)
+```bash
+cd ai-development-cockpit
+ls templates/           # Browse by trade (hvac/, plumbing/, electrical/, etc.)
+cat TEMPLATE_INVENTORY.md
+```
 
-**Plug-and-play for any field service platform.**
+## Current Status
 
----
+| Component | Status |
+|-----------|--------|
+| Form templates (64 files) | Complete |
+| GTM vertical configs | Complete |
+| Service plan structures | Complete |
+| Work order templates | Complete |
 
-## Business Model
+## GTME Skills Developed
 
-| Package | What's Included | Price |
-|---------|-----------------|-------|
-| **Starter** | 50 templates, static files (JSON/PDF) | $2,500 |
-| **Pro** | 100+ templates, database-ready (Supabase/Postgres) | $7,500 |
-| **Enterprise** | Full integration + custom templates | $15,000+ |
+Building toward Go-To-Market Engineer through hands-on product work:
 
-**Margins:** 85-95% (digital product, no marginal cost)
+| Skill Area | What I Learned |
+|------------|----------------|
+| **Product mastery** | Built 64 templates to understand Coperniq's capabilities deeply |
+| **Technical discovery** | Mapped 4,037 GraphQL types to understand the data model |
+| **Vertical expertise** | Learned HVAC, plumbing, electrical industry standards (EPA 608, NFPA 25) |
+| **Demo preparation** | Created real industry templates for prospect demos |
+| **ICP understanding** | Identified contractor pain points through template research |
+| **Technical sales** | Can discuss data model, workflows, integrations credibly |
 
----
+## Tech Stack
 
-## Why We're Different
+YAML/JSON templates, Coperniq GraphQL API
 
-1. **Built from real-world use** - Not theoretical, based on actual contractor workflows
-2. **MEP vocabulary** - Uses industry terminology (not generic "field service")
-3. **Integration-ready** - GraphQL/REST compatible, database schemas included
-4. **Continuously updated** - Templates evolve with industry standards
+## Target Instance
 
----
-
-## Files in This Package
-
-| File | Purpose |
-|------|---------|
-| `MEP_TEMPLATE_SPEC.md` | Complete template specifications (15+ forms, tasks, service plans) |
-| `COPERNIQ_SCHEMA.md` | Reference GraphQL schema (how to integrate) |
-| `COPERNIQ_GAP_ANALYSIS.md` | Industry feature analysis (what MEP SaaS needs) |
-| `BUILD_SPECS.md` | Technical implementation specs |
-| `TEMPLATE_PACKAGE.md` | Product packaging and pricing |
-
----
-
-## Development Status
-
-### Phase 1: Research & Specs (COMPLETE)
-- [x] GraphQL schema discovery (4,037 types mapped)
-- [x] Form builder analysis (6 field types)
-- [x] Template specifications (30+ templates)
-- [x] Pricing model
-
-### Phase 2: GTM Vertical Configs (COMPLETE - 2025-12-20)
-- [x] 4 GTM vertical JSON configs created
-- [x] Exact Coperniq GraphQL type alignment
-- [x] CSV import schemas with exact field names
-- [x] Agent prompts and sample queries
-
-**GTM Verticals:**
-| Vertical | Workflow | Key Tables |
-|----------|----------|------------|
-| `solar_epc` | Phase-based | Contact, Site, Project, System |
-| `hvac_mep` | Phase-based | Contact, Site, Project, Asset, Task |
-| `om_service` | Ticket-based | Contact, Site, Asset, Task, ServicePlanInstance |
-| `multi_trade` | Hybrid | All types combined |
-
-**Location:** `config/gtm_verticals/*.json`
-
-### Phase 3: E2B Sandbox Integration (IN PROGRESS)
-- [ ] Create E2B runtime wrapper
-- [ ] Wire agents to sandbox
-- [ ] Test with real CSV imports
-- [ ] Trial management system
-
-### Phase 4: Productize
-- [ ] Landing page
-- [ ] Stripe payments
-- [ ] Customer portal
-- [ ] Documentation site
-
----
-
-## How to Build (Next Steps)
-
-1. **Open Coperniq** → `/112/company/studio/templates/form-templates`
-2. **Create templates** from MEP_TEMPLATE_SPEC.md
-3. **Test with real workflows**
-4. **Export/document patterns**
-5. **Package for sale**
-
----
-
-## Target Customers (YC SaaS)
-
-| Company | What They Do | Why They Need This |
-|---------|--------------|-------------------|
-| Coperniq | MEP contractor platform | They're our beta (free) |
-| ServiceTitan | Field service giant | Enterprise pricing |
-| Housecall Pro | Home service SaaS | Starter/Pro |
-| Jobber | Field service for SMB | Pro package |
-| BuildOps | Commercial contractors | Enterprise |
-| FieldEdge | HVAC/Plumbing focus | Pro/Enterprise |
-
-**Sales approach:** "We have 100+ MEP templates ready. Instead of building from scratch, buy ours and ship in 2 weeks."
-
----
-
-## Contact
-
-Built by ai-development-cockpit team
+**Coperniq 388:** https://app.coperniq.io/388
